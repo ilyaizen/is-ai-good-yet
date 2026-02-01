@@ -106,7 +106,7 @@
         <ul class="nav-list">
           <li><a href="#home" class="nav-link">home</a></li>
           <li><a href="#details" class="nav-link">details</a></li>
-          <li><a href="#articles" class="nav-link">articles</a></li>
+          <li><a href="#articles-table" class="nav-link">articles</a></li>
         </ul>
       </nav>
 

@@ -113,7 +113,7 @@
 {#if revealed}
   <main class="main-content">
     <!-- Hero Section: Full-Viewport Verdict Display -->
-    <section class="verdict-hero">
+    <section id="home" class="verdict-hero">
       <div class="verdict-hero__container">
         <VerdictDisplay
           verdict={data.verdictScore.verdict}
@@ -126,7 +126,9 @@
 
     <!-- Content Section: Articles Table & Footer -->
     <section id="articles" class="content-section" class:content-section--visible={contentVisible}>
-      <DetailsSection visible={contentVisible} />
+      <div id="details" class="scroll-mt-24">
+        <DetailsSection visible={contentVisible} />
+      </div>
 
       <div id="articles-table" class="scroll-mt-24">
         <ArticlesTable articles={data.topArticles} />

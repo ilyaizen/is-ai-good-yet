@@ -39,7 +39,7 @@
           <span class="footer-links-label">navigate</span>
           <a href="#home">home</a>
           <a href="#details">details</a>
-          <a href="#articles">articles</a>
+          <a href="#articles-table">articles</a>
         </div>
         <div class="footer-links-group">
           <span class="footer-links-label">project</span>

@@ -1,4 +1,4 @@
-# Is AI "Good" Yet? — Frontend
+# Is AI "good" yet? (Frontend)
 
 ![SvelteKit](https://img.shields.io/badge/SvelteKit-5.x-FF3E00?logo=svelte&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css&logoColor=white)
@@ -11,7 +11,7 @@ A **premium, terminal-themed dashboard** that visualizes Hacker News sentiment t
 
 ## 🤔 What is this?
 
-**is AI "good" yet?** tracks Hacker News to see what devs *actually* think about AI coding tools.
+**Is AI “good” yet?** tracks Hacker News to see what developers *actually* think about AI coding tools.
 
 It runs a multi-stage Python pipeline that:
 1. Collects AI-tagged submissions via [Histre](https://histre.com/hn/?tags=+ai)
@@ -32,7 +32,7 @@ It's also a portfolio piece (web developer here, not a statistician). If you fin
 - ⭐ [Starring the repo](https://github.com/ilyaizen/is-ai-good-yet)
 - ☕ [Buying a coffee](https://ko-fi.com/ilyaizen) — a *lot* of coffee went into this
 
-If this gets traction, I'll open-source the full pipeline. You never know.
+If this gets traction, I'll open-source the full pipeline—you never know.
 
 ---
 

@@ -1,36 +1,113 @@
-# The Is AI “Good” Yet? Project
+# Is AI "Good" Yet? — Frontend
 
-_**HN on AI-Assisted Development and "Vibe-Coding": The Sentiment Analysis**_
+![SvelteKit](https://img.shields.io/badge/SvelteKit-5.x-FF3E00?logo=svelte&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![SvelteKit](https://img.shields.io/badge/sveltekit-v2-orange)
-![License](https://img.shields.io/badge/license-MIT-green)
-
-TLDR; This little project analyzes HN’s hivemind to answer which camp is currently louder, the “AI-Good” or “AI-Bad” one?
-
-Using a pipeline to scrape and analyze the sentiment of 1000+ AI-related articles submitted to Hacker News over the past 3 years, it tries to objectively determine how developers actually feel about AI-assisted development and “vibe-coding” in 2026.
-
-"Does Claude Code make you a worse programmer?" or "Is vibe-coding everything worth the technical debt?" I scraped, cleaned, and analyzed all AI-related articles posted on HN in the past three years (about 6,000 articles after filtering) using a multi-step Python pipeline for the scraping and analysis, and built a SvelteKit frontend dashboard to nicely display the results. The goal was to spot the overall trend in Hacker News discourse, whether practitioners genuinely see value in AI coding workflows today and if they think that value will grow. It's a meme site, and yes, I know sentiment analysis might seem pointless.
+A **premium, terminal-themed dashboard** that visualizes Hacker News sentiment toward AI coding tools. Built with **Svelte 5**, **SvelteKit 2**, and **Tailwind CSS 4**, featuring rich animations, dynamic theming, and a unique "verdict reveal" experience.
 
 ---
 
-### 3. Run the Frontend
+## 🤔 What is this?
+
+**is AI "good" yet?** tracks Hacker News to see what devs *actually* think about AI coding tools.
+
+It runs a multi-stage Python pipeline that:
+1. Collects AI-tagged submissions via [Histre](https://histre.com/hn/?tags=+ai)
+2. Resolves them using [Algolia's HN API](https://hn.algolia.com)
+3. Scrapes all possible article links
+4. Uses an LLM to filter out noise, then performs sentiment analysis
+5. Ranks articles based on **utility** and **trajectory** scores, weighted by engagement and recency
+
+The frontend you're looking at is the pretty face that makes all that data digestible.
+
+---
+
+## 💡 Why does this exist?
+
+> *"I kept seeing waves of AI-hate that just didn't match my experience, and as I don't jive with vibes or tribes, I built this to find out if HN's hivemind shares similar sentiments."*
+
+It's also a portfolio piece (web developer here, not a statistician). If you find this interesting, consider:
+- ⭐ [Starring the repo](https://github.com/ilyaizen/is-ai-good-yet)
+- ☕ [Buying a coffee](https://ko-fi.com/ilyaizen) — a *lot* of coffee went into this
+
+If this gets traction, I'll open-source the full pipeline. You never know.
+
+---
+
+## 📁 Project Structure
+
+```
+is-ai-good-yet/
+├── src/
+│   ├── lib/
+│   │   ├── components/
+│   │   │   ├── landing/           # Landing page components
+│   │   │   │   ├── verdict-veil.svelte      # Initial "question" overlay
+│   │   │   │   ├── verdict-display.svelte   # Main answer reveal
+│   │   │   │   ├── details-section.svelte   # Themes, methodology, stats
+│   │   │   │   ├── articles-table.svelte    # Sortable article explorer
+│   │   │   │   ├── history-chart.svelte     # Sentiment over time
+│   │   │   │   └── ...
+│   │   │   ├── ui/                # Reusable UI primitives (bits-ui based)
+│   │   │   ├── app-header.svelte  # Global header with nav
+│   │   │   ├── app-footer.svelte  # Global footer with links
+│   │   │   └── ...
+│   │   ├── composables/           # Svelte 5 composables (e.g., useTokenStream)
+│   │   ├── data/                  # Static JSON data (from pipeline export)
+│   │   │   ├── articles.json
+│   │   │   ├── themes.json
+│   │   │   └── verdict.json
+│   │   ├── server/                # Server-side utilities
+│   │   └── types/                 # TypeScript type definitions
+│   ├── routes/
+│   │   ├── +page.svelte           # Landing page
+│   │   ├── +layout.svelte         # Root layout (fonts, analytics)
+│   │   └── details/               # Article detail routes
+│   └── styles/                    # Global CSS & design tokens
+├── static/                        # Static assets (favicon, OG images)
+├── convex/                        # Convex backend (visitor counter)
+└── package.json
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Bun** v1.3+ (or npm/pnpm)
+- Node.js 20+ (for SvelteKit)
+
+### Installation
 
 ```bash
+# Clone the repo (if standalone)
 cd is-ai-good-yet
+
+# Install dependencies
+bun install
+
+# Start development server
 bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to view the dashboard.
+The app will be available at **http://localhost:5173** (or port 3050 if configured).
+
+### Available Scripts
+
+| Command           | Description                       |
+| ----------------- | --------------------------------- |
+| `bun run dev`     | Start Vite dev server with HMR    |
+| `bun run build`   | Production build                  |
+| `bun run preview` | Preview production build locally  |
+| `bun run check`   | TypeScript + Svelte type checking |
+| `bun run lint`    | Run Prettier + ESLint             |
+| `bun run format`  | Auto-format with Prettier         |
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+<p align="center">
+  <i>Built with ☕ and curiosity — <a href="https://github.com/ilyaizen">@ilyaizen</a></i>
+</p>

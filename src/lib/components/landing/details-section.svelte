@@ -391,6 +391,24 @@
       </div>
     </div>
 
+    <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">Why</h3>
+    <div class="text-sm text-foreground leading-relaxed space-y-3">
+      <p>
+        this exists because i kept seeing waves of AI-hate that just didn’t match my experience, and as i don’t jive
+        with vibes or tribes, i built this website to find out if hn’s hivemind share similar sentiments. it’s also a
+        small addition to my portfolio (i’m a web developer, not a statistician). thanks and if you find this
+        interesting, please consider checking it out on <a
+          href="https://github.com/ilyaizen/is-ai-good-yet"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="article-link">github</a
+        >, dropping a star, or
+        <a href="https://ko-fi.com/ilyaizen" target="_blank" rel="noopener noreferrer" class="article-link"
+          >buying a coffee</a
+        >… <i>a lot</i> of coffee went into this… either way, if this gets traction, i’ll share the pipeline—you never know.
+      </p>
+    </div>
+
     <!-- Divider -->
     <!-- <div class="border-t border-border/30 my-8"></div> -->
 

@@ -391,7 +391,7 @@
       </div>
     </div>
 
-    <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">Why</h3>
+    <!-- <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">Why</h3>
     <div class="text-sm text-foreground leading-relaxed space-y-3">
       <p>
         this exists because i kept seeing waves of AI-hate that just didn’t match my experience, and as i don’t jive
@@ -407,7 +407,7 @@
           >buying a coffee</a
         >… <i>a lot</i> of coffee went into this… either way, if this gets traction, i’ll share the pipeline—you never know.
       </p>
-    </div>
+    </div> -->
 
     <!-- Divider -->
     <!-- <div class="border-t border-border/30 my-8"></div> -->

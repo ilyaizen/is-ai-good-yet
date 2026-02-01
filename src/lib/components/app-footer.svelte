@@ -25,7 +25,7 @@
               </a>.
             </TooltipTrigger>
             <TooltipContent>
-              <p>unbelieve huh? lol</p>
+              <p>unbelieve huh? lol..</p>
             </TooltipContent>
           </Tooltip> 🦞
         </p>

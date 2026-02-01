@@ -1,0 +1,153 @@
+/**
+ * Global Stylesheet for "Is AI Good Yet?"
+ * ========================================
+ *
+ * This is the ENTRY POINT that imports all styling modules.
+ *
+ * File Structure:
+ * ├── app.css (this file) - Entry point + Tailwind theme bridge
+ * └── styles/
+ *     ├── tokens.css      - Design tokens (colors, typography, spacing)
+ *     ├── base.css        - HTML element defaults
+ *     ├── terminal.css    - Terminal aesthetic components
+ *     ├── components.css  - Reusable component styles
+ *     └── animations.css  - Keyframe animations
+ *
+ * To change the primary lime green accent:
+ *   Edit --palette-lime-light and --palette-lime-dark in styles/tokens.css
+ */
+
+/* Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* ============================================
+   Font Imports
+   ============================================
+   - Armata: Primary sans-serif font
+   - Tiro Bangla: Decorative serif font
+   - IBM Plex Mono: Monospace font for code/terminal aesthetics
+*/
+@import "@fontsource/armata/400.css";
+@import "@fontsource/tiro-bangla/400.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/700.css";
+
+/* Force IBM Plex Mono to block display to prevent font flash */
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-display: block;
+}
+
+/* ============================================
+   Style Modules
+   ============================================
+*/
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/terminal.css";
+@import "./styles/components.css";
+@import "./styles/animations.css";
+
+/* ============================================
+   Tailwind CSS v4 Theme Bridge
+   ============================================
+   Maps CSS custom properties to Tailwind's theme system.
+   This enables usage like `bg-primary`, `text-muted-foreground`, etc.
+*/
+@theme inline {
+  /* Semantic colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Terminal component colors */
+  --color-terminal-bg: var(--terminal-bg);
+  --color-terminal-bg-subtle: var(--terminal-bg-subtle);
+  --color-terminal-bg-header: var(--terminal-bg-header);
+  --color-terminal-bg-footer: var(--terminal-bg-footer);
+  --color-terminal-bg-overlay: var(--terminal-bg-overlay);
+  --color-terminal-text: var(--terminal-text);
+  --color-terminal-text-muted: var(--terminal-text-muted);
+  --color-terminal-text-faint: var(--terminal-text-faint);
+  --color-terminal-accent: var(--terminal-accent);
+  --color-terminal-border: var(--terminal-border);
+  --color-terminal-border-strong: var(--terminal-border-strong);
+  --color-terminal-cursor: var(--terminal-cursor);
+  --color-terminal-background: var(--terminal-bg);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  /* Border radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Shadows */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  /* Semantic surface colors (aliases for common patterns) */
+  --color-surface: var(--card);
+  --color-surface-hover: var(--muted);
+  --color-accent-glow: var(--accent);
+  --color-dot: var(--muted-foreground);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted-foreground);
+  --color-text-muted: var(--muted-foreground);
+  --color-bg: var(--background);
+
+  /* Layout tokens */
+  --ease-swift: cubic-bezier(0, 0.7, 0.1, 1);
+  --transition-normal: 0.1s var(--ease-swift);
+  --transition-fast: 0.05s var(--ease-swift);
+  --spacing-section: 6rem;
+
+  /* Animation */
+  --animate-blink: blink 1s step-end infinite;
+}

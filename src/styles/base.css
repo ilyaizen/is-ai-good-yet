@@ -1,0 +1,50 @@
+/**
+ * Base Element Styles
+ * ====================
+ * Foundational styles for HTML elements.
+ * Uses tokens from tokens.css
+ */
+
+@layer base {
+  /* Scroll lock mechanism for reveal transition */
+  html {
+    min-height: 100vh;
+  }
+
+  html.scroll-locked {
+    overflow: hidden !important;
+  }
+
+  html.scroll-locked body {
+    overflow: hidden !important;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition:
+      background-color var(--transition-normal),
+      color var(--transition-normal);
+  }
+
+  /* Headings use monospace font for terminal aesthetic */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-mono);
+    color: var(--color-text-primary);
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+}

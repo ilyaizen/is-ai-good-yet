@@ -1,0 +1,159 @@
+/**
+ * Terminal Component Styles
+ * ==========================
+ * Styles for the terminal aesthetic used throughout the app.
+ * All colors reference tokens from tokens.css
+ *
+ * Components styled here:
+ * - .terminal-panel (shared container)
+ * - .verdict-veil (intro overlay)
+ * - .cursor (shared, see components.css)
+ * - .reveal-btn, .info-btn (terminal buttons)
+ * - .glow-text (accent text with glow)
+ * - .date-badge, .history-chart-section
+ */
+
+@layer components {
+  /* ============================================
+     Terminal Panel
+     ============================================
+     Shared container for verdict display, veil, details, etc.
+  */
+  .terminal-panel {
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-radius: 8px;
+    box-shadow:
+      0 8px 32px oklch(0 0 0 / 0.4),
+      inset 0 1px 0 oklch(1 0 0 / 0.05);
+    transition:
+      transform 400ms var(--ease-swift),
+      opacity 400ms var(--ease-swift);
+    color: var(--terminal-text);
+  }
+
+  .light .terminal-panel {
+    box-shadow:
+      0 8px 32px oklch(0 0 0 / 0.1),
+      inset 0 1px 0 oklch(1 0 0 / 0.5);
+  }
+
+  .terminal-panel.scale-up {
+    transform: scale(1.05);
+  }
+
+  /* ============================================
+     Verdict Veil
+     ============================================
+     Full-screen overlay for the intro animation.
+  */
+  .verdict-veil {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition:
+      opacity 50ms ease-out,
+      transform 50ms ease-out;
+  }
+
+  .verdict-veil.fading {
+    opacity: 0;
+    transform: scale(1.2);
+    pointer-events: none;
+  }
+
+  /* Verdict Veil Cursor — uses shared .cursor class */
+
+  /* ============================================
+     Glow Text
+     ============================================
+     Accent text with glowing effect.
+  */
+  .glow-text {
+    color: var(--color-accent);
+    text-shadow:
+      0 0 10px color-mix(in srgb, var(--color-accent), transparent 40%),
+      0 0 20px color-mix(in srgb, var(--color-accent), transparent 60%);
+  }
+
+  .light .glow-text {
+    text-shadow:
+      0 0 8px color-mix(in srgb, var(--color-accent), transparent 50%),
+      0 0 16px color-mix(in srgb, var(--color-accent), transparent 70%);
+  }
+
+  /* ============================================
+     Terminal Buttons
+     ============================================
+     Styled buttons for terminal panels.
+  */
+  .reveal-btn,
+  .info-btn {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    background: var(--terminal-btn-bg);
+    border: 1px solid var(--terminal-btn-border);
+    border-radius: 4px;
+    color: var(--terminal-text);
+    cursor: pointer;
+    transition: all 0.2s var(--ease-swift);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .reveal-btn .reveal-arrow,
+  .info-btn .reveal-arrow {
+    animation: arrow-slide-in 200ms var(--ease-swift);
+  }
+
+  .reveal-btn:disabled,
+  .info-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .reveal-btn:hover:not(:disabled),
+  .reveal-btn:focus:not(:disabled),
+  .reveal-btn.focused,
+  .info-btn:hover:not(:disabled),
+  .info-btn:focus:not(:disabled) {
+    color: var(--terminal-text);
+    background: var(--terminal-btn-hover-bg);
+    border-color: var(--terminal-btn-border-hover);
+    box-shadow: 0 0 15px var(--terminal-btn-glow);
+    outline: none;
+  }
+
+  .reveal-btn:disabled:hover,
+  .reveal-btn:disabled:focus,
+  .info-btn:disabled:hover,
+  .info-btn:disabled:focus {
+    background: var(--terminal-btn-bg);
+    border-color: var(--terminal-btn-border);
+    box-shadow: none;
+    outline: none;
+  }
+
+  /* ============================================
+     Date Badge & History Section
+     ============================================
+  */
+  .date-badge {
+    background: var(--terminal-btn-bg);
+    border-color: var(--terminal-border-subtle);
+    color: var(--terminal-text-muted);
+  }
+
+  .history-chart-section {
+    border-color: var(--terminal-border-subtle);
+  }
+}

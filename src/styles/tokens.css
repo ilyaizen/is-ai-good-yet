@@ -1,0 +1,316 @@
+/**
+ * Design Tokens
+ * =============
+ * This is the SINGLE SOURCE OF TRUTH for all colors, typography, and spacing.
+ *
+ * To change the primary lime green across the entire app:
+ *   1. Modify --palette-lime-light and --palette-lime-dark below
+ *   2. Everything else derives from these values automatically
+ *
+ * Color Architecture:
+ *   Palette (raw values) → Semantic (purpose) → Component (specific usage)
+ */
+
+@layer base {
+  :root {
+    /* =========================================================
+       PALETTE - Raw Color Values
+       =========================================================
+       These are the ONLY places you need to change colors.
+       All other tokens reference these values.
+    */
+
+    /* Primary Lime Green - THE accent color */
+    --palette-lime-light: oklch(0.50 0.16 141.5);      /* Darker lime for light mode */
+    --palette-lime-dark: oklch(0.68 0.18 140.85);      /* Brighter lime for dark mode */
+
+    /* Warning Yellow/Orange */
+    --palette-warning-light: oklch(0.75 0.12 105);
+    --palette-warning-dark: oklch(0.80 0.14 105);
+
+    /* Destructive Red */
+    --palette-destructive-light: oklch(0.45 0.18 25);
+    --palette-destructive-dark: oklch(0.63 0.23 20.65);
+
+    /* Neutral Grays (blue-tinted) */
+    --palette-gray-50: oklch(0.96 0.005 250);
+    --palette-gray-100: oklch(0.92 0.008 250);
+    --palette-gray-200: oklch(0.88 0.008 250);
+    --palette-gray-300: oklch(0.7 0.01 250);
+    --palette-gray-400: oklch(0.6 0.01 250);
+    --palette-gray-500: oklch(0.5 0.01 250);
+    --palette-gray-600: oklch(0.4 0.01 250);
+    --palette-gray-700: oklch(0.35 0.01 250);
+    --palette-gray-800: oklch(0.15 0.008 250);
+    --palette-gray-900: oklch(0.13 0.008 250);
+    --palette-gray-950: oklch(0.09 0.005 250);
+
+    /* Window Control Colors (macOS-style) */
+    --palette-control-close: oklch(0.55 0.22 25);
+    --palette-control-minimize: oklch(0.72 0.17 85);
+    --palette-control-maximize: oklch(0.58 0.19 142);
+
+    /* =========================================================
+       SEMANTIC TOKENS - Light Theme
+       =========================================================
+       These map palette colors to their PURPOSE.
+       Light mode uses the "-light" palette variants.
+    */
+
+    /* Core Backgrounds */
+    --background: oklch(0.96 0.0033 197.0919);
+    --foreground: oklch(0.2167 0.0015 197.0424);
+
+    /* Surfaces */
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.2167 0.0015 197.0424);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.2167 0.0015 197.0424);
+
+    /* Primary - References the palette */
+    --primary: var(--palette-lime-light);
+    --primary-foreground: oklch(0 0 0);
+
+    /* Secondary */
+    --secondary: var(--palette-lime-light);
+    --secondary-foreground: oklch(0.2167 0.0015 197.0424);
+
+    /* Muted */
+    --muted: oklch(0.96 0.0033 197.0919);
+    --muted-foreground: oklch(0.3942 0.0053 196.9418);
+
+    /* Accent */
+    --accent: var(--palette-lime-light);
+    --accent-foreground: oklch(0 0 0);
+
+    /* Destructive - References the palette */
+    --destructive: var(--palette-destructive-light);
+    --destructive-foreground: oklch(1 0 0);
+
+    /* Warning - References the palette */
+    --warning: var(--palette-warning-light);
+    --warning-foreground: oklch(0 0 0);
+
+    /* Borders & Inputs */
+    --border: oklch(0.785 0.0056 197.0423);
+    --input: oklch(0.785 0.0056 197.0423);
+    --ring: var(--palette-lime-light);
+
+    /* Sidebar */
+    --sidebar: oklch(0.8328 0 0);
+    --sidebar-foreground: oklch(0.2167 0.0015 197.0424);
+    --sidebar-primary: oklch(0.2167 0.0015 197.0424);
+    --sidebar-primary-foreground: oklch(0.8328 0 0);
+    --sidebar-accent: oklch(0.8203 0 0);
+    --sidebar-accent-foreground: oklch(0.2167 0.0015 197.0424);
+    --sidebar-border: oklch(0.7794 0 0);
+    --sidebar-ring: oklch(0.6032 0 0);
+
+    /* Sentiment Colors (for data visualization) */
+    --color-primary: var(--palette-lime-light);
+    --color-warning: var(--palette-warning-light);
+    --color-destructive: var(--palette-destructive-light);
+    --color-neutral: var(--palette-warning-light);
+
+    /* Links */
+    --hn-link-color: oklch(0.6958 0.204259 43.491);
+    --link-blue: oklch(0.5 0.135 249.313);
+
+    /* =========================================================
+       TERMINAL TOKENS - Light Theme
+       =========================================================
+       Terminal aesthetic components derive from palette + grays.
+
+       NOTE: When changing --palette-lime-light, also update:
+       - --terminal-border (same color with / 0.4 opacity)
+       - --terminal-border-subtle (same color with / 0.2 opacity)
+       - --terminal-accent-glow (same color with / 0.3 opacity)
+       - --terminal-accent-hover (same color with / 0.15 opacity)
+       - --terminal-btn-* values that reference the accent
+    */
+
+    /* Terminal Surfaces */
+    --terminal-bg: oklch(1 0 0);
+    --terminal-bg-subtle: var(--palette-gray-50);
+    --terminal-bg-header: var(--palette-gray-100);
+    --terminal-bg-footer: var(--palette-gray-200);
+    --terminal-bg-overlay: var(--palette-gray-50);
+
+    /* Terminal Borders - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
+    --terminal-border: oklch(0.50 0.16 131.5 / 0.4);
+    --terminal-border-strong: var(--palette-lime-light);
+    --terminal-border-subtle: oklch(0.50 0.16 131.5 / 0.2);
+
+    /* Terminal Text - Uses gray palette */
+    --terminal-text: var(--palette-gray-800);
+    --terminal-text-muted: var(--palette-gray-700);
+    --terminal-text-faint: var(--palette-gray-500);
+
+    /* Terminal Accent - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
+    --terminal-accent: var(--palette-lime-light);
+    --terminal-accent-glow: oklch(0.50 0.16 131.5 / 0.3);
+    --terminal-accent-hover: oklch(0.50 0.16 131.5 / 0.15);
+
+    /* Terminal Buttons - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
+    --terminal-btn-bg: oklch(0 0 0 / 0.05);
+    --terminal-btn-hover-bg: oklch(0.50 0.16 131.5 / 0.15);
+    --terminal-btn-border: oklch(0.50 0.16 131.5 / 0.4);
+    --terminal-btn-border-hover: var(--palette-lime-light);
+    --terminal-btn-glow: oklch(0.50 0.16 131.5 / 0.3);
+
+    /* Terminal Cursor & Controls */
+    --terminal-cursor: var(--palette-lime-light);
+    --terminal-control-close: var(--palette-control-close);
+    --terminal-control-minimize: var(--palette-control-minimize);
+    --terminal-control-maximize: var(--palette-control-maximize);
+
+    /* =========================================================
+       LAYOUT & TYPOGRAPHY
+       =========================================================
+    */
+
+    /* Container */
+    --container-width: 80rem;
+    --max-width: 80rem;
+
+    /* Typography */
+    --font-sans: Armata, ui-sans-serif, sans-serif, system-ui;
+    --font-serif: Tiro Bangla, ui-serif, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+    /* Border Radius */
+    --radius: 0.4rem;
+
+    /* Shadows */
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+
+    /* Spacing */
+    --spacing: 0.25rem;
+
+    /* Table */
+    --table-bg: var(--card);
+    --table-text: var(--foreground);
+    --table-secondary-text: var(--muted-foreground);
+    --table-border: var(--border);
+    --table-header-bg: var(--muted);
+    --table-row-hover: var(--muted);
+    --table-pagination-bg: var(--muted);
+  }
+
+  /* =========================================================
+     DARK THEME
+     =========================================================
+     Overrides semantic tokens to use "-dark" palette variants.
+  */
+  .dark {
+    /* Core Backgrounds */
+    --background: oklch(0.2189 0.0046 196.8245);
+    --foreground: oklch(0.8211 0.0033 197.0919);
+
+    /* Surfaces */
+    --card: black;
+    --card-foreground: oklch(0.8211 0.0033 197.0919);
+    --popover: black;
+    --popover-foreground: oklch(0.8211 0.0033 197.0919);
+
+    /* Primary - References the DARK palette variant */
+    --primary: var(--palette-lime-dark);
+    --primary-foreground: oklch(0.2189 0.0046 196.8245);
+
+    /* Secondary */
+    --secondary: var(--palette-lime-dark);
+    --secondary-foreground: oklch(0.2189 0.0046 196.8245);
+
+    /* Muted */
+    --muted: oklch(0.2467 0.0015 197.0595);
+    --muted-foreground: oklch(0.6209 0.0083 196.9435);
+
+    /* Accent */
+    --accent: var(--palette-lime-dark);
+    --accent-foreground: oklch(0.2189 0.0046 196.8245);
+
+    /* Destructive - References the DARK palette variant */
+    --destructive: var(--palette-destructive-dark);
+    --destructive-foreground: oklch(1 0 0);
+
+    /* Warning - References the DARK palette variant */
+    --warning: var(--palette-warning-dark);
+    --warning-foreground: oklch(0 0 0);
+
+    /* Borders & Inputs */
+    --border: oklch(0.2467 0.0015 197.0595);
+    --input: oklch(0.2467 0.0015 197.0595);
+    --ring: var(--palette-lime-dark);
+
+    /* Sidebar */
+    --sidebar: oklch(0.2167 0.0015 197.0424);
+    --sidebar-foreground: oklch(0.8328 0 0);
+    --sidebar-primary: oklch(0.609 0.0989 173.7468);
+    --sidebar-primary-foreground: oklch(0.8328 0 0);
+    --sidebar-accent: oklch(0.235 0 0);
+    --sidebar-accent-foreground: oklch(0.8328 0 0);
+    --sidebar-border: oklch(0.2435 0 0);
+    --sidebar-ring: oklch(0.3791 0 0);
+
+    /* Sentiment Colors */
+    --color-primary: var(--palette-lime-dark);
+    --color-warning: var(--palette-warning-dark);
+    --color-destructive: var(--palette-destructive-dark);
+
+    /* Links */
+    --link-blue: oklch(50.041% 0.13497 249.313);
+
+    /* =========================================================
+       TERMINAL TOKENS - Dark Theme
+       =========================================================
+       NOTE: When changing --palette-lime-dark, also update:
+       - --terminal-border (same color with / 0.4 opacity)
+       - --terminal-border-subtle (same color with / 0.2 opacity)
+       - --terminal-accent-glow (same color with / 0.3 opacity)
+       - --terminal-accent-hover (same color with / 0.15 opacity)
+       - --terminal-btn-* values that reference the accent
+    */
+
+    /* Terminal Surfaces */
+    --terminal-bg: var(--palette-gray-900);
+    --terminal-bg-subtle: var(--palette-gray-950);
+    --terminal-bg-header: var(--palette-gray-800);
+    --terminal-bg-footer: oklch(0.12 0.008 250);
+    --terminal-bg-overlay: var(--palette-gray-900);
+
+    /* Terminal Borders - Based on --palette-lime-dark: oklch(0.68 0.18 130.85) */
+    --terminal-border: oklch(0.68 0.18 130.85 / 0.4);
+    --terminal-border-strong: var(--palette-lime-dark);
+    --terminal-border-subtle: oklch(0.68 0.18 130.85 / 0.2);
+
+    /* Terminal Text */
+    --terminal-text: oklch(0.95 0.005 250);
+    --terminal-text-muted: var(--palette-gray-300);
+    --terminal-text-faint: var(--palette-gray-500);
+
+    /* Terminal Accent - Based on --palette-lime-dark: oklch(0.68 0.18 130.85) */
+    --terminal-accent: var(--palette-lime-dark);
+    --terminal-accent-glow: oklch(0.68 0.18 130.85 / 0.3);
+    --terminal-accent-hover: oklch(0.68 0.18 130.85 / 0.15);
+
+    /* Terminal Buttons - Based on --palette-lime-dark: oklch(0.68 0.18 130.85) */
+    --terminal-btn-bg: oklch(0 0 0 / 0.25);
+    --terminal-btn-hover-bg: oklch(0.68 0.18 130.85 / 0.15);
+    --terminal-btn-border: oklch(0.68 0.18 130.85 / 0.4);
+    --terminal-btn-border-hover: var(--palette-lime-dark);
+    --terminal-btn-glow: oklch(0.68 0.18 130.85 / 0.3);
+
+    /* Terminal Cursor */
+    --terminal-cursor: var(--palette-lime-dark);
+
+    /* Table */
+    --table-row-hover: oklch(0.2632 0.0026 196.9418);
+  }
+}

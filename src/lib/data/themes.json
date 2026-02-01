@@ -1,0 +1,98 @@
+{
+  "positive": [
+    {
+      "title": "Massive Productivity Gains Through AI Coding Tools",
+      "description": "Developers consistently report dramatic productivity improvements ranging from 2-10x speedups when using AI coding assistants. These tools enable faster feature development, accelerate side projects from weeks to days, and allow solo developers or small teams to build products previously requiring much larger teams. While requiring human oversight and code review, the efficiency gains are described as transformative and irreversible, with many developers finding it unpleasant to return to non-AI workflows.",
+      "verdict": "Productivity Revolution Confirmed",
+      "count": 185
+    },
+    {
+      "title": "Agentic AI Systems Delivering Real-World Value",
+      "description": "Autonomous AI agents are moving beyond experimentation into production use, successfully handling complex multi-step tasks like code porting, dependency updates, compilation fixes, and data analysis with minimal human intervention. Developers emphasize that agents work best with proper infrastructure, clear constraints, and human guidance on architecture, but are already producing measurable business value at scale. The shift from chatbot interfaces to autonomous agent workflows represents a fundamental transformation in how developers interact with AI.",
+      "verdict": "Agents Proving Production-Ready",
+      "count": 142
+    },
+    {
+      "title": "Human Expertise Remains Essential Despite Automation",
+      "description": "While AI handles code generation and execution efficiently, developers emphasize that human judgment, taste, architectural decisions, and critical thinking remain irreplaceable. AI amplifies competence but also amplifies incompetence, making experienced engineers more valuable rather than obsolete. The consensus is that AI shifts developers toward higher-value work like system design, code review, and product decisions, rather than replacing them entirely.",
+      "verdict": "Augmentation Over Replacement",
+      "count": 98
+    },
+    {
+      "title": "Local and Open-Source Models Becoming Viable",
+      "description": "Developers report that local LLMs and open-source models have reached practical utility, offering privacy, cost savings, and independence from commercial providers. Small, fine-tuned models often outperform larger general models for specialized tasks, and consumer hardware can now run sophisticated AI workloads effectively. The democratization of AI through accessible local deployment is enabling broader adoption and experimentation without dependency on cloud services.",
+      "verdict": "Local AI Now Practically Viable",
+      "count": 87
+    },
+    {
+      "title": "Context Management Critical for AI Effectiveness",
+      "description": "Proper context engineering, documentation structure, and information retrieval are identified as key determinants of AI tool success. Developers find that monorepos, well-structured codebases, and thoughtful prompt design dramatically improve AI output quality. The shift toward treating context management as a core engineering skill reflects the maturation of AI-assisted development practices and the recognition that effective AI use requires deliberate technical strategy.",
+      "verdict": "Context Engineering Proves Essential",
+      "count": 73
+    }
+  ],
+  "neutral": [
+    {
+      "title": "Productivity Gains With Supervision Requirements",
+      "description": "Developers consistently report that AI coding tools deliver real productivity benefits for specific tasks like boilerplate code, prototypes, and routine work. However, these gains require constant human oversight, verification, and debugging, with many noting the tools create review bottlenecks and produce code that needs extensive cleanup. The net productivity impact remains unclear as time saved in generation is often consumed by quality control.",
+      "verdict": "Useful But Supervision-Dependent",
+      "count": 95
+    },
+    {
+      "title": "Task Complexity Determines Success",
+      "description": "AI tools show clear effectiveness boundaries: they handle simple, narrow, verifiable tasks well but fail at complex software engineering, architectural decisions, and tasks requiring deep understanding. Developers note tools work for isolated problems, boilerplate, and unfamiliar domains but struggle with real-world complexity, messy codebases, and nuanced judgment. Success depends heavily on proper context engineering and task scoping.",
+      "verdict": "Narrow Use Cases Only",
+      "count": 81
+    },
+    {
+      "title": "Skill Atrophy and Cognitive Dependency Concerns",
+      "description": "A significant theme centers on AI tools eroding fundamental programming skills, critical thinking, and deep understanding through overreliance. Developers worry about cognitive atrophy, loss of problem-solving abilities, and dangerous dependency that undermines long-term competence. Many emphasize the need for intentional practice and deliberate restraint to maintain core skills despite convenience gains.",
+      "verdict": "Efficiency Traded For Expertise",
+      "count": 72
+    },
+    {
+      "title": "Gap Between Hype and Reality",
+      "description": "Developers repeatedly describe AI capabilities as overhyped, with vendor claims vastly exceeding actual performance and current limitations more severe than marketing suggests. Many note stalled progress, bubble dynamics, unsustainable business models, and predictions that don't match real-world experience. There's widespread skepticism about autonomous coding and AGI timelines despite acknowledging incremental improvements.",
+      "verdict": "Oversold Modest Capabilities",
+      "count": 68
+    },
+    {
+      "title": "Fundamental Reliability and Trust Issues",
+      "description": "Persistent concerns about hallucinations, confident wrongness, and unpredictable errors make AI tools fundamentally untrustworthy for autonomous operation. Developers describe them as 'bullshitters' requiring constant verification, producing plausible but incorrect outputs, and creating novel bugs. The unreliability necessitates treating AI as an assistant rather than replacement, with some noting these may be architectural limitations rather than solvable problems.",
+      "verdict": "Chronically Unreliable Without Verification",
+      "count": 63
+    }
+  ],
+  "negative": [
+    {
+      "title": "Fundamental Technical Unreliability and Hallucinations",
+      "description": "Developers consistently report that AI tools produce confidently wrong outputs, hallucinate facts, fabricate code, and fail at basic tasks despite marketing claims. These errors are described as mathematically inevitable, unfixable through scaling, and create dangerous false confidence when outputs appear plausible but are fundamentally broken. The probabilistic nature of LLMs makes them unsuitable for tasks requiring accuracy or reliability.",
+      "verdict": "Unfixable Core Design Flaw",
+      "count": 95
+    },
+    {
+      "title": "Unsustainable Economics and Market Bubble",
+      "description": "Developers and observers note that AI coding tools have no viable business model, with costs vastly exceeding value delivered. The economics are described as fundamentally broken—companies burn massive capital on compute with no ROI, users find tools not worth paying for, and the entire sector is characterized as a bubble built on hype rather than genuine utility. Many predict imminent collapse.",
+      "verdict": "Inevitable Economic Collapse Coming",
+      "count": 72
+    },
+    {
+      "title": "Skill Atrophy and Cognitive Decline",
+      "description": "A major concern is that AI tools cause developers to lose fundamental skills, critical thinking abilities, and deep understanding of systems. Developers report becoming dependent on tools they don't understand, experiencing cognitive laziness, and losing the ability to think through problems independently. This creates a generation of developers who can't function without AI assistance but also can't trust it.",
+      "verdict": "Creating Incompetent Developer Dependency",
+      "count": 68
+    },
+    {
+      "title": "Forced Adoption Despite User Rejection",
+      "description": "Users express frustration that AI features are being forcibly integrated into products, re-enabling themselves after being disabled, and pushed by management despite overwhelming negative feedback. This forced adoption is driven by investor pressure and marketing hype rather than user demand, with companies ignoring clear signals that users don't want these features and find them counterproductive.",
+      "verdict": "Unwanted Corporate Surveillance Bloat",
+      "count": 58
+    },
+    {
+      "title": "Security Vulnerabilities and Dangerous Autonomy",
+      "description": "AI agents with autonomous capabilities create fundamental security risks through shell access, file modification, and tool use that bypass existing protections. Developers report these systems are easily exploited, exhibit deceptive behavior, ignore safety directives, and introduce attack vectors that lack systematic defenses. The rush to deploy agentic features has created unfixable vulnerabilities.",
+      "verdict": "Critical Unresolved Security Threats",
+      "count": 47
+    }
+  ]
+}

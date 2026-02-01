@@ -1,0 +1,208 @@
+/**
+ * Component Styles
+ * =================
+ * Reusable component styling patterns.
+ * All colors reference tokens from tokens.css
+ */
+
+@layer components {
+  /* ============================================
+     Highlight & Utilities
+     ============================================
+  */
+  .highlight {
+    color: var(--color-primary);
+    text-shadow: 0 0 10px var(--color-primary);
+  }
+
+  .mono-text {
+    font-family: var(--font-mono);
+  }
+
+  /* ============================================
+     Layout Constraints
+     ============================================
+  */
+  .page-container,
+  .container {
+    max-width: 80rem !important;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  /* ============================================
+     Cursor (generic)
+     ============================================
+  */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: var(--terminal-cursor);
+    vertical-align: text-bottom;
+    animation: var(--animate-blink);
+  }
+
+  /* ============================================
+     Site Header
+     ============================================
+  */
+  .site-header {
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .site-header .header-content {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 1rem 1.5rem;
+  }
+
+  .site-header .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .site-header .logo-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .site-header .logo-text-wrapper {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .site-header .logo-text {
+    display: flex;
+    align-items: baseline;
+  }
+
+  .site-header .logo-text .word {
+    display: inline-block;
+  }
+
+  .site-header .logo-text .space {
+    display: inline-block;
+    width: 0.5ch;
+  }
+
+  .site-header .cursor {
+    height: 1em;
+    vertical-align: baseline;
+  }
+
+  .site-header .desktop-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .site-header .nav-list {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-header .nav-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color var(--transition-normal);
+  }
+
+  .site-header .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .site-header .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-self: end;
+  }
+
+  .site-header .dev-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-family: var(--font-mono);
+    transition: all var(--transition-normal);
+  }
+
+  .site-header .dev-link:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    border-color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    .site-header .desktop-nav,
+    .site-header .dev-link span {
+      display: none;
+    }
+  }
+
+  /* ============================================
+     Sheet Component
+     ============================================
+     Custom animations for the Sheet component.
+  */
+
+  /* Prevent background scrolling when sheet is open */
+  html:has([data-state="open"][role="dialog"]),
+  body:has([data-state="open"][role="dialog"]) {
+    overflow: hidden !important;
+  }
+
+  /* Sheet container animation overrides */
+  [data-slot="sheet-content"] {
+    --sheet-easing: var(--ease-swift);
+    border-color: var(--border) !important;
+    transition-timing-function: var(--sheet-easing) !important;
+  }
+
+  [data-slot="sheet-content"][data-state="open"] {
+    animation: sheet-slide-in-right 400ms var(--sheet-easing) forwards;
+  }
+
+  [data-slot="sheet-content"][data-state="closed"] {
+    animation: sheet-slide-out-right 300ms var(--sheet-easing) forwards;
+  }
+
+  [data-slot="sheet-overlay"] {
+    transition-timing-function: var(--ease-swift) !important;
+  }
+
+  [data-slot="sheet-overlay"][data-state="open"] {
+    animation: sheet-overlay-in 400ms var(--ease-swift) forwards;
+  }
+
+  [data-slot="sheet-overlay"][data-state="closed"] {
+    animation: sheet-overlay-out 300ms var(--ease-swift) forwards;
+  }
+}

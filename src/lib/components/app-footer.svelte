@@ -38,7 +38,7 @@
           </Tooltip>
         </p>
         <p class="footer-description pt-2">
-          thanks for visiting! (#<VisitorCounter />) cast your vote
+          thank you for visiting, #<VisitorCounter />! please cast your vote
           <a
             href="https://news.ycombinator.com/item?id=46851589"
             target="_blank"

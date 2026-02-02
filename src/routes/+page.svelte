@@ -165,7 +165,6 @@
   /* Content Section: Fade + slide up animation */
   .content-section {
     padding-top: 2rem;
-    padding-bottom: 4rem;
     max-width: 56rem; /* max-w-4xl - slightly wider for articles table */
     margin: 0 auto;
     width: 100%;

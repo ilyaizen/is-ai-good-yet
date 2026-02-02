@@ -38,14 +38,14 @@
           </Tooltip>
         </p>
         <p class="footer-description pt-2">
-          thanks for visiting! (#<VisitorCounter />) if you like ai,
+          thanks for visiting! (#<VisitorCounter />) cast your vote
           <a
             href="https://news.ycombinator.com/item?id=46851589"
             target="_blank"
             rel="noopener noreferrer"
             class="text-primary hover:underline hover:text-primary">
-            vote it up!
-          </a>
+            here
+          </a>.
         </p>
       </div>
 
@@ -73,13 +73,21 @@
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--color);
-    background-color: var(--color-background);
+    border-top: 1px solid oklch(from var(--primary) l c h / 0.3);
+    background-color: var(--card);
     margin-top: 4rem;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding-left: calc(50vw - 50%);
+    padding-right: calc(50vw - 50%);
+    padding-bottom: 1.5rem;
   }
 
   .footer-inner {
     padding: 2.5rem 1.5rem 1.5rem;
+    max-width: 64rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .footer-top {

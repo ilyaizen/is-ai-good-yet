@@ -118,6 +118,10 @@
 </div>
 
 <style>
+  .site-header {
+    border-bottom: 1px solid oklch(from var(--primary) l c h / 0.3);
+  }
+
   /*
    * Animated mode styles:
    * - Header starts translated up (hidden above viewport)

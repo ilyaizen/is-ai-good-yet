@@ -383,7 +383,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="pt-10 sm:pt-10 transition-opacity duration-300 ease-swift" class:opacity-35={isHoveringHistory}>
+    <div class="pt-10 sm:pt-10 transition-opacity duration-300 ease-swift" class:opacity-65={isHoveringHistory}>
       <!-- Verdict Answer -->
       {#if animationStep >= 1}
         <div
@@ -413,7 +413,16 @@
           <div class="mb-5 text-center sm:mb-4">
             <!-- Combined sentiment + context line with brighter contrast -->
             <p class="font-mono text-sm text-foreground dark:text-foreground">
-              {#if descriptionStream}
+              {#if isHoveringHistory}
+                <!-- When hovering history, show dynamic text that updates with the hovered snapshot -->
+                {sentimentText}
+                based on the accumulated points of
+                <NumberFlow
+                  value={effectiveTotalArticles}
+                  animated={numberFlowAnimated}
+                  transformTiming={numberFlowTiming}
+                  spinTiming={numberFlowTiming} /> recent articles.
+              {:else if descriptionStream}
                 {descriptionStream.getVisibleText(
                   0
                 )}{#if descriptionStream.isLineComplete(0)}{descriptionStream.getVisibleText(

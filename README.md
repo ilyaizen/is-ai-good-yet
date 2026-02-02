@@ -1,4 +1,4 @@
-# Is AI "good" yet? (Frontend)
+# Is AI "good" yet?
 
 ![SvelteKit](https://img.shields.io/badge/SvelteKit-5.x-FF3E00?logo=svelte&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css&logoColor=white)
@@ -27,12 +27,6 @@ The frontend you're looking at is the pretty face that makes all that data diges
 ## 💡 Why does this exist?
 
 > *"I kept seeing waves of AI-hate that just didn't match my experience, and as I don't jive with vibes or tribes, I built this to find out if HN's hivemind shares similar sentiments."*
-
-It's also a portfolio piece (web developer here, not a statistician). If you find this interesting, consider:
-- ⭐ [Starring the repo](https://github.com/ilyaizen/is-ai-good-yet)
-- ☕ [Buying a coffee](https://ko-fi.com/ilyaizen) — a *lot* of coffee went into this
-
-If this gets traction, I'll open-source the full pipeline—you never know.
 
 ---
 

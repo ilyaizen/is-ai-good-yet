@@ -38,7 +38,14 @@
           </Tooltip>
         </p>
         <p class="footer-description pt-2">
-          thanks for visiting! (#<VisitorCounter />)
+          thanks for visiting! (#<VisitorCounter />) if you like ai,
+          <a
+            href="https://news.ycombinator.com/item?id=46851589"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline hover:text-primary">
+            vote it up!
+          </a>
         </p>
       </div>
 

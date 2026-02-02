@@ -21,13 +21,21 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="hover:underline hover:text-primary">
-                molty
+                molty 🦞
+              </a>
+              and
+              <a
+                href="https://github.com/AutoMaker-Org/automaker"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:underline hover:text-primary">
+                automaker
               </a>.
             </TooltipTrigger>
             <TooltipContent>
-              <p>unbelieve huh? lol..</p>
+              <p>unbelieve huh?</p>
             </TooltipContent>
-          </Tooltip> 🦞
+          </Tooltip>
         </p>
         <p class="footer-description pt-2">
           thanks for visiting! (#<VisitorCounter />)

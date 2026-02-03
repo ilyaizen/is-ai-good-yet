@@ -552,7 +552,7 @@
     <!-- History Chart Section (Collapsible) -->
     {#if weeklySnapshots && weeklySnapshots.length > 0}
       {#if animationStep >= 5}
-        <div class="border-t border-border/20 flex flex-col items-start w-full">
+        <div class="flex flex-col items-start w-full">
           <!-- History Chart -->
           <div
             class="grid transition-all duration-500 ease-swift overflow-hidden w-full"

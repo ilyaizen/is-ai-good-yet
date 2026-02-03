@@ -44210,5 +44210,48 @@
         "timestamp": "2026-02-01T13:55:51.854143+00:00"
       }
     }
+  },
+  "46855527": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with malicious AI extensions, highlighting security risks and importance of visibility into AI tool functionality."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1882,
+        "output_tokens": 49,
+        "total_tokens": 1931,
+        "inference_time_ms": 393.7,
+        "tokens_per_second": 124.5,
+        "prompt_chars": 3962,
+        "timestamp": "2026-02-02T22:36:16.800394+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding assistants can secretly steal code, posing severe security risks.",
+        "quotes": [
+          "These extensions ... capture every file you open, every edit you make, and send it all to servers in China.",
+          "MaliciousCorgi Campaign Extension ... harvest your code."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-02T22:36:21.435516+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2180,
+        "output_tokens": 196,
+        "total_tokens": 2376,
+        "inference_time_ms": 409.1,
+        "tokens_per_second": 479.1,
+        "prompt_chars": 6229,
+        "timestamp": "2026-02-02T22:36:21.435516+00:00"
+      }
+    }
   }
 }

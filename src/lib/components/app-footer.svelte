@@ -12,7 +12,7 @@
         <p class="footer-description">
           a survey tracking developer sentiment on AI-assisted coding through hacker news posts.
         </p>
-        <p class="footer-description pt-2">
+        <!-- <p class="footer-description pt-2">
           made with ❤️ and a single prompt that one-shot this entirely in 25 minutes using
           <Tooltip>
             <TooltipTrigger>
@@ -46,6 +46,16 @@
             class="text-primary hover:underline hover:text-primary">
             here
           </a>.
+        </p> -->
+        <p class="footer-description pt-2">
+          this page was visited <VisitorCounter /> times.
+          <!-- <a
+            href="https://news.ycombinator.com/item?id=46851589"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline hover:text-primary">
+            here
+          </a>. -->
         </p>
       </div>
 
@@ -57,9 +67,21 @@
           <a href="#articles-table">articles</a>
         </div>
         <div class="footer-links-group">
-          <span class="footer-links-label">project</span>
+          <span class="footer-links-label">links</span>
           <a href="https://github.com/ilyaizen/is-ai-good-yet" target="_blank" rel="noopener noreferrer">
             github
+            <ExternalLink size={12} />
+          </a>
+          <!-- <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer">
+            hacker news
+            <ExternalLink size={12} />
+          </a> -->
+          <a href="https://hcker.news/" target="_blank" rel="noopener noreferrer">
+            hcker.news
+            <ExternalLink size={12} />
+          </a>
+          <a href="https://news.ycombinator.com/item?id=46851589" target="_blank" rel="noopener noreferrer">
+            original post
             <ExternalLink size={12} />
           </a>
         </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ExternalLink } from "lucide-svelte"
   import VisitorCounter from "./visitor-counter.svelte"
-  import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip"
+  // import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip"
 </script>
 
 <footer class="site-footer">

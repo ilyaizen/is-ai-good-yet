@@ -44253,5 +44253,220 @@
         "timestamp": "2026-02-02T22:36:21.435516+00:00"
       }
     }
+  },
+  "46866481": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI coding assistants' limitations"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1815,
+        "output_tokens": 41,
+        "total_tokens": 1856,
+        "inference_time_ms": 335.7,
+        "tokens_per_second": 122.1,
+        "prompt_chars": 3968,
+        "timestamp": "2026-02-05T08:05:54.862885+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI tools add ambiguity and security risks, but some senior devs see speed gains—overall net mixed impact.",
+        "quotes": [
+          "\"48% of AI‑generated code contains security vulnerabilities (Apiiro, 2024)\"",
+          "\"Experienced developers were 19% slower when using AI coding assistants—yet believed they were faster (METR, 2025)\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-05T08:06:04.432798+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2401,
+        "output_tokens": 210,
+        "total_tokens": 2611,
+        "inference_time_ms": 618.2,
+        "tokens_per_second": 339.7,
+        "prompt_chars": 7981,
+        "timestamp": "2026-02-05T08:06:04.432798+00:00"
+      }
+    }
+  },
+  "46845845": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with Claude Code quota limit and provides a workaround using open source models"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1656,
+        "output_tokens": 46,
+        "total_tokens": 1702,
+        "inference_time_ms": 407.1,
+        "tokens_per_second": 113.0,
+        "prompt_chars": 2612,
+        "timestamp": "2026-02-05T08:05:53.014446+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Switching to a local model keeps coding alive, but sacrifices speed and quality – a pragmatic, but imperfect, workaround.",
+        "quotes": [
+          "\"Reduce your expectations about speed and performance!\"",
+          "\"Unless you have a monster of a machine, you’re going to notice the time it takes to do things and a drop in code quality but it works(!)\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-05T08:06:02.632114+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1512,
+        "output_tokens": 209,
+        "total_tokens": 1721,
+        "inference_time_ms": 429.0,
+        "tokens_per_second": 487.2,
+        "prompt_chars": 2612,
+        "timestamp": "2026-02-05T08:06:02.632114+00:00"
+      }
+    }
+  },
+  "46874139": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience with AI agent sandboxing in Linux"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1887,
+        "output_tokens": 40,
+        "total_tokens": 1927,
+        "inference_time_ms": 483.8,
+        "tokens_per_second": 82.7,
+        "prompt_chars": 3958,
+        "timestamp": "2026-02-05T08:05:55.469318+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Bubblewrap effectively tames AI agent permissions, keeping workflow safe without disrupting dev ergonomics.",
+        "quotes": [
+          "'bubblewrap is a good solution for lightweight sandboxing of AI agents.'",
+          "'This can be risky (although I know of some people that run it like that and still haven't destroyed their dev machines).'"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-05T08:06:04.981083+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2303,
+        "output_tokens": 174,
+        "total_tokens": 2477,
+        "inference_time_ms": 442.2,
+        "tokens_per_second": 393.5,
+        "prompt_chars": 5864,
+        "timestamp": "2026-02-05T08:06:04.981083+00:00"
+      }
+    }
+  },
+  "46844410": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with coding agents, threat model, and sandboxing solutions."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1931,
+        "output_tokens": 44,
+        "total_tokens": 1975,
+        "inference_time_ms": 400.0,
+        "tokens_per_second": 110.0,
+        "prompt_chars": 3970,
+        "timestamp": "2026-02-05T08:05:55.989490+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Coding agents are not instant productivity boosts but reliably improve code quality and enable previously impossible tasks.",
+        "quotes": [
+          "I don’t feel like they’re automatically making existing tasks more efficient, I feel that they make things possible that were previously out of reach",
+          "I have been positively surprised by Claude Code’s capabilities and quality many times."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-05T08:06:05.534216+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2833,
+        "output_tokens": 161,
+        "total_tokens": 2994,
+        "inference_time_ms": 450.0,
+        "tokens_per_second": 357.8,
+        "prompt_chars": 7979,
+        "timestamp": "2026-02-05T08:06:05.534216+00:00"
+      }
+    }
+  },
+  "46891131": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Codex app, analyzing its impact on coding workflow"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1945,
+        "output_tokens": 44,
+        "total_tokens": 1989,
+        "inference_time_ms": 371.2,
+        "tokens_per_second": 118.5,
+        "prompt_chars": 3972,
+        "timestamp": "2026-02-05T08:05:57.515085+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Codex app is a useful workflow tool for parallelization, but not a game‑changer.",
+        "quotes": [
+          "The Codex app is my parallelization layer. The thing that’s cool about it (and Conductor, which is similar) is that it makes Git worktrees easy to use.",
+          "I think it has the best features, the most hooks, and the most ability to create a clean development workflow with all the checks I want."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-05T08:06:06.592192+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1824,
+        "output_tokens": 275,
+        "total_tokens": 2099,
+        "inference_time_ms": 547.7,
+        "tokens_per_second": 502.1,
+        "prompt_chars": 4082,
+        "timestamp": "2026-02-05T08:06:06.593210+00:00"
+      }
+    }
   }
 }

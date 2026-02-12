@@ -44468,5 +44468,262 @@
         "timestamp": "2026-02-05T08:06:06.593210+00:00"
       }
     }
+  },
+  "46963887": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion on using coding agents, with tools Showboat and Rodney."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1876,
+        "output_tokens": 46,
+        "total_tokens": 1922,
+        "inference_time_ms": 457.4,
+        "tokens_per_second": 100.6,
+        "prompt_chars": 3972,
+        "timestamp": "2026-02-12T02:28:51.712545+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Showboat and Rodney make agent demos practical, useful yet not infallible, improving workflow while acknowledging cheat risks.",
+        "quotes": [
+          "I’ve convinced myself of its utility.",
+          "I’ve also seen agents cheat! Since the demo file is Markdown the agent will sometimes edit that file directly rather than using Showboat."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:29:09.032855+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2570,
+        "output_tokens": 173,
+        "total_tokens": 2743,
+        "inference_time_ms": 500.4,
+        "tokens_per_second": 345.7,
+        "prompt_chars": 7969,
+        "timestamp": "2026-02-12T02:29:09.032855+00:00"
+      }
+    }
+  },
+  "46933223": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person developer experience and qualitative analysis with clear opinion"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1906,
+        "output_tokens": 39,
+        "total_tokens": 1945,
+        "inference_time_ms": 639.1,
+        "tokens_per_second": 61.0,
+        "prompt_chars": 3973,
+        "timestamp": "2026-02-12T02:28:46.061729+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI coding has dramatically boosted productivity, but sandbox and IDE issues still bite.",
+        "quotes": [
+          "\"In February this year, the latest Opus model can write nine tenths of my code.\", \"At a big company, my time was 80‑20 reading code to writing code…Now it is 95‑5.\", \"Built‑in agent sandboxes do not work…you have to provide your own sandbox.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:29:04.796978+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2653,
+        "output_tokens": 182,
+        "total_tokens": 2835,
+        "inference_time_ms": 489.6,
+        "tokens_per_second": 371.7,
+        "prompt_chars": 7977,
+        "timestamp": "2026-02-12T02:29:04.796978+00:00"
+      }
+    }
+  },
+  "46924426": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI coding tools and their team's success with Software Factory"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1887,
+        "output_tokens": 45,
+        "total_tokens": 1932,
+        "inference_time_ms": 422.7,
+        "tokens_per_second": 106.5,
+        "prompt_chars": 3970,
+        "timestamp": "2026-02-12T02:28:41.571807+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Agentic coding can succeed but needs new testing paradigms, so productivity gains are real yet tempered by fresh challenges.",
+        "quotes": [
+          "\"Not very far! At least: not very far, until we added tests.\"",
+          "\"With the DTU, we can validate at volumes and rates far exceeding production limits.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:29:03.755476+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2062,
+        "output_tokens": 142,
+        "total_tokens": 2204,
+        "inference_time_ms": 398.8,
+        "tokens_per_second": 356.0,
+        "prompt_chars": 5651,
+        "timestamp": "2026-02-12T02:29:03.755476+00:00"
+      }
+    }
+  },
+  "46903616": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI tool (Opus 4.6) and its limitations."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1897,
+        "output_tokens": 47,
+        "total_tokens": 1944,
+        "inference_time_ms": 1526.5,
+        "tokens_per_second": 30.8,
+        "prompt_chars": 3975,
+        "timestamp": "2026-02-12T02:28:32.962993+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Agent teams unlock large-scale autonomy but expose reliability risks, making the approach promising yet cautiously adopted.",
+        "quotes": [
+          "This approach dramatically expands the scope of what's achievable with LLM agents.",
+          "I used to work in penetration testing, exploiting vulnerabilities in products produced by large companies, and the thought of programmers deploying software they’ve never personally verified is a real concern."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:28:58.905397+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2589,
+        "output_tokens": 300,
+        "total_tokens": 2889,
+        "inference_time_ms": 829.4,
+        "tokens_per_second": 361.7,
+        "prompt_chars": 7973,
+        "timestamp": "2026-02-12T02:28:58.905397+00:00"
+      }
+    }
+  },
+  "46934344": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and opinion on using LLMs for coding, citing benefits and drawbacks."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1931,
+        "output_tokens": 47,
+        "total_tokens": 1978,
+        "inference_time_ms": 706.0,
+        "tokens_per_second": 66.6,
+        "prompt_chars": 3930,
+        "timestamp": "2026-02-12T02:28:38.363715+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "pessimistic",
+        "topic": "workflow",
+        "summary": "LLMs can aid coding if used cautiously, but unchecked reliance drags developers into shallow, dopamine‑driven workflows that erode problem‑solving depth.",
+        "quotes": [
+          "I felt the familiar feeling of depression and lethargy creep in while my eyes darted from watching claude-code work and my phone.",
+          "I copy‑paste files that I think are necessary to provide the context, and then I copy‑paste code and ask it to make changes to it or write tests for it."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:29:01.496106+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1787,
+        "output_tokens": 228,
+        "total_tokens": 2015,
+        "inference_time_ms": 770.0,
+        "tokens_per_second": 296.1,
+        "prompt_chars": 3930,
+        "timestamp": "2026-02-12T02:29:01.496106+00:00"
+      }
+    }
+  },
+  "46929391": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and opinion about the impact of AI coding agents on code quality and productivity."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1701,
+        "output_tokens": 47,
+        "total_tokens": 1748,
+        "inference_time_ms": 556.0,
+        "tokens_per_second": 84.5,
+        "prompt_chars": 3023,
+        "timestamp": "2026-02-12T02:28:50.053840+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding tools speed work but churn out mediocre code, undermining the pursuit of quality.",
+        "quotes": [
+          "I’m definitely far more productive with an agent at my side.",
+          "At the end of the day, the code they spit out is… acceptable."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-12T02:29:07.470122+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1556,
+        "output_tokens": 238,
+        "total_tokens": 1794,
+        "inference_time_ms": 499.3,
+        "tokens_per_second": 476.7,
+        "prompt_chars": 3023,
+        "timestamp": "2026-02-12T02:29:07.470122+00:00"
+      }
+    }
   }
 }

@@ -1955,36 +1955,50 @@
     "positiveCount": 335,
     "neutralCount": 136,
     "negativeCount": 272,
-    "positiveContribution": 43551.31,
+    "positiveContribution": 43551.95,
     "negativeContribution": -33465.22,
     "neutralContribution": -5135.94
   },
   {
     "week": "2026-W05",
     "weekStart": "2026-01-26",
-    "verdictScore": 56.58,
+    "verdictScore": 56.59,
     "verdict": "YES",
     "articleCount": 743,
     "rawSentiment": 0,
     "positiveCount": 335,
     "neutralCount": 139,
     "negativeCount": 269,
-    "positiveContribution": 43571.69,
+    "positiveContribution": 43600.4,
     "negativeContribution": -33438.94,
-    "neutralContribution": -5359.81
+    "neutralContribution": -5360.14
   },
   {
     "week": "2026-W06",
     "weekStart": "2026-02-02",
-    "verdictScore": 56.52,
+    "verdictScore": 56.6,
     "verdict": "YES",
     "articleCount": 743,
     "rawSentiment": 0,
-    "positiveCount": 334,
+    "positiveCount": 333,
+    "neutralCount": 140,
+    "negativeCount": 270,
+    "positiveContribution": 43593.27,
+    "negativeContribution": -33421.65,
+    "neutralContribution": -5522.67
+  },
+  {
+    "week": "2026-W07",
+    "weekStart": "2026-02-09",
+    "verdictScore": 56.63,
+    "verdict": "YES",
+    "articleCount": 742,
+    "rawSentiment": 0,
+    "positiveCount": 333,
     "neutralCount": 140,
     "negativeCount": 269,
-    "positiveContribution": 43561.77,
-    "negativeContribution": -33506.75,
-    "neutralContribution": -5401.69
+    "positiveContribution": 43626.94,
+    "negativeContribution": -33406.81,
+    "neutralContribution": -5522.67
   }
 ]

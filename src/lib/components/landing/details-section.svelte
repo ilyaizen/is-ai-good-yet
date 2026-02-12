@@ -338,7 +338,7 @@
               >histre</a
             >, resolves them using
             <a href="https://hn.algolia.com" target="_blank" rel="noopener noreferrer" class="article-link">algolia</a>,
-            scrapes all possible links, uses an llm to first filter out noise, then perform the actual sentiment
+            scrapes all possible links, uses an llm to first filter out noise, then performs the actual sentiment
             analysis. each article is ranked based on <strong>utility</strong> and <strong>trajectory</strong> scores that
             are weight by engagement and recency.
           </p>

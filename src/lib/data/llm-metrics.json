@@ -44725,5 +44725,435 @@
         "timestamp": "2026-02-12T02:29:07.470122+00:00"
       }
     }
+  },
+  "47077676": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and research findings on AI coding assistants' productivity gains."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1908,
+        "output_tokens": 43,
+        "total_tokens": 1951,
+        "inference_time_ms": 294.1,
+        "tokens_per_second": 146.2,
+        "prompt_chars": 3970,
+        "timestamp": "2026-02-21T10:26:04.317492+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI gives modest 10% productivity gains; real impact requires organizational changes, not just tool use.",
+        "quotes": [
+          "\"Productivity gains haven’t budged past 10%… the time‑saving boost has leveled off.\", \"In well‑structured organizations, AI acts as a “force multiplier,” helping teams move faster…\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:17.872269+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2180,
+        "output_tokens": 196,
+        "total_tokens": 2376,
+        "inference_time_ms": 432.8,
+        "tokens_per_second": 452.9,
+        "prompt_chars": 6098,
+        "timestamp": "2026-02-21T10:26:17.872269+00:00"
+      }
+    }
+  },
+  "47075400": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience sharing personal opinion on AI-enhanced coding enjoyment"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1296,
+        "output_tokens": 41,
+        "total_tokens": 1337,
+        "inference_time_ms": 226.6,
+        "tokens_per_second": 181.0,
+        "prompt_chars": 1141,
+        "timestamp": "2026-02-21T10:26:02.755438+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI turns boring coding into fun, but still wary of copy‑paste errors.",
+        "quotes": [
+          "\"AI made coding more enjoyable\"",
+          "\"In the past years I’ve been handed tools that do the most tedious tasks of software engineering for me. And I love it."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:16.691803+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1151,
+        "output_tokens": 182,
+        "total_tokens": 1333,
+        "inference_time_ms": 350.3,
+        "tokens_per_second": 519.5,
+        "prompt_chars": 1141,
+        "timestamp": "2026-02-21T10:26:16.691803+00:00"
+      }
+    }
+  },
+  "47037628": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with AI anxiety and offers opinion on AI's impact on profession."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1921,
+        "output_tokens": 45,
+        "total_tokens": 1966,
+        "inference_time_ms": 247.4,
+        "tokens_per_second": 181.9,
+        "prompt_chars": 3982,
+        "timestamp": "2026-02-21T10:25:57.820016+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI boosts productivity but with notable caveats and future concerns.",
+        "quotes": [
+          "I think it’s been very effective at increasing my productivity—not as effective as the influencers claim it should be, but effective nonetheless.",
+          "AI has allowed me to eliminate the most annoying, manual, inelegant, and soul-crushing parts of my profession!"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:11.530786+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2607,
+        "output_tokens": 171,
+        "total_tokens": 2778,
+        "inference_time_ms": 433.6,
+        "tokens_per_second": 394.4,
+        "prompt_chars": 7968,
+        "timestamp": "2026-02-21T10:26:11.530786+00:00"
+      }
+    }
+  },
+  "47096466": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Claude and Cord implementation, discussing AI agent coordination and task decomposition."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1885,
+        "output_tokens": 46,
+        "total_tokens": 1931,
+        "inference_time_ms": 293.2,
+        "tokens_per_second": 156.9,
+        "prompt_chars": 3965,
+        "timestamp": "2026-02-21T10:26:03.483783+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Cord dynamically builds task trees, reducing hardcoded decomposition—promising, but still early.",
+        "quotes": [
+          "15 out of 15 tests passed. Claude decomposed tasks into 3-6 subtasks with correct dependencies.",
+          "I built a throwaway MCP server with the five tools, pointed Claude Code at it, and ran 15 tests. No runtime. No engine. Just Claude, the tools, and a task."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:17.288111+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2631,
+        "output_tokens": 175,
+        "total_tokens": 2806,
+        "inference_time_ms": 440.3,
+        "tokens_per_second": 397.5,
+        "prompt_chars": 7967,
+        "timestamp": "2026-02-21T10:26:17.288111+00:00"
+      }
+    }
+  },
+  "47073947": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Research with clear findings on AI agent autonomy in practice with empirical data and conclusions"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1859,
+        "output_tokens": 44,
+        "total_tokens": 1903,
+        "inference_time_ms": 434.5,
+        "tokens_per_second": 101.3,
+        "prompt_chars": 3976,
+        "timestamp": "2026-02-21T10:26:01.000237+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Agents gain autonomy but need tighter oversight; no outright praise or criticism of AI coding tools.",
+        "quotes": [
+          "Claude Code is working autonomously for longer. ... The length of time Claude Code works before stopping has nearly doubled...",
+          "Effective oversight of agents will require new forms of post‑deployment monitoring infrastructure and new human‑AI interaction paradigms."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:15.075425+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2413,
+        "output_tokens": 206,
+        "total_tokens": 2619,
+        "inference_time_ms": 451.1,
+        "tokens_per_second": 456.7,
+        "prompt_chars": 7974,
+        "timestamp": "2026-02-21T10:26:15.075425+00:00"
+      }
+    }
+  },
+  "47067395": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience, critical evaluation, and research findings about AI coding tools"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1927,
+        "output_tokens": 44,
+        "total_tokens": 1971,
+        "inference_time_ms": 259.2,
+        "tokens_per_second": 169.8,
+        "prompt_chars": 3991,
+        "timestamp": "2026-02-21T10:25:59.011172+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Elixir’s BEAM gives robust, scalable agent concurrency—great for production but not a silver bullet.",
+        "quotes": [
+          "\"The BEAM was built for exactly this.\"\n\"I might want to look at the technology that's been doing this for 40 years.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:12.933596+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2564,
+        "output_tokens": 216,
+        "total_tokens": 2780,
+        "inference_time_ms": 480.9,
+        "tokens_per_second": 449.2,
+        "prompt_chars": 7968,
+        "timestamp": "2026-02-21T10:26:12.933596+00:00"
+      }
+    }
+  },
+  "47031268": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with AI coding tool, Claude, implementing SQLite"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1937,
+        "output_tokens": 41,
+        "total_tokens": 1978,
+        "inference_time_ms": 310.1,
+        "tokens_per_second": 132.2,
+        "prompt_chars": 3935,
+        "timestamp": "2026-02-21T10:26:02.315179+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Parallel AI coding can accelerate progress but introduces coordination pain and quality gaps.",
+        "quotes": [
+          "“Parallelism is great, but only with strict task boundaries.”",
+          "“The engine passes 64 queries (including core CRUD, JOINs, and GROUP BY) but fails 1,000+ due to unsupported syntax.”"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:16.195321+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2284,
+        "output_tokens": 154,
+        "total_tokens": 2438,
+        "inference_time_ms": 367.5,
+        "tokens_per_second": 419.0,
+        "prompt_chars": 6042,
+        "timestamp": "2026-02-21T10:26:16.195321+00:00"
+      }
+    }
+  },
+  "47062534": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Personal experience, opinions, and research findings about AI software development"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1900,
+        "output_tokens": 41,
+        "total_tokens": 1941,
+        "inference_time_ms": 227.5,
+        "tokens_per_second": 180.2,
+        "prompt_chars": 3968,
+        "timestamp": "2026-02-21T10:25:57.463152+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI coding boosts speed but raises defect risk in fragile code, demanding better TDD and health checks.",
+        "quotes": [
+          "AI is proven to be impactful on the individual developer’s work and on the speed of writing code.",
+          "They found that LLMs performed consistently better in healthy code bases. The risk of defects was 30% higher in less-healthy code."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:10.855395+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2596,
+        "output_tokens": 141,
+        "total_tokens": 2737,
+        "inference_time_ms": 392.2,
+        "tokens_per_second": 359.5,
+        "prompt_chars": 7965,
+        "timestamp": "2026-02-21T10:26:10.855395+00:00"
+      }
+    }
+  },
+  "47033622": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Developer opinion and experience on AI tool Claude Code's new output format"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1856,
+        "output_tokens": 42,
+        "total_tokens": 1898,
+        "inference_time_ms": 236.8,
+        "tokens_per_second": 177.4,
+        "prompt_chars": 3873,
+        "timestamp": "2026-02-21T10:25:56.162086+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Claude Code’s collapsed file‑view hurts oversight, making it a net negative for devs.",
+        "quotes": [
+          "\"Claude Code is being dumbed down.\", \"Verbose mode is not a viable alternative, there's way too much noise.\", \"Right now Claude cannot be trusted to get things right without constant oversight.\n"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:09.670233+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1700,
+        "output_tokens": 162,
+        "total_tokens": 1862,
+        "inference_time_ms": 381.0,
+        "tokens_per_second": 425.2,
+        "prompt_chars": 3843,
+        "timestamp": "2026-02-21T10:26:09.670233+00:00"
+      }
+    }
+  },
+  "47041973": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI-assisted coding and provides detailed analysis of the process."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1929,
+        "output_tokens": 45,
+        "total_tokens": 1974,
+        "inference_time_ms": 229.6,
+        "tokens_per_second": 196.0,
+        "prompt_chars": 3988,
+        "timestamp": "2026-02-21T10:26:01.377403+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI accelerates side‑project builds but still requires developer oversight and refactoring",
+        "quotes": [
+          "I got a working prototype in a few days, and then iterated on it until I was happy with the results.",
+          "The LLM could get me 80% of the way there, and the last 20% was on me.",
+          "In the end we ended up scrapping much of that code in favour of \"borrowing\" the actual texture data from X11, which is much faster"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-02-21T10:26:15.675055+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2624,
+        "output_tokens": 183,
+        "total_tokens": 2807,
+        "inference_time_ms": 432.6,
+        "tokens_per_second": 423.0,
+        "prompt_chars": 7979,
+        "timestamp": "2026-02-21T10:26:15.675055+00:00"
+      }
+    }
   }
 }

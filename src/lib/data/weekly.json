@@ -1962,43 +1962,57 @@
   {
     "week": "2026-W05",
     "weekStart": "2026-01-26",
-    "verdictScore": 56.59,
+    "verdictScore": 56.6,
     "verdict": "YES",
     "articleCount": 743,
     "rawSentiment": 0,
     "positiveCount": 335,
     "neutralCount": 139,
     "negativeCount": 269,
-    "positiveContribution": 43600.4,
+    "positiveContribution": 43600.92,
     "negativeContribution": -33438.94,
     "neutralContribution": -5360.14
   },
   {
     "week": "2026-W06",
     "weekStart": "2026-02-02",
-    "verdictScore": 56.6,
+    "verdictScore": 56.61,
     "verdict": "YES",
     "articleCount": 743,
     "rawSentiment": 0,
     "positiveCount": 333,
     "neutralCount": 140,
     "negativeCount": 270,
-    "positiveContribution": 43593.27,
+    "positiveContribution": 43598.23,
     "negativeContribution": -33421.65,
-    "neutralContribution": -5522.67
+    "neutralContribution": -5523.38
   },
   {
     "week": "2026-W07",
     "weekStart": "2026-02-09",
-    "verdictScore": 56.63,
+    "verdictScore": 56.64,
     "verdict": "YES",
     "articleCount": 742,
     "rawSentiment": 0,
     "positiveCount": 333,
     "neutralCount": 140,
     "negativeCount": 269,
-    "positiveContribution": 43626.94,
+    "positiveContribution": 43631.9,
     "negativeContribution": -33406.81,
-    "neutralContribution": -5522.67
+    "neutralContribution": -5523.38
+  },
+  {
+    "week": "2026-W08",
+    "weekStart": "2026-02-16",
+    "verdictScore": 58.42,
+    "verdict": "YES",
+    "articleCount": 727,
+    "rawSentiment": 0,
+    "positiveCount": 331,
+    "neutralCount": 144,
+    "negativeCount": 252,
+    "positiveContribution": 43735.02,
+    "negativeContribution": -31130.31,
+    "neutralContribution": -5642.45
   }
 ]

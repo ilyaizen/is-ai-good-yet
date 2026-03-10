@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { ChevronRight } from "lucide-svelte"
+  import { ChevronRight } from "@lucide/svelte"
   import { onMount } from "svelte"
   import { useTokenStream } from "$lib/composables/use-token-stream.svelte"
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
-  import { Info } from "lucide-svelte"
+  import { Info } from "@lucide/svelte"
 
   let {
     onReveal,
@@ -31,7 +31,7 @@
   let aboutHovered = $state(false)
   let aboutFocused = $state(false)
 
-  const WORDS = ["is ", "AI ", "good", " yet?"]
+  const WORDS = ["Is ", "AI ", "good", " yet?"]
 
   function numberWithCommas(x: number | string) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -45,8 +45,8 @@
 
   // Lines to display - each line appears all at once
   const LINES = $derived([
-    `this site analyzes hacker news sentiment toward AI coding.`,
-    `it examines ~${roundedCount} AI-related articles from the past 3 years to see whether hn is leaning toward enthusiasm or skepticism, and which side is louder.`,
+    `This site analyzes developer sentiment toward AI coding.`,
+    `It examines ~${roundedCount} AI-related articles from the past 3 years to see whether HN is leaning toward enthusiasm or skepticism, and which side is louder.`,
   ])
 
   let tokenStream = $state<ReturnType<typeof useTokenStream> | null>(null)
@@ -84,7 +84,7 @@
   const formattedUpdate = $derived(lastUpdateTimestamp ? formatDate(lastUpdateTimestamp) : null)
 
   const updateLine = $derived(
-    formattedUpdate ? `updated: ${formattedUpdate.formatted.toLocaleLowerCase()} (${formattedUpdate.relative})` : null
+    formattedUpdate ? `Updated: ${formattedUpdate.formatted} (${formattedUpdate.relative})` : null
   )
 
   function typeNextChar() {
@@ -158,7 +158,7 @@
 
   // Build the display text with special rendering for "Good"
   function getRenderedSegments(text: string): { before: string; good: string; after: string } {
-    const goodStart = "is AI ".length
+    const goodStart = "Is AI ".length
     const goodEnd = goodStart + "good".length
 
     if (!goodComplete) {
@@ -287,9 +287,6 @@
                 </p>
               {/if}
             {/each}
-            <!-- {#if updateLine && allComplete}
-              <p class="text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed text-muted-foreground/70">this is a test</p>
-            {/if} -->
             {#if updateLine && allComplete}
               <p class="text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed text-muted-foreground/70">
                 {updateLine}
@@ -302,14 +299,14 @@
         {#if allComplete}
           <div class="flex gap-2 sm:gap-3 flex-col sm:flex-row w-full sm:w-auto px-1 sm:px-2 pt-4">
             <AnimatedButton
-              label="answer"
+              label="Answer"
               onclick={handleReveal}
               class="flex-1 sm:flex-initial"
               bind:hovered={revealHovered}
               bind:focused={buttonFocused} />
 
             <AnimatedButton
-              label="about"
+              label="About"
               onclick={handleAbout}
               icon={Info}
               class="flex-1 sm:flex-initial"

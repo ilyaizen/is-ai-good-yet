@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { InfluentialArticle } from "$lib/server/db"
   import { NEUTRAL_MULTIPLIER } from "$lib/constants"
-  import { ChevronDown, ChevronUp, ChevronRight, ExternalLink, LayoutList } from "lucide-svelte"
+  import { ChevronDown, ChevronUp, ChevronRight, ExternalLink, LayoutList } from "@lucide/svelte"
   import * as Select from "$lib/components/ui/select"
   import * as InputGroup from "$lib/components/ui/input-group"
   import { page } from "$app/stores"
@@ -279,7 +279,7 @@
               currentPage = 1
             }}>
             <Select.Trigger class="w-40 border-none! shadow-none! bg-transparent! text-muted-foreground">
-              show {itemsPerPage} results
+              Show {itemsPerPage} results
             </Select.Trigger>
             <Select.Content>
               <Select.Item value="10" label="show 10 results" />
@@ -322,7 +322,7 @@
 
     <div class="text-right text-xs">
       <span class="text-muted-foreground">
-        showing <span class="font-bold text-foreground">{(currentPage - 1) * itemsPerPage + 1}</span>
+        Showing <span class="font-bold text-foreground">{(currentPage - 1) * itemsPerPage + 1}</span>
         to <span class="font-bold text-foreground">{Math.min(currentPage * itemsPerPage, sortedArticles.length)}</span>
         of <span class="font-bold text-foreground">{sortedArticles.length}</span>
       </span>
@@ -333,7 +333,7 @@
 <div class="mt-8 terminal-panel p-4 sm:p-6 md:p-8">
   <div class="flex items-center gap-1 mb-4 sm:mb-6">
     <ChevronRight color="var(--color-accent)" strokeWidth={3} />
-    <span class="font-mono font-semibold text-base sm:text-lg">articles:</span>
+    <span class="font-mono font-semibold text-base sm:text-lg">Articles:</span>
   </div>
 
   {@render paginationControls()}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { scrollToTop } from "$lib/scroll"
-  import { ChevronRight } from "lucide-svelte"
+  import { ChevronRight } from "@lucide/svelte"
   import ThemeToggle from "$lib/components/theme-toggle.svelte"
 
   type HeaderMode = "default" | "animated"
@@ -16,7 +16,7 @@
 
   let logoWords = $state<string[]>([])
   let currentWordIndex = $state(0)
-  const words = ["is", "AI", "good", "yet?"]
+  const words = ["Is", "AI", "good", "yet?"]
 
   // Animated mode: header slides in when visible becomes true
   const isAnimatedMode = $derived(mode === "animated")
@@ -104,9 +104,9 @@
 
       <nav class="desktop-nav">
         <ul class="nav-list">
-          <li><a href="#home" class="nav-link">home</a></li>
-          <li><a href="#details" class="nav-link">details</a></li>
-          <li><a href="#articles-table" class="nav-link">articles</a></li>
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#details" class="nav-link">Details</a></li>
+          <li><a href="#articles-table" class="nav-link">Articles</a></li>
         </ul>
       </nav>
 

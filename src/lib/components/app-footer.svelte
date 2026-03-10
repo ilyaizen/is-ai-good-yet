@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ExternalLink } from "lucide-svelte"
+  import { ExternalLink } from "@lucide/svelte"
   import VisitorCounter from "./visitor-counter.svelte"
   // import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip"
 </script>
@@ -8,80 +8,34 @@
   <div class="footer-inner max-w-5xl mx-auto w-full">
     <div class="footer-top">
       <div class="footer-about">
-        <p class="footer-brand font-mono font-bold">is AI <span class="highlight">“good”</span> yet?</p>
+        <p class="footer-brand font-mono font-bold">Is AI <span class="highlight">“good”</span> yet?</p>
         <p class="footer-description">
-          a survey tracking developer sentiment on AI-assisted coding through hacker news posts.
-        </p>
-        <!-- <p class="footer-description pt-2">
-          made with ❤️ and a single prompt that one-shot this entirely in 25 minutes using
-          <Tooltip>
-            <TooltipTrigger>
-              <a
-                href="https://www.molty.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hover:underline hover:text-primary">
-                molty 🦞
-              </a>
-              and
-              <a
-                href="https://github.com/AutoMaker-Org/automaker"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="hover:underline hover:text-primary">
-                automaker
-              </a>.
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>unbelieve huh?</p>
-            </TooltipContent>
-          </Tooltip>
+          A survey tracking developer sentiment on AI-assisted coding through Hacker News posts.
         </p>
         <p class="footer-description pt-2">
-          thank you for visiting! (#<VisitorCounter />) cast your vote
-          <a
-            href="https://news.ycombinator.com/item?id=46851589"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline hover:text-primary">
-            here
-          </a>.
-        </p> -->
-        <p class="footer-description pt-2">
-          this page was visited <VisitorCounter /> times.
-          <!-- <a
-            href="https://news.ycombinator.com/item?id=46851589"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary hover:underline hover:text-primary">
-            here
-          </a>. -->
+          This page was visited <VisitorCounter /> times.
         </p>
       </div>
 
       <nav class="footer-links" aria-label="Footer navigation">
         <div class="footer-links-group">
-          <span class="footer-links-label">navigate</span>
-          <a href="#home">home</a>
-          <a href="#details">details</a>
-          <a href="#articles-table">articles</a>
+          <span class="footer-links-label">Navigate</span>
+          <a href="#home">Home</a>
+          <a href="#details">Details</a>
+          <a href="#articles-table">Articles</a>
         </div>
         <div class="footer-links-group">
           <span class="footer-links-label">links</span>
           <a href="https://github.com/ilyaizen/is-ai-good-yet" target="_blank" rel="noopener noreferrer">
-            github
+            GitHub
             <ExternalLink size={12} />
           </a>
-          <!-- <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer">
-            hacker news
-            <ExternalLink size={12} />
-          </a> -->
           <a href="https://hcker.news/" target="_blank" rel="noopener noreferrer">
-            hcker.news
+            Hcker.news
             <ExternalLink size={12} />
           </a>
           <a href="https://news.ycombinator.com/item?id=46851589" target="_blank" rel="noopener noreferrer">
-            original post
+            Original post
             <ExternalLink size={12} />
           </a>
         </div>
@@ -89,7 +43,7 @@
     </div>
   </div>
   <div class="font-mono text-xs flex justify-center items-center">
-    <span class="copyright">“is AI good yet?” © {new Date().getFullYear()}</span>
+    <span class="copyright">Is AI “good” yet? © {new Date().getFullYear()}</span>
   </div>
 </footer>
 

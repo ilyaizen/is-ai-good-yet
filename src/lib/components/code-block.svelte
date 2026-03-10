@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Copy, Check } from "lucide-svelte"
+  import { Copy, Check } from "@lucide/svelte"
   import type { Snippet } from "svelte"
 
   interface Props {

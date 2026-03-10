@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Sheet from "$lib/components/ui/sheet"
-  import { MessageSquare, User, ExternalLink, Clock, Brain, Quote, Loader2, ChevronDown } from "lucide-svelte"
+  import { MessageSquare, User, ExternalLink, Clock, Brain, Quote, Loader2, ChevronDown } from "@lucide/svelte"
   import type { ArticleDetailsResponse } from "$lib/types/article-details"
 
   let {
@@ -164,8 +164,7 @@
               href={`https://news.ycombinator.com/item?id=${data.article.hn_id}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="info-box info-box-link"
-            >
+              class="info-box info-box-link">
               <div class="info-label">
                 <MessageSquare class="size-4" />
                 <span>HN Stats</span>
@@ -182,8 +181,7 @@
                 href={`https://news.ycombinator.com/user?id=${data.article.hn_author}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="info-box info-box-link"
-              >
+                class="info-box info-box-link">
                 <div class="info-label">
                   <User class="size-4" />
                   <span>Poster</span>

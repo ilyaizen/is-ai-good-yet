@@ -5,14 +5,14 @@
   import HistoryChart from "./history-chart.svelte"
   import NumberFlow from "@number-flow/svelte"
   import { onMount } from "svelte"
-  import { ChevronRight } from "lucide-svelte"
-  import { RotateCcw } from "lucide-svelte"
-  import { ChevronDown } from "lucide-svelte"
+  import { ChevronRight } from "@lucide/svelte"
+  import { RotateCcw } from "@lucide/svelte"
+  import { ChevronDown } from "@lucide/svelte"
   import { useTokenStream } from "$lib/composables/use-token-stream.svelte"
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
-  import { Info } from "lucide-svelte"
+  import { Info } from "@lucide/svelte"
 
-  type Verdict = "YES" | "NO" | "NOT_YET"
+  type Verdict = "Yes" | "No" | "Not yet"
 
   let {
     verdict,
@@ -68,8 +68,8 @@
   let replayButtonHovered = $state(false)
   let replayButtonRef = $state<HTMLButtonElement | null>(null)
 
-  const LABEL_TEXT = "answer:"
-  const MONTH_NAMES = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+  const LABEL_TEXT = "Answer:"
+  const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
   // Description text for token streaming
   let descriptionLines = $state<string[]>([])
@@ -197,7 +197,7 @@
   const effectiveNegative = $derived(hoveredSnapshot?.negativeCount ?? verdictScore?.negativeCount ?? 0)
   const effectiveNeutral = $derived(hoveredSnapshot?.neutralCount ?? verdictScore?.neutralCount ?? 0)
   const effectiveTotalArticles = $derived(effectivePositive + effectiveNeutral + effectiveNegative)
-  const displayText = $derived(effectiveVerdict === "NOT_YET" ? "NOT YET" : effectiveVerdict)
+  const displayText = $derived(effectiveVerdict === "NOT_YET" ? "Not yet" : effectiveVerdict)
 
   // Date parts for NumberFlow animation
   const displayDate = $derived(() => {
@@ -249,10 +249,10 @@
   // Sentiment description text
   const sentimentText = $derived(
     effectiveVerdict === "YES"
-      ? "most developers think positively about “vibe-coding” and AI-assisted workflows, "
+      ? "Most developers think positively about “vibe-coding” and AI-assisted workflows, "
       : effectiveVerdict === "NO"
-        ? "most developers are skeptical about “vibe-coding” and AI-assisted workflows, "
-        : "the developer community is undecided on “vibe-coding” and AI-assisted workflows, "
+        ? "Most developers are skeptical about “vibe-coding” and AI-assisted workflows, "
+        : "The developer community is undecided on “vibe-coding” and AI-assisted workflows, "
   )
 
   // Disarm NumberFlow animations during history hover for performance
@@ -401,7 +401,7 @@
                 style:text-shadow="0 0 12px color-mix(in srgb, {sentimentColor}, transparent 40%), 0 0 24px color-mix(in
                 srgb, {sentimentColor}, transparent 60%)">
                 {displayText}</span
-              ><span class="text-muted-foreground/60 -ml-1">,</span>
+              ><span class="text-muted-foreground/60 -ml-1">.</span>
             </div>
           {/key}
         </div>
@@ -421,7 +421,7 @@
                   value={effectiveTotalArticles}
                   animated={numberFlowAnimated}
                   transformTiming={numberFlowTiming}
-                  spinTiming={numberFlowTiming} /> recent articles.
+                  spinTiming={numberFlowTiming} /> recent articles:
               {:else if descriptionStream}
                 {descriptionStream.getVisibleText(
                   0
@@ -431,7 +431,7 @@
                       value={effectiveTotalArticles}
                       animated={numberFlowAnimated}
                       transformTiming={numberFlowTiming}
-                      spinTiming={numberFlowTiming} /> recent articles.{/if}{/if}
+                      spinTiming={numberFlowTiming} /> recent articles:{/if}{/if}
               {:else}
                 {sentimentText}
                 based on the accumulated points of
@@ -439,7 +439,7 @@
                   value={effectiveTotalArticles}
                   animated={numberFlowAnimated}
                   transformTiming={numberFlowTiming}
-                  spinTiming={numberFlowTiming} /> recent articles.
+                  spinTiming={numberFlowTiming} /> recent articles:
               {/if}
             </p>
           </div>
@@ -448,13 +448,13 @@
         {#if animationStep >= 4}
           <div
             class="flex flex-wrap items-baseline gap-x-2 sm:gap-x-3 gap-y-2 transition-opacity duration-200 justify-center">
-            <span class="text-muted-foreground text-xs font-mono shrink-0">totals:</span>
+            <span class="text-muted-foreground text-xs font-mono shrink-0">Totals:</span>
 
             <div class="flex flex-wrap gap-2">
               <!-- Positive -->
               <div
                 class="flex items-baseline gap-1.5 border border-primary/30 px-2 py-0.5 rounded bg-primary/10 font-mono text-xs">
-                <span class="text-primary lowercase font-bold">
+                <span class="text-primary font-bold">
                   <NumberFlow
                     value={positiveContribution}
                     animated={numberFlowAnimated}
@@ -473,7 +473,7 @@
               <!-- Neutral -->
               <div
                 class="flex items-baseline gap-1.5 border border-warning/30 px-2 py-0.5 rounded bg-warning/10 font-mono text-xs">
-                <span class="text-warning lowercase font-bold">
+                <span class="text-warning font-bold">
                   <NumberFlow
                     value={neutralContribution}
                     animated={numberFlowAnimated}
@@ -492,7 +492,7 @@
               <!-- Negative -->
               <div
                 class="flex items-baseline gap-1.5 border border-destructive/30 px-2 py-0.5 rounded bg-destructive/10 font-mono text-xs">
-                <span class="text-destructive lowercase font-bold">
+                <span class="text-destructive font-bold">
                   <NumberFlow
                     value={negativeContribution}
                     animated={numberFlowAnimated}
@@ -514,7 +514,7 @@
         <!-- Star Rating -->
         {#if animationStep >= 5}
           <div class="mt-2 mb-4 sm:mb-6 flex flex-wrap items-baseline gap-x-2 gap-y-2 justify-center">
-            <span class="text-muted-foreground text-xs font-mono shrink-0">rating:</span>
+            <span class="text-muted-foreground text-xs font-mono shrink-0">Rating:</span>
             <div class="flex flex-wrap items-baseline gap-2">
               <span class="font-mono text-sm font-semibold" style="color: {sentimentColor}"
                 ><NumberFlow
@@ -559,7 +559,7 @@
             style="grid-template-rows: {historyExpanded ? '1fr' : '0fr'}; opacity: {historyExpanded ? 1 : 0}">
             <div class="min-h-0">
               <!-- History Labels -->
-              <div class="text-foreground font-mono text-xs font-semibold">history:</div>
+              <div class="text-foreground font-mono text-xs font-semibold">History:</div>
               <div class="pb-6">
                 <HistoryChart data={weeklySnapshots} compact={true} onHover={handleChartHover} />
               </div>
@@ -570,7 +570,7 @@
         <!-- Action Buttons -->
         <div class="flex gap-2 sm:gap-3 flex-col sm:flex-row w-full">
           <AnimatedButton
-            label="details"
+            label="Details"
             onclick={scrollToArticles}
             class="flex-1 sm:flex-initial"
             bind:hovered={moreInfoButtonHovered}
@@ -578,7 +578,7 @@
             bind:ref={moreInfoButtonRef} />
 
           <AnimatedButton
-            label="history"
+            label="History"
             icon={ChevronDown}
             iconClass={historyExpanded ? "rotate-180" : ""}
             onclick={toggleHistory}
@@ -588,7 +588,7 @@
             bind:ref={historyButtonRef} />
 
           <AnimatedButton
-            label="about"
+            label="About"
             onclick={() => scrollToBottom()}
             icon={Info}
             class="flex-1 sm:flex-initial"
@@ -596,7 +596,7 @@
             bind:focused={aboutButtonFocused} />
 
           <AnimatedButton
-            label="replay"
+            label="Replay"
             icon={RotateCcw}
             onclick={handleReplayClick}
             class="flex-1 sm:flex-initial sm:ml-auto"

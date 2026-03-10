@@ -1,6 +1,6 @@
 <script lang="ts">
   import { slide } from "svelte/transition"
-  import { ChevronRight } from "lucide-svelte"
+  import { ChevronRight } from "@lucide/svelte"
   import HoverIcon from "./hover-icon.svelte"
   import { cn } from "$lib/utils"
 
@@ -20,11 +20,11 @@
 <div class="w-full">
   <button
     onclick={() => (isOpen = !isOpen)}
-    class="group flex lowercase items-center text-left cursor-pointer select-none py-0.5 focus:outline-hidden rounded-sm transition-colors overflow-hidden"
+    class="group flex items-center text-left cursor-pointer select-none py-0.5 focus:outline-hidden rounded-sm transition-colors overflow-hidden"
     aria-expanded={isOpen}>
     <!-- Title Header -->
     <span
-      class="font-semibold text-foreground text-sm transition-colors group-hover:text-primary group-hover:underline lowercase">
+      class="font-semibold text-foreground text-sm transition-colors group-hover:text-primary group-hover:underline">
       {title}
     </span>
 

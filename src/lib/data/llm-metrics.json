@@ -45155,5 +45155,391 @@
         "timestamp": "2026-02-21T10:26:15.675055+00:00"
       }
     }
+  },
+  "47289406": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI-generated code, discussing its impact on productivity and cognitive load."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1904,
+        "output_tokens": 48,
+        "total_tokens": 1952,
+        "inference_time_ms": 260.8,
+        "tokens_per_second": 184.1,
+        "prompt_chars": 3972,
+        "timestamp": "2026-03-10T01:52:46.350577+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI boosts output but creates verification debt and review bottlenecks, leaving developers to spend more time validating than coding.",
+        "quotes": [
+          "\"Call it verification debt: the growing gap between how fast we can generate output and how fast we can validate it.\"",
+          "\"If AI makes every engineer even 50% more productive, the org doesn’t get 50% more output. It gets 50% more pull requests… and someone has to review all of it.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:53:00.833618+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2403,
+        "output_tokens": 229,
+        "total_tokens": 2632,
+        "inference_time_ms": 518.6,
+        "tokens_per_second": 441.5,
+        "prompt_chars": 7086,
+        "timestamp": "2026-03-10T01:53:00.833618+00:00"
+      }
+    }
+  },
+  "47283337": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with LLMs, critical evaluation with clear findings and conclusions"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1895,
+        "output_tokens": 44,
+        "total_tokens": 1939,
+        "inference_time_ms": 287.6,
+        "tokens_per_second": 153.0,
+        "prompt_chars": 3968,
+        "timestamp": "2026-03-10T01:52:40.615020+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "LLMs produce fast, but buggy code; only reliable with clear acceptance criteria. Useful with oversight, but risky if unchecked.",
+        "quotes": [
+          "LLMs optimize for plausibility over correctness. In this case, plausible is about 20,000 times slower than correct.",
+          "LLMs are useful. They make for a very productive flow when the person using them knows what correct looks like."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:52:55.897927+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2607,
+        "output_tokens": 181,
+        "total_tokens": 2788,
+        "inference_time_ms": 462.1,
+        "tokens_per_second": 391.7,
+        "prompt_chars": 7972,
+        "timestamp": "2026-03-10T01:52:55.897927+00:00"
+      }
+    }
+  },
+  "47313787": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares first-person experience and empirical findings about Code Review effectiveness"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1833,
+        "output_tokens": 41,
+        "total_tokens": 1874,
+        "inference_time_ms": 298.8,
+        "tokens_per_second": 137.2,
+        "prompt_chars": 3820,
+        "timestamp": "2026-03-10T01:52:49.706973+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Claude’s Code Review effectively surfaces critical bugs, boosting review depth without replacing humans, but at higher cost and with a learning curve.",
+        "quotes": [
+          "\"16% of PRs got substantive review comments. Now 54% do.\"",
+          "\"less than 1% of findings are marked incorrect.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:53:03.668949+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1687,
+        "output_tokens": 177,
+        "total_tokens": 1864,
+        "inference_time_ms": 379.5,
+        "tokens_per_second": 466.4,
+        "prompt_chars": 3820,
+        "timestamp": "2026-03-10T01:53:03.668949+00:00"
+      }
+    }
+  },
+  "47293938": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI's impact on team dynamics and collaboration"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1872,
+        "output_tokens": 44,
+        "total_tokens": 1916,
+        "inference_time_ms": 296.0,
+        "tokens_per_second": 148.7,
+        "prompt_chars": 3979,
+        "timestamp": "2026-03-10T01:52:47.603996+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI reshapes roles; disruption is real but paired collaboration can turn turbulence into productive teamwork.",
+        "quotes": [
+          "\"In the short term, this is going to be incredibly disruptive for team culture.\", \"What if Product Managers and Engineers did more AI-driven pair programming?\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:53:01.800027+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1977,
+        "output_tokens": 163,
+        "total_tokens": 2140,
+        "inference_time_ms": 362.0,
+        "tokens_per_second": 450.3,
+        "prompt_chars": 5203,
+        "timestamp": "2026-03-10T01:53:01.800027+00:00"
+      }
+    }
+  },
+  "47300747": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with literate programming and AI agents, evaluating its practicality and potential benefits."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1844,
+        "output_tokens": 48,
+        "total_tokens": 1892,
+        "inference_time_ms": 311.2,
+        "tokens_per_second": 154.2,
+        "prompt_chars": 3983,
+        "timestamp": "2026-03-10T01:52:43.237564+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Agents make literate programming practical by automating tangling and sync, reducing maintenance overhead but lacking large‑scale evidence.",
+        "quotes": [
+          "\"I am thrilled by its application there.\"",
+          "\"The agent is told to handle tangling, and the problem of extraction goes away.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:52:58.171322+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1977,
+        "output_tokens": 186,
+        "total_tokens": 2163,
+        "inference_time_ms": 434.7,
+        "tokens_per_second": 427.9,
+        "prompt_chars": 5291,
+        "timestamp": "2026-03-10T01:52:58.171322+00:00"
+      }
+    }
+  },
+  "47286408": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and opinion about AI agents and filesystems"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1860,
+        "output_tokens": 41,
+        "total_tokens": 1901,
+        "inference_time_ms": 235.7,
+        "tokens_per_second": 173.9,
+        "prompt_chars": 3980,
+        "timestamp": "2026-03-10T01:52:42.786497+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Files are a powerful, though imperfect, interface that can boost developer workflows but need careful handling.",
+        "quotes": [
+          "Files are the original open protocol.",
+          "Filesystems can redefine what personal computing means in the age of AI."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:52:57.606818+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2485,
+        "output_tokens": 229,
+        "total_tokens": 2714,
+        "inference_time_ms": 551.7,
+        "tokens_per_second": 415.1,
+        "prompt_chars": 7967,
+        "timestamp": "2026-03-10T01:52:57.606818+00:00"
+      }
+    }
+  },
+  "47252459": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on designing CLIs for AI agents"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1926,
+        "output_tokens": 42,
+        "total_tokens": 1968,
+        "inference_time_ms": 235.5,
+        "tokens_per_second": 178.3,
+        "prompt_chars": 4010,
+        "timestamp": "2026-03-10T01:52:45.440169+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Agent-first CLI design is essential, practical, and balances human ergonomics with machine needs.",
+        "quotes": [
+          "'Agents need deterministic, machine‑readable output…','The answer isn’t to pick one — it’s to make the raw‑payload path a first‑class citizen alongside any convenience flags you ship for humans.']"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:52:59.789148+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2674,
+        "output_tokens": 166,
+        "total_tokens": 2840,
+        "inference_time_ms": 394.0,
+        "tokens_per_second": 421.3,
+        "prompt_chars": 7976,
+        "timestamp": "2026-03-10T01:52:59.789148+00:00"
+      }
+    }
+  },
+  "47273854": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience and research with clear findings about AI coding effectiveness"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1793,
+        "output_tokens": 41,
+        "total_tokens": 1834,
+        "inference_time_ms": 309.9,
+        "tokens_per_second": 132.3,
+        "prompt_chars": 3984,
+        "timestamp": "2026-03-10T01:52:40.189360+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "AI dramatically speeds security bug discovery, proving highly effective and reliable with verifier support.",
+        "quotes": [
+          "\"Claude Opus 4.6 discovered 22 vulnerabilities over the course of two weeks… 14 were high‑severity\"",
+          "\"Task verifiers give us increased confidence that the produced patch will fix the specific vulnerability while preserving program functionality\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:52:54.988699+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2398,
+        "output_tokens": 157,
+        "total_tokens": 2555,
+        "inference_time_ms": 393.0,
+        "tokens_per_second": 399.5,
+        "prompt_chars": 7979,
+        "timestamp": "2026-03-10T01:52:54.988699+00:00"
+      }
+    }
+  },
+  "47292574": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Research with clear findings about AI coding effectiveness, author opinion, and personal experience."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1822,
+        "output_tokens": 44,
+        "total_tokens": 1866,
+        "inference_time_ms": 325.6,
+        "tokens_per_second": 135.1,
+        "prompt_chars": 3977,
+        "timestamp": "2026-03-10T01:52:48.882659+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI speeds work but inflates errors, overtime and burnout, leaving teams juggling higher output with lower quality.",
+        "quotes": [
+          "\"90 percent of respondents said they were using AI at work—with more than 80 percent saying the technology had boosted their productivity.\"",
+          "As you use more AI, you’re more likely to roll back changes that you’ve pushed into production.",
+          "…employees took on more tasks, worked at a faster pace and worked more hours after adopting AI."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-10T01:53:03.144574+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2395,
+        "output_tokens": 232,
+        "total_tokens": 2627,
+        "inference_time_ms": 441.8,
+        "tokens_per_second": 525.2,
+        "prompt_chars": 7869,
+        "timestamp": "2026-03-10T01:53:03.144574+00:00"
+      }
+    }
   }
 }

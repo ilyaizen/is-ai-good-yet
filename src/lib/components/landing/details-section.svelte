@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronRight, ExternalLink, Info } from "lucide-svelte"
+  import { ChevronRight, ExternalLink, Info } from "@lucide/svelte"
   import ThemeItem from "./theme-item.svelte"
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
   import { onMount } from "svelte"
@@ -91,7 +91,7 @@
   // Typing animation state
   let typedLabel = $state("")
   let labelTypingComplete = $state(false)
-  const LABEL_TEXT = "details:"
+  const LABEL_TEXT = "Details:"
 
   function scrollToArticles() {
     const el = document.getElementById("articles-table")
@@ -222,9 +222,9 @@
       <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mb-3">Summary</h3>
       <div class="text-sm text-foreground leading-relaxed">
         <p>
-          it appears AI coding tools offer real advantages and help smaller teams ship faster. however, these gains come
+          It appears AI coding tools offer real advantages and help smaller teams ship faster. However, these gains come
           with heavy review overhead, serious reliability issues, risks of skill degradation, and questionable long-term
-          economics. most experienced developers view them as a powerful but fallible, and consider over-reliance on
+          economics. Most experienced developers view them as a powerful but fallible, and consider over-reliance on
           them to be dangerous.
         </p>
       </div>
@@ -240,7 +240,7 @@
           <div class="text-primary font-bold mb-2 flex items-center gap-2">
             <span class="text-xs border border-primary/30 px-2 py-0.5 rounded bg-primary/10 uppercase">The Good</span>
           </div>
-          <div class="space-y-0.5 pl-4 border-l-2 border-primary/20 lowercase">
+          <div class="space-y-0.5 pl-4 border-l-2 border-primary/20">
             {#each themesData.positive.slice(0, 3) as theme}
               <ThemeItem title={theme.title} description={theme.description} sentiment="positive" />
             {/each}
@@ -331,15 +331,15 @@
         <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">How It Works</h3>
         <div class="text-sm text-foreground leading-relaxed space-y-3">
           <p>
-            <strong class="text-foreground">is AI “good” yet?</strong> tracks hacker news to see what devs
+            <strong class="text-foreground">Is AI “good” yet?</strong> tracks Hacker News to see what devs
             <i>actually</i>
-            think about AI coding tools. it runs a multi-stage python pipeline that collects AI-tagged submissions via
+            think about AI coding tools. It runs a multi-stage python pipeline that collects AI-tagged submissions via
             <a href="https://histre.com/hn/?tags=+ai" target="_blank" rel="noopener noreferrer" class="article-link"
-              >histre</a
+              >Histre</a
             >, resolves them using
-            <a href="https://hn.algolia.com" target="_blank" rel="noopener noreferrer" class="article-link">algolia</a>,
-            scrapes all possible links, uses an llm to first filter out noise, then performs the actual sentiment
-            analysis. each article is ranked based on <strong>utility</strong> and <strong>trajectory</strong> scores that
+            <a href="https://hn.algolia.com" target="_blank" rel="noopener noreferrer" class="article-link">Algolia</a>,
+            scrapes all possible links, uses an LLM to first filter out noise, then performs the actual sentiment
+            analysis. Each article is ranked based on <strong>utility</strong> and <strong>trajectory</strong> scores that
             are weight by engagement and recency.
           </p>
         </div>
@@ -391,37 +391,16 @@
       </div>
     </div>
 
-    <!-- <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">Why</h3>
-    <div class="text-sm text-foreground leading-relaxed space-y-3">
-      <p>
-        this exists because i kept seeing waves of AI-hate that just didn’t match my experience, and as i don’t jive
-        with vibes or tribes, i built this website to find out if hn’s hivemind share similar sentiments. it’s also a
-        small addition to my portfolio (i’m a web developer, not a statistician). thanks and if you find this
-        interesting, please consider checking it out on <a
-          href="https://github.com/ilyaizen/is-ai-good-yet"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="article-link">github</a
-        >, dropping a star, or
-        <a href="https://ko-fi.com/ilyaizen" target="_blank" rel="noopener noreferrer" class="article-link"
-          >buying a coffee</a
-        >… <i>a lot</i> of coffee went into this… either way, if this gets traction, i’ll share the pipeline—you never know.
-      </p>
-    </div> -->
-
-    <!-- Divider -->
-    <!-- <div class="border-t border-border/30 my-8"></div> -->
-
     <!-- Action Buttons -->
     <div class="flex flex-col sm:flex-row gap-4 mt-8">
       <AnimatedButton
-        label="articles"
+        label="Articles"
         onclick={scrollToArticles}
         bind:hovered={articlesButtonHovered}
         bind:focused={articlesButtonFocused} />
 
       <AnimatedButton
-        label="about"
+        label="About"
         icon={Info}
         onclick={() => scrollToBottom()}
         class="info-btn"

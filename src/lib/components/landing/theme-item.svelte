@@ -38,7 +38,7 @@
 
   {#if isOpen}
     <div transition:slide={{ duration: 300, axis: "y" }}>
-      <div class="text-sm text-muted-foreground mt-0.5 leading-relaxed mb-2 lowercase">
+      <div class="text-sm text-muted-foreground mt-0.5 leading-relaxed mb-2">
         {description}
       </div>
     </div>

@@ -331,9 +331,9 @@
         <h3 class="text-sm font-bold text-foreground uppercase tracking-wide mt-8 mb-3">How It Works</h3>
         <div class="text-sm text-foreground leading-relaxed space-y-3">
           <p>
-            <strong class="text-foreground">Is AI “good” yet?</strong> tracks Hacker News to see what devs
+            <strong class="text-foreground">Is AI “Good” Yet?</strong> tracks Hacker News to see what devs
             <i>actually</i>
-            think about AI coding tools. It runs a multi-stage python pipeline that collects AI-tagged submissions via
+            think about AI coding tools. It runs a multi-stage Python pipeline that collects AI-tagged submissions via
             <a href="https://histre.com/hn/?tags=+ai" target="_blank" rel="noopener noreferrer" class="article-link"
               >Histre</a
             >, resolves them using

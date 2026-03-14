@@ -11,7 +11,7 @@ A **premium, terminal-themed dashboard** that visualizes Hacker News sentiment t
 
 ## 🤔 What is this?
 
-**Is AI “good” yet?** tracks Hacker News to see what developers *actually* think about AI coding tools.
+**Is AI “Good” Yet?** tracks Hacker News to see what developers *actually* think about AI coding tools.
 
 It runs a multi-stage Python pipeline that:
 1. Collects AI-tagged submissions via [Histre](https://histre.com/hn/?tags=+ai)

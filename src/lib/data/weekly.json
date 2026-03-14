@@ -2025,22 +2025,22 @@
     "positiveCount": 326,
     "neutralCount": 140,
     "negativeCount": 246,
-    "positiveContribution": 44095.92,
+    "positiveContribution": 44099.93,
     "negativeContribution": -30847.76,
-    "neutralContribution": -5559.98
+    "neutralContribution": -5560.62
   },
   {
     "week": "2026-W11",
     "weekStart": "2026-03-09",
-    "verdictScore": 58.96,
+    "verdictScore": 59.1,
     "verdict": "YES",
-    "articleCount": 711,
+    "articleCount": 713,
     "rawSentiment": 0,
-    "positiveCount": 326,
+    "positiveCount": 327,
     "neutralCount": 140,
-    "negativeCount": 245,
-    "positiveContribution": 44120.06,
-    "negativeContribution": -30711.83,
-    "neutralContribution": -5559.98
+    "negativeCount": 246,
+    "positiveContribution": 44532.02,
+    "negativeContribution": -30815.21,
+    "neutralContribution": -5560.62
   }
 ]

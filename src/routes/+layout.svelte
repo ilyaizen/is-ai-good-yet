@@ -42,7 +42,7 @@
   })
 
   // SEO constants
-  const SITE_TITLE = "Is AI “good” yet?"
+  const SITE_TITLE = "Is AI “Good” Yet?"
   const SITE_DESCRIPTION = "A survey website that analyzes Hacker News sentiment toward AI coding."
   const SITE_URL = "https://www.is-ai-good-yet.com"
   const SITE_IMAGE = `${SITE_URL}/og-image.png`
@@ -94,7 +94,7 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="Is AI “good” yet?" />
+  <meta property="og:site_name" content="Is AI “Good” Yet?" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />

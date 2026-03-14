@@ -31,7 +31,7 @@
   let aboutHovered = $state(false)
   let aboutFocused = $state(false)
 
-  const WORDS = ["Is ", "AI ", "good", " yet?"]
+  const WORDS = ["Is ", "AI ", "Good", " Yet?"]
 
   function numberWithCommas(x: number | string) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -159,7 +159,7 @@
   // Build the display text with special rendering for "Good"
   function getRenderedSegments(text: string): { before: string; good: string; after: string } {
     const goodStart = "Is AI ".length
-    const goodEnd = goodStart + "good".length
+    const goodEnd = goodStart + "Good".length
 
     if (!goodComplete) {
       return { before: text, good: "", after: "" }
@@ -179,7 +179,7 @@
     }
 
     const beforeText = text.slice(0, goodStart)
-    const goodText = "good"
+    const goodText = "Good"
     const afterText = text.slice(goodEnd)
     return { before: beforeText, good: goodText, after: afterText }
   }

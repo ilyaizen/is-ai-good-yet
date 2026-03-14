@@ -92,7 +92,7 @@
 </script>
 
 <svelte:head>
-  <title>Is AI “good” yet?</title>
+  <title>Is AI “Good” Yet?</title>
   <meta
     name="description"
     content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts." />

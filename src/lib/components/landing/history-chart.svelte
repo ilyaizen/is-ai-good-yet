@@ -140,6 +140,18 @@
     }
   }
 
+  // Get display text for verdict
+  function getVerdictDisplay(verdict: "YES" | "NO" | "NOT_YET"): string {
+    switch (verdict) {
+      case "YES":
+        return "Yes"
+      case "NO":
+        return "No"
+      case "NOT_YET":
+        return "Not yet"
+    }
+  }
+
   // Normalized stacked area chart data
   // For each point, calculate the percentage of positive, neutral, negative
   const stackedAreaData = $derived(() => {
@@ -308,12 +320,7 @@
             opacity={isHovered ? 1 : 0.6} />
 
           <!-- Cap (small dot at current score level) -->
-          <circle
-            cx={x}
-            cy={currY}
-            r={isHovered ? 3 : 1.5}
-            fill={changeColor}
-            opacity={isHovered ? 1 : 0.8} />
+          <circle cx={x} cy={currY} r={isHovered ? 3 : 1.5} fill={changeColor} opacity={isHovered ? 1 : 0.8} />
         {/each}
 
         <!-- Hover vertical guide line -->
@@ -328,7 +335,6 @@
             stroke-dasharray="2 2"
             opacity="0.3" />
         {/if}
-
       </g>
 
       {#if !compact}
@@ -364,7 +370,7 @@
       <div class="tooltip" style="left: {xPercent}%; top: {yPercent}%;">
         <div class="tooltip-month">Week of {formatWeekDate(point.weekStart)}</div>
         <div class="tooltip-score" style="color: {getVerdictColor(point.verdict)}">
-          {Math.round(point.verdictScore)} ({point.verdict === "NOT_YET" ? "NOT YET" : point.verdict})
+          {Math.round(point.verdictScore)} ({getVerdictDisplay(point.verdict)})
         </div>
         {#if hoveredIndex > 0}
           <div class="tooltip-change" style="color: {changeColor}">

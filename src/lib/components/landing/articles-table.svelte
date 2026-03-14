@@ -282,10 +282,10 @@
               Show {itemsPerPage} results
             </Select.Trigger>
             <Select.Content>
-              <Select.Item value="10" label="show 10 results" />
-              <Select.Item value="20" label="show 20 results" />
-              <Select.Item value="50" label="show 50 results" />
-              <Select.Item value="100" label="show 100 results" />
+              <Select.Item value="10" label="Show 10 results" />
+              <Select.Item value="20" label="Show 20 results" />
+              <Select.Item value="50" label="Show 50 results" />
+              <Select.Item value="100" label="Show 100 results" />
             </Select.Content>
           </Select.Root>
         </InputGroup.Root>

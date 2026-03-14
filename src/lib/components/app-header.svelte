@@ -16,7 +16,7 @@
 
   let logoWords = $state<string[]>([])
   let currentWordIndex = $state(0)
-  const words = ["Is", "AI", "good", "yet?"]
+  const words = ["Is", "AI", "Good", "Yet?"]
 
   // Animated mode: header slides in when visible becomes true
   const isAnimatedMode = $derived(mode === "animated")
@@ -91,8 +91,8 @@
         <div class="logo-text-wrapper">
           <span class="logo-text font-mono font-bold -ml-2">
             {#each logoWords as word, i}
-              <span class="word {word === 'good' ? 'highlight' : ''}"
-                >{word === "good" ? `\u201C${word}\u201D` : word}</span>
+              <span class="word {word === 'Good' ? 'highlight' : ''}"
+                >{word === "Good" ? `\u201C${word}\u201D` : word}</span>
               <span class="space">{i < logoWords.length - 1 ? " " : ""}</span>
             {/each}
           </span>

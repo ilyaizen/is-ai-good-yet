@@ -45541,5 +45541,220 @@
         "timestamp": "2026-03-10T01:53:03.144574+00:00"
       }
     }
+  },
+  "47322887": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and novel approach to LLM model improvement"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2146,
+        "output_tokens": 41,
+        "total_tokens": 2187,
+        "inference_time_ms": 267.0,
+        "tokens_per_second": 153.5,
+        "prompt_chars": 3966,
+        "timestamp": "2026-03-14T02:10:59.576672+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "The author claims layer duplication boosts model performance, but notes limitations and requires heavy compute, making it a mixed, optimistic tweak.",
+        "quotes": [
+          "I took an existing 72‑billion parameter model, duplicated a particular block of seven of its middle layers, and stitched the result back together. No weight was modified in the process.",
+          "This method does not use extra VRAM! For all these experiments, I duplicated layers via pointers; the layers are repeated without using more GPU memory."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-14T02:11:13.348385+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2811,
+        "output_tokens": 267,
+        "total_tokens": 3078,
+        "inference_time_ms": 535.2,
+        "tokens_per_second": 498.9,
+        "prompt_chars": 7971,
+        "timestamp": "2026-03-14T02:11:13.348385+00:00"
+      }
+    }
+  },
+  "47327559": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and opinion on using AI for coding, with research-backed claims about AI-generated code review."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1929,
+        "output_tokens": 50,
+        "total_tokens": 1979,
+        "inference_time_ms": 271.0,
+        "tokens_per_second": 184.5,
+        "prompt_chars": 3969,
+        "timestamp": "2026-03-14T02:10:59.975327+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Agents boost speed but need rigorous criteria—trust hinges on proper acceptance tests, not just AI output.",
+        "quotes": [
+          "Teams are spending a lot more time in code reviews.",
+          "The workflow: write acceptance criteria before you prompt, let the agent build against them, run verification, review only the failures."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-14T02:11:13.860332+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2228,
+        "output_tokens": 179,
+        "total_tokens": 2407,
+        "inference_time_ms": 396.7,
+        "tokens_per_second": 451.2,
+        "prompt_chars": 6227,
+        "timestamp": "2026-03-14T02:11:13.860332+00:00"
+      }
+    }
+  },
+  "47325595": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience building a programming language using Claude Code."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2020,
+        "output_tokens": 40,
+        "total_tokens": 2060,
+        "inference_time_ms": 257.2,
+        "tokens_per_second": 155.5,
+        "prompt_chars": 3978,
+        "timestamp": "2026-03-14T02:11:04.414665+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "pessimistic",
+        "topic": "productivity",
+        "summary": "AI generated an entire language, but the author worries about addiction, ownership, and long‑term impact more than it boosts productivity.",
+        "quotes": [
+          "I was surprised by the results of this experiment. Cutlet exists today. It builds and runs on both macOS and Linux.",
+          "It’s easy to get addicted to agentic engineering tools. I often had Claude Code churning away in the background…"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-14T02:11:17.122731+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2776,
+        "output_tokens": 239,
+        "total_tokens": 3015,
+        "inference_time_ms": 480.5,
+        "tokens_per_second": 497.4,
+        "prompt_chars": 7973,
+        "timestamp": "2026-03-14T02:11:17.122731+00:00"
+      }
+    }
+  },
+  "47320614": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI coding tool levels and progression."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1886,
+        "output_tokens": 42,
+        "total_tokens": 1928,
+        "inference_time_ms": 264.3,
+        "tokens_per_second": 158.9,
+        "prompt_chars": 3967,
+        "timestamp": "2026-03-14T02:11:01.156896+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI‑assistants boost output when teams level up, but coordination and context still pose hard challenges.",
+        "quotes": [
+          "\"I would put my energy on Level 7 – that's where the leverage is.\"",
+          "The best engineering teams aren't staffed with clones… I routinely dispatch Opus for implementation, Gemini for exploratory research, and Codex for review, and the cumulative output is stronger than any single model working alone."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-14T02:11:14.825722+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2503,
+        "output_tokens": 188,
+        "total_tokens": 2691,
+        "inference_time_ms": 465.1,
+        "tokens_per_second": 404.2,
+        "prompt_chars": 7978,
+        "timestamp": "2026-03-14T02:11:14.825722+00:00"
+      }
+    }
+  },
+  "47349334": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and analysis of LLM merge rates"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1665,
+        "output_tokens": 40,
+        "total_tokens": 1705,
+        "inference_time_ms": 236.7,
+        "tokens_per_second": 169.0,
+        "prompt_chars": 2772,
+        "timestamp": "2026-03-14T02:11:02.789151+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "evaluation",
+        "summary": "Merge rates plateau—no real progress, making LLMs less useful now.",
+        "quotes": [
+          "\"the merge rate has not increased in the latter half of this plot.\"",
+          "\"This means llm s have not improved in their programming abilities for over a year.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-14T02:11:16.120513+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1516,
+        "output_tokens": 264,
+        "total_tokens": 1780,
+        "inference_time_ms": 444.6,
+        "tokens_per_second": 593.7,
+        "prompt_chars": 2772,
+        "timestamp": "2026-03-14T02:11:16.120513+00:00"
+      }
+    }
   }
 }

@@ -197,7 +197,15 @@
   const effectiveNegative = $derived(hoveredSnapshot?.negativeCount ?? verdictScore?.negativeCount ?? 0)
   const effectiveNeutral = $derived(hoveredSnapshot?.neutralCount ?? verdictScore?.neutralCount ?? 0)
   const effectiveTotalArticles = $derived(effectivePositive + effectiveNeutral + effectiveNegative)
-  const displayText = $derived(effectiveVerdict === "NOT_YET" ? "Not yet" : effectiveVerdict)
+  const displayText = $derived(
+    effectiveVerdict === "NOT_YET"
+      ? "Not yet"
+      : effectiveVerdict === "YES"
+        ? "Yes"
+        : effectiveVerdict === "NO"
+          ? "No"
+          : effectiveVerdict
+  )
 
   // Date parts for NumberFlow animation
   const displayDate = $derived(() => {
@@ -229,9 +237,9 @@
 
   // Sentiment color based on verdict
   const sentimentColor = $derived(
-    effectiveVerdict === "YES"
+    effectiveVerdict === "YES" || effectiveVerdict === "Yes"
       ? "var(--color-primary)"
-      : effectiveVerdict === "NO"
+      : effectiveVerdict === "NO" || effectiveVerdict === "No"
         ? "var(--color-destructive)"
         : "var(--color-warning)"
   )
@@ -248,11 +256,11 @@
 
   // Sentiment description text
   const sentimentText = $derived(
-    effectiveVerdict === "YES"
-      ? "Most developers think positively about “vibe-coding” and AI-assisted workflows, "
-      : effectiveVerdict === "NO"
-        ? "Most developers are skeptical about “vibe-coding” and AI-assisted workflows, "
-        : "The developer community is undecided on “vibe-coding” and AI-assisted workflows, "
+    effectiveVerdict === "YES" || effectiveVerdict === "Yes"
+      ? 'Most developers think positively about "vibe-coding" and AI-assisted workflows, '
+      : effectiveVerdict === "NO" || effectiveVerdict === "No"
+        ? 'Most developers are skeptical about "vibe-coding" and AI-assisted workflows, '
+        : 'The developer community is undecided on "vibe-coding" and AI-assisted workflows, '
   )
 
   // Disarm NumberFlow animations during history hover for performance
@@ -395,8 +403,8 @@
             <div class="font-mono text-[clamp(1.75rem,10vw,4.5rem)] font-bold flex items-center justify-center">
               <span
                 class="transition-colors duration-200"
-                class:text-accent={effectiveVerdict === "YES"}
-                class:text-destructive={effectiveVerdict === "NO"}
+                class:text-accent={effectiveVerdict === "YES" || effectiveVerdict === "Yes"}
+                class:text-destructive={effectiveVerdict === "NO" || effectiveVerdict === "No"}
                 style:color={sentimentColor}
                 style:text-shadow="0 0 12px color-mix(in srgb, {sentimentColor}, transparent 40%), 0 0 24px color-mix(in
                 srgb, {sentimentColor}, transparent 60%)">

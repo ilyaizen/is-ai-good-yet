@@ -45756,5 +45756,519 @@
         "timestamp": "2026-03-14T02:11:16.120513+00:00"
       }
     }
+  },
+  "47428541": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI coding, citing feelings and job impact."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1906,
+        "output_tokens": 44,
+        "total_tokens": 1950,
+        "inference_time_ms": 305.6,
+        "tokens_per_second": 144.0,
+        "prompt_chars": 3981,
+        "timestamp": "2026-03-19T21:51:22.724670+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI coding feels like gambling: tempting but ultimately unsatisfying, leaving developers feeling lazy and detached from true craftsmanship.",
+        "quotes": [
+          "Giving us a vaguely plausible but often surprisingly wrong",
+          "It sucks. The Simplest Problem I divide my tasks into good for the soul and bad for it."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:39.013936+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1765,
+        "output_tokens": 161,
+        "total_tokens": 1926,
+        "inference_time_ms": 353.2,
+        "tokens_per_second": 455.9,
+        "prompt_chars": 4054,
+        "timestamp": "2026-03-19T21:51:39.013936+00:00"
+      }
+    }
+  },
+  "47407252": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and critical evaluation of AI coding effectiveness with explicit conclusions."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1884,
+        "output_tokens": 43,
+        "total_tokens": 1927,
+        "inference_time_ms": 334.2,
+        "tokens_per_second": 128.7,
+        "prompt_chars": 4004,
+        "timestamp": "2026-03-19T21:51:30.498657+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding is dangerously unreliable, producing buggy, bloated code that harms business outcomes.",
+        "quotes": [
+          "\"Even within the coding, it’s not working very well.\"",
+          "\"It passed all the unit tests, the shape of the code looks right… It’s 3.7x more lines of code that performs 2,000 times worse than the actual SQLite. Two thousand times worse for a database is a non‑viable product.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:45.391941+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2528,
+        "output_tokens": 188,
+        "total_tokens": 2716,
+        "inference_time_ms": 419.4,
+        "tokens_per_second": 448.3,
+        "prompt_chars": 7978,
+        "timestamp": "2026-03-19T21:51:45.391941+00:00"
+      }
+    }
+  },
+  "47386636": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience, critical evaluation, and research with clear findings about AI coding tools"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1979,
+        "output_tokens": 45,
+        "total_tokens": 2024,
+        "inference_time_ms": 279.9,
+        "tokens_per_second": 160.8,
+        "prompt_chars": 3996,
+        "timestamp": "2026-03-19T21:51:24.994729+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI speeds prototypes but the 100‑hour gap shows it’s still a net productivity hit for complex apps.",
+        "quotes": [
+          "\"I’ve been using AI to code in late 2023… It gave us an edge.\"",
+          "\"In the first hour I had my working prototype. Wow, I'm going to publish it soon, right?\"",
+          "\"…the 100 hour gap is so real. The prototype feels magical but then you hit auth edge cases… shipping is the hard part.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:40.641847+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2788,
+        "output_tokens": 202,
+        "total_tokens": 2990,
+        "inference_time_ms": 410.3,
+        "tokens_per_second": 492.4,
+        "prompt_chars": 7969,
+        "timestamp": "2026-03-19T21:51:40.641847+00:00"
+      }
+    }
+  },
+  "47442435": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience with Karpathy's Autoresearch, presents findings on GPU cluster scaling"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1973,
+        "output_tokens": 48,
+        "total_tokens": 2021,
+        "inference_time_ms": 396.2,
+        "tokens_per_second": 121.1,
+        "prompt_chars": 3971,
+        "timestamp": "2026-03-19T21:51:29.553867+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Claude Code autonomously scales hyperparameter search, slashing run time 9× and discovering new hardware‑aware strategies—true game‑changer for ML engineering.",
+        "quotes": [
+          "With 16 GPUs, it ran factorial grids of 10‑13 experiments per wave, catching interaction effects between parameters that sequential search would miss.",
+          "It reached the same best validation loss 9x faster than the simulated sequential baseline (~8 hours vs ~72 hours)."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:44.123968+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2775,
+        "output_tokens": 219,
+        "total_tokens": 2994,
+        "inference_time_ms": 424.2,
+        "tokens_per_second": 516.2,
+        "prompt_chars": 7976,
+        "timestamp": "2026-03-19T21:51:44.123968+00:00"
+      }
+    }
+  },
+  "47427647": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal measurement experience with Sashiko's bug detection rate"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1375,
+        "output_tokens": 42,
+        "total_tokens": 1417,
+        "inference_time_ms": 351.5,
+        "tokens_per_second": 119.5,
+        "prompt_chars": 1456,
+        "timestamp": "2026-03-19T21:51:28.636011+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Sashiko catches 53% of kernel bugs humans miss, proving a solid quality boost for code review.",
+        "quotes": [
+          "\"Sashiko was able to find 53% of bugs based on a completely unfiltered set of 1000 recent upstream issues...\",\"100% of these issues were missed by human reviewers.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:42.818583+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1230,
+        "output_tokens": 210,
+        "total_tokens": 1440,
+        "inference_time_ms": 369.4,
+        "tokens_per_second": 568.5,
+        "prompt_chars": 1450,
+        "timestamp": "2026-03-19T21:51:42.818583+00:00"
+      }
+    }
+  },
+  "47400261": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Apideck CLI, comparing it to MCP, and discusses industry trends and best practices for AI-agent integration."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1873,
+        "output_tokens": 55,
+        "total_tokens": 1928,
+        "inference_time_ms": 272.5,
+        "tokens_per_second": 201.8,
+        "prompt_chars": 3960,
+        "timestamp": "2026-03-19T21:51:27.410968+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "CLI outperforms MCP by cutting context bloat, but tradeoffs in auth and streaming still exist.",
+        "quotes": [
+          "\"The agent had 57,000 tokens left for the actual conversation... Good luck building anything useful in that space.\", \"The mistake is treating MCP as the universal answer when, for many integration patterns, a CLI does the job with two orders of magnitude less context overhead.\"]"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:41.509582+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2493,
+        "output_tokens": 197,
+        "total_tokens": 2690,
+        "inference_time_ms": 391.5,
+        "tokens_per_second": 503.2,
+        "prompt_chars": 7977,
+        "timestamp": "2026-03-19T21:51:41.509582+00:00"
+      }
+    }
+  },
+  "47372672": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and critical evaluation of content optimization for AI agents."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1895,
+        "output_tokens": 42,
+        "total_tokens": 1937,
+        "inference_time_ms": 368.8,
+        "tokens_per_second": 113.9,
+        "prompt_chars": 3972,
+        "timestamp": "2026-03-19T21:51:31.004376+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Optimizing content for agents is practical but not a game‑changer; Sentry’s MDX tweaks improve bot usability.",
+        "quotes": [
+          "\"Serve true markdown content – massive tokenization savings as well as improved accuracy\",\"You should do it. You should also pay attention to how patterns are changing with agents and update your optimizations as behavior changes.\"]"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:45.903832+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2040,
+        "output_tokens": 224,
+        "total_tokens": 2264,
+        "inference_time_ms": 394.6,
+        "tokens_per_second": 567.6,
+        "prompt_chars": 5277,
+        "timestamp": "2026-03-19T21:51:45.903832+00:00"
+      }
+    }
+  },
+  "47359712": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on collaborative editing algorithms, citing specific challenges and recommending an alternative."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1909,
+        "output_tokens": 47,
+        "total_tokens": 1956,
+        "inference_time_ms": 332.7,
+        "tokens_per_second": 141.3,
+        "prompt_chars": 3966,
+        "timestamp": "2026-03-19T21:51:24.195397+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Yjs is overly complex and buggy; a lightweight 40‑line prosemirror‑collab solution is preferable for most real‑world editors.",
+        "quotes": [
+          "CRDTs are operationally complex, but you need them…",
+          "We recommend a less‑well‑known alternative to Yjs because it is uniformly better on every axis…",
+          "CRDTs are much, much harder to debug…"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:40.118425+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2633,
+        "output_tokens": 296,
+        "total_tokens": 2929,
+        "inference_time_ms": 530.2,
+        "tokens_per_second": 558.2,
+        "prompt_chars": 7974,
+        "timestamp": "2026-03-19T21:51:40.118425+00:00"
+      }
+    }
+  },
+  "47415919": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and critical evaluation of AI coding assistants"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1891,
+        "output_tokens": 40,
+        "total_tokens": 1931,
+        "inference_time_ms": 385.1,
+        "tokens_per_second": 103.9,
+        "prompt_chars": 3975,
+        "timestamp": "2026-03-19T21:51:23.219310+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "workflow",
+        "summary": "AI speed boosts waste time; it magnifies bottlenecks and hampers real delivery.",
+        "quotes": [
+          "\"Your VP looked at your entire software delivery organisation, identified the one thing that was already pretty fast, and decided to make it faster.\"",
+          "\"Your developers are producing PRs faster than ever. Great. Wonderful. Gold star. Someone get the confetti cannon.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:39.475551+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2565,
+        "output_tokens": 130,
+        "total_tokens": 2695,
+        "inference_time_ms": 356.7,
+        "tokens_per_second": 364.4,
+        "prompt_chars": 7979,
+        "timestamp": "2026-03-19T21:51:39.475551+00:00"
+      }
+    }
+  },
+  "47397367": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 1.0,
+        "reasoning": "Author shares personal experience with automated verification of AI-generated code."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1493,
+        "output_tokens": 40,
+        "total_tokens": 1533,
+        "inference_time_ms": 255.4,
+        "tokens_per_second": 156.6,
+        "prompt_chars": 2132,
+        "timestamp": "2026-03-19T21:51:29.020054+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Verification framework cuts review time, but setup overhead still high.",
+        "quotes": [
+          "\"The overhead of setting up these constraints currently outweighs the cost of just reading the code.\",\"These checks seem sufficient for me to trust the generated code without looking at it.\n"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:43.596693+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1342,
+        "output_tokens": 189,
+        "total_tokens": 1531,
+        "inference_time_ms": 356.3,
+        "tokens_per_second": 530.5,
+        "prompt_chars": 2124,
+        "timestamp": "2026-03-19T21:51:43.596693+00:00"
+      }
+    }
+  },
+  "47387434": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with LLMs, criticizes productivity claims, and provides opinion on code output."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1856,
+        "output_tokens": 49,
+        "total_tokens": 1905,
+        "inference_time_ms": 263.5,
+        "tokens_per_second": 186.0,
+        "prompt_chars": 3972,
+        "timestamp": "2026-03-19T21:51:30.016651+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "LLM code generation is a major source of bugs and friction; only useful for research, not for reliable production code.",
+        "quotes": [
+          "\"When I deal with LLM-generated code, I have a bad time.\"",
+          "\"I constantly question whether they are a useful tool for the programming I do.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:44.869200+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2502,
+        "output_tokens": 430,
+        "total_tokens": 2932,
+        "inference_time_ms": 632.8,
+        "tokens_per_second": 679.5,
+        "prompt_chars": 7970,
+        "timestamp": "2026-03-19T21:51:44.869200+00:00"
+      }
+    }
+  },
+  "47377262": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI's impact on software engineering"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1770,
+        "output_tokens": 42,
+        "total_tokens": 1812,
+        "inference_time_ms": 266.0,
+        "tokens_per_second": 157.9,
+        "prompt_chars": 3971,
+        "timestamp": "2026-03-19T21:51:27.787381+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI speeds spec drift; useful when disciplined, but risks undermining quality if ignored.",
+        "quotes": [
+          "Large language models dramatically accelerate the production of code… the forces that create spec drift begin to accelerate.",
+          "They are remarkable tools, and used thoughtfully they can dramatically improve the way engineers explore and design systems."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-19T21:51:42.011774+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2311,
+        "output_tokens": 207,
+        "total_tokens": 2518,
+        "inference_time_ms": 392.7,
+        "tokens_per_second": 527.1,
+        "prompt_chars": 7976,
+        "timestamp": "2026-03-19T21:51:42.012775+00:00"
+      }
+    }
   }
 }

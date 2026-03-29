@@ -46270,5 +46270,264 @@
         "timestamp": "2026-03-19T21:51:42.012775+00:00"
       }
     }
+  },
+  "47491466": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion on AI coding agents, highlighting issues and proposing a solution."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1930,
+        "output_tokens": 46,
+        "total_tokens": 1976,
+        "inference_time_ms": 336.0,
+        "tokens_per_second": 136.9,
+        "prompt_chars": 3977,
+        "timestamp": "2026-03-29T22:04:28.747789+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "cq promises to cut AI token waste by sharing vetted knowledge, but remains early and experimental.",
+        "quotes": [
+          "'Every agent hitting the same wall independently, burning tokens and compute each time. That's the waste cq is designed to cut.'",
+          "'We started building this at the beginning of March, and recently saw confirmation of it through Andrew Ng's post asking whether there should be a Stack Overflow for AI coding agents.']"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:40.126800+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2482,
+        "output_tokens": 226,
+        "total_tokens": 2708,
+        "inference_time_ms": 514.0,
+        "tokens_per_second": 439.7,
+        "prompt_chars": 7576,
+        "timestamp": "2026-03-29T22:04:40.126800+00:00"
+      }
+    }
+  },
+  "47494890": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience sharing productivity gains with Claude Code"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1915,
+        "output_tokens": 38,
+        "total_tokens": 1953,
+        "inference_time_ms": 315.2,
+        "tokens_per_second": 120.6,
+        "prompt_chars": 3965,
+        "timestamp": "2026-03-29T22:04:27.829723+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Claude Code automates grunt work, slashes build time, and streamlines PRs, dramatically boosting developer flow.",
+        "quotes": [
+          "\"/git-pr does everything I used to do, except it does it better.\", \"Server restarts dropped to under a second. This sparked joy.\", \"I could run ten previews simultaneously if I wanted."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:39.510089+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2237,
+        "output_tokens": 148,
+        "total_tokens": 2385,
+        "inference_time_ms": 378.2,
+        "tokens_per_second": 391.3,
+        "prompt_chars": 6183,
+        "timestamp": "2026-03-29T22:04:39.510089+00:00"
+      }
+    }
+  },
+  "47538190": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with personal opinion and empirical findings about AI coding tools"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1669,
+        "output_tokens": 42,
+        "total_tokens": 1711,
+        "inference_time_ms": 237.0,
+        "tokens_per_second": 177.2,
+        "prompt_chars": 3032,
+        "timestamp": "2026-03-29T22:04:30.507991+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Multi‑agent pair programming speeds up review but adds noise, so it's a net positive with caveats.",
+        "quotes": [
+          "‘It makes this feedback loop faster and more natural, while preserving context across iterations.’",
+          "‘Letting the agents loop can result in more changes than expected, which are usually welcome – but unfortunately it makes the human review harder.’"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:40.554004+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1521,
+        "output_tokens": 138,
+        "total_tokens": 1659,
+        "inference_time_ms": 315.8,
+        "tokens_per_second": 437.1,
+        "prompt_chars": 3032,
+        "timestamp": "2026-03-29T22:04:40.554004+00:00"
+      }
+    }
+  },
+  "47536761": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with AI agent development and usage."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1999,
+        "output_tokens": 38,
+        "total_tokens": 2037,
+        "inference_time_ms": 349.7,
+        "tokens_per_second": 108.7,
+        "prompt_chars": 3994,
+        "timestamp": "2026-03-29T22:04:26.979504+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "A clever, low‑cost IRC‑based AI doorman that works, but isn’t flawless—useful with clear boundaries.",
+        "quotes": [
+          "\"It backs up what it says with code",
+          "and my resume can",
+          "t do that.\"",
+          "It's an IRC bot backed by Haiku, so it's not perfect."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:39.011873+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2774,
+        "output_tokens": 188,
+        "total_tokens": 2962,
+        "inference_time_ms": 426.9,
+        "tokens_per_second": 440.4,
+        "prompt_chars": 7972,
+        "timestamp": "2026-03-29T22:04:39.011873+00:00"
+      }
+    }
+  },
+  "47546732": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with LLM-generated code in OpenBSD and raises concerns about copyright and maintenance."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1859,
+        "output_tokens": 48,
+        "total_tokens": 1907,
+        "inference_time_ms": 303.7,
+        "tokens_per_second": 158.1,
+        "prompt_chars": 3989,
+        "timestamp": "2026-03-29T22:04:32.858720+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI-generated ext4 driver poses serious legal and quality risks, leading the OpenBSD project to reject it outright.",
+        "quotes": [
+          "'the chances of us accepting such new code with such a suspicious Copyright situation is zero'",
+          "'We can freely steal each other in a new original way without copyright infringment its totally crazy the amount of code you can steal in just 1h'"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:42.737613+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2253,
+        "output_tokens": 309,
+        "total_tokens": 2562,
+        "inference_time_ms": 485.2,
+        "tokens_per_second": 636.8,
+        "prompt_chars": 6648,
+        "timestamp": "2026-03-29T22:04:42.737613+00:00"
+      }
+    }
+  },
+  "47530330": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with Codeberg migration and compares GitHub features"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1658,
+        "output_tokens": 41,
+        "total_tokens": 1699,
+        "inference_time_ms": 292.5,
+        "tokens_per_second": 140.2,
+        "prompt_chars": 2865,
+        "timestamp": "2026-03-29T22:04:24.569966+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Migration is doable but CI setup is a headache, requiring self‑hosted runners and some workarounds.",
+        "quotes": [
+          "The import preserves issue numbers, labels, authorship.",
+          "The CI is the by far nastiest part – you’ll have to give up on both free macOS runners and infinite capacity for public repos."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-03-29T22:04:38.132307+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1533,
+        "output_tokens": 171,
+        "total_tokens": 1704,
+        "inference_time_ms": 491.4,
+        "tokens_per_second": 348.0,
+        "prompt_chars": 2865,
+        "timestamp": "2026-03-29T22:04:38.132307+00:00"
+      }
+    }
   }
 }

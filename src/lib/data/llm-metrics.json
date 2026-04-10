@@ -46271,6 +46271,49 @@
       }
     }
   },
+  "47545748": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and verdict on AI coding agents."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1868,
+        "output_tokens": 253,
+        "total_tokens": 2121,
+        "inference_time_ms": 886.0,
+        "tokens_per_second": 285.6,
+        "prompt_chars": 3985,
+        "timestamp": "2026-04-10T16:04:46.251532+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding agents pose serious risks: skill atrophy, hallucinations, legal headaches, and undermine developer trust in code quality.",
+        "quotes": [
+          "LLM-based AI coding agents have no place now, or ever, in generating production code for any software I build professionally.",
+          "Skill atrophy … the role changes to becoming a software engineering manager who supervises AI agents instead of writing code."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:08.357319+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2490,
+        "output_tokens": 265,
+        "total_tokens": 2755,
+        "inference_time_ms": 550.0,
+        "tokens_per_second": 481.9,
+        "prompt_chars": 7971,
+        "timestamp": "2026-04-10T16:05:08.357319+00:00"
+      }
+    }
+  },
   "47491466": {
     "prefilter": {
       "response": {
@@ -46527,6 +46570,609 @@
         "tokens_per_second": 348.0,
         "prompt_chars": 2865,
         "timestamp": "2026-03-29T22:04:38.132307+00:00"
+      }
+    }
+  },
+  "47656335": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on LLM-assisted coding and microservices"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1530,
+        "output_tokens": 44,
+        "total_tokens": 1574,
+        "inference_time_ms": 444.5,
+        "tokens_per_second": 99.0,
+        "prompt_chars": 2350,
+        "timestamp": "2026-04-10T16:04:50.419449+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "LLMs push microservices, offering isolation but risking a fragmented, hard‑to‑maintain ecosystem.",
+        "quotes": [
+          "LLM‑assisted coding naturally flows towards small microservices",
+          "A microservice has much less risk of coupling",
+          "A proliferation of microservices is probably worse and harder to maintain in the long term"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:11.916483+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1386,
+        "output_tokens": 178,
+        "total_tokens": 1564,
+        "inference_time_ms": 367.5,
+        "tokens_per_second": 484.4,
+        "prompt_chars": 2350,
+        "timestamp": "2026-04-10T16:05:11.916483+00:00"
+      }
+    }
+  },
+  "47651540": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.85,
+        "reasoning": "Author shares personal experience with Gemma 4 local setup and Claude Code, discussing advantages and limitations."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2019,
+        "output_tokens": 48,
+        "total_tokens": 2067,
+        "inference_time_ms": 325.4,
+        "tokens_per_second": 147.5,
+        "prompt_chars": 3966,
+        "timestamp": "2026-04-10T16:04:34.461248+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Gemma 4 works well locally for small coding tasks, offering cost savings and privacy, but its slower speed limits large‑scale work.",
+        "quotes": [
+          "\"Zero API costs, no data leaving your machine, and consistent availability.\"",
+          "\"Gemma 4 at 51 tok/sec is noticeably slower than the Anthropic API for large code generation tasks, but for code review, small edits, and exploration it is perfectly usable.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:00.223901+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2782,
+        "output_tokens": 181,
+        "total_tokens": 2963,
+        "inference_time_ms": 452.5,
+        "tokens_per_second": 400.0,
+        "prompt_chars": 7970,
+        "timestamp": "2026-04-10T16:05:00.223901+00:00"
+      }
+    }
+  },
+  "47710007": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience migrating from WordPress to Jekyll, discussing AI proliferation and coding agent impact"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1901,
+        "output_tokens": 47,
+        "total_tokens": 1948,
+        "inference_time_ms": 441.1,
+        "tokens_per_second": 106.6,
+        "prompt_chars": 3973,
+        "timestamp": "2026-04-10T16:04:45.138636+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI coding agents streamline migrations, boosting speed and quality but still require human oversight.",
+        "quotes": [
+          "\"Since the advent of coding agents like Claude Code, it has now become easier to completely route around this problem by simply migrating to another platform.\"",
+          "\"We can now execute on new content ideas far faster and at much higher quality than we have ever been able to do so before.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:05.925037+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2643,
+        "output_tokens": 219,
+        "total_tokens": 2862,
+        "inference_time_ms": 562.6,
+        "tokens_per_second": 389.3,
+        "prompt_chars": 7973,
+        "timestamp": "2026-04-10T16:05:05.925037+00:00"
+      }
+    }
+  },
+  "47704881": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Vercel plugin on Claude Code, highlighting consent issues and telemetry concerns"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1926,
+        "output_tokens": 48,
+        "total_tokens": 1974,
+        "inference_time_ms": 512.0,
+        "tokens_per_second": 93.7,
+        "prompt_chars": 3976,
+        "timestamp": "2026-04-10T16:04:37.841481+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Vercel plugin misuses prompt injection, hijacks telemetry, and violates developer consent, creating a harmful workflow.",
+        "quotes": [
+          "\"The Vercel plugin collects anonymous usage data… Would you like to also share your prompt text?\"",
+          "\"All plugin‑injected questions look identical to native UI. Plugins need granular permissions.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:03.268682+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2685,
+        "output_tokens": 181,
+        "total_tokens": 2866,
+        "inference_time_ms": 466.2,
+        "tokens_per_second": 388.2,
+        "prompt_chars": 7975,
+        "timestamp": "2026-04-10T16:05:03.268682+00:00"
+      }
+    }
+  },
+  "47700972": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience, compares models, and provides actionable advice on reallocation of AI spend."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1928,
+        "output_tokens": 47,
+        "total_tokens": 1975,
+        "inference_time_ms": 655.2,
+        "tokens_per_second": 71.7,
+        "prompt_chars": 3972,
+        "timestamp": "2026-04-10T16:04:35.666017+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Zed + OpenRouter offer cost‑effective, flexible coding, but the author still relies on Claude for certain tasks.",
+        "quotes": [
+          "I’ve been disappointed to feel that I’m hitting Claude limits faster than before.",
+          "I highly recommend giving it a try."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:01.134894+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2694,
+        "output_tokens": 173,
+        "total_tokens": 2867,
+        "inference_time_ms": 484.6,
+        "tokens_per_second": 357.0,
+        "prompt_chars": 7975,
+        "timestamp": "2026-04-10T16:05:01.134894+00:00"
+      }
+    }
+  },
+  "47696210": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author's personal experience and analysis of Claude Code's performance with empirical data"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1848,
+        "output_tokens": 43,
+        "total_tokens": 1891,
+        "inference_time_ms": 308.3,
+        "tokens_per_second": 139.5,
+        "prompt_chars": 4000,
+        "timestamp": "2026-04-10T16:04:52.739952+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Claude Code’s recent updates have made it unreliable, forcing a top‑tier engineer to abandon it for worse quality elsewhere.",
+        "quotes": [
+          "\"Claude cannot be trusted to perform complex engineering tasks.\"",
+          "\"When thinking is shallow, the model defaults to the cheapest action available: edit without reading...\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:13.704008+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1882,
+        "output_tokens": 162,
+        "total_tokens": 2044,
+        "inference_time_ms": 368.9,
+        "tokens_per_second": 439.1,
+        "prompt_chars": 4890,
+        "timestamp": "2026-04-10T16:05:13.704008+00:00"
+      }
+    }
+  },
+  "47633855": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience and research findings about AI coding tool effectiveness"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1917,
+        "output_tokens": 40,
+        "total_tokens": 1957,
+        "inference_time_ms": 263.1,
+        "tokens_per_second": 152.1,
+        "prompt_chars": 3966,
+        "timestamp": "2026-04-10T16:04:33.525136+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Claude Code is a game‑changing bug‑hunter, uncovering long‑hidden vulnerabilities with minimal human input.",
+        "quotes": [
+          "Nicholas was astonished at how effective Claude Code has been at finding these bugs: We now have a number of remotely exploitable heap buffer overflows in the Linux kernel.",
+          "This bug required the AI model to understand intricate details of how the NFS protocol works."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:04:59.271955+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2552,
+        "output_tokens": 231,
+        "total_tokens": 2783,
+        "inference_time_ms": 584.1,
+        "tokens_per_second": 395.5,
+        "prompt_chars": 6897,
+        "timestamp": "2026-04-10T16:04:59.271955+00:00"
+      }
+    }
+  },
+  "47664912": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI coding and critiques the 'vibe coding' concept"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1899,
+        "output_tokens": 45,
+        "total_tokens": 1944,
+        "inference_time_ms": 306.9,
+        "tokens_per_second": 146.6,
+        "prompt_chars": 3988,
+        "timestamp": "2026-04-10T16:04:32.761839+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI cleans code well when guided, but hype about vibe coding is misguided.",
+        "quotes": [
+          "The AI is actually very good at this, especially if you have a conversation with it beforehand.",
+          "But the Claude team isn’t doing that. They’re going completely overboard with dogfooding and utterly refusing to even spend a few minutes looking under the hood."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:04:57.787393+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2035,
+        "output_tokens": 200,
+        "total_tokens": 2235,
+        "inference_time_ms": 516.6,
+        "tokens_per_second": 387.2,
+        "prompt_chars": 5283,
+        "timestamp": "2026-04-10T16:04:57.788396+00:00"
+      }
+    }
+  },
+  "47706141": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Research-driven agents with literature search phase produce better optimizations"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1910,
+        "output_tokens": 39,
+        "total_tokens": 1949,
+        "inference_time_ms": 249.9,
+        "tokens_per_second": 156.1,
+        "prompt_chars": 3971,
+        "timestamp": "2026-04-10T16:04:39.674752+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Literature‑guided agents outperform code‑only ones, delivering measurable speed gains and smart optimizations.",
+        "quotes": [
+          "\"Agents that read papers and study competing projects before writing code find optimizations that code‑only agents miss.\"",
+          "\"The literature research pointed the agent at operator fusions present in CUDA/Metal backends but absent from CPU.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:04.302230+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2616,
+        "output_tokens": 175,
+        "total_tokens": 2791,
+        "inference_time_ms": 470.3,
+        "tokens_per_second": 372.1,
+        "prompt_chars": 7979,
+        "timestamp": "2026-04-10T16:05:04.302230+00:00"
+      }
+    }
+  },
+  "47704285": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on coding agents, referencing Robert Martin's Clean Architecture and highlighting practical steps for organizing code."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1655,
+        "output_tokens": 52,
+        "total_tokens": 1707,
+        "inference_time_ms": 382.0,
+        "tokens_per_second": 136.1,
+        "prompt_chars": 2850,
+        "timestamp": "2026-04-10T16:04:51.400486+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Clean code still matters for agents—helps context but you must review changes.",
+        "quotes": [
+          "'Agents need clean code to keep context low, otherwise they read dozens of files and cost tokens.'",
+          "'Even if LLMs understand the style, you still have to review the outcomes."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:12.823368+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1500,
+        "output_tokens": 200,
+        "total_tokens": 1700,
+        "inference_time_ms": 380.0,
+        "tokens_per_second": 526.4,
+        "prompt_chars": 2848,
+        "timestamp": "2026-04-10T16:05:12.823368+00:00"
+      }
+    }
+  },
+  "47629485": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with 100+ Claude agents in parallel, discussing architecture and workflow."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1876,
+        "output_tokens": 46,
+        "total_tokens": 1922,
+        "inference_time_ms": 280.5,
+        "tokens_per_second": 164.0,
+        "prompt_chars": 3969,
+        "timestamp": "2026-04-10T16:04:48.645900+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Mngr streamlines multi‑agent workflows, scaling from local to Modal with minimal friction, but still needs manual oversight for complex tests.",
+        "quotes": [
+          "\"I built the entire lifecycle using only agents on my local machine… I can run 10 of them in parallel, and by trading space for time, I can run hundreds of agents overnight.\"",
+          "\"mngr gives you the ‘maps’ and ‘reduces’, just like a library of functional programming primitives, so that you can build whatever simple or complex multi‑agent pipeline you want.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:10.452475+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2571,
+        "output_tokens": 179,
+        "total_tokens": 2750,
+        "inference_time_ms": 475.7,
+        "tokens_per_second": 376.3,
+        "prompt_chars": 7974,
+        "timestamp": "2026-04-10T16:05:10.452475+00:00"
+      }
+    }
+  },
+  "47679155": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author provides technical details, testing results, and implications of Claude Mythos Preview's cybersecurity capabilities."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1885,
+        "output_tokens": 47,
+        "total_tokens": 1932,
+        "inference_time_ms": 263.9,
+        "tokens_per_second": 178.1,
+        "prompt_chars": 3979,
+        "timestamp": "2026-04-10T16:04:36.053713+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Claude Mythos is a powerful but dangerously effective vulnerability hunter, turning security into a liability.",
+        "quotes": [
+          "\"capable of identifying and then exploiting zero‑day vulnerabilities in every major operating system and every major web browser\",\"We have found that Mythos Preview is capable of identifying and then exploiting zero‑day vulnerabilities\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:01.844011+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2859,
+        "output_tokens": 265,
+        "total_tokens": 3124,
+        "inference_time_ms": 600.5,
+        "tokens_per_second": 441.3,
+        "prompt_chars": 7965,
+        "timestamp": "2026-04-10T16:05:01.844011+00:00"
+      }
+    }
+  },
+  "47700084": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI's impact on coding, citing specific examples and statistics."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1910,
+        "output_tokens": 47,
+        "total_tokens": 1957,
+        "inference_time_ms": 291.3,
+        "tokens_per_second": 161.3,
+        "prompt_chars": 3975,
+        "timestamp": "2026-04-10T16:04:49.541754+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI coding massively cuts cost and time, but requires skill in specification and verification to avoid sloppy code.",
+        "quotes": [
+          "\"Programming in Claude Code is like playing with a Tamagotchi … deploy database‑backed web applications…\"",
+          "\"The 10% that went up 1000x is judgment, specification, and verification.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:05:11.130843+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2611,
+        "output_tokens": 205,
+        "total_tokens": 2816,
+        "inference_time_ms": 573.0,
+        "tokens_per_second": 357.8,
+        "prompt_chars": 7970,
+        "timestamp": "2026-04-10T16:05:11.130843+00:00"
+      }
+    }
+  },
+  "47673005": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person developer experience, critical evaluation with verdict, and research with clear findings about AI coding tool effectiveness"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1886,
+        "output_tokens": 49,
+        "total_tokens": 1935,
+        "inference_time_ms": 257.0,
+        "tokens_per_second": 190.7,
+        "prompt_chars": 3976,
+        "timestamp": "2026-04-10T16:04:33.148878+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "AI-driven specs exposed a long‑standing lock leak, proving AI is a powerful debugging aid but still needs human oversight.",
+        "quotes": [
+          "We used Claude and Allium to distil 130,000 lines of AGC assembly into 12,500 lines of specs. The specs were derived from the code itself, and the process signposted us directly to the defect.",
+          "The specification forces this question on every path through the IMU mode‑switching code. A reviewer examining BADEND would see correct, complete cleanup for every resource BADEND was designed to handle."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-10T16:04:58.574173+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2599,
+        "output_tokens": 267,
+        "total_tokens": 2866,
+        "inference_time_ms": 675.5,
+        "tokens_per_second": 395.3,
+        "prompt_chars": 7965,
+        "timestamp": "2026-04-10T16:04:58.574173+00:00"
       }
     }
   }

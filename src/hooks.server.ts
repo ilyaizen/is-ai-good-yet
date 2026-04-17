@@ -1,13 +1,13 @@
-import type { Handle } from "@sveltejs/kit";
-import { ConvexHttpClient } from "convex/browser";
-import { api } from "../convex/_generated/api";
-import { createHash } from "crypto";
-import { PUBLIC_CONVEX_URL } from "$env/static/public";
-import { VISITOR_IP_SALT } from "$env/static/private";
+import type { Handle } from "@sveltejs/kit"
+import { ConvexHttpClient } from "convex/browser"
+import { api } from "../convex/_generated/api"
+import { createHash } from "crypto"
+import { PUBLIC_CONVEX_URL } from "$env/static/public"
+import { VISITOR_IP_SALT } from "$env/static/private"
 
 // Initialize Convex HTTP client for server-side mutations
 // This client runs on the server only - prevents client-side spoofing of IP addresses
-const convex = new ConvexHttpClient(PUBLIC_CONVEX_URL);
+const convex = new ConvexHttpClient(PUBLIC_CONVEX_URL)
 
 /**
  * Hash IP address with salt for privacy-friendly storage.
@@ -27,11 +27,9 @@ const convex = new ConvexHttpClient(PUBLIC_CONVEX_URL);
 function hashIP(ip: string): string {
   // Normalize localhost IPs in development
   // ::1 = IPv6 localhost, 127.0.0.1 = IPv4 localhost
-  const normalizedIP = ip === "::1" || ip === "127.0.0.1" ? "localhost-dev" : ip;
+  const normalizedIP = ip === "::1" || ip === "127.0.0.1" ? "localhost-dev" : ip
 
-  return createHash("sha256")
-    .update(`${normalizedIP}:${VISITOR_IP_SALT}`)
-    .digest("hex");
+  return createHash("sha256").update(`${normalizedIP}:${VISITOR_IP_SALT}`).digest("hex")
 }
 
 /**
@@ -52,7 +50,7 @@ function hashIP(ip: string): string {
  * @returns true if request is from a bot
  */
 function isBot(userAgent: string | null): boolean {
-  if (!userAgent) return false;
+  if (!userAgent) return false
 
   const botPatterns = [
     /bot/i, // Generic bot pattern
@@ -62,9 +60,9 @@ function isBot(userAgent: string | null): boolean {
     /mediapartners/i, // Google Image search
     /lighthouse/i, // Lighthouse auditing tool
     /headless/i, // Headless browser
-  ];
+  ]
 
-  return botPatterns.some((pattern) => pattern.test(userAgent));
+  return botPatterns.some((pattern) => pattern.test(userAgent))
 }
 
 /**
@@ -83,34 +81,32 @@ function isBot(userAgent: string | null): boolean {
  * Layer 3: IP hashing (privacy protection)
  */
 export const handle: Handle = async ({ event, resolve }) => {
-  const userAgent = event.request.headers.get("user-agent");
+  const userAgent = event.request.headers.get("user-agent")
 
   // Filter 1: Skip tracking bot traffic
   if (isBot(userAgent)) {
-    return resolve(event);
+    return resolve(event)
   }
 
   // Filter 2: Session deduplication - one visitor per IP per 24 hours
-  const sessionCookie = event.cookies.get("visitor_session");
+  const sessionCookie = event.cookies.get("visitor_session")
 
   if (!sessionCookie) {
     try {
       // Extract client IP address (server-side prevents spoofing)
       // Try X-Forwarded-For first (for proxies/load balancers)
       // Fall back to getClientAddress() (direct connection)
-      const clientIP =
-        event.request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
-        event.getClientAddress();
+      const clientIP = event.request.headers.get("x-forwarded-for")?.split(",")[0].trim() || event.getClientAddress()
 
       // Hash IP for privacy (GDPR-friendly)
-      const ipHash = hashIP(clientIP);
+      const ipHash = hashIP(clientIP)
 
       // Record visit to Convex asynchronously
       // Fire-and-forget: doesn't block page rendering
       // Errors are silently logged but don't break the site
       convex.mutation(api.visitors.recordVisit, { ipHash }).catch((err) => {
-        console.error("Failed to record visitor:", err);
-      });
+        console.error("Failed to record visitor:", err)
+      })
 
       // Set session cookie to prevent duplicate counts
       // Cookie expires in 24 hours - same visitor coming back later will be counted again
@@ -123,14 +119,14 @@ export const handle: Handle = async ({ event, resolve }) => {
         httpOnly: true, // Prevent JavaScript access
         sameSite: "strict", // Prevent CSRF attacks
         secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      });
+      })
     } catch (error) {
       // Silently fail - don't break site if visitor tracking fails
       // This ensures graceful degradation if Convex is down
-      console.error("Visitor tracking error:", error);
+      console.error("Visitor tracking error:", error)
     }
   }
 
   // Continue with normal request processing
-  return resolve(event);
-};
+  return resolve(event)
+}

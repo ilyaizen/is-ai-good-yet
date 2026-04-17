@@ -34,7 +34,8 @@
     className
   )}
   onmouseenter={reverseAnimations}
-  onmouseleave={reverseAnimations}>
+  onmouseleave={reverseAnimations}
+>
   {#each Array(repeat) as _, i (i)}
     <div
       data-marquee-animated="true"
@@ -44,7 +45,8 @@
         "animate-marquee-vertical flex-col": vertical,
         "group-hover:[animation-play-state:paused]": pauseOnHover,
       })}
-      style="animation-duration: {speed}s;">
+      style="animation-duration: {speed}s;"
+    >
       {@render children()}
     </div>
   {/each}

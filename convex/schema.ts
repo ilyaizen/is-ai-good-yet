@@ -1,5 +1,5 @@
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { defineSchema, defineTable } from "convex/server"
+import { v } from "convex/values"
 
 export default defineSchema({
   // Track unique visitor hashes (privacy-friendly IP storage)
@@ -17,4 +17,4 @@ export default defineSchema({
     count: v.number(), // Current shard count
     shardId: v.number(), // Shard ID (0-15 for 16 shards)
   }).index("by_name_and_shard", ["name", "shardId"]),
-});
+})

@@ -95,7 +95,8 @@
   <title>Is AI “Good” Yet?</title>
   <meta
     name="description"
-    content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts." />
+    content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts."
+  />
 </svelte:head>
 
 <!-- Comprehensive Loader - shows during initial data fetch -->
@@ -107,7 +108,8 @@
     onReveal={handleReveal}
     articleCount={data.permanentRecord.totalArticles}
     lastUpdateTimestamp={data.lastCatchUpTimestamp}
-    resetTrigger={veilResetTrigger} />
+    resetTrigger={veilResetTrigger}
+  />
 {/if}
 
 {#if revealed}
@@ -120,7 +122,8 @@
           score={data.verdictScore.finalScore}
           weeklySnapshots={data.weeklySnapshots}
           verdictScore={data.verdictScore}
-          onReplay={handleReplay} />
+          onReplay={handleReplay}
+        />
       </div>
     </section>
 

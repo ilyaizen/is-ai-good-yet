@@ -21,12 +21,12 @@
     */
 
     /* Primary Lime Green - THE accent color */
-    --palette-lime-light: oklch(0.50 0.16 141.5);      /* Darker lime for light mode */
-    --palette-lime-dark: oklch(0.68 0.18 140.85);      /* Brighter lime for dark mode */
+    --palette-lime-light: oklch(0.5 0.16 141.5); /* Darker lime for light mode */
+    --palette-lime-dark: oklch(0.68 0.18 140.85); /* Brighter lime for dark mode */
 
     /* Warning Yellow/Orange */
     --palette-warning-light: oklch(0.75 0.12 105);
-    --palette-warning-dark: oklch(0.80 0.14 105);
+    --palette-warning-dark: oklch(0.8 0.14 105);
 
     /* Destructive Red */
     --palette-destructive-light: oklch(0.45 0.18 25);
@@ -137,9 +137,9 @@
     --terminal-bg-overlay: var(--palette-gray-50);
 
     /* Terminal Borders - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
-    --terminal-border: oklch(0.50 0.16 131.5 / 0.4);
+    --terminal-border: oklch(0.5 0.16 131.5 / 0.4);
     --terminal-border-strong: var(--palette-lime-light);
-    --terminal-border-subtle: oklch(0.50 0.16 131.5 / 0.2);
+    --terminal-border-subtle: oklch(0.5 0.16 131.5 / 0.2);
 
     /* Terminal Text - Uses gray palette */
     --terminal-text: var(--palette-gray-800);
@@ -148,15 +148,15 @@
 
     /* Terminal Accent - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
     --terminal-accent: var(--palette-lime-light);
-    --terminal-accent-glow: oklch(0.50 0.16 131.5 / 0.3);
-    --terminal-accent-hover: oklch(0.50 0.16 131.5 / 0.15);
+    --terminal-accent-glow: oklch(0.5 0.16 131.5 / 0.3);
+    --terminal-accent-hover: oklch(0.5 0.16 131.5 / 0.15);
 
     /* Terminal Buttons - Based on --palette-lime-light: oklch(0.50 0.16 131.5) */
     --terminal-btn-bg: oklch(0 0 0 / 0.05);
-    --terminal-btn-hover-bg: oklch(0.50 0.16 131.5 / 0.15);
-    --terminal-btn-border: oklch(0.50 0.16 131.5 / 0.4);
+    --terminal-btn-hover-bg: oklch(0.5 0.16 131.5 / 0.15);
+    --terminal-btn-border: oklch(0.5 0.16 131.5 / 0.4);
     --terminal-btn-border-hover: var(--palette-lime-light);
-    --terminal-btn-glow: oklch(0.50 0.16 131.5 / 0.3);
+    --terminal-btn-glow: oklch(0.5 0.16 131.5 / 0.3);
 
     /* Terminal Cursor & Controls */
     --terminal-cursor: var(--palette-lime-light);

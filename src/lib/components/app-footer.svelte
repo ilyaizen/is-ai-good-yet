@@ -130,9 +130,6 @@
       gap: 2rem;
     }
 
-    .footer-about {
-    }
-
     .footer-links {
       gap: 2rem;
     }

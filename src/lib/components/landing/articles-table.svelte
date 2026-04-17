@@ -277,7 +277,8 @@
             onValueChange={(v) => {
               itemsPerPage = parseInt(v)
               currentPage = 1
-            }}>
+            }}
+          >
             <Select.Trigger class="w-40 border-none! shadow-none! bg-transparent! text-muted-foreground">
               Show {itemsPerPage} results
             </Select.Trigger>
@@ -296,7 +297,8 @@
           onclick={() => (currentPage = Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
           class="reveal-btn p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Previous page">
+          aria-label="Previous page"
+        >
           <ChevronDown class="h-4 w-4 rotate-90" />
         </button>
         <div class="flex items-center gap-1 font-mono text-muted-foreground px-2">
@@ -306,7 +308,8 @@
             bind:value={pageInput}
             onblur={commitPageChange}
             onkeydown={(e) => e.key === "Enter" && commitPageChange()}
-            aria-label="Current page" />
+            aria-label="Current page"
+          />
           <span class="opacity-50">/</span>
           <span class="w-8 text-center">{Math.max(1, totalPages)}</span>
         </div>
@@ -314,7 +317,8 @@
           onclick={() => (currentPage = Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages || totalPages === 0}
           class="reveal-btn p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Next page">
+          aria-label="Next page"
+        >
           <ChevronDown class="h-4 w-4 -rotate-90" />
         </button>
       </nav>
@@ -343,11 +347,13 @@
       <thead>
         <tr>
           <th
-            class="p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider w-14 text-center sm:w-12 max-[480px]:hidden">
+            class="p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider w-14 text-center sm:w-12 max-[480px]:hidden"
+          >
             <button
               class="inline-flex items-center gap-1 bg-none border-none p-0 text-muted-foreground font-inherit font-medium uppercase tracking-wider cursor-pointer transition-colors hover:text-foreground"
               onclick={() => handleSort("hn_timestamp")}
-              title="Sort by time">
+              title="Sort by time"
+            >
               Age
               {#if sortField === "hn_timestamp"}
                 {#if sortDirection === "asc"}
@@ -359,11 +365,13 @@
             </button>
           </th>
           <th
-            class="text-left p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider min-w-70 max-w-120 max-[768px]:max-w-45">
+            class="text-left p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider min-w-70 max-w-120 max-[768px]:max-w-45"
+          >
             <button
               class="inline-flex items-center gap-1 bg-none border-none p-0 text-muted-foreground font-inherit font-medium uppercase tracking-wider cursor-pointer transition-colors hover:text-foreground"
               onclick={() => handleSort("url")}
-              title="Sort by URL">
+              title="Sort by URL"
+            >
               Title / URL
               {#if sortField === "url"}
                 {#if sortDirection === "asc"}
@@ -375,11 +383,13 @@
             </button>
           </th>
           <th
-            class="p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider w-16 text-center">
+            class="p-2 sm:p-3 border-b border-border text-muted-foreground font-medium text-[0.7rem] uppercase tracking-wider w-16 text-center"
+          >
             <button
               class="inline-flex items-center gap-1 bg-none border-none p-0 text-muted-foreground font-inherit font-medium uppercase tracking-wider cursor-pointer transition-colors hover:text-foreground"
               onclick={() => handleSort("contribution")}
-              title="Sort by verdict contribution (sentiment × influence)">
+              title="Sort by verdict contribution (sentiment × influence)"
+            >
               Score
               {#if sortField === "contribution"}
                 {#if sortDirection === "asc"}
@@ -398,18 +408,22 @@
           {@const sentimentColor = getSentimentColor(article.sentiment_label)}
           <tr
             class="group cursor-pointer transition-colors duration-150 ease-swift hover:bg-muted"
-            onclick={() => openArticleSheet(article.hn_id)}>
+            onclick={() => openArticleSheet(article.hn_id)}
+          >
             <td
-              class="p-2.5 sm:p-2 border-b border-border text-foreground align-middle last:border-b-0 w-14 text-center max-[480px]:hidden">
+              class="p-2.5 sm:p-2 border-b border-border text-foreground align-middle last:border-b-0 w-14 text-center max-[480px]:hidden"
+            >
               <span
                 class="font-bold text-base font-mono tracking-tight leading-none text-foreground"
                 style="color: {getTimeColor(article.hn_timestamp)}"
-                title={formatDate(article.hn_timestamp)}>
+                title={formatDate(article.hn_timestamp)}
+              >
                 {formatTimeAgo(article.hn_timestamp)}
               </span>
             </td>
             <td
-              class="p-2.5 sm:p-2 border-b border-border text-foreground align-middle last:border-b-0 min-w-70 max-w-120 max-[768px]:max-w-45">
+              class="p-2.5 sm:p-2 border-b border-border text-foreground align-middle last:border-b-0 min-w-70 max-w-120 max-[768px]:max-w-45"
+            >
               <div class="flex flex-col gap-0.5">
                 <div class="flex items-center gap-2 justify-between">
                   <button
@@ -419,7 +433,8 @@
                     onclick={(e: MouseEvent) => {
                       e.stopPropagation()
                       openArticleSheet(article.hn_id)
-                    }}>
+                    }}
+                  >
                     <span class="overflow-hidden text-ellipsis whitespace-nowrap">{article.hn_title}</span>
                     <HoverIcon showOnHover={true}>
                       {#snippet icon()}
@@ -432,7 +447,8 @@
                       href={article.url}
                       title="Open original article"
                       onclick={(e) => e.stopPropagation()}
-                      className="text-accent no-underline font-mono text-[0.8rem] hover:underline">
+                      className="text-accent no-underline font-mono text-[0.8rem] hover:underline"
+                    >
                       {#snippet children()}
                         {getDomain(article.url)}
                       {/snippet}
@@ -444,7 +460,8 @@
                       href={`https://news.ycombinator.com/item?id=${article.hn_id}`}
                       onclick={(e: MouseEvent) => e.stopPropagation()}
                       title={`Open HN page | ${article.hn_score} points / ${article.hn_comments} comments`}
-                      className="text-(--hn-link-color) no-underline font-bold text-[0.8rem] hover:underline">
+                      className="text-(--hn-link-color) no-underline font-bold text-[0.8rem] hover:underline"
+                    >
                       {#snippet children()}
                         {article.hn_score}/{article.hn_comments}
                       {/snippet}
@@ -457,9 +474,11 @@
                 <div
                   class="relative overflow-hidden h-5"
                   style="mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent); -webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);"
-                  title={article.summary}>
+                  title={article.summary}
+                >
                   <div
-                    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap group-hover:animate-[marquee_8s_linear_infinite] will-change-transform">
+                    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap group-hover:animate-[marquee_8s_linear_infinite] will-change-transform"
+                  >
                     <span class="inline-block text-[0.7rem] text-muted-foreground pr-8">{article.summary || ""}</span>
                     <span class="inline-block text-[0.7rem] text-muted-foreground pr-8">{article.summary || ""}</span>
                   </div>
@@ -468,11 +487,13 @@
             </td>
             <td
               class="p-2.5 sm:p-2 text-foreground align-middle last:border-b-0 w-16 text-center"
-              style="border-bottom: 1px solid var(--border);">
+              style="border-bottom: 1px solid var(--border);"
+            >
               <div class="flex flex-col justify-center items-center gap-px leading-none">
                 <span
                   class="font-bold text-base font-mono tracking-tight leading-none block"
-                  style="color: {sentimentColor}">
+                  style="color: {sentimentColor}"
+                >
                   {formatSentimentProduct(getContribution(article))}
                 </span>
               </div>

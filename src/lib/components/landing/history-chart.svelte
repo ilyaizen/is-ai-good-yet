@@ -222,7 +222,8 @@
   bind:this={containerElement}
   onmousemove={handleMouseMove}
   onmouseleave={handleMouseLeave}
-  role="img">
+  role="img"
+>
   {#if filteredData.length > 0}
     <svg viewBox="0 0 {width} {height}" class="chart" aria-label="Historical verdict score chart">
       <defs>
@@ -240,21 +241,24 @@
           width={chartWidth}
           height={yScale(yesThreshold) - yScale(yMax)}
           fill="var(--color-primary)"
-          opacity="0.05" />
+          opacity="0.05"
+        />
         <rect
           x={padding.left}
           y={yScale(yesThreshold)}
           width={chartWidth}
           height={yScale(noThreshold) - yScale(yesThreshold)}
           fill="#ca8a04"
-          opacity="0.05" />
+          opacity="0.05"
+        />
         <rect
           x={padding.left}
           y={yScale(noThreshold)}
           width={chartWidth}
           height={yScale(yMin) - yScale(noThreshold)}
           fill="#ef4444"
-          opacity="0.05" />
+          opacity="0.05"
+        />
 
         <!-- Normalized stacked area chart (sentiment breakdown) -->
         <g class="stacked-area">
@@ -274,7 +278,8 @@
           y2={yScale(baseline)}
           stroke="var(--color-border)"
           stroke-width="1"
-          opacity="0.6" />
+          opacity="0.6"
+        />
 
         <!-- Threshold lines -->
         <line
@@ -285,7 +290,8 @@
           stroke="var(--color-primary)"
           stroke-width="1"
           stroke-dasharray="3 3"
-          opacity="0.4" />
+          opacity="0.4"
+        />
         <line
           x1={padding.left}
           y1={yScale(noThreshold)}
@@ -294,7 +300,8 @@
           stroke="var(--color-destructive)"
           stroke-width="1"
           stroke-dasharray="3 3"
-          opacity="0.4" />
+          opacity="0.4"
+        />
 
         <!-- Candlesticks (showing week-over-week change) -->
         {#each filteredData as point, i}
@@ -317,7 +324,8 @@
             stroke-width={candleWidth}
             stroke-linecap="round"
             class="candlestick"
-            opacity={isHovered ? 1 : 0.6} />
+            opacity={isHovered ? 1 : 0.6}
+          />
 
           <!-- Cap (small dot at current score level) -->
           <circle cx={x} cy={currY} r={isHovered ? 3 : 1.5} fill={changeColor} opacity={isHovered ? 1 : 0.8} />
@@ -333,7 +341,8 @@
             stroke="var(--color-foreground)"
             stroke-width="1"
             stroke-dasharray="2 2"
-            opacity="0.3" />
+            opacity="0.3"
+          />
         {/if}
       </g>
 

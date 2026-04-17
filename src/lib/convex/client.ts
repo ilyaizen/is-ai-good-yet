@@ -1,5 +1,5 @@
-import { ConvexClient } from "convex/browser";
-import { PUBLIC_CONVEX_URL } from "$env/static/public";
+import { ConvexClient } from "convex/browser"
+import { PUBLIC_CONVEX_URL } from "$env/static/public"
 
 /**
  * Singleton Convex client for browser-side real-time subscriptions.
@@ -15,7 +15,7 @@ import { PUBLIC_CONVEX_URL } from "$env/static/public";
  *
  * Note: This is separate from ConvexHttpClient used server-side in hooks.server.ts
  */
-let convexClient: ConvexClient | null = null;
+let convexClient: ConvexClient | null = null
 
 /**
  * Get the global Convex client instance.
@@ -25,7 +25,7 @@ let convexClient: ConvexClient | null = null;
  */
 export function getConvexClient(): ConvexClient {
   if (!convexClient) {
-    convexClient = new ConvexClient(PUBLIC_CONVEX_URL);
+    convexClient = new ConvexClient(PUBLIC_CONVEX_URL)
   }
-  return convexClient;
+  return convexClient
 }

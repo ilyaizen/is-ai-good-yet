@@ -363,7 +363,8 @@
         <div class="controls-row">
           <button
             onclick={() => (showOnlyRelevant = !showOnlyRelevant)}
-            class="relevant-toggle {showOnlyRelevant ? 'active' : ''}">
+            class="relevant-toggle {showOnlyRelevant ? 'active' : ''}"
+          >
             <span class="toggle-dot {showOnlyRelevant ? 'active' : ''}"></span>
             Relevant Only
           </button>
@@ -425,7 +426,8 @@
             <InputGroup.Addon class="text-xs text-muted-foreground">Score ≥</InputGroup.Addon>
             <Select.Root type="single" value={minScore.toString()} onValueChange={(v) => (minScore = parseInt(v))}>
               <Select.Trigger
-                class="w-20 border-none! shadow-none! bg-transparent! text-muted-foreground text-center justify-center">
+                class="w-20 border-none! shadow-none! bg-transparent! text-muted-foreground text-center justify-center"
+              >
                 {minScore}
               </Select.Trigger>
               <Select.Content class="max-h-60">
@@ -441,9 +443,11 @@
             <Select.Root
               type="single"
               value={minComments.toString()}
-              onValueChange={(v) => (minComments = parseInt(v))}>
+              onValueChange={(v) => (minComments = parseInt(v))}
+            >
               <Select.Trigger
-                class="w-20 border-none! shadow-none! bg-transparent! text-muted-foreground text-center justify-center">
+                class="w-20 border-none! shadow-none! bg-transparent! text-muted-foreground text-center justify-center"
+              >
                 {minComments}
               </Select.Trigger>
               <Select.Content class="max-h-60">
@@ -461,7 +465,8 @@
             <Select.Root
               type="single"
               value={itemsPerPage.toString()}
-              onValueChange={(v) => (itemsPerPage = parseInt(v))}>
+              onValueChange={(v) => (itemsPerPage = parseInt(v))}
+            >
               <Select.Trigger class="w-40 border-none! shadow-none! bg-transparent! text-muted-foreground">
                 Show {itemsPerPage} results
               </Select.Trigger>
@@ -495,7 +500,8 @@
         onclick={() => (currentPage = Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
         class="pagination-btn"
-        aria-label="Previous page">
+        aria-label="Previous page"
+      >
         <ChevronDown class="h-4 w-4 rotate-90" />
       </button>
       <div class="pagination-page-display">
@@ -505,7 +511,8 @@
           bind:value={pageInput}
           onblur={commitPageChange}
           onkeydown={(e) => e.key === "Enter" && commitPageChange()}
-          aria-label="Current page" />
+          aria-label="Current page"
+        />
         <span class="pagination-separator">/</span>
         <span class="pagination-total">{Math.max(1, totalPages)}</span>
       </div>
@@ -513,7 +520,8 @@
         onclick={() => (currentPage = Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages || totalPages === 0}
         class="pagination-btn"
-        aria-label="Next page">
+        aria-label="Next page"
+      >
         <ChevronDown class="h-4 w-4 -rotate-90" />
       </button>
     </nav>
@@ -566,12 +574,14 @@
           <tr
             class="article-row"
             class:clickable={canNavigate}
-            onclick={() => canNavigate && openArticleSheet(item.hn_id!)}>
+            onclick={() => canNavigate && openArticleSheet(item.hn_id!)}
+          >
             <td class="col-time">
               <span
                 class="time-ago"
                 style="color: {getTimeColor(item.hn_timestamp)}"
-                title={formatDate(item.hn_timestamp)}>
+                title={formatDate(item.hn_timestamp)}
+              >
                 {formatTimeAgo(item.hn_timestamp)}
               </span>
             </td>
@@ -586,7 +596,8 @@
                       onclick={(e: MouseEvent) => {
                         e.stopPropagation()
                         openArticleSheet(item.hn_id!)
-                      }}>
+                      }}
+                    >
                       <span class="title-text-content">{item.hn_title || item.url}</span>
                       <ChevronRight class="size-4 title-chevron" />
                     </button>
@@ -601,7 +612,8 @@
                     rel="noopener noreferrer"
                     class="domain-anchor"
                     title="Open original article"
-                    onclick={(e) => e.stopPropagation()}>
+                    onclick={(e) => e.stopPropagation()}
+                  >
                     {getDomain(item.url)}
                     <ExternalLink class="size-3 domain-external-icon" />
                   </a>
@@ -612,7 +624,8 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         class="hn-link"
-                        onclick={(e) => e.stopPropagation()}>
+                        onclick={(e) => e.stopPropagation()}
+                      >
                         {item.hn_score || 0}v/{item.hn_comments || 0}c
                       </a>
                     </span>

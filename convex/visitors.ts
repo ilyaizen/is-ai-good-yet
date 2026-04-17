@@ -1,5 +1,5 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { v } from "convex/values"
+import { mutation, query } from "./_generated/server"
 
 /**
  * Simple hash function for sharding - distributes IPs across 16 shards.
@@ -7,12 +7,12 @@ import { mutation, query } from "./_generated/server";
  * Different IPs will generally hash to different shards (reduces lock contention).
  */
 function hashToShard(str: string, shards: number = 16): number {
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash = hash & hash; // Convert to 32-bit integer
+    hash = (hash << 5) - hash + str.charCodeAt(i)
+    hash = hash & hash // Convert to 32-bit integer
   }
-  return Math.abs(hash) % shards;
+  return Math.abs(hash) % shards
 }
 
 /**
@@ -38,21 +38,21 @@ function hashToShard(str: string, shards: number = 16): number {
 export const recordVisit = mutation({
   args: { ipHash: v.string() },
   handler: async (ctx, { ipHash }) => {
-    const now = Date.now();
+    const now = Date.now()
 
     // Check if this IP hash has visited before
     const existingVisitor = await ctx.db
       .query("unique_visitors")
       .withIndex("by_ip_hash", (q) => q.eq("ipHash", ipHash))
-      .first();
+      .first()
 
     if (existingVisitor) {
       // Returning visitor - update last visit time and visit count
       await ctx.db.patch(existingVisitor._id, {
         lastVisit: now,
         visitCount: existingVisitor.visitCount + 1,
-      });
-      return { isNewVisitor: false };
+      })
+      return { isNewVisitor: false }
     }
 
     // New visitor! Create record and increment counter shard
@@ -61,35 +61,33 @@ export const recordVisit = mutation({
       firstVisit: now,
       lastVisit: now,
       visitCount: 1,
-    });
+    })
 
     // Increment the counter shard
     // Using IP hash to distribute writes across 16 shards prevents hot spots
-    const shardId = hashToShard(ipHash, 16);
+    const shardId = hashToShard(ipHash, 16)
     const shard = await ctx.db
       .query("sharded_counter_shards")
-      .withIndex("by_name_and_shard", (q) =>
-        q.eq("name", "visitors").eq("shardId", shardId)
-      )
-      .first();
+      .withIndex("by_name_and_shard", (q) => q.eq("name", "visitors").eq("shardId", shardId))
+      .first()
 
     if (shard) {
       // Shard exists - increment count
       await ctx.db.patch(shard._id, {
         count: shard.count + 1,
-      });
+      })
     } else {
       // New shard - create it
       await ctx.db.insert("sharded_counter_shards", {
         name: "visitors",
         count: 1,
         shardId,
-      });
+      })
     }
 
-    return { isNewVisitor: true };
+    return { isNewVisitor: true }
   },
-});
+})
 
 /**
  * Gets the current total unique visitor count.
@@ -107,15 +105,11 @@ export const getVisitorCount = query({
   args: {},
   handler: async (ctx) => {
     // Get all counter shards for "visitors"
-    const shards = await ctx.db
-      .query("sharded_counter_shards")
-      .collect();
+    const shards = await ctx.db.query("sharded_counter_shards").collect()
 
     // Filter to only "visitors" shards and sum the counts
-    const totalCount = shards
-      .filter((shard) => shard.name === "visitors")
-      .reduce((sum, shard) => sum + shard.count, 0);
+    const totalCount = shards.filter((shard) => shard.name === "visitors").reduce((sum, shard) => sum + shard.count, 0)
 
-    return totalCount;
+    return totalCount
   },
-});
+})

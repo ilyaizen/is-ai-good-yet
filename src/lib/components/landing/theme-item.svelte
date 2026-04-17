@@ -21,10 +21,12 @@
   <button
     onclick={() => (isOpen = !isOpen)}
     class="group flex items-center text-left cursor-pointer select-none py-0.5 focus:outline-hidden rounded-sm transition-colors overflow-hidden"
-    aria-expanded={isOpen}>
+    aria-expanded={isOpen}
+  >
     <!-- Title Header -->
     <span
-      class="font-semibold text-foreground text-sm transition-colors group-hover:text-primary group-hover:underline">
+      class="font-semibold text-foreground text-sm transition-colors group-hover:text-primary group-hover:underline"
+    >
       {title}
     </span>
 

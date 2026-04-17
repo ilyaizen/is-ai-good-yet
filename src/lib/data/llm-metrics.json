@@ -629,10 +629,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "AMD GPUs achieve competitive AI performance with HipKittens, an open-source library for optimized memory access and wave scheduling.",
-        "quotes": [
-          "We want more AI in the world.",
-          "Realizing AI's full potential requires diverse, open hardware."
-        ],
+        "quotes": ["We want more AI in the world.", "Realizing AI's full potential requires diverse, open hardware."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:40:49.878431+00:00"
       },
@@ -2550,10 +2547,7 @@
         "primary_theme": "workflow",
         "secondary_theme": "workflow",
         "summary": "AI search platforms may starve themselves of content, leading to economic bubble and potential collapse",
-        "quotes": [
-          "AI is killing the web.",
-          "It's get rich quick and we'll deal with the consequences later."
-        ],
+        "quotes": ["AI is killing the web.", "It's get rich quick and we'll deal with the consequences later."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:52:13.657879+00:00"
       },
@@ -3294,10 +3288,7 @@
         "trajectory": "uncertain",
         "topic": "evaluation",
         "summary": "Both GPT‑5 and Opus 4.1 deliver quick, decent builds but with trade‑offs—Opus shines in UI, GPT‑5 excels at sharing, still buggy.",
-        "quotes": [
-          "Both models got a lot done in one shot.",
-          "Opus had the edge in UI."
-        ],
+        "quotes": ["Both models got a lot done in one shot.", "Opus had the edge in UI."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:28:48.636114+00:00"
       },
@@ -4075,10 +4066,7 @@
         "trajectory": "optimistic",
         "topic": "quality",
         "summary": "Practical hybrid models reduce hallucinations; context engineering is the real win.",
-        "quotes": [
-          "Modern reasoning models rarely fabricate facts outright.",
-          "Context is the real failure mode."
-        ],
+        "quotes": ["Modern reasoning models rarely fabricate facts outright.", "Context is the real failure mode."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:15:24.605449+00:00"
       },
@@ -5490,11 +5478,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "Author rejects bots, shares solution to block scrapers with Nginx and Fail2Ban",
-        "quotes": [
-          "Roboti ite domum!",
-          "Roboti ite infernum",
-          "AI enshitification"
-        ],
+        "quotes": ["Roboti ite domum!", "Roboti ite infernum", "AI enshitification"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:43:49.772125+00:00"
       },
@@ -6058,10 +6042,7 @@
         "trajectory": "optimistic",
         "topic": "productivity",
         "summary": "Claude Code accelerated shipping, cutting hours, but UX quirks keep it from being a full game‑changer.",
-        "quotes": [
-          "\"Almost 100% built by Claude Code\"",
-          "\"I found an extra 5 hours every day\""
-        ],
+        "quotes": ["\"Almost 100% built by Claude Code\"", "\"I found an extra 5 hours every day\""],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:10:10.119238+00:00"
       },
@@ -7068,9 +7049,7 @@
         "primary_theme": "security",
         "secondary_theme": "workflow",
         "summary": "Roundtable's Proof-of-Human API uses behavioral patterns to improve bot detection, outperforming Google reCAPTCHA v3",
-        "quotes": [
-          "AI systems have detectable behavioral signatures that can be used to improve bot detection"
-        ],
+        "quotes": ["AI systems have detectable behavioral signatures that can be used to improve bot detection"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:52:00.955731+00:00"
       },
@@ -7240,10 +7219,7 @@
         "trajectory": "uncertain",
         "topic": "evaluation",
         "summary": "The author finds no clear winner; most models perform well but cost and speed vary, making evaluation useful but inconclusive.",
-        "quotes": [
-          "\"There is no obvious winner.\"",
-          "Speed The fastest: google/gemini-2.5-flash"
-        ],
+        "quotes": ["\"There is no obvious winner.\"", "Speed The fastest: google/gemini-2.5-flash"],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:12:17.090979+00:00"
       },
@@ -10749,11 +10725,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "OpenAI researchers made unsubstantiated math breakthrough claims, sparking community criticism.",
-        "quotes": [
-          "a dramatic misinterpretation",
-          "embarrassing",
-          "Hoisted by their own GPTards"
-        ],
+        "quotes": ["a dramatic misinterpretation", "embarrassing", "Hoisted by their own GPTards"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:34:55.046847+00:00"
       },
@@ -13211,10 +13183,7 @@
         "primary_theme": "skills",
         "secondary_theme": "productivity",
         "summary": "AI 'raises the floor' for knowledge work, making it easier to learn and work with technology",
-        "quotes": [
-          "AI can meet you at your skill level",
-          "AI has raised the floor for knowledge work"
-        ],
+        "quotes": ["AI can meet you at your skill level", "AI has raised the floor for knowledge work"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:36:21.668571+00:00"
       },
@@ -14694,10 +14663,7 @@
         "primary_theme": "productivity",
         "secondary_theme": null,
         "summary": "Smart blocker that measures attention, blocks distractions, and intervenes to protect focus and productivity",
-        "quotes": [
-          "Stop trading your life for clicks.",
-          "The internet steals 5-6 hours daily from your dreams."
-        ],
+        "quotes": ["Stop trading your life for clicks.", "The internet steals 5-6 hours daily from your dreams."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T16:24:44.738963+00:00"
       },
@@ -16010,10 +15976,7 @@
         "trajectory": "pessimistic",
         "topic": "workflow",
         "summary": "AI prompt‑pasting replaces real engineering, leading to fragile, unstructured code.",
-        "quotes": [
-          "\"They just pasted prompts into OpenAI.\"",
-          "MVP was built in less than two weeks using ChatGPT."
-        ],
+        "quotes": ["\"They just pasted prompts into OpenAI.\"", "MVP was built in less than two weeks using ChatGPT."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:26:37.919107+00:00"
       },
@@ -19814,10 +19777,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "Google AI Overviews force publishers into a no-win choice between visibility and control",
-        "quotes": [
-          "It's a dark pattern tactic by Google.",
-          "The only silver lining: the EU and UK are taking action."
-        ],
+        "quotes": ["It's a dark pattern tactic by Google.", "The only silver lining: the EU and UK are taking action."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:58:50.085630+00:00"
       },
@@ -20075,9 +20035,7 @@
         "primary_theme": "workflow",
         "secondary_theme": "workflow",
         "summary": "Boom's supersonic engine core enables a 42MW natural gas turbine with full power at high ambient heat, waterless operation, and cloud-native control.",
-        "quotes": [
-          "America Doesn't Have 10-15 Years to Solve Its Power Problem the Old Way"
-        ],
+        "quotes": ["America Doesn't Have 10-15 Years to Solve Its Power Problem the Old Way"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:48:51.454166+00:00"
       },
@@ -21035,10 +20993,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "Apple's voice dictation incorrectly writes 'Trump' when user says 'Racist', highlighting potential machine learning flaws",
-        "quotes": [
-          "What phonetic overlap???",
-          "Maybe Simple Sabotage is making a comeback."
-        ],
+        "quotes": ["What phonetic overlap???", "Maybe Simple Sabotage is making a comeback."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T16:14:16.221624+00:00"
       },
@@ -21080,10 +21035,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "Author's YouTube recommendations are colonized by AI-generated music mixes, and they share a blocklist to mitigate this issue.",
-        "quotes": [
-          "awful!",
-          "colonized to a very large degree by mixes made entirely out of AI generated music"
-        ],
+        "quotes": ["awful!", "colonized to a very large degree by mixes made entirely out of AI generated music"],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T15:57:29.359436+00:00"
       },
@@ -23045,10 +22997,7 @@
         "trajectory": "optimistic",
         "topic": "productivity",
         "summary": "LLMs boost my productivity, though integrating them still requires effort and careful workflow design.",
-        "quotes": [
-          "I consider their benefits net-positive on my productivity.",
-          "The experience has been positive."
-        ],
+        "quotes": ["I consider their benefits net-positive on my productivity.", "The experience has been positive."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T12:29:21.767615+00:00"
       },
@@ -23174,9 +23123,7 @@
         "trajectory": "optimistic",
         "topic": "workflow",
         "summary": "A neat Bash wrapper for local LLMs that streamlines prompt experimentation but is still a niche utility.",
-        "quotes": [
-          "I think it's pretty neat, since it (very easily) lets you do some pretty cool things."
-        ],
+        "quotes": ["I think it's pretty neat, since it (very easily) lets you do some pretty cool things."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:14:49.570614+00:00"
       },
@@ -24008,10 +23955,7 @@
         "trajectory": "optimistic",
         "topic": "workflow",
         "summary": "Cursor shines as a polished, workflow‑centric copilot, boosting productivity while still needing tweaks for full polish.",
-        "quotes": [
-          "I tried out Cursor and was thoroughly impressed",
-          "Cursor is a great choice"
-        ],
+        "quotes": ["I tried out Cursor and was thoroughly impressed", "Cursor is a great choice"],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:30:59.963620+00:00"
       },
@@ -25075,10 +25019,7 @@
         "trajectory": "optimistic",
         "topic": "productivity",
         "summary": "Composer finally nailed my JNI rewrite, proving it’s a powerful productivity boost despite early hiccups.",
-        "quotes": [
-          "This time, composer probably wrote 99% of the code.",
-          "And it just worked."
-        ],
+        "quotes": ["This time, composer probably wrote 99% of the code.", "And it just worked."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:26:38.516436+00:00"
       },
@@ -29395,10 +29336,7 @@
         "trajectory": "uncertain",
         "topic": "productivity",
         "summary": "Token savings from images are real but offset by longer runtimes and higher completion costs, so the trade‑off is borderline.",
-        "quotes": [
-          "'We get over a 40% reduction in prompt tokens'",
-          "'It did take almost twice as long to process'"
-        ],
+        "quotes": ["'We get over a 40% reduction in prompt tokens'", "'It did take almost twice as long to process'"],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:25:35.870723+00:00"
       },
@@ -31129,10 +31067,7 @@
         "primary_theme": "workflow",
         "secondary_theme": null,
         "summary": "AI bubble will collapse in 2026 due to core technical problems and poor economics",
-        "quotes": [
-          "It's all over now, Baby Blue.",
-          "Without world models, you cannot achieve reliability."
-        ],
+        "quotes": ["It's all over now, Baby Blue.", "Without world models, you cannot achieve reliability."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T16:16:18.494429+00:00"
       },
@@ -32736,10 +32671,7 @@
         "trajectory": "optimistic",
         "topic": "workflow",
         "summary": "Claude Code drastically speeds execution but still requires manual judgment and tweaks.",
-        "quotes": [
-          "\"Execution keeps getting cheaper.\"",
-          "\"I fixed the ten covers no API could find.\""
-        ],
+        "quotes": ["\"Execution keeps getting cheaper.\"", "\"I fixed the ten covers no API could find.\""],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T13:04:41.042189+00:00"
       },
@@ -32995,10 +32927,7 @@
         "trajectory": "optimistic",
         "topic": "productivity",
         "summary": "AI coding tools now enable instant shipping, turning complex workflows into almost zero‑time CLI scripts.",
-        "quotes": [
-          "I can ship code now at a speed that seems unreal.",
-          "My go-to model is gpt-5.2-codex high."
-        ],
+        "quotes": ["I can ship code now at a speed that seems unreal.", "My go-to model is gpt-5.2-codex high."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-12T03:04:37.887427+00:00"
       },
@@ -36179,10 +36108,7 @@
         "trajectory": "uncertain",
         "topic": "evaluation",
         "summary": "NotebookLLM is powerful but trivially steerable, so useful yet risky.",
-        "quotes": [
-          "\"It's really good.\"",
-          "\"I would say that was 10/10 steerability.\""
-        ],
+        "quotes": ["\"It's really good.\"", "\"I would say that was 10/10 steerability.\""],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T12:32:51.051484+00:00"
       },
@@ -36265,10 +36191,7 @@
         "trajectory": "uncertain",
         "topic": "quality",
         "summary": "ChatGPT’s hallucinations are a real flaw; useful but dangerously unreliable, requiring cautious use.",
-        "quotes": [
-          "ChatGPT will lie to you",
-          "ChatGPT cannot be trusted to provide factual information"
-        ],
+        "quotes": ["ChatGPT will lie to you", "ChatGPT cannot be trusted to provide factual information"],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T12:30:45.764555+00:00"
       },
@@ -38341,10 +38264,7 @@
         "trajectory": "pessimistic",
         "topic": "quality",
         "summary": "AI-generated email feels spam, undermining trust and personal workflow.",
-        "quotes": [
-          "I dislike this.",
-          "I hate spam."
-        ],
+        "quotes": ["I dislike this.", "I hate spam."],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T12:29:55.817535+00:00"
       },
@@ -38603,10 +38523,7 @@
         "primary_theme": "workflow",
         "secondary_theme": "workflow",
         "summary": "Author warns that the future of AI may not be as inevitable as it seems, drawing parallels to the failed digital future of Napster.",
-        "quotes": [
-          "History doesn't repeat itself, but it does rhyme.",
-          "Remember the Ghost of Napster."
-        ],
+        "quotes": ["History doesn't repeat itself, but it does rhyme.", "Remember the Ghost of Napster."],
         "model": "llama-3.1-8b-instant",
         "analyzed_at": "2026-01-09T16:21:27.349587+00:00"
       },
@@ -41395,10 +41312,7 @@
         "trajectory": "uncertain",
         "topic": "quality",
         "summary": "GPT-4 delivers reliable extraction; hallucinations rare, but incremental gains and cost creep dampen enthusiasm.",
-        "quotes": [
-          "\"GPT-4 is 100% useful\"",
-          "\"Hallucination basically doesn't happen\""
-        ],
+        "quotes": ["\"GPT-4 is 100% useful\"", "\"Hallucination basically doesn't happen\""],
         "model": "openai/gpt-oss-20b",
         "analyzed_at": "2026-01-11T12:31:02.658873+00:00"
       },
@@ -47173,6 +47087,438 @@
         "tokens_per_second": 395.3,
         "prompt_chars": 7965,
         "timestamp": "2026-04-10T16:04:58.574173+00:00"
+      }
+    }
+  },
+  "47762901": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal AI coding horror story with technical background"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1568,
+        "output_tokens": 39,
+        "total_tokens": 1607,
+        "inference_time_ms": 210.5,
+        "tokens_per_second": 185.3,
+        "prompt_chars": 2631,
+        "timestamp": "2026-04-17T16:25:53.396310+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding without oversight leads to catastrophic data leaks and legal violations.",
+        "quotes": [
+          "Everything that could go wrong, did go wrong.",
+          "That is not how medical patient data can be handled."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:08.884568+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1418,
+        "output_tokens": 141,
+        "total_tokens": 1559,
+        "inference_time_ms": 325.8,
+        "tokens_per_second": 432.8,
+        "prompt_chars": 2629,
+        "timestamp": "2026-04-17T16:26:08.884568+00:00"
+      }
+    }
+  },
+  "47801255": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Claude Code for hardware development, with lessons learned and workflow comparison."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1392,
+        "output_tokens": 46,
+        "total_tokens": 1438,
+        "inference_time_ms": 346.5,
+        "tokens_per_second": 132.8,
+        "prompt_chars": 1671,
+        "timestamp": "2026-04-17T16:25:57.495853+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Claude Code boosts validation workflow but struggles with complex designs and requires careful data handling.",
+        "quotes": [
+          "This has become extremely valuable for validating SPICE circuits and models, embedded programming, and data analysis.",
+          "It worked fine for trivial circuits but became difficult for more complex designs."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:11.680377+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1245,
+        "output_tokens": 177,
+        "total_tokens": 1422,
+        "inference_time_ms": 298.5,
+        "tokens_per_second": 593.0,
+        "prompt_chars": 1671,
+        "timestamp": "2026-04-17T16:26:11.680377+00:00"
+      }
+    }
+  },
+  "47772282": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion about AI engineering culture and quality standards."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2009,
+        "output_tokens": 42,
+        "total_tokens": 2051,
+        "inference_time_ms": 341.2,
+        "tokens_per_second": 123.1,
+        "prompt_chars": 3961,
+        "timestamp": "2026-04-17T16:26:00.939343+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI‐generated code is a liability, not a boon; it erodes quality and breeds debt at machine speed.",
+        "quotes": [
+          "\"The function is 3,167 lines? Don’t refactor, add more RAM.\"",
+          "\"AI amplifies whatever is already there. Good discipline becomes great output. No discipline becomes technical debt at machine speed.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:13.763324+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2720,
+        "output_tokens": 184,
+        "total_tokens": 2904,
+        "inference_time_ms": 419.3,
+        "tokens_per_second": 438.9,
+        "prompt_chars": 7965,
+        "timestamp": "2026-04-17T16:26:13.763324+00:00"
+      }
+    }
+  },
+  "47754179": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience, analysis, and findings about AI tool Claude Code"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1742,
+        "output_tokens": 43,
+        "total_tokens": 1785,
+        "inference_time_ms": 217.4,
+        "tokens_per_second": 197.8,
+        "prompt_chars": 3250,
+        "timestamp": "2026-04-17T16:26:02.726111+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Claude Code silently inflates tokens, wasting limits and degrading output—an actively harmful flaw.",
+        "quotes": [
+          "‘Claude Code v2.1.100 silently adds ~20,000 invisible tokens to every single request.’",
+          "‘Those extra tokens… diluting custom instructions set in CLAUDE.md and degrading output quality faster in long sessions.’"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:14.799241+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1597,
+        "output_tokens": 240,
+        "total_tokens": 1837,
+        "inference_time_ms": 424.6,
+        "tokens_per_second": 565.2,
+        "prompt_chars": 3250,
+        "timestamp": "2026-04-17T16:26:14.799241+00:00"
+      }
+    }
+  },
+  "47787854": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and critical evaluation of AI agent's behavior."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1903,
+        "output_tokens": 41,
+        "total_tokens": 1944,
+        "inference_time_ms": 255.1,
+        "tokens_per_second": 160.7,
+        "prompt_chars": 3968,
+        "timestamp": "2026-04-17T16:26:01.685070+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI agents falter on strict rules, but better framing and structured harnesses mitigate chaos.",
+        "quotes": [
+          "The agent kept skipping rules. The only perceivable change was that it apologized more elaborately.",
+          "The fix wasn’t to write clearer rules. It was to stop trying to communicate them through the conversational channel at all."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:14.259696+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2618,
+        "output_tokens": 156,
+        "total_tokens": 2774,
+        "inference_time_ms": 389.1,
+        "tokens_per_second": 401.0,
+        "prompt_chars": 7977,
+        "timestamp": "2026-04-17T16:26:14.259696+00:00"
+      }
+    }
+  },
+  "47775653": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with AI-assisted workflow, sharing lessons learned and critique."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1848,
+        "output_tokens": 43,
+        "total_tokens": 1891,
+        "inference_time_ms": 430.0,
+        "tokens_per_second": 100.0,
+        "prompt_chars": 3963,
+        "timestamp": "2026-04-17T16:25:58.024700+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Structured pre‑coding thinking turns AI into a reliable helper, but the heavy upfront planning is a trade‑off that pays off in maintainability.",
+        "quotes": [
+          "It feels fast. The features work, technically. But nobody, including me, fully understood what is there.",
+          "The workflow only pays off if you genuinely believe that thinking time before coding is cheaper than debugging time after."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:12.192215+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2479,
+        "output_tokens": 193,
+        "total_tokens": 2672,
+        "inference_time_ms": 401.9,
+        "tokens_per_second": 480.2,
+        "prompt_chars": 7975,
+        "timestamp": "2026-04-17T16:26:12.192215+00:00"
+      }
+    }
+  },
+  "47744255": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience with AI model comparison and personal conclusion"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2009,
+        "output_tokens": 39,
+        "total_tokens": 2048,
+        "inference_time_ms": 362.1,
+        "tokens_per_second": 107.7,
+        "prompt_chars": 3991,
+        "timestamp": "2026-04-17T16:25:51.595123+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "Local Gemma 4 works but with hiccups; cloud still wins first‑pass reliability, so local is viable yet not yet a full game‑changer.",
+        "quotes": [
+          "\"Both machines produced working code with passing tests.\"",
+          "For this workflow, first‑pass reliability mattered more than raw generation speed.",
+          "The Mac generated tokens 5.1 times faster. It still finished only 30 per cent sooner."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:07.632474+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2787,
+        "output_tokens": 195,
+        "total_tokens": 2982,
+        "inference_time_ms": 482.9,
+        "tokens_per_second": 403.8,
+        "prompt_chars": 7975,
+        "timestamp": "2026-04-17T16:26:07.632474+00:00"
+      }
+    }
+  },
+  "47729634": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal opinion on the impact of AI on coding skills and productivity."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1744,
+        "output_tokens": 43,
+        "total_tokens": 1787,
+        "inference_time_ms": 522.0,
+        "tokens_per_second": 82.4,
+        "prompt_chars": 3412,
+        "timestamp": "2026-04-17T16:25:56.103471+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding tools erode engineering fundamentals, causing skill atrophy and long-term harm.",
+        "quotes": [
+          "AI also means fewer people will be able to write code.",
+          "If you choose to ignore the tools you will be left behind by the agentic engineers in productivity terms.",
+          "It follows that the number of skilled engineers will drop from what it is today."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:10.967012+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1600,
+        "output_tokens": 198,
+        "total_tokens": 1798,
+        "inference_time_ms": 389.0,
+        "tokens_per_second": 509.0,
+        "prompt_chars": 3412,
+        "timestamp": "2026-04-17T16:26:10.967012+00:00"
+      }
+    }
+  },
+  "47728970": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI-assisted programming"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1921,
+        "output_tokens": 40,
+        "total_tokens": 1961,
+        "inference_time_ms": 284.2,
+        "tokens_per_second": 140.7,
+        "prompt_chars": 3976,
+        "timestamp": "2026-04-17T16:25:54.604282+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Author finds AI helpful but requires careful, commit-by-commit checks; balances automation with manual coding to maintain quality.",
+        "quotes": [
+          "I was building a terminal user interface... I gave Codex the full power. Then I felt lost, confused and illiterate.",
+          "This made everything much better and I felt less dumb, but after a while I got bored. I was not writing code anymore but constantly doing code reviews."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:10.074212+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2179,
+        "output_tokens": 215,
+        "total_tokens": 2394,
+        "inference_time_ms": 446.2,
+        "tokens_per_second": 481.8,
+        "prompt_chars": 5962,
+        "timestamp": "2026-04-17T16:26:10.074212+00:00"
+      }
+    }
+  },
+  "47806116": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author reproduces Anthropic's Mythos findings with public models, sharing mixed results and implications for defenders."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1881,
+        "output_tokens": 49,
+        "total_tokens": 1930,
+        "inference_time_ms": 264.9,
+        "tokens_per_second": 184.9,
+        "prompt_chars": 3974,
+        "timestamp": "2026-04-17T16:25:59.210342+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Public models can mimic Anthropic’s Mythos but still need robust workflows; no full game‑changer yet.",
+        "quotes": [
+          "We cleanly reproduced FreeBSD, Botan, and OpenBSD with at least one widely available model, while both GPT‑5.4 and Claude Opus 4.6 only reached partial results on FFmpeg and wolfSSL.",
+          "The useful lesson is that many enterprise security teams already sit on more hidden issues than their current workflows can realistically discover, validate, and prioritize."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-04-17T16:26:12.886012+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2503,
+        "output_tokens": 245,
+        "total_tokens": 2748,
+        "inference_time_ms": 592.7,
+        "tokens_per_second": 413.4,
+        "prompt_chars": 7977,
+        "timestamp": "2026-04-17T16:26:12.886012+00:00"
       }
     }
   }

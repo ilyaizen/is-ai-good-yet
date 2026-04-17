@@ -1,3 +1,3 @@
-import { defineConfig } from "convex/config";
+import { defineConfig } from "convex/config"
 
-export default defineConfig({});
+export default defineConfig({})

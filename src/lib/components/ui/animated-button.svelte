@@ -49,7 +49,8 @@
   }}
   onmouseleave={() => (hovered = false)}
   onfocus={() => (focused = true)}
-  onblur={() => (focused = false)}>
+  onblur={() => (focused = false)}
+>
   <span>{label}</span>
   {#if hovered || focused}
     <Icon size={16} class="reveal-arrow {iconClass || ''}" {...iconProps} style={iconProps.style || ""} />

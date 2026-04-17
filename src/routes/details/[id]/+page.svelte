@@ -167,7 +167,8 @@
             href={`https://news.ycombinator.com/item?id=${data.article.hn_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="info-box info-box-link">
+            class="info-box info-box-link"
+          >
             <div class="info-label">
               <MessageSquare class="size-4" />
               <span>HN Stats</span>
@@ -185,7 +186,8 @@
               href={`https://news.ycombinator.com/user?id=${data.article.hn_author}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="info-box info-box-link">
+              class="info-box info-box-link"
+            >
               <div class="info-label">
                 <User class="size-4" />
                 <span>Poster</span>
@@ -306,7 +308,8 @@
                           copyToClipboard(promptsData.prefilter.prompt, "prefilter")
                         }
                       }}
-                      title="Copy prefilter prompt">
+                      title="Copy prefilter prompt"
+                    >
                       {#if copiedPrefilter}
                         <Check class="size-3" />
                       {:else}
@@ -349,7 +352,8 @@
                           copyToClipboard(fullPrompt, "classifier")
                         }
                       }}
-                      title="Copy classifier prompt">
+                      title="Copy classifier prompt"
+                    >
                       {#if copiedClassifier}
                         <Check class="size-3" />
                       {:else}

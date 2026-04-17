@@ -11,9 +11,10 @@ A **premium, terminal-themed dashboard** that visualizes Hacker News sentiment t
 
 ## 🤔 What is this?
 
-**Is AI “Good” Yet?** tracks Hacker News to see what developers *actually* think about AI coding tools.
+**Is AI “Good” Yet?** tracks Hacker News to see what developers _actually_ think about AI coding tools.
 
 It runs a multi-stage Python pipeline that:
+
 1. Collects AI-tagged submissions via [Histre](https://histre.com/hn/?tags=+ai)
 2. Resolves them using [Algolia's HN API](https://hn.algolia.com)
 3. Scrapes all possible article links
@@ -26,7 +27,7 @@ The frontend you're looking at is the pretty face that makes all that data diges
 
 ## 💡 Why does this exist?
 
-> *"I kept seeing waves of AI-hate that just didn't match my experience, and as I don't jive with vibes or tribes, I built this to find out if HN's hivemind shares similar sentiments."*
+> _"I kept seeing waves of AI-hate that just didn't match my experience, and as I don't jive with vibes or tribes, I built this to find out if HN's hivemind shares similar sentiments."_
 
 ---
 

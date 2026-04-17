@@ -158,7 +158,8 @@
     class:translate-y-8={!visible}
     class:opacity-100={visible}
     class:translate-y-0={visible}
-    aria-label="Project Details">
+    aria-label="Project Details"
+  >
     <!-- Header -->
     <div class="flex items-center gap-1 mb-8" bind:this={titleElement}>
       <ChevronRight color="var(--color-accent)" strokeWidth={3} />
@@ -183,7 +184,8 @@
               "text-warning bg-warning/15 border border-warning/30 hover:bg-warning/25": quote.sentiment === "neutral",
             }
           )}
-          onclick={() => openArticleSheet(quote.hnId)}>
+          onclick={() => openArticleSheet(quote.hnId)}
+        >
           "{quote.text}"
         </button>
       {/snippet}
@@ -209,11 +211,11 @@
 
         <!-- Fade edges -->
         <div
-          class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-terminal-background via-terminal-background/50 to-transparent z-10">
-        </div>
+          class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-terminal-background via-terminal-background/50 to-transparent z-10"
+        ></div>
         <div
-          class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-terminal-background via-terminal-background/50 to-transparent z-10">
-        </div>
+          class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-terminal-background via-terminal-background/50 to-transparent z-10"
+        ></div>
       </div>
     </div>
 
@@ -254,7 +256,8 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   class="group/link article-link-row"
-                  title={article.title}>
+                  title={article.title}
+                >
                   <ExternalLink class="w-3.5 h-3.5 text-primary shrink-0" />
                   <span class="truncate">{article.title}</span>
                 </a>
@@ -268,8 +271,8 @@
       {#if themesData.neutral && themesData.neutral.length > 0}
         <div class="theme-group">
           <div class="text-warning font-bold mb-2 flex items-center gap-2">
-            <span class="text-xs border border-warning/30 px-2 py-0.5 rounded bg-warning/10 uppercase"
-              >The Neutral</span>
+            <span class="text-xs border border-warning/30 px-2 py-0.5 rounded bg-warning/10 uppercase">The Neutral</span
+            >
           </div>
           <div class="space-y-0.5 pl-4 border-l-2 border-warning/20">
             {#each themesData.neutral.slice(0, 3) as theme}
@@ -284,7 +287,8 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   class="group/link article-link-row"
-                  title={article.title}>
+                  title={article.title}
+                >
                   <ExternalLink class="w-3.5 h-3.5 text-primary shrink-0" />
                   <span class="truncate">{article.title}</span>
                 </a>
@@ -299,7 +303,8 @@
         <div class="theme-group">
           <div class="text-destructive font-bold mb-2 flex items-center gap-2">
             <span class="text-xs border border-destructive/30 px-2 py-0.5 rounded bg-destructive/10 uppercase"
-              >The Bad</span>
+              >The Bad</span
+            >
           </div>
           <div class="space-y-0.5 pl-4 border-l-2 border-destructive/20">
             {#each themesData.negative.slice(0, 3) as theme}
@@ -314,7 +319,8 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   class="group/link article-link-row"
-                  title={article.title}>
+                  title={article.title}
+                >
                   <ExternalLink class="w-3.5 h-3.5 text-primary shrink-0" />
                   <span class="truncate">{article.title}</span>
                 </a>
@@ -397,7 +403,8 @@
         label="Articles"
         onclick={scrollToArticles}
         bind:hovered={articlesButtonHovered}
-        bind:focused={articlesButtonFocused} />
+        bind:focused={articlesButtonFocused}
+      />
 
       <AnimatedButton
         label="About"
@@ -405,7 +412,8 @@
         onclick={() => scrollToBottom()}
         class="info-btn"
         bind:hovered={aboutButtonHovered}
-        bind:focused={aboutButtonFocused} />
+        bind:focused={aboutButtonFocused}
+      />
     </div>
   </section>
 

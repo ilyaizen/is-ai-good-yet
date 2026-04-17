@@ -262,7 +262,8 @@
     class:opacity-0={fading || entering}
     class:scale-125={fading}
     class:scale-110={entering}
-    class:pointer-events-none={fading}>
+    class:pointer-events-none={fading}
+  >
     <div class="w-full px-4 sm:px-6 md:px-8">
       <div class="terminal-panel flex min-h-72 sm:min-h-80 flex-col p-4 sm:p-6 md:p-8" class:scale-up={shouldScaleUp}>
         <div class="flex items-center gap-1 mb-3 sm:mb-4">
@@ -274,7 +275,8 @@
               bind:this={caretAnchor}
               class="absolute w-0 h-0 overflow-hidden outline-none"
               tabindex="-1">&#8203;</span
-            ></span>
+            ></span
+          >
         </div>
 
         <!-- Content -->
@@ -303,7 +305,8 @@
               onclick={handleReveal}
               class="flex-1 sm:flex-initial"
               bind:hovered={revealHovered}
-              bind:focused={buttonFocused} />
+              bind:focused={buttonFocused}
+            />
 
             <AnimatedButton
               label="About"
@@ -311,7 +314,8 @@
               icon={Info}
               class="flex-1 sm:flex-initial"
               bind:hovered={aboutHovered}
-              bind:focused={aboutFocused} />
+              bind:focused={aboutFocused}
+            />
           </div>
         {/if}
       </div>

@@ -78,7 +78,8 @@
   class="site-header bg-card"
   class:site-header--animated={isAnimatedMode}
   class:site-header--visible={isAnimatedMode && visible}
-  class:site-header--hidden={isAnimatedMode && !visible}>
+  class:site-header--hidden={isAnimatedMode && !visible}
+>
   <div class="header-content-wrapper max-w-5xl mx-auto w-full">
     <div class="header-content w-full">
       <button
@@ -86,13 +87,15 @@
         class="logo-container"
         onclick={() => scrollToTop()}
         onkeydown={handleKeyDown}
-        aria-label="Scroll to top">
+        aria-label="Scroll to top"
+      >
         <ChevronRight size={24} strokeWidth={3.5} class="logo-icon" />
         <div class="logo-text-wrapper">
           <span class="logo-text font-mono font-bold -ml-2">
             {#each logoWords as word, i}
               <span class="word {word === 'Good' ? 'highlight' : ''}"
-                >{word === "Good" ? `\u201C${word}\u201D` : word}</span>
+                >{word === "Good" ? `\u201C${word}\u201D` : word}</span
+              >
               <span class="space">{i < logoWords.length - 1 ? " " : ""}</span>
             {/each}
           </span>

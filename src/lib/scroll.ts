@@ -36,7 +36,7 @@ export const scrollToTop = (options: ScrollOptions = {}) => {
   const { duration = 600, onComplete } = options
 
   // Guard against server-side execution
-  if (typeof window === 'undefined') return
+  if (typeof window === "undefined") return
 
   const start = performance.now()
   const startY = window.scrollY
@@ -66,7 +66,7 @@ export const scrollToBottom = (options: ScrollOptions = {}) => {
   const { duration = 800, onComplete } = options
 
   // Guard against server-side execution
-  if (typeof window === 'undefined') return
+  if (typeof window === "undefined") return
 
   const start = window.scrollY
   let startTime = 0

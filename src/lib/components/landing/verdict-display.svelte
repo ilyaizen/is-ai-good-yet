@@ -12,7 +12,7 @@
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
   import { Info } from "@lucide/svelte"
 
-  type Verdict = "Yes" | "No" | "Not yet"
+  type Verdict = "Yes" | "No" | "Not yet" | "YES" | "NO" | "NOT_YET"
 
   let {
     verdict,
@@ -362,7 +362,8 @@
     class:scale-105={shouldScaleUp && !exiting}
     class:pointer-events-none={exiting}
     onmouseenter={handlePanelEnter}
-    aria-label="Verdict details">
+    aria-label="Verdict details"
+  >
     <!-- Header Title (Left-Top) -->
     <div class="flex items-center gap-1 absolute z-10 transition-opacity duration-300 -ml-2">
       <ChevronRight color="var(--color-accent)" strokeWidth={3} />
@@ -378,7 +379,8 @@
       class="absolute top-4 right-4 transition-opacity duration-200 ease-swift"
       class:opacity-0={!isHoveringHistory}
       class:opacity-100={isHoveringHistory}
-      class:pointer-events-none={!isHoveringHistory}>
+      class:pointer-events-none={!isHoveringHistory}
+    >
       <div class="date-badge font-mono text-xs px-3 py-1 rounded flex gap-1 items-center border">
         {displayDate().month}
         <NumberFlow value={displayDate().day} transformTiming={numberFlowTiming} spinTiming={numberFlowTiming} />
@@ -386,7 +388,8 @@
           value={displayDate().year}
           format={{ useGrouping: false }}
           transformTiming={numberFlowTiming}
-          spinTiming={numberFlowTiming} />
+          spinTiming={numberFlowTiming}
+        />
       </div>
     </div>
 
@@ -398,7 +401,8 @@
           class="relative min-h-[clamp(2rem,10vw,5rem)] transition-all ease-swift"
           style="transform: translateY({verdictSlideIn ? '0px' : '20px'}); opacity: {verdictSlideIn
             ? 1
-            : 0}; transition-duration: 200ms;">
+            : 0}; transition-duration: 200ms;"
+        >
           {#key effectiveVerdict}
             <div class="font-mono text-[clamp(1.75rem,10vw,4.5rem)] font-bold flex items-center justify-center">
               <span
@@ -407,7 +411,8 @@
                 class:text-destructive={effectiveVerdict === "NO" || effectiveVerdict === "No"}
                 style:color={sentimentColor}
                 style:text-shadow="0 0 12px color-mix(in srgb, {sentimentColor}, transparent 40%), 0 0 24px color-mix(in
-                srgb, {sentimentColor}, transparent 60%)">
+                srgb, {sentimentColor}, transparent 60%)"
+              >
                 {displayText}</span
               ><span class="text-muted-foreground/60 -ml-1">.</span>
             </div>
@@ -429,7 +434,8 @@
                   value={effectiveTotalArticles}
                   animated={numberFlowAnimated}
                   transformTiming={numberFlowTiming}
-                  spinTiming={numberFlowTiming} /> recent articles:
+                  spinTiming={numberFlowTiming}
+                /> recent articles:
               {:else if descriptionStream}
                 {descriptionStream.getVisibleText(
                   0
@@ -439,7 +445,8 @@
                       value={effectiveTotalArticles}
                       animated={numberFlowAnimated}
                       transformTiming={numberFlowTiming}
-                      spinTiming={numberFlowTiming} /> recent articles:{/if}{/if}
+                      spinTiming={numberFlowTiming}
+                    /> recent articles:{/if}{/if}
               {:else}
                 {sentimentText}
                 based on the accumulated points of
@@ -447,7 +454,8 @@
                   value={effectiveTotalArticles}
                   animated={numberFlowAnimated}
                   transformTiming={numberFlowTiming}
-                  spinTiming={numberFlowTiming} /> recent articles:
+                  spinTiming={numberFlowTiming}
+                /> recent articles:
               {/if}
             </p>
           </div>
@@ -455,65 +463,78 @@
         <!-- Contribution Points: Concise inline tags -->
         {#if animationStep >= 4}
           <div
-            class="flex flex-wrap items-baseline gap-x-2 sm:gap-x-3 gap-y-2 transition-opacity duration-200 justify-center">
+            class="flex flex-wrap items-baseline gap-x-2 sm:gap-x-3 gap-y-2 transition-opacity duration-200 justify-center"
+          >
             <span class="text-muted-foreground text-xs font-mono shrink-0">Totals:</span>
 
             <div class="flex flex-wrap gap-2">
               <!-- Positive -->
               <div
-                class="flex items-baseline gap-1.5 border border-primary/30 px-2 py-0.5 rounded bg-primary/10 font-mono text-xs">
+                class="flex items-baseline gap-1.5 border border-primary/30 px-2 py-0.5 rounded bg-primary/10 font-mono text-xs"
+              >
                 <span class="text-primary font-bold">
                   <NumberFlow
                     value={positiveContribution}
                     animated={numberFlowAnimated}
                     format={{ notation: "compact", signDisplay: "always", maximumFractionDigits: 1 }}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} />
+                    spinTiming={numberFlowTiming}
+                  />
                 </span>
                 <span class="font-semibold text-primary/60 opacity-80"
                   >(<NumberFlow
                     value={effectivePositive}
                     animated={numberFlowAnimated}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} /> GOOD)</span>
+                    spinTiming={numberFlowTiming}
+                  /> GOOD)</span
+                >
               </div>
 
               <!-- Neutral -->
               <div
-                class="flex items-baseline gap-1.5 border border-warning/30 px-2 py-0.5 rounded bg-warning/10 font-mono text-xs">
+                class="flex items-baseline gap-1.5 border border-warning/30 px-2 py-0.5 rounded bg-warning/10 font-mono text-xs"
+              >
                 <span class="text-warning font-bold">
                   <NumberFlow
                     value={neutralContribution}
                     animated={numberFlowAnimated}
                     format={{ notation: "compact", signDisplay: "always", maximumFractionDigits: 1 }}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} />
+                    spinTiming={numberFlowTiming}
+                  />
                 </span>
                 <span class="font-semibold text-warning/60 opacity-80"
                   >(<NumberFlow
                     value={effectiveNeutral}
                     animated={numberFlowAnimated}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} /> NEUTRAL)</span>
+                    spinTiming={numberFlowTiming}
+                  /> NEUTRAL)</span
+                >
               </div>
 
               <!-- Negative -->
               <div
-                class="flex items-baseline gap-1.5 border border-destructive/30 px-2 py-0.5 rounded bg-destructive/10 font-mono text-xs">
+                class="flex items-baseline gap-1.5 border border-destructive/30 px-2 py-0.5 rounded bg-destructive/10 font-mono text-xs"
+              >
                 <span class="text-destructive font-bold">
                   <NumberFlow
                     value={negativeContribution}
                     animated={numberFlowAnimated}
                     format={{ notation: "compact", signDisplay: "always", maximumFractionDigits: 1 }}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} />
+                    spinTiming={numberFlowTiming}
+                  />
                 </span>
                 <span class="font-semibold text-destructive/60 opacity-80"
                   >(<NumberFlow
                     value={effectiveNegative}
                     animated={numberFlowAnimated}
                     transformTiming={numberFlowTiming}
-                    spinTiming={numberFlowTiming} /> BAD)</span>
+                    spinTiming={numberFlowTiming}
+                  /> BAD)</span
+                >
               </div>
             </div>
           </div>
@@ -530,11 +551,14 @@
                   animated={numberFlowAnimated}
                   format={{ minimumFractionDigits: 0, maximumFractionDigits: 1 }}
                   transformTiming={numberFlowTiming}
-                  spinTiming={numberFlowTiming} />-star developer satisfaction</span>
+                  spinTiming={numberFlowTiming}
+                />-star developer satisfaction</span
+              >
 
               <div
                 class="flex gap-1 items-center shrink-0 translate-y-0.5"
-                style="--sentiment-color: {sentimentColor};">
+                style="--sentiment-color: {sentimentColor};"
+              >
                 {#each stars() as star}
                   <div class="relative w-4 h-4" style="--star-fill: {star.fill}%;">
                     <!-- Empty star (gray base) -->
@@ -545,7 +569,8 @@
                     <svg
                       viewBox="0 0 16 16"
                       class="absolute w-full h-full fill-(--sentiment-color) transition-[clip-path,fill] duration-200 ease-swift"
-                      style="clip-path: inset(0 calc(100% - var(--star-fill)) 0 0)">
+                      style="clip-path: inset(0 calc(100% - var(--star-fill)) 0 0)"
+                    >
                       <path d="M8 .2l4.9 15.2L0 6h16L3.1 15.4z" />
                     </svg>
                   </div>
@@ -564,7 +589,8 @@
           <!-- History Chart -->
           <div
             class="grid transition-all duration-500 ease-swift overflow-hidden w-full"
-            style="grid-template-rows: {historyExpanded ? '1fr' : '0fr'}; opacity: {historyExpanded ? 1 : 0}">
+            style="grid-template-rows: {historyExpanded ? '1fr' : '0fr'}; opacity: {historyExpanded ? 1 : 0}"
+          >
             <div class="min-h-0">
               <!-- History Labels -->
               <div class="text-foreground font-mono text-xs font-semibold">History:</div>
@@ -583,7 +609,8 @@
             class="flex-1 sm:flex-initial"
             bind:hovered={moreInfoButtonHovered}
             bind:focused={moreInfoButtonFocused}
-            bind:ref={moreInfoButtonRef} />
+            bind:ref={moreInfoButtonRef}
+          />
 
           <AnimatedButton
             label="History"
@@ -593,7 +620,8 @@
             class="flex-1 sm:flex-initial"
             bind:hovered={historyButtonHovered}
             bind:focused={historyButtonFocused}
-            bind:ref={historyButtonRef} />
+            bind:ref={historyButtonRef}
+          />
 
           <AnimatedButton
             label="About"
@@ -601,7 +629,8 @@
             icon={Info}
             class="flex-1 sm:flex-initial"
             bind:hovered={aboutButtonHovered}
-            bind:focused={aboutButtonFocused} />
+            bind:focused={aboutButtonFocused}
+          />
 
           <AnimatedButton
             label="Replay"
@@ -610,7 +639,8 @@
             class="flex-1 sm:flex-initial sm:ml-auto"
             bind:hovered={replayButtonHovered}
             bind:focused={replayButtonFocused}
-            bind:ref={replayButtonRef} />
+            bind:ref={replayButtonRef}
+          />
         </div>
       {/if}
     {/if}

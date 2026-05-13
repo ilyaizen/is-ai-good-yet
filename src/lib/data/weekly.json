@@ -2067,7 +2067,7 @@
     "positiveCount": 326,
     "neutralCount": 134,
     "negativeCount": 238,
-    "positiveContribution": 45426.23,
+    "positiveContribution": 45426.75,
     "negativeContribution": -28178.36,
     "neutralContribution": -5443.44
   },
@@ -2081,8 +2081,8 @@
     "positiveCount": 328,
     "neutralCount": 134,
     "negativeCount": 238,
-    "positiveContribution": 45171.89,
-    "negativeContribution": -28065.59,
+    "positiveContribution": 45172.59,
+    "negativeContribution": -28066.53,
     "neutralContribution": -5533.47
   },
   {
@@ -2095,8 +2095,64 @@
     "positiveCount": 326,
     "neutralCount": 134,
     "negativeCount": 238,
-    "positiveContribution": 44541.71,
-    "negativeContribution": -27887.73,
+    "positiveContribution": 44547.53,
+    "negativeContribution": -27891.2,
     "neutralContribution": -5541.66
+  },
+  {
+    "week": "2026-W17",
+    "weekStart": "2026-04-20",
+    "verdictScore": 61.24,
+    "verdict": "YES",
+    "articleCount": 684,
+    "rawSentiment": 0,
+    "positiveCount": 321,
+    "neutralCount": 129,
+    "negativeCount": 234,
+    "positiveContribution": 43644.46,
+    "negativeContribution": -27619.75,
+    "neutralContribution": -5350.68
+  },
+  {
+    "week": "2026-W18",
+    "weekStart": "2026-04-27",
+    "verdictScore": 61.65,
+    "verdict": "YES",
+    "articleCount": 677,
+    "rawSentiment": 0,
+    "positiveCount": 320,
+    "neutralCount": 128,
+    "negativeCount": 229,
+    "positiveContribution": 43802.34,
+    "negativeContribution": -27244.83,
+    "neutralContribution": -5352.4
+  },
+  {
+    "week": "2026-W19",
+    "weekStart": "2026-05-04",
+    "verdictScore": 62.18,
+    "verdict": "YES",
+    "articleCount": 677,
+    "rawSentiment": 0,
+    "positiveCount": 322,
+    "neutralCount": 131,
+    "negativeCount": 224,
+    "positiveContribution": 44195.44,
+    "negativeContribution": -26877.73,
+    "neutralContribution": -5644.54
+  },
+  {
+    "week": "2026-W20",
+    "weekStart": "2026-05-11",
+    "verdictScore": 62.42,
+    "verdict": "YES",
+    "articleCount": 677,
+    "rawSentiment": 0,
+    "positiveCount": 323,
+    "neutralCount": 132,
+    "negativeCount": 222,
+    "positiveContribution": 44663.16,
+    "negativeContribution": -26893.74,
+    "neutralContribution": -5821.19
   }
 ]

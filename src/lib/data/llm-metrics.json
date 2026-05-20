@@ -48556,5 +48556,177 @@
         "timestamp": "2026-05-13T04:54:56.817634+00:00"
       }
     }
+  },
+  "48193524": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience sharing personal shift to AI engineering without coding"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1916,
+        "output_tokens": 40,
+        "total_tokens": 1956,
+        "inference_time_ms": 427.0,
+        "tokens_per_second": 93.7,
+        "prompt_chars": 3965,
+        "timestamp": "2026-05-20T00:40:55.590483+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI coding frees him to focus on decisions, speeds shipping, but requires careful oversight.",
+        "quotes": [
+          "I ship more, think more clearly, and care more about what I’m building.",
+          "If you don’t have the taste, AI coding makes you worse. If you have the taste, it gives you back the time you were spending on translation."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-20T00:41:10.568554+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2056,
+        "output_tokens": 181,
+        "total_tokens": 2237,
+        "inference_time_ms": 443.8,
+        "tokens_per_second": 407.9,
+        "prompt_chars": 5267,
+        "timestamp": "2026-05-20T00:41:10.568554+00:00"
+      }
+    }
+  },
+  "48144494": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person developer experience with analysis of Claude Code in large codebases"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1788,
+        "output_tokens": 42,
+        "total_tokens": 1830,
+        "inference_time_ms": 393.2,
+        "tokens_per_second": 106.8,
+        "prompt_chars": 3971,
+        "timestamp": "2026-05-20T00:40:47.508152+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Claude Code scales well but needs solid setup and governance; useful with proper harness and organizational support.",
+        "quotes": [
+          "\"At one company, a couple of engineers built a suite of plugins and MCPs that were available on day one.\"",
+          "\"The teams doing this work today tend to sit under developer experience or developer productivity, which is typically the function responsible for onboarding new engineers and building developer tooling.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-20T00:41:01.864488+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2373,
+        "output_tokens": 164,
+        "total_tokens": 2537,
+        "inference_time_ms": 384.1,
+        "tokens_per_second": 427.0,
+        "prompt_chars": 7971,
+        "timestamp": "2026-05-20T00:41:01.864951+00:00"
+      }
+    }
+  },
+  "48189156": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience sharing AI coding workflow changes and benefits"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1888,
+        "output_tokens": 39,
+        "total_tokens": 1927,
+        "inference_time_ms": 366.5,
+        "tokens_per_second": 106.4,
+        "prompt_chars": 3968,
+        "timestamp": "2026-05-20T00:40:52.647638+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Codex elevates workflow by integrating persistent threads, voice, and side‑panel interactions, making coding and knowledge work smoother.",
+        "quotes": [
+          "Codex is still excellent for coding, but the more interesting shift is that it gives my work somewhere to live.",
+          "The part of Codex I am most excited about is the side panel. It is easy to think of this as a place where previews happen."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-20T00:41:04.260105+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2574,
+        "output_tokens": 163,
+        "total_tokens": 2737,
+        "inference_time_ms": 716.2,
+        "tokens_per_second": 227.6,
+        "prompt_chars": 7971,
+        "timestamp": "2026-05-20T00:41:04.260105+00:00"
+      }
+    }
+  },
+  "48121717": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Developer opinions and experiences shared on AI usage, with quotes from anonymous sources."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1668,
+        "output_tokens": 43,
+        "total_tokens": 1711,
+        "inference_time_ms": 292.5,
+        "tokens_per_second": 147.0,
+        "prompt_chars": 2953,
+        "timestamp": "2026-05-20T00:40:51.544558+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI code generation is harming developers, creating debt and de‑skill, not just slowing work.",
+        "quotes": [
+          "\"We're being told to use [AI] agents for broad changes across our codebase. There's no way to evaluate whether that much code is well‑written or secure—especially when hundreds of other programmers in the company are doing the same,\"",
+          "\"We're building a rat's nest of tech debt that will be impossible to untangle when these models become prohibitively expensive (any minute now...).\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-20T00:41:03.437571+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1518,
+        "output_tokens": 263,
+        "total_tokens": 1781,
+        "inference_time_ms": 509.5,
+        "tokens_per_second": 516.2,
+        "prompt_chars": 2953,
+        "timestamp": "2026-05-20T00:41:03.437571+00:00"
+      }
+    }
   }
 }

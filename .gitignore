@@ -23,6 +23,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 src/lib/data/verdict.json
 src/lib/data/articles.json
-bun.lock
 
-.vercel
+# Coolify/exported deployment logs
+deployment-*.txt
+*-all-logs-*.txt

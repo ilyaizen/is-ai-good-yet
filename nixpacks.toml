@@ -1,0 +1,5 @@
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "HOST=0.0.0.0 node build"

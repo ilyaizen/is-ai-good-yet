@@ -9,7 +9,7 @@
 - Runtime package manager is npm.
 - Production target is Coolify/Nixpacks with SvelteKit adapter-node.
 - Python pipeline lives in `pipeline/` and uses a repo-root `.venv` on the Hetzner box.
-- `docs_internal/`, `docs/`, and `Agents/` are all real repo documentation surfaces.
+- `docs_internal/`, `docs/`, and `agents/` are all real repo documentation surfaces.
 
 ## Verified recently
 

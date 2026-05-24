@@ -64,7 +64,7 @@ is-ai-good-yet/
 ├── pipeline/                      # Python data pipeline source and CLI
 ├── docs/                          # Pipeline prompt/spec docs
 ├── docs_internal/                 # Repo-local operational docs
-├── Agents/                        # Agent execution specs
+├── agents/                        # agent execution specs
 ├── static/                        # Static assets (favicon, OG images)
 ├── convex/                        # Convex backend (visitor counter)
 └── package.json

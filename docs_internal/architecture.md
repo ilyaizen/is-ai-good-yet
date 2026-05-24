@@ -25,7 +25,7 @@ This is intentionally boring. Boring is good here: Python owns scraping/analysis
 │   └── tests/
 ├── docs/                      # prompt/spec docs used by the pipeline
 ├── docs_internal/             # repo-local operational docs
-├── Agents/                    # agent execution specs
+├── agents/                    # agent execution specs
 ├── convex/                    # visitor counter backend
 ├── scripts/                   # TypeScript operational scripts
 ├── package.json
@@ -119,7 +119,7 @@ Do not make public pages depend on `pipeline/data/pipeline.db`. A fresh producti
 
 ## Planned admin/scheduler architecture
 
-See `Agents/pipeline-admin-plan.md` for implementation details. The intended shape:
+See `agents/pipeline-admin-plan.md` for implementation details. The intended shape:
 
 - authenticated admin route, not public
 - SvelteKit server actions/API endpoints start named pipeline jobs only

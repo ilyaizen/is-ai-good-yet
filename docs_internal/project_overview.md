@@ -29,4 +29,4 @@ The project has two cooperating parts:
 - `README.md` — public-facing project summary and quick start.
 - `docs_internal/` — operational project docs.
 - `docs/` — prompt/spec docs used by the pipeline.
-- `Agents/` — AI-agent execution docs, especially Hermes/Claude Code workflow.
+- `agents/` — AI-agent execution docs, especially Hermes/Claude Code workflow.

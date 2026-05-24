@@ -87,7 +87,7 @@ Hermes orchestrates. Claude Code is the default code executor for repo work on t
 Before code changes:
 
 1. Confirm current path is `/srv/apps/is-ai-good-yet`.
-2. Read the relevant `docs_internal/` and `Agents/` files.
+2. Read the relevant `docs_internal/` and `agents/` files.
 3. Check `git status --short --branch`.
 4. Make the smallest correct change.
 5. Verify.

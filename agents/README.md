@@ -1,11 +1,11 @@
-# Agents
+# agents
 
 Internal repo docs for working this codebase from the box.
 
 ## Canonical source
 
-- repo-local source: `docs_internal/`, `docs/`, and `Agents/`
-- `Agents/` scope: AI-agent execution specs only
+- repo-local source: `docs_internal/`, `docs/`, and `agents/`
+- `agents/` scope: AI-agent execution specs only
 - `docs_internal/` scope: project architecture, usage, development, plans, and task state
 - `docs/` scope: prompt/spec docs used by the pipeline
 - target/current checkout: `/srv/apps/is-ai-good-yet`

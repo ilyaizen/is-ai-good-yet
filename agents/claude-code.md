@@ -11,8 +11,8 @@ Hermes stays the orchestrator: inspect state, write/verify handoffs, run final c
 - old private repo purpose: Python scraper/analysis pipeline now being folded into the public repo
 - target/current production checkout: `/srv/apps/is-ai-good-yet`
 - old temporary working checkout during migration: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
-- canonical repo-local docs: `docs_internal/`, `docs/`, and `Agents/`
-- `Agents/` contains Claude/Hermes execution specs; it does not replace project docs
+- canonical repo-local docs: `docs_internal/`, `docs/`, and `agents/`
+- `agents/` contains Claude/Hermes execution specs; it does not replace project docs
 - vault mirror: `HyperVault/Projects/is-ai-good-yet/`
 
 Do not confuse the two GitHub repositories. The `.com` repo name is legacy/private history, not the production repo name.
@@ -71,7 +71,7 @@ Expected current shape:
 1. Claude Code CLI authenticated and healthy.
 2. Hermes `claude-code` skill available.
 3. RTK shell hook active for Claude Code Bash output compression.
-4. Repo-local `Agents/` docs loaded/consulted before code changes.
+4. Repo-local `agents/` docs loaded/consulted before code changes.
 
 ### Useful but not mandatory
 
@@ -97,7 +97,7 @@ Do not install random plugins just because they exist. If a plugin does not chan
    git log --oneline -5
    ```
 
-2. Read relevant `Agents/` docs before prompting Claude.
+2. Read relevant `agents/` docs before prompting Claude.
 3. Give Claude Code a bounded, concrete task with exact files or commands when possible.
 4. Restrict tools to the task.
 5. Let Claude make repo-local edits.
@@ -114,7 +114,7 @@ claude -p "Improve the project" --dangerously-skip-permissions
 Good pattern:
 
 ```bash
-claude -p "Update Agents/runtime.md so it documents the /srv/apps/is-ai-good-yet production checkout, npm/node runtime, and Python pipeline venv setup. Do not edit code." \
+claude -p "Update agents/runtime.md so it documents the /srv/apps/is-ai-good-yet production checkout, npm/node runtime, and Python pipeline venv setup. Do not edit code." \
   --model claude-opus-4-7 \
   --effort low \
   --allowedTools 'Read,Edit' \
@@ -129,7 +129,7 @@ claude -p "Update Agents/runtime.md so it documents the /srv/apps/is-ai-good-yet
 - Pipeline code stays in `pipeline/`.
 - DB-backed scripts expect `pipeline/data/pipeline.db`.
 - Runtime path resolution should be repo/module-relative, not `cwd`-relative.
-- Internal docs belong in `Agents/`; `docs_internal/` is a pointer/index layer.
+- Internal project docs belong in `docs_internal/`; prompt/spec docs belong in `docs/`; agent execution specs belong in `agents/`.
 - Vault mirrors are mirrors. They do not override repo-local docs.
 
 ## Python pipeline local setup lane
@@ -218,7 +218,7 @@ tmux kill-session -t claude-is-ai-good-yet
 
 Add sibling docs only when they become executable lanes:
 
-- `Agents/opencode.md` for OpenCode repo execution.
-- `Agents/pi.md` for a `pi` executor lane.
+- `agents/opencode.md` for OpenCode repo execution.
+- `agents/pi.md` for a `pi` executor lane.
 
 Each future lane must include install/auth checks, exact command shape, allowed tools/scope, verification, and when not to use it. Otherwise it is just prose wearing a hard hat.

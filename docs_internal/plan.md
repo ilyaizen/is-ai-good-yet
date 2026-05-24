@@ -11,7 +11,7 @@ Make the public `ilyaizen/is-ai-good-yet` repo production-ready on the Hetzner/C
 - Nixpacks build/start commands match the real Node output.
 - Python `.venv` exists at the repo root and requirements install locally.
 - Playwright Chromium is installed for the scraper.
-- Agent docs exist under `Agents/`.
+- agent docs exist under `agents/`.
 - `docs_internal/` and `docs/` are restored as real repo docs.
 
 ## Next implementation phases
@@ -45,7 +45,7 @@ Goal: expose pipeline visibility and safe controls through SvelteKit.
 - Store run metadata separately from analysis data if practical.
 - Stream or poll logs without stuffing huge logs into SQLite.
 
-See `Agents/pipeline-admin-plan.md`.
+See `agents/pipeline-admin-plan.md`.
 
 ### Phase 4 — Scheduling
 

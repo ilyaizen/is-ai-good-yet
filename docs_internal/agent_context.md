@@ -13,7 +13,7 @@ This repo has three real documentation surfaces:
 
 - `docs_internal/` — operational project docs
 - `docs/` — prompt/spec docs
-- `Agents/` — AI-agent execution specs
+- `agents/` — AI-agent execution specs
 
 Do not collapse them into one directory. Do not treat `docs_internal/` as a pointer-only layer.
 

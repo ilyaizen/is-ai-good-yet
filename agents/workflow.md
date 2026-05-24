@@ -4,7 +4,7 @@
 
 1. Inspect the actual repo state.
 2. Confirm the checkout path and remote.
-3. Read the relevant repo-local docs: `docs_internal/` for project facts, `docs/` for prompts/specs, and `Agents/` for execution rules.
+3. Read the relevant repo-local docs: `docs_internal/` for project facts, `docs/` for prompts/specs, and `agents/` for execution rules.
 4. Use Claude Code as the default repo-local coding executor.
 5. Make the smallest real change that fixes the workflow.
 6. Verify it against the real entrypoint or command.
@@ -40,7 +40,7 @@ If the work changes repo behavior, update the relevant repo docs first:
 
 - `docs_internal/` for project architecture, setup, usage, task state, and troubleshooting
 - `docs/` for prompt/spec changes
-- `Agents/` for agent execution/workflow rules
+- `agents/` for agent execution/workflow rules
 
 Then mirror the matching files under `HyperVault/Projects/is-ai-good-yet/`.
 

@@ -279,7 +279,7 @@ cd pipeline
 
 Files:
 
-- Create: `Agents/systemd-pipeline.md` or extend this file
+- Create: `agents/systemd-pipeline.md` or extend this file
 
 Document service/timer, environment file, working directory, log paths, and rollback.
 

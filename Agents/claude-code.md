@@ -11,8 +11,9 @@ Hermes stays the orchestrator: inspect state, write/verify handoffs, run final c
 - old private repo purpose: Python scraper/analysis pipeline now being folded into the public repo
 - target/current production checkout: `/srv/apps/is-ai-good-yet`
 - old temporary working checkout during migration: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
-- canonical repo-local docs: `Agents/`
-- vault mirror: `HyperVault/Projects/is-ai-good-yet/Agents/`
+- canonical repo-local docs: `docs_internal/`, `docs/`, and `Agents/`
+- `Agents/` contains Claude/Hermes execution specs; it does not replace project docs
+- vault mirror: `HyperVault/Projects/is-ai-good-yet/`
 
 Do not confuse the two GitHub repositories. The `.com` repo name is legacy/private history, not the production repo name.
 

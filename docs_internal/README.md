@@ -1,22 +1,27 @@
-# docs_internal
+# Internal Documentation
 
-Internal repo docs pointer.
+This directory is part of the repository. It is not just a pointer layer.
 
-The real working notes live in `Agents/`. This folder is an index layer for humans and agents that expect a `docs_internal/` entrypoint.
+`docs_internal/` holds project-facing operational knowledge: architecture, usage, development conventions, plans, task status, and troubleshooting. `docs/` holds prompt specs and task-specific artifacts that may be useful to the pipeline itself.
 
-## Current anchor points
+## Canonical locations
 
-- `Agents/README.md` — repo-local internal docs index.
-- `Agents/claude-code.md` — default Claude Code repo-work lane on the Hetzner box.
-- `Agents/runtime.md` — real Node/npm deployment shape plus Python pipeline setup.
-- `Agents/workflow.md` — repo workflow rules.
-- `Agents/pipeline-admin-plan.md` — plan for the SvelteKit admin page, Python subprocess runner, schedule, run logs, and locks.
+- Canonical checkout on the Hetzner box: `/srv/apps/is-ai-good-yet`
+- Public GitHub repo: `ilyaizen/is-ai-good-yet`
+- Old private/history repo: `ilyaizen/is-ai-good-yet.com`
+- Vault mirror: `/root/workspace/HyperVault/Projects/is-ai-good-yet`
 
-## Repository identity
+The repo-local files are the source of truth for implementation work. The vault mirrors them for planning, review, and cross-session recall.
 
-- public production repo: `ilyaizen/is-ai-good-yet`
-- current checkout: `/srv/apps/is-ai-good-yet`
-- old temporary migration checkout: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
-- legacy/private source repo: `ilyaizen/is-ai-good-yet.com`
+## Read order
 
-Do not use the old `.com` repo name when documenting the production checkout.
+1. `docs_internal/project_overview.md` — what the project is.
+2. `docs_internal/architecture.md` — how data moves through the system.
+3. `docs_internal/usage.md` — exact local commands.
+4. `docs_internal/development.md` — stack, conventions, verification.
+5. `Agents/claude-code.md` — how Claude Code should work on this box.
+6. `Agents/pipeline-admin-plan.md` — planned admin/scheduler integration.
+
+## Current correction
+
+Earlier docs incorrectly treated `Agents/` as the only canonical docs directory. That is wrong for this repo. `Agents/` is for agent execution specs. `docs_internal/` and `docs/` remain real repo docs and must stay in the checkout.

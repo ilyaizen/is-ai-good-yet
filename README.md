@@ -62,6 +62,9 @@ is-ai-good-yet/
 │   │   └── details/               # Article detail routes
 │   └── styles/                    # Global CSS & design tokens
 ├── pipeline/                      # Python data pipeline source and CLI
+├── docs/                          # Pipeline prompt/spec docs
+├── docs_internal/                 # Repo-local operational docs
+├── Agents/                        # Agent execution specs
 ├── static/                        # Static assets (favicon, OG images)
 ├── convex/                        # Convex backend (visitor counter)
 └── package.json
@@ -81,8 +84,9 @@ is-ai-good-yet/
 
 ### Prerequisites
 
-- **Bun** v1.3+ (or npm/pnpm)
-- Node.js 20+ (for SvelteKit)
+- Node.js 22.12+ (SvelteKit runtime/build)
+- npm
+- Python 3.11+ for the pipeline
 
 ### Installation
 

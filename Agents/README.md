@@ -4,10 +4,13 @@ Internal repo docs for working this codebase from the box.
 
 ## Canonical source
 
-- repo-local source: `Agents/`
+- repo-local source: `docs_internal/`, `docs/`, and `Agents/`
+- `Agents/` scope: AI-agent execution specs only
+- `docs_internal/` scope: project architecture, usage, development, plans, and task state
+- `docs/` scope: prompt/spec docs used by the pipeline
 - target/current checkout: `/srv/apps/is-ai-good-yet`
-- old temporary migration checkout: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
-- vault mirror: `HyperVault/Projects/is-ai-good-yet/Agents/`
+- old temporary migration checkout: `/tmp/is-ai-good-yet-public` (history only)
+- vault mirror: `HyperVault/Projects/is-ai-good-yet/`
 
 Repo-local docs win. Vault copies are mirrors and long-term notes, not the source of truth for executable workflow.
 

@@ -1,8 +1,10 @@
 import asyncio
 import logging
-from playwright.async_api import async_playwright
 import sys
 from pathlib import Path
+
+import pytest
+from playwright.async_api import async_playwright
 
 # Add project root to path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -12,6 +14,7 @@ from src.utils.stealth_connector import StealthConnector
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
+@pytest.mark.asyncio
 async def test_stealth_browser():
     async with async_playwright() as p:
         connector = StealthConnector()

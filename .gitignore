@@ -24,6 +24,17 @@ vite.config.ts.timestamp-*
 src/lib/data/verdict.json
 src/lib/data/articles.json
 
+# Python / pipeline runtime
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.venv
+/pipeline/data
+/pipeline/downloaded_files
+/pipeline/test_output.json
+
 # Coolify/exported deployment logs
 deployment-*.txt
 *-all-logs-*.txt

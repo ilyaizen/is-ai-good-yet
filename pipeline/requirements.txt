@@ -1,0 +1,37 @@
+# CLI & UX
+rich
+
+# Data Processing
+polars
+pyarrow  # Required for Polars parquet support
+
+# Network & Scraping
+aiohttp
+aiolimiter
+tenacity
+trafilatura
+playwright
+playwright-stealth-plus
+curl-cffi  # Optional: TLS fingerprint randomization
+newspaper3k
+setuptools
+importlib-metadata  # For pkg_resources compatibility
+
+# Selenium + undetected-chromedriver (Cloudflare bypass for archive.is)
+undetected-chromedriver
+selenium
+seleniumbase
+
+# LLM & Validation
+ollama
+pydantic
+groq
+
+# Environment
+python-dotenv
+
+# Testing
+pytest
+pytest-asyncio
+
+sloppylint[rich]

@@ -2,12 +2,12 @@ import type { Handle } from "@sveltejs/kit"
 import { ConvexHttpClient } from "convex/browser"
 import { api } from "../convex/_generated/api"
 import { createHash } from "crypto"
-import { PUBLIC_CONVEX_URL } from "$env/static/public"
-import { VISITOR_IP_SALT } from "$env/static/private"
+import { env as publicEnv } from "$env/dynamic/public"
+import { env as privateEnv } from "$env/dynamic/private"
 
 // Initialize Convex HTTP client for server-side mutations
 // This client runs on the server only - prevents client-side spoofing of IP addresses
-const convex = new ConvexHttpClient(PUBLIC_CONVEX_URL)
+const convex = publicEnv.PUBLIC_CONVEX_URL ? new ConvexHttpClient(publicEnv.PUBLIC_CONVEX_URL) : null
 
 /**
  * Hash IP address with salt for privacy-friendly storage.
@@ -29,7 +29,11 @@ function hashIP(ip: string): string {
   // ::1 = IPv6 localhost, 127.0.0.1 = IPv4 localhost
   const normalizedIP = ip === "::1" || ip === "127.0.0.1" ? "localhost-dev" : ip
 
-  return createHash("sha256").update(`${normalizedIP}:${VISITOR_IP_SALT}`).digest("hex")
+  if (!privateEnv.VISITOR_IP_SALT) {
+    throw new Error("VISITOR_IP_SALT is not configured")
+  }
+
+  return createHash("sha256").update(`${normalizedIP}:${privateEnv.VISITOR_IP_SALT}`).digest("hex")
 }
 
 /**
@@ -104,9 +108,11 @@ export const handle: Handle = async ({ event, resolve }) => {
       // Record visit to Convex asynchronously
       // Fire-and-forget: doesn't block page rendering
       // Errors are silently logged but don't break the site
-      convex.mutation(api.visitors.recordVisit, { ipHash }).catch((err) => {
-        console.error("Failed to record visitor:", err)
-      })
+      if (convex) {
+        convex.mutation(api.visitors.recordVisit, { ipHash }).catch((err) => {
+          console.error("Failed to record visitor:", err)
+        })
+      }
 
       // Set session cookie to prevent duplicate counts
       // Cookie expires in 24 hours - same visitor coming back later will be counted again

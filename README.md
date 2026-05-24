@@ -61,10 +61,19 @@ is-ai-good-yet/
 │   │   ├── +layout.svelte         # Root layout (fonts, analytics)
 │   │   └── details/               # Article detail routes
 │   └── styles/                    # Global CSS & design tokens
+├── pipeline/                      # Python data pipeline source and CLI
 ├── static/                        # Static assets (favicon, OG images)
 ├── convex/                        # Convex backend (visitor counter)
 └── package.json
 ```
+
+## 🚢 Deployment
+
+- **Coolify should deploy the repo root**, not the Python pipeline directory.
+- The SvelteKit app uses `@sveltejs/adapter-node`, so Coolify gets a real Node server instead of a dead-end static build.
+- `nixpacks.toml` pins Node 22.12, installs dev deps, builds with `bun run build`, and starts with `HOST=0.0.0.0 node build`.
+- The pipeline lives in `pipeline/` as source only; its data directory is gitignored.
+- Keep frontend env vars separate from pipeline secrets. Frontend runtime needs the Convex/public visitor settings; pipeline needs its own Python/LLM env.
 
 ---
 

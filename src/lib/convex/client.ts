@@ -1,5 +1,5 @@
+import { env } from "$env/dynamic/public"
 import { ConvexClient } from "convex/browser"
-import { PUBLIC_CONVEX_URL } from "$env/static/public"
 
 /**
  * Singleton Convex client for browser-side real-time subscriptions.
@@ -21,11 +21,16 @@ let convexClient: ConvexClient | null = null
  * Get the global Convex client instance.
  * Creates and caches it on first call.
  *
- * @returns ConvexClient singleton
+ * Returns null when the public Convex URL is not configured so the app
+ * can still build and run in environments without visitor tracking.
  */
-export function getConvexClient(): ConvexClient {
+export function getConvexClient(): ConvexClient | null {
+  if (!env.PUBLIC_CONVEX_URL) {
+    return null
+  }
+
   if (!convexClient) {
-    convexClient = new ConvexClient(PUBLIC_CONVEX_URL)
+    convexClient = new ConvexClient(env.PUBLIC_CONVEX_URL)
   }
   return convexClient
 }

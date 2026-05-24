@@ -12,6 +12,12 @@
     const convex = getConvexClient()
     let pollInterval: ReturnType<typeof setInterval> | null = null
 
+    if (!convex) {
+      isLoading = false
+      error = null
+      return
+    }
+
     const fetchVisitorCount = async () => {
       try {
         const count = await convex.query(api.visitors.getVisitorCount, {})

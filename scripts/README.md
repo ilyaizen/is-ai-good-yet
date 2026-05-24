@@ -11,8 +11,7 @@ Diagnoses v3→v4 schema migration impact by counting articles with old vs. new 
 **Usage:**
 
 ```bash
-cd frontend
-bun run scripts/diagnose-schema-migration.ts
+npm run diagnose:schema-migration
 ```
 
 **Output:**
@@ -31,8 +30,7 @@ Verifies that the backward compatibility fix correctly includes old-schema artic
 **Usage:**
 
 ```bash
-cd frontend
-bun run scripts/verify-fix.ts
+npm run verify:fix
 ```
 
 **Output:**
@@ -49,11 +47,10 @@ Tests that old-schema articles load correctly through SvelteKit's server-side da
 **Usage:**
 
 ```bash
-cd frontend
-bun run scripts/test-article-display.ts
+npm run test:article-display
 ```
 
-**Note:** This script requires running through SvelteKit's server context (not standalone) due to `better-sqlite3` dependency.
+**Note:** This script uses the app's server-side DB helpers and expects the pipeline database at `pipeline/data/pipeline.db`.
 
 ## Context
 

@@ -12,13 +12,20 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "start": "HOST=0.0.0.0 node build",
+    "start": "HOST=0.0.0.0 node build/index.js",
     "preview": "vite preview --host 0.0.0.0",
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "diagnose:schema-migration": "tsx scripts/diagnose-schema-migration.ts",
+    "verify:fix": "tsx scripts/verify-fix.ts",
+    "test:article-display": "tsx scripts/test-article-display.ts",
+    "pipeline:run": "python3 pipeline/run.py --phase all",
+    "pipeline:ingest": "python3 pipeline/run.py --phase ingest",
+    "pipeline:scrape": "python3 pipeline/run.py --phase scrape",
+    "pipeline:analyze": "python3 pipeline/run.py --phase analyze"
   },
   "devDependencies": {
     "@sveltejs/adapter-node": "^5.5.4",
@@ -67,6 +74,7 @@
     "sveltekit-superforms": "^2.30.0",
     "tailwind-merge": "^3.5.0",
     "tailwind-variants": "^3.2.2",
+    "tsx": "^4.19.3",
     "vaul-svelte": "^0.3.2"
   }
 }

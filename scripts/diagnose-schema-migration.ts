@@ -4,11 +4,9 @@
  * New schema: topic
  */
 
-import { Database } from "bun:sqlite"
-import path from "path"
+import { openPipelineDb } from "./_runtime"
 
-const dbPath = path.join(process.cwd(), "..", "pipeline", "data", "pipeline.db")
-const db = new Database(dbPath, { readonly: true })
+const db = openPipelineDb(true)
 
 console.log("=== V4.0 Schema Migration Diagnostic ===\n")
 

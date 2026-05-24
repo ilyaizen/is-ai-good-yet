@@ -2,8 +2,9 @@ import Database from "better-sqlite3"
 import path from "path"
 import { NEUTRAL_MULTIPLIER } from "$lib/constants"
 import { existsSync } from "fs"
+import { fileURLToPath } from "url"
 
-const DB_PATH = path.resolve("../pipeline/data/pipeline.db")
+const DB_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../pipeline/data/pipeline.db")
 
 let _db: Database.Database | null = null
 

@@ -12,10 +12,10 @@ pip install -r requirements.txt
 
 ```bash
 # Run all phases
-python run.py --phase all
+python3 pipeline/run.py --phase all
 
 # Run specific phase
-python run.py --phase ingest
+python3 pipeline/run.py --phase ingest
 ```
 
 ## Structure

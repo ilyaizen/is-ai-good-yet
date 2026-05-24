@@ -3,11 +3,9 @@
  * This should show that all 1018 articles are now included
  */
 
-import { Database } from "bun:sqlite"
-import path from "path"
+import { openPipelineDb } from "./_runtime"
 
-const dbPath = path.join(process.cwd(), "..", "pipeline", "data", "pipeline.db")
-const db = new Database(dbPath, { readonly: true })
+const db = openPipelineDb(true)
 
 console.log("=== Verification: Backward Compatibility Fix ===\n")
 

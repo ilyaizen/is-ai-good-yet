@@ -9,4 +9,4 @@ cmds = ["npm install --include=dev"]
 cmds = ["npm run build"]
 
 [start]
-cmd = "HOST=0.0.0.0 node build"
+cmd = "HOST=0.0.0.0 node build/index.js"

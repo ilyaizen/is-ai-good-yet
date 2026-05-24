@@ -71,7 +71,7 @@ is-ai-good-yet/
 
 - **Coolify should deploy the repo root**, not the Python pipeline directory.
 - The SvelteKit app uses `@sveltejs/adapter-node`, so Coolify gets a real Node server instead of a dead-end static build.
-- `nixpacks.toml` pins Node 22.12, installs dev deps, builds with `bun run build`, and starts with `HOST=0.0.0.0 node build`.
+- `nixpacks.toml` pins Node 22.12, installs dev deps, builds with `npm run build`, and starts with `HOST=0.0.0.0 node build/index.js`.
 - The pipeline lives in `pipeline/` as source only; its data directory is gitignored.
 - Keep frontend env vars separate from pipeline secrets. Frontend runtime needs the Convex/public visitor settings; pipeline needs its own Python/LLM env.
 
@@ -91,10 +91,10 @@ is-ai-good-yet/
 cd is-ai-good-yet
 
 # Install dependencies
-bun install
+npm install
 
 # Start development server
-bun run dev
+npm run dev
 ```
 
 The app will be available at **http://localhost:5173** (or port 3050 if configured).
@@ -103,12 +103,12 @@ The app will be available at **http://localhost:5173** (or port 3050 if configur
 
 | Command           | Description                       |
 | ----------------- | --------------------------------- |
-| `bun run dev`     | Start Vite dev server with HMR    |
-| `bun run build`   | Production build                  |
-| `bun run preview` | Preview production build locally  |
-| `bun run check`   | TypeScript + Svelte type checking |
-| `bun run lint`    | Run Prettier + ESLint             |
-| `bun run format`  | Auto-format with Prettier         |
+| `npm run dev`     | Start Vite dev server with HMR    |
+| `npm run build`   | Production build                  |
+| `npm run preview` | Preview production build locally  |
+| `npm run check`   | TypeScript + Svelte type checking |
+| `npm run lint`    | Run Prettier + ESLint             |
+| `npm run format`  | Auto-format with Prettier         |
 
 ---
 

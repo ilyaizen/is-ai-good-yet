@@ -2,20 +2,31 @@
 
 Internal repo docs for working this codebase from the box.
 
+## Canonical source
+
+- repo-local source: `Agents/`
+- target/current checkout: `/srv/apps/is-ai-good-yet`
+- old temporary migration checkout: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
+- vault mirror: `HyperVault/Projects/is-ai-good-yet/Agents/`
+
+Repo-local docs win. Vault copies are mirrors and long-term notes, not the source of truth for executable workflow.
+
 ## What goes here
 
 - repo-workflow rules that should not be buried in the public README
 - runtime and deployment assumptions
 - Claude Code lane notes
-- future executor lanes like pi or opencode
+- pipeline/admin implementation specs
+- future executor lanes like `pi` or `opencode`
 - any repo-specific agent specs that need to survive compaction
 
 ## Current layout
 
-- `claude-code.md` — current default coding lane
-- `runtime.md` — Node/npm, pipeline, and deployment shape
+- `claude-code.md` — default Claude Code operational lane for this box
+- `runtime.md` — Node/npm, pipeline, Python venv, and deployment shape
 - `workflow.md` — repo work rules and handoff expectations
+- `pipeline-admin-plan.md` — plan for integrating the manual Python pipeline with the SvelteKit admin/scheduling workflow
 
 ## Default rule
 
-If the task is code in this repo, use the real repo workflow docs here. Don't improvise from chat history.
+If the task is code in this repo, inspect the actual repo state, read the relevant docs here, use Claude Code for repo-local code writing, and verify with real commands. Do not improvise from chat history.

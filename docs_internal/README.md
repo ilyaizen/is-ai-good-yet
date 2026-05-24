@@ -1,18 +1,22 @@
 # docs_internal
 
-Internal repo docs.
+Internal repo docs pointer.
 
-This folder is the public-facing pointer. The real working notes live in `Agents/`.
-
-## What belongs here
-
-- high-level pointers to internal workflow docs
-- links to the repo-local `Agents/` material
-- short reminders that should not go in the public README
+The real working notes live in `Agents/`. This folder is an index layer for humans and agents that expect a `docs_internal/` entrypoint.
 
 ## Current anchor points
 
-- `Agents/claude-code.md` is the default repo-work lane doc.
-- `Agents/runtime.md` covers the real Node/npm deployment shape.
-- `Agents/workflow.md` captures the repo workflow rules.
-- Keep pipeline source in `pipeline/` and the runtime assumptions documented next to the workflow docs.
+- `Agents/README.md` — repo-local internal docs index.
+- `Agents/claude-code.md` — default Claude Code repo-work lane on the Hetzner box.
+- `Agents/runtime.md` — real Node/npm deployment shape plus Python pipeline setup.
+- `Agents/workflow.md` — repo workflow rules.
+- `Agents/pipeline-admin-plan.md` — plan for the SvelteKit admin page, Python subprocess runner, schedule, run logs, and locks.
+
+## Repository identity
+
+- public production repo: `ilyaizen/is-ai-good-yet`
+- current checkout: `/srv/apps/is-ai-good-yet`
+- old temporary migration checkout: `/tmp/is-ai-good-yet-public` (moved out of `/tmp`)
+- legacy/private source repo: `ilyaizen/is-ai-good-yet.com`
+
+Do not use the old `.com` repo name when documenting the production checkout.

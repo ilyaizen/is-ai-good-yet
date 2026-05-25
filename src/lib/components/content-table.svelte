@@ -528,7 +528,7 @@
   </div>
 {/snippet}
 
-<div class="content-table-section">
+<div class="terminal-panel content-table-section">
   <h3 class="section-title">{title}</h3>
   <p class="section-subtitle">Displaying {filteredItems.length} articles</p>
 
@@ -672,26 +672,28 @@
 
 <style>
   .content-table-section {
-    padding: 1.5rem;
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
+    padding: 1rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: var(--terminal-text);
   }
 
   .section-title {
     font-family: var(--font-mono);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--color-foreground);
+    color: var(--terminal-text);
     margin: 0 0 0.25rem 0;
-    text-align: center;
+    text-align: left;
+    letter-spacing: 0.02em;
   }
 
   .section-subtitle {
     font-size: 0.75rem;
-    color: var(--color-muted-foreground);
+    color: var(--terminal-text-muted);
     margin: 0 0 1rem 0;
-    text-align: center;
+    text-align: left;
   }
 
   /* Controls Section */
@@ -711,17 +713,18 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    background: var(--color-muted);
-    color: var(--color-muted-foreground);
-    border: 1px solid var(--color-border);
+    background: var(--terminal-btn-bg);
+    color: var(--terminal-text);
+    border: 1px solid var(--terminal-btn-border);
     transition: all 0.15s var(--ease-swift);
     align-self: flex-start;
   }
 
   .filter-toggle-btn:hover {
-    background: var(--color-muted);
-    color: var(--color-foreground);
-    border-color: var(--color-border);
+    background: var(--terminal-btn-hover-bg);
+    color: var(--terminal-text);
+    border-color: var(--terminal-btn-border-hover);
+    box-shadow: 0 0 0 1px var(--terminal-btn-glow);
   }
 
   .controls-drawer {
@@ -793,6 +796,9 @@
   /* Table Styles */
   .table-wrapper {
     overflow-x: auto;
+    border: 1px solid var(--terminal-border-subtle);
+    border-radius: 0.5rem;
+    background: var(--terminal-bg-subtle);
   }
 
   .articles-table {
@@ -805,8 +811,8 @@
   .articles-table th {
     text-align: left;
     padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-muted-foreground);
+    border-bottom: 1px solid var(--terminal-border-subtle);
+    color: var(--terminal-text-muted);
     font-weight: 500;
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -815,8 +821,8 @@
 
   .articles-table td {
     padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-foreground);
+    border-bottom: 1px solid var(--terminal-border-subtle);
+    color: var(--terminal-text);
     vertical-align: middle;
   }
 
@@ -833,7 +839,7 @@
   }
 
   .article-row:hover {
-    background: var(--color-muted);
+    background: color-mix(in srgb, var(--terminal-border-subtle), transparent 85%);
   }
 
   .article-row:hover .title-link {
@@ -852,7 +858,7 @@
     background: none;
     border: none;
     padding: 0;
-    color: var(--color-muted-foreground);
+    color: var(--terminal-text-muted);
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
@@ -863,7 +869,7 @@
   }
 
   .sort-btn:hover {
-    color: var(--color-foreground);
+    color: var(--terminal-text);
   }
 
   :global(.sort-icon) {

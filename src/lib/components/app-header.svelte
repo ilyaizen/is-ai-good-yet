@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import { page } from "$app/state"
   import { scrollToTop } from "$lib/scroll"
   import { ChevronRight } from "@lucide/svelte"
   import ThemeToggle from "$lib/components/theme-toggle.svelte"
@@ -18,26 +19,40 @@
   let currentWordIndex = $state(0)
   const words = ["Is", "AI", "Good", "Yet?"]
 
-  // Animated mode: header slides in when visible becomes true
   const isAnimatedMode = $derived(mode === "animated")
+  const isHomepage = $derived(page.url.pathname === "/")
+  const isAdminRoute = $derived(page.url.pathname.startsWith("/admin"))
 
-  // Keyboard handler for accessibility
+  const navLinks = $derived(
+    isAdminRoute
+      ? [
+          { href: "/#home", label: "Home" },
+          { href: "/#details", label: "Details" },
+          { href: "/#articles-table", label: "Articles" },
+          { href: "/admin", label: "Admin" },
+          { href: "/admin/pipeline-control", label: "Control" },
+        ]
+      : [
+          { href: "/#home", label: "Home" },
+          { href: "/#details", label: "Details" },
+          { href: "/#articles-table", label: "Articles" },
+        ]
+  )
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
-      scrollToTop()
+      if (isHomepage) scrollToTop()
+      else window.location.assign("/")
     }
   }
 
-  // Typing animation speed (faster for swift animation)
   const TYPING_DELAY_MS = 50
 
-  // Replay typing animation when visibility changes in animated mode
   $effect(() => {
     if (!isAnimatedMode) return
 
     if (visible) {
-      // Reset and start typing animation when becoming visible
       logoWords = []
       currentWordIndex = 0
       let index = 0
@@ -49,10 +64,8 @@
           setTimeout(typeNextWord, TYPING_DELAY_MS)
         }
       }
-      // Small initial delay to sync with slide-in animation
       setTimeout(typeNextWord, 100)
     } else {
-      // Reset when hidden so animation replays next time
       logoWords = []
       currentWordIndex = 0
     }
@@ -60,7 +73,6 @@
 
   onMount(() => {
     if (!isAnimatedMode) {
-      // Default mode: type animation on mount
       const typeNextWord = () => {
         if (currentWordIndex < words.length) {
           logoWords = [...logoWords, words[currentWordIndex]]
@@ -82,34 +94,53 @@
 >
   <div class="header-content-wrapper max-w-5xl mx-auto w-full">
     <div class="header-content w-full">
-      <button
-        type="button"
-        class="logo-container"
-        onclick={() => scrollToTop()}
-        onkeydown={handleKeyDown}
-        aria-label="Scroll to top"
-      >
-        <ChevronRight size={24} strokeWidth={3.5} class="logo-icon" />
-        <div class="logo-text-wrapper">
-          <span class="logo-text font-mono font-bold -ml-2">
-            {#each logoWords as word, i}
-              <span class="word {word === 'Good' ? 'highlight' : ''}"
-                >{word === "Good" ? `\u201C${word}\u201D` : word}</span
-              >
-              <span class="space">{i < logoWords.length - 1 ? " " : ""}</span>
-            {/each}
-          </span>
-          {#if !isAnimatedMode}
-            <span class="cursor"></span>
-          {/if}
-        </div>
-      </button>
+      {#if isHomepage}
+        <button
+          type="button"
+          class="logo-container"
+          onclick={() => scrollToTop()}
+          onkeydown={handleKeyDown}
+          aria-label="Scroll to top"
+        >
+          <ChevronRight size={24} strokeWidth={3.5} class="logo-icon" />
+          <div class="logo-text-wrapper">
+            <span class="logo-text font-mono font-bold -ml-2">
+              {#each logoWords as word, i}
+                <span class="word {word === 'Good' ? 'highlight' : ''}"
+                  >{word === "Good" ? `\u201C${word}\u201D` : word}</span
+                >
+                <span class="space">{i < logoWords.length - 1 ? " " : ""}</span>
+              {/each}
+            </span>
+            {#if !isAnimatedMode}
+              <span class="cursor"></span>
+            {/if}
+          </div>
+        </button>
+      {:else}
+        <a href="/" class="logo-container" aria-label="Go to homepage">
+          <ChevronRight size={24} strokeWidth={3.5} class="logo-icon" />
+          <div class="logo-text-wrapper">
+            <span class="logo-text font-mono font-bold -ml-2">
+              {#each logoWords as word, i}
+                <span class="word {word === 'Good' ? 'highlight' : ''}"
+                  >{word === "Good" ? `\u201C${word}\u201D` : word}</span
+                >
+                <span class="space">{i < logoWords.length - 1 ? " " : ""}</span>
+              {/each}
+            </span>
+            {#if !isAnimatedMode}
+              <span class="cursor"></span>
+            {/if}
+          </div>
+        </a>
+      {/if}
 
       <nav class="desktop-nav">
         <ul class="nav-list">
-          <li><a href="#home" class="nav-link">Home</a></li>
-          <li><a href="#details" class="nav-link">Details</a></li>
-          <li><a href="#articles-table" class="nav-link">Articles</a></li>
+          {#each navLinks as link}
+            <li><a href={link.href} class="nav-link">{link.label}</a></li>
+          {/each}
         </ul>
       </nav>
 
@@ -125,12 +156,6 @@
     border-bottom: 1px solid oklch(from var(--primary) l c h / 0.3);
   }
 
-  /*
-   * Animated mode styles:
-   * - Header starts translated up (hidden above viewport)
-   * - Uses position:fixed so it doesn't take up layout space initially
-   * - Transitions to visible with slide-down animation
-   */
   .site-header--animated {
     position: fixed;
     top: 0;
@@ -149,7 +174,6 @@
     transform: translateY(-100%);
   }
 
-  /* Logo container button styles */
   .logo-container {
     cursor: pointer;
     transition: opacity 300ms cubic-bezier(0, 0.7, 0.1, 1);

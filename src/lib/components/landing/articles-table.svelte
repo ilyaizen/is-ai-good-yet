@@ -426,13 +426,12 @@
             >
               <div class="flex flex-col gap-0.5">
                 <div class="flex items-center gap-2 justify-between">
-                  <button
-                    type="button"
+                  <a
+                    href={`/details/${article.hn_id}`}
                     class="text-foreground no-underline flex items-center gap-1 overflow-hidden font-bold font-mono text-left flex-1 min-w-0 cursor-pointer group-hover:text-accent group-hover:underline"
-                    title={article.hn_title}
+                    title={`Open story page: ${article.hn_title}`}
                     onclick={(e: MouseEvent) => {
                       e.stopPropagation()
-                      openArticleSheet(article.hn_id)
                     }}
                   >
                     <span class="overflow-hidden text-ellipsis whitespace-nowrap">{article.hn_title}</span>
@@ -441,7 +440,7 @@
                         <ChevronRight class="w-4 h-4 text-accent" />
                       {/snippet}
                     </HoverIcon>
-                  </button>
+                  </a>
                   <div class="inline-flex items-center gap-2 shrink-0 max-[480px]:text-[0.65rem]">
                     <LinkWithHoverIcon
                       href={article.url}

@@ -5,6 +5,7 @@ import { existsSync } from "fs"
 import { fileURLToPath } from "url"
 
 const DB_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../pipeline/data/pipeline.db")
+export const PIPELINE_DB_PATH = DB_PATH
 
 let _db: Database.Database | null = null
 

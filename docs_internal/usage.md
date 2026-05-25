@@ -140,6 +140,10 @@ python3 pipeline/bootstrap_pipeline_db.py
 
 That recreates `pipeline/data/pipeline.db` from `src/lib/data/articles.json` and `src/lib/data/llm-metrics.json`.
 
+If you have the HyperVault backup archive, `data.7z` belongs under `pipeline/data/` as an ignored local artifact. Extract it there for a fuller restore, but do not commit it.
+
+For Coolify durability, mount a persistent host directory onto the container path `/app/pipeline/data` (for this app the runtime will also accept `PIPELINE_DATA_DIR` or `PIPELINE_DB_PATH` if you prefer an explicit override). Without a persistent mount, a redeploy can wipe the restored SQLite files again.
+
 ## Tests and verification
 
 ```bash

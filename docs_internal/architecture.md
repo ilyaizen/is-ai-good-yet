@@ -117,6 +117,8 @@ This keeps the user-facing site deployable without requiring the mutable pipelin
 
 Do not make public pages depend on `pipeline/data/pipeline.db`. A fresh production checkout may not have it.
 
+For Coolify, the durable setup is a persistent mount for `/app/pipeline/data` in the container, with `PIPELINE_DATA_DIR` or `PIPELINE_DB_PATH` available as an explicit override when the mount path needs to be pinned.
+
 ## Planned admin/scheduler architecture
 
 See `agents/pipeline-admin-plan.md` for implementation details. The intended shape:

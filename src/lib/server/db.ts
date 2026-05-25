@@ -1,10 +1,9 @@
 import Database from "better-sqlite3"
-import path from "path"
 import { NEUTRAL_MULTIPLIER } from "$lib/constants"
-import { existsSync } from "fs"
-import { fileURLToPath } from "url"
+import { existsSync } from "node:fs"
+import { getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 
-const DB_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../pipeline/data/pipeline.db")
+const { pipelineDbPath: DB_PATH } = getPipelineStoragePaths()
 export const PIPELINE_DB_PATH = DB_PATH
 
 let _db: Database.Database | null = null

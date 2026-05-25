@@ -1,4 +1,34 @@
 <script lang="ts">
+  import { page } from "$app/state"
+  import ContentTable from "$lib/components/content-table.svelte"
+
+  type UrlEntry = {
+    id: number
+    url: string
+    hn_id: number | null
+    hn_score: number | null
+    hn_comments: number | null
+    hn_title: string | null
+    hn_timestamp: number | null
+    hn_author: string | null
+    status: string
+    scraped_status: string | null
+    filter_score: number | null
+    opinion: string | null
+    is_opinion: boolean | null
+    sentiment_score: number | null
+    content_category: string | null
+    content_confidence: number | null
+    classification_json: string | null
+    content_filter_json: string | null
+  }
+
+  type PipelineCommand = {
+    name: string
+    label: string
+    description: string
+  }
+
   type RunRow = {
     id: number
     command: string
@@ -20,6 +50,8 @@
     stale: boolean
   }
 
+  type StageStatus = "completed" | "active" | "pending"
+
   type PipelineData = {
     env: {
       repoRootExists: boolean
@@ -34,6 +66,13 @@
       currentRun: RunRow | null
       lock: LockRow | null
       recentRuns: RunRow[]
+    }
+    commands: PipelineCommand[]
+    logViewer: {
+      run: RunRow | null
+      path: string | null
+      exists: boolean
+      tail: string
     }
     storage: {
       dataDir: string
@@ -50,28 +89,18 @@
       configured: boolean
       dbExists: boolean
       counts: { total: number; approved: number; refused: number; pending: number; other: number }
-      stats: {
-        totalUrls: number
-        resolved: number
-        scraped: number
-        relevant: number
-        analyzed: number
-        failed: number
-      }
+      stats: { totalUrls: number; resolved: number; scraped: number; relevant: number; analyzed: number; failed: number }
+      tableData: UrlEntry[]
       pipeline: PipelineData
       controlHref: string
     }
   } = $props()
 
-  type StageStatus = "completed" | "active" | "pending"
+  let selectedCommand = $state<PipelineCommand | null>(null)
+  let confirmValue = $state("")
 
   function humanizeCommand(command: string): string {
     return command.replaceAll("_", " ")
-  }
-
-  function formatTimestamp(timestamp: string | null): string {
-    if (!timestamp) return "—"
-    return timestamp.replace("T", " ").replace("Z", " UTC")
   }
 
   function runStatusLabel(status: string): string {
@@ -81,6 +110,11 @@
     if (status === "cancelled") return "Cancelled"
     if (status === "queued") return "Queued"
     return status
+  }
+
+  function formatTimestamp(timestamp: string | null): string {
+    if (!timestamp) return "—"
+    return timestamp.replace("T", " ").replace("Z", " UTC")
   }
 
   function phaseStatusLabel(status: StageStatus): string {
@@ -94,6 +128,23 @@
     if (status === "active") return "border-sky-400/20 bg-sky-500/10 text-sky-100"
     return "border-white/10 bg-black/20 text-white/55"
   }
+
+  function openCommand(command: PipelineCommand): void {
+    selectedCommand = command
+    confirmValue = ""
+  }
+
+  function closeDialog(): void {
+    selectedCommand = null
+    confirmValue = ""
+  }
+
+  let canConfirm = $derived.by(() => {
+    if (!selectedCommand) return false
+    return confirmValue.trim().toLowerCase() === selectedCommand.name.toLowerCase()
+  })
+
+  let activeLock = $derived.by(() => Boolean(data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale))
 
   let stages = $derived.by(() => {
     const stats = data.stats
@@ -140,7 +191,7 @@
 </script>
 
 <svelte:head>
-  <title>Admin - Is AI Good Yet?</title>
+  <title>Pipeline Control - Is AI Good Yet?</title>
 </svelte:head>
 
 <div class="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
@@ -148,18 +199,18 @@
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p class="text-xs uppercase tracking-[0.3em] text-white/45">Admin</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Status overview</h1>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Pipeline control</h1>
         <p class="mt-3 max-w-2xl text-sm leading-6 text-white/65">
-          This page is for health and state. Control lives in the nested pipeline control page.
+          This is the control room. The admin page is the overview. The data table lives here.
         </p>
       </div>
 
       <div class="flex flex-wrap gap-3">
         <a
           href={data.controlHref}
-          class="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-100 transition hover:border-emerald-400/35 hover:bg-emerald-500/15"
+          class="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-black/40"
         >
-          Open pipeline control
+          Back to admin
         </a>
         <form method="post" action="?/logout">
           <button
@@ -333,9 +384,39 @@
         </dl>
       {:else}
         <div class="mt-5 rounded-2xl border border-dashed border-white/10 bg-black/15 p-4 text-sm text-white/55">
-          No active run. Go to pipeline control if you need to start one.
+          No active run. Start a job below if you need to move the data forward.
         </div>
       {/if}
+
+      <div class="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="text-base font-semibold text-white">Log tail</h3>
+            <p class="mt-1 text-sm text-white/55">The real subprocess output, not an invented summary.</p>
+          </div>
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+            {data.pipeline.logViewer.run ? `#${data.pipeline.logViewer.run.id}` : "None"}
+          </span>
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+          {#if data.pipeline.logViewer.run}
+            <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-white/50">
+              <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">{humanizeCommand(data.pipeline.logViewer.run.command)}</span>
+              <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
+              <span class="rounded-full border border-white/10 bg-white/5 px-2 py-1">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
+            </div>
+            <pre class="max-h-[30rem] overflow-auto whitespace-pre-wrap break-words rounded-2xl bg-black/40 p-4 text-xs leading-6 text-emerald-100">{data.pipeline.logViewer.tail}</pre>
+            <div class="mt-3 text-xs text-white/45" title={data.pipeline.logViewer.path ?? undefined}>
+              {data.pipeline.logViewer.path}
+            </div>
+          {:else}
+            <div class="rounded-2xl border border-dashed border-white/10 bg-black/15 p-4 text-sm text-white/55">
+              No logs available yet.
+            </div>
+          {/if}
+        </div>
+      </div>
     </div>
 
     <div class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-sm">
@@ -380,4 +461,128 @@
       {/if}
     </div>
   </section>
+
+  <section class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/45">Actions</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-white">Verified job runs</h2>
+        <p class="mt-3 max-w-2xl text-sm leading-6 text-white/65">
+          Buttons open a verification dialog. The command name has to be typed before anything actually fires.
+        </p>
+      </div>
+      {#if data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale}
+        <div class="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+          Job running already. The buttons are disabled until the lock clears.
+        </div>
+      {/if}
+    </div>
+
+    {#if page.form?.message}
+      <div class="mt-6 rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white/80">
+        {page.form.message}
+      </div>
+    {/if}
+
+    <div class="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      {#each data.pipeline.commands as command}
+        <button
+          type="button"
+          onclick={() => openCommand(command)}
+          disabled={activeLock}
+          class="flex h-full w-full flex-col justify-between rounded-2xl border border-white/10 bg-black/20 p-4 text-left transition hover:border-white/20 hover:bg-black/30 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <div>
+            <div class="text-base font-semibold text-white">{command.label}</div>
+            <div class="mt-2 text-sm leading-6 text-white/60">{command.description}</div>
+          </div>
+          <div class="mt-4 text-xs uppercase tracking-[0.25em] text-white/35">{humanizeCommand(command.name)}</div>
+        </button>
+      {/each}
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/45">Registry</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-white">Content table</h2>
+        <p class="mt-3 max-w-2xl text-sm leading-6 text-white/65">
+          This is the actual data table. Filters, detail links, and the usual junk live here.
+        </p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/65">
+        {data.tableData.length} rows loaded
+      </div>
+    </div>
+
+    <div class="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black/15">
+      <ContentTable data={data.tableData} enableDetailLinks={true} title="Pipeline Data Registry" syncWithUrl={true} />
+    </div>
+  </section>
 </div>
+
+{#if selectedCommand}
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+    <div class="w-full max-w-xl rounded-3xl border border-white/10 bg-[#111827]/95 p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-white/45">Verify job</p>
+          <h3 class="mt-2 text-2xl font-semibold tracking-tight text-white">{selectedCommand.label}</h3>
+        </div>
+        <button
+          type="button"
+          onclick={closeDialog}
+          class="rounded-full border border-white/10 bg-black/30 px-3 py-2 text-sm text-white/70 transition hover:border-white/20 hover:bg-black/40"
+          aria-label="Close dialog"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p class="mt-4 text-sm leading-6 text-white/65">
+        This is a real subprocess run. Type <code class="rounded bg-black/40 px-1.5 py-0.5 text-white">{selectedCommand.name}</code> to unlock the button.
+      </p>
+
+      <form method="post" action="?/run" class="mt-6 space-y-4">
+        <input type="hidden" name="command" value={selectedCommand.name} />
+        <label class="block">
+          <span class="text-sm font-medium text-white/80">Verification</span>
+          <input
+            bind:value={confirmValue}
+            name="confirm"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder={selectedCommand.name}
+            class="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-emerald-400/30 focus:ring-2 focus:ring-emerald-500/20"
+          />
+        </label>
+
+        <div class="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/65">
+          {#if activeLock}
+            A job is already running. This dialog will still let you submit, but the backend will reject it.
+          {:else}
+            The button stays locked until the exact command name matches.
+          {/if}
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onclick={closeDialog}
+            class="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-black/40"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={!canConfirm}
+            class="rounded-2xl border border-emerald-400/20 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-100 transition hover:border-emerald-400/35 hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Run {selectedCommand.label}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{/if}

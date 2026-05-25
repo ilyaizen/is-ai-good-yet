@@ -1,10 +1,8 @@
 import { existsSync } from "node:fs"
 import Database from "better-sqlite3"
-import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { getPipelineStoragePaths } from "../src/lib/server/pipeline-storage"
 
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-export const pipelineDbPath = path.join(repoRoot, "pipeline", "data", "pipeline.db")
+export const pipelineDbPath = getPipelineStoragePaths().pipelineDbPath
 
 export function openPipelineDb(readonly = true): Database.Database {
   if (!existsSync(pipelineDbPath)) {

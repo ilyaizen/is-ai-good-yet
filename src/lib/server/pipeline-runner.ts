@@ -1,8 +1,8 @@
-import { createWriteStream, existsSync, mkdirSync } from "fs"
-import path from "path"
-import { spawn } from "child_process"
+import { createWriteStream, existsSync } from "node:fs"
+import path from "node:path"
+import { spawn } from "node:child_process"
 import Database from "better-sqlite3"
-import { fileURLToPath } from "url"
+import { ensurePipelineStoragePaths, getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 
 export type PipelineCommandName =
   | "catch_up"
@@ -55,12 +55,13 @@ export type PipelineEnvironmentStatus = {
   mistralApiKeyConfigured: boolean
 }
 
-const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../")
-const PIPELINE_DIR = path.join(REPO_ROOT, "pipeline")
-const ADMIN_DB_PATH = path.join(PIPELINE_DIR, "data", "admin.db")
-const PIPELINE_LOG_DIR = path.join(PIPELINE_DIR, "data", "logs")
+const REPO_ROOT = process.cwd()
 const VENV_PYTHON = path.join(REPO_ROOT, ".venv", "bin", "python")
 const STALE_LOCK_THRESHOLD_MS = 6 * 60 * 60 * 1000
+const STORAGE_PATHS = getPipelineStoragePaths()
+const PIPELINE_DIR = path.dirname(STORAGE_PATHS.dataDir)
+const ADMIN_DB_PATH = STORAGE_PATHS.adminDbPath
+const PIPELINE_LOG_DIR = STORAGE_PATHS.logDir
 
 const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
   catch_up: {
@@ -102,8 +103,7 @@ const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
 }
 
 function ensureDirectories(): void {
-  mkdirSync(path.dirname(ADMIN_DB_PATH), { recursive: true })
-  mkdirSync(PIPELINE_LOG_DIR, { recursive: true })
+  ensurePipelineStoragePaths()
 }
 
 function getDb(): Database.Database {

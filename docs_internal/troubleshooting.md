@@ -33,7 +33,14 @@ Database file not found at .../pipeline/data/pipeline.db
 
 Cause: the DB artifact is gitignored and absent in a fresh checkout.
 
-Fix: restore a trusted `pipeline.db` artifact or run the pipeline phases that create/populate it. Do not "fix" this by changing SvelteKit public pages to require SQLite in production.
+Fix: bootstrap the DB from the checked-in exports, or restore a trusted `pipeline.db` artifact.
+
+```bash
+cd /srv/apps/is-ai-good-yet
+python3 pipeline/bootstrap_pipeline_db.py
+```
+
+That rebuilds `pipeline/data/pipeline.db` from `src/lib/data/articles.json` and `src/lib/data/llm-metrics.json`. Do not "fix" this by changing SvelteKit public pages to require SQLite in production.
 
 ## Python module import errors
 

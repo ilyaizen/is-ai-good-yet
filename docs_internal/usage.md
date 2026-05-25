@@ -132,6 +132,14 @@ pipeline/data/pipeline.db
 
 DB-backed scripts will fail until the DB is created/restored by a pipeline run or copied from a trusted artifact. That is expected, not a Node/SvelteKit failure.
 
+If you just need a local recovery from the checked-in exports, run:
+
+```bash
+python3 pipeline/bootstrap_pipeline_db.py
+```
+
+That recreates `pipeline/data/pipeline.db` from `src/lib/data/articles.json` and `src/lib/data/llm-metrics.json`.
+
 ## Tests and verification
 
 ```bash

@@ -124,9 +124,9 @@
   }
 
   function stageTone(status: StageStatus): string {
-    if (status === "completed") return "border-emerald-400/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-100"
-    if (status === "active") return "border-sky-400/20 bg-sky-500/10 text-sky-700 dark:text-sky-100"
-    return "border-terminal-border-subtle bg-terminal-bg-subtle text-terminal-text-muted"
+    if (status === "completed") return "border-emerald-400/20 bg-emerald-500/10"
+    if (status === "active") return "border-sky-400/20 bg-sky-500/10"
+    return "border-terminal-border-subtle bg-terminal-bg-subtle"
   }
 
   function openCommand(command: PipelineCommand): void {
@@ -229,23 +229,23 @@
         <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.totalUrls}</div>
       </div>
       <div class="terminal-card border-sky-400/20 bg-sky-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-sky-200/70">Resolved</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-sky-700 dark:text-sky-100">Resolved</div>
         <div class="mt-2 text-3xl font-semibold text-sky-700 dark:text-sky-100">{data.stats.resolved}</div>
       </div>
       <div class="terminal-card border-amber-400/20 bg-amber-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-amber-200/70">Scraped</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-amber-700 dark:text-amber-100">Scraped</div>
         <div class="mt-2 text-3xl font-semibold text-amber-700 dark:text-amber-100">{data.stats.scraped}</div>
       </div>
       <div class="terminal-card border-emerald-400/20 bg-emerald-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-emerald-200/70">Relevant</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-emerald-700 dark:text-emerald-100">Relevant</div>
         <div class="mt-2 text-3xl font-semibold text-emerald-700 dark:text-emerald-100">{data.stats.relevant}</div>
       </div>
       <div class="terminal-card border-violet-400/20 bg-violet-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-violet-200/70">Analyzed</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-violet-700 dark:text-violet-100">Analyzed</div>
         <div class="mt-2 text-3xl font-semibold text-violet-700 dark:text-violet-100">{data.stats.analyzed}</div>
       </div>
       <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-rose-200/70">Failed</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-rose-700 dark:text-rose-100">Failed</div>
         <div class="mt-2 text-3xl font-semibold text-rose-700 dark:text-rose-100">{data.stats.failed}</div>
       </div>
     </div>
@@ -307,12 +307,12 @@
         {#each stages as stage}
           <div class={`terminal-card terminal-card--interactive p-4 ${stageTone(stage.status)}`}>
             <div class="flex items-center justify-between gap-3">
-              <div class="text-sm font-semibold">{stage.name}</div>
+              <div class="text-sm font-semibold text-terminal-text">{stage.name}</div>
               <div class="terminal-chip text-[11px] uppercase tracking-[0.2em] text-terminal-text-muted">
                 {phaseStatusLabel(stage.status)}
               </div>
             </div>
-            <p class="mt-3 text-sm leading-6 text-current/75">{stage.description}</p>
+            <p class="mt-3 text-sm leading-6 text-terminal-text-muted">{stage.description}</p>
           </div>
         {/each}
       </div>

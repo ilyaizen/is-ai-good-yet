@@ -229,24 +229,24 @@
         <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.totalUrls}</div>
       </div>
       <div class="terminal-card border-sky-400/20 bg-sky-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-sky-700 dark:text-sky-100">Resolved</div>
-        <div class="mt-2 text-3xl font-semibold text-sky-700 dark:text-sky-100">{data.stats.resolved}</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-terminal-text">Resolved</div>
+        <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.resolved}</div>
       </div>
       <div class="terminal-card border-amber-400/20 bg-amber-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-amber-700 dark:text-amber-100">Scraped</div>
-        <div class="mt-2 text-3xl font-semibold text-amber-700 dark:text-amber-100">{data.stats.scraped}</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-terminal-text">Scraped</div>
+        <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.scraped}</div>
       </div>
       <div class="terminal-card border-emerald-400/20 bg-emerald-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-emerald-700 dark:text-emerald-100">Relevant</div>
-        <div class="mt-2 text-3xl font-semibold text-emerald-700 dark:text-emerald-100">{data.stats.relevant}</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-terminal-text">Relevant</div>
+        <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.relevant}</div>
       </div>
       <div class="terminal-card border-violet-400/20 bg-violet-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-violet-700 dark:text-violet-100">Analyzed</div>
-        <div class="mt-2 text-3xl font-semibold text-violet-700 dark:text-violet-100">{data.stats.analyzed}</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-terminal-text">Analyzed</div>
+        <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.analyzed}</div>
       </div>
       <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4">
-        <div class="text-xs uppercase tracking-[0.25em] text-rose-700 dark:text-rose-100">Failed</div>
-        <div class="mt-2 text-3xl font-semibold text-rose-700 dark:text-rose-100">{data.stats.failed}</div>
+        <div class="text-xs uppercase tracking-[0.25em] text-terminal-text">Failed</div>
+        <div class="mt-2 text-3xl font-semibold text-terminal-text">{data.stats.failed}</div>
       </div>
     </div>
 
@@ -335,7 +335,7 @@
         ] as [label, ok]}
           <div class="terminal-card flex items-center justify-between gap-4 px-4 py-3">
             <span class="text-terminal-text-muted">{label}</span>
-            <span class={`terminal-chip text-xs font-medium ${ok ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-100" : "bg-rose-500/15 text-rose-700 dark:text-rose-100"}`}>
+            <span class={`terminal-chip text-xs font-medium ${ok ? "bg-emerald-500/15 text-terminal-text" : "bg-rose-500/15 text-terminal-text"}`}>
               {ok ? "OK" : "Missing"}
             </span>
           </div>
@@ -377,7 +377,7 @@
             </dd>
           </div>
           {#if data.pipeline.snapshot.currentRun.error}
-            <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4 text-rose-700 dark:text-rose-100">
+            <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4 text-terminal-text">
               {data.pipeline.snapshot.currentRun.error}
             </div>
           {/if}
@@ -406,7 +406,7 @@
               <span class="terminal-chip">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
               <span class="terminal-chip">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
             </div>
-            <pre class="terminal-card max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-4 text-xs leading-6 text-emerald-700 dark:text-emerald-100">{data.pipeline.logViewer.tail}</pre>
+            <pre class="terminal-card max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-4 text-xs leading-6 text-terminal-text">{data.pipeline.logViewer.tail}</pre>
             <div class="mt-3 text-xs text-terminal-text-faint" title={data.pipeline.logViewer.path ?? undefined}>
               {data.pipeline.logViewer.path}
             </div>
@@ -577,7 +577,7 @@
           <button
             type="submit"
             disabled={!canConfirm}
-            class="terminal-action border-emerald-400/20 bg-emerald-500/5 text-emerald-700 dark:text-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+            class="terminal-action border-emerald-400/20 bg-emerald-500/5 text-terminal-text disabled:cursor-not-allowed disabled:opacity-50"
           >
             Run {selectedCommand.label}
           </button>

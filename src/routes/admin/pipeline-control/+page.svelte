@@ -208,14 +208,14 @@
       <div class="flex flex-wrap gap-3">
         <a
           href={data.controlHref}
-          class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-terminal-bg"
+          class="terminal-action"
         >
           Back to admin
         </a>
         <form method="post" action="?/logout">
           <button
             type="submit"
-            class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-terminal-bg"
+            class="terminal-action"
           >
             Log out
           </button>
@@ -224,52 +224,52 @@
     </div>
 
     <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-      <div class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4">
+      <div class="terminal-card p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-white/40">Total URLs</div>
         <div class="mt-2 text-3xl font-semibold text-white">{data.stats.totalUrls}</div>
       </div>
-      <div class="rounded-2xl border border-sky-400/20 bg-sky-500/10 p-4">
+      <div class="terminal-card border-sky-400/20 bg-sky-500/5 p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-sky-200/70">Resolved</div>
         <div class="mt-2 text-3xl font-semibold text-sky-100">{data.stats.resolved}</div>
       </div>
-      <div class="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4">
+      <div class="terminal-card border-amber-400/20 bg-amber-500/5 p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-amber-200/70">Scraped</div>
         <div class="mt-2 text-3xl font-semibold text-amber-100">{data.stats.scraped}</div>
       </div>
-      <div class="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4">
+      <div class="terminal-card border-emerald-400/20 bg-emerald-500/5 p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-emerald-200/70">Relevant</div>
         <div class="mt-2 text-3xl font-semibold text-emerald-100">{data.stats.relevant}</div>
       </div>
-      <div class="rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4">
+      <div class="terminal-card border-violet-400/20 bg-violet-500/5 p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-violet-200/70">Analyzed</div>
         <div class="mt-2 text-3xl font-semibold text-violet-100">{data.stats.analyzed}</div>
       </div>
-      <div class="rounded-2xl border border-rose-400/20 bg-rose-500/10 p-4">
+      <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-rose-200/70">Failed</div>
         <div class="mt-2 text-3xl font-semibold text-rose-100">{data.stats.failed}</div>
       </div>
     </div>
 
     <div class="mt-6 flex flex-wrap gap-3 text-sm text-white/65">
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Password {data.configured ? "configured" : "missing"}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">DB {data.dbExists ? "found" : "missing"}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Storage {data.pipeline.storage.dataDir}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Rows {data.counts.total}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Approved {data.counts.approved}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Refused {data.counts.refused}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Pending {data.counts.pending}</span>
-      <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1">Other {data.counts.other}</span>
+      <span class="terminal-chip">Password {data.configured ? "configured" : "missing"}</span>
+      <span class="terminal-chip">DB {data.dbExists ? "found" : "missing"}</span>
+      <span class="terminal-chip">Storage {data.pipeline.storage.dataDir}</span>
+      <span class="terminal-chip">Rows {data.counts.total}</span>
+      <span class="terminal-chip">Approved {data.counts.approved}</span>
+      <span class="terminal-chip">Refused {data.counts.refused}</span>
+      <span class="terminal-chip">Pending {data.counts.pending}</span>
+      <span class="terminal-chip">Other {data.counts.other}</span>
     </div>
 
     {#if !data.configured || !data.dbExists}
       <div class="mt-6 grid gap-3 sm:grid-cols-2">
         {#if !data.configured}
-          <div class="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-100">
+          <div class="terminal-card border-amber-400/20 bg-amber-500/5 p-4 text-sm text-amber-50">
             Admin password is not configured. Set <code>PIPELINE_ADMIN_PASSWORD</code> first.
           </div>
         {/if}
         {#if !data.dbExists}
-          <div class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm text-white/65">
+          <div class="terminal-card p-4 text-sm text-white/65">
             Pipeline DB is missing on this checkout. The dashboard will populate once <code>pipeline/data/pipeline.db</code> exists.
           </div>
         {/if}
@@ -288,7 +288,7 @@
           </p>
         </div>
 
-        <div class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3 text-sm text-white/65">
+        <div class="terminal-card px-4 py-3 text-sm text-white/65">
           {#if data.pipeline.snapshot.lock}
             <div class="font-medium text-white">
               {data.pipeline.snapshot.lock.stale ? "Stale lock" : "Active lock"}
@@ -305,10 +305,10 @@
 
       <div class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         {#each stages as stage}
-          <div class={`rounded-2xl border p-4 ${stageTone(stage.status)}`}>
+          <div class={`terminal-card terminal-card--interactive p-4 ${stageTone(stage.status)}`}>
             <div class="flex items-center justify-between gap-3">
               <div class="text-sm font-semibold">{stage.name}</div>
-              <div class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-2 py-1 text-[11px] uppercase tracking-[0.2em] text-white/55">
+              <div class="terminal-chip text-[11px] uppercase tracking-[0.2em] text-white/55">
                 {phaseStatusLabel(stage.status)}
               </div>
             </div>
@@ -333,9 +333,9 @@
           ["Groq key", data.pipeline.env.groqApiKeyConfigured],
           ["Mistral key", data.pipeline.env.mistralApiKeyConfigured],
         ] as [label, ok]}
-          <div class="flex items-center justify-between gap-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3">
+          <div class="terminal-card flex items-center justify-between gap-4 px-4 py-3">
             <span class="text-white/70">{label}</span>
-            <span class={`rounded-full px-2.5 py-1 text-xs font-medium ${ok ? "bg-emerald-500/15 text-emerald-100" : "bg-rose-500/15 text-rose-100"}`}>
+            <span class={`terminal-chip text-xs font-medium ${ok ? "bg-emerald-500/15 text-emerald-100" : "bg-rose-500/15 text-rose-100"}`}>
               {ok ? "OK" : "Missing"}
             </span>
           </div>
@@ -351,67 +351,67 @@
           <p class="text-xs uppercase tracking-[0.3em] text-white/45">Current run</p>
           <h2 class="mt-2 text-2xl font-semibold tracking-tight text-white">Latest job state</h2>
         </div>
-        <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1 text-xs text-white/70">
+        <span class="terminal-chip">
           {data.pipeline.snapshot.currentRun ? runStatusLabel(data.pipeline.snapshot.currentRun.status) : "Idle"}
         </span>
       </div>
 
       {#if data.pipeline.snapshot.currentRun}
         <dl class="mt-5 space-y-3 text-sm text-white/70">
-          <div class="flex items-start justify-between gap-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3">
+          <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-white/45">Run</dt>
             <dd class="text-right text-white">#{data.pipeline.snapshot.currentRun.id}</dd>
           </div>
-          <div class="flex items-start justify-between gap-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3">
+          <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-white/45">Command</dt>
             <dd class="text-right text-white">{humanizeCommand(data.pipeline.snapshot.currentRun.command)}</dd>
           </div>
-          <div class="flex items-start justify-between gap-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3">
+          <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-white/45">Started</dt>
             <dd class="text-right text-white">{formatTimestamp(data.pipeline.snapshot.currentRun.started_at)}</dd>
           </div>
-          <div class="flex items-start justify-between gap-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3">
+          <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-white/45">Log</dt>
             <dd class="max-w-[18rem] truncate text-right text-white/70" title={data.pipeline.snapshot.currentRun.log_path}>
               {data.pipeline.snapshot.currentRun.log_path}
             </dd>
           </div>
           {#if data.pipeline.snapshot.currentRun.error}
-            <div class="rounded-2xl border border-rose-400/20 bg-rose-500/10 p-4 text-rose-100">
+            <div class="terminal-card border-rose-400/20 bg-rose-500/5 p-4 text-rose-100">
               {data.pipeline.snapshot.currentRun.error}
             </div>
           {/if}
         </dl>
       {:else}
-        <div class="mt-5 rounded-xl border border-dashed border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm text-white/55">
+        <div class="terminal-card mt-5 border-dashed p-4 text-sm text-white/55">
           No active run. Start a job below if you need to move the data forward.
         </div>
       {/if}
 
-      <div class="mt-6 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4">
+      <div class="terminal-card mt-6 p-4">
         <div class="flex items-center justify-between gap-3">
           <div>
             <h3 class="text-base font-semibold text-white">Log tail</h3>
             <p class="mt-1 text-sm text-white/55">The real subprocess output, not an invented summary.</p>
           </div>
-          <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1 text-xs text-white/70">
+          <span class="terminal-chip">
             {data.pipeline.logViewer.run ? `#${data.pipeline.logViewer.run.id}` : "None"}
           </span>
         </div>
 
-        <div class="mt-4 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4">
+        <div class="terminal-card mt-4 p-4">
           {#if data.pipeline.logViewer.run}
             <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-white/50">
-              <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-2 py-1">{humanizeCommand(data.pipeline.logViewer.run.command)}</span>
-              <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-2 py-1">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
-              <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-2 py-1">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
+              <span class="terminal-chip">{humanizeCommand(data.pipeline.logViewer.run.command)}</span>
+              <span class="terminal-chip">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
+              <span class="terminal-chip">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
             </div>
-            <pre class="max-h-[30rem] overflow-auto whitespace-pre-wrap break-words rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-xs leading-6 text-emerald-100">{data.pipeline.logViewer.tail}</pre>
+            <pre class="terminal-card max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-4 text-xs leading-6 text-emerald-100">{data.pipeline.logViewer.tail}</pre>
             <div class="mt-3 text-xs text-white/45" title={data.pipeline.logViewer.path ?? undefined}>
               {data.pipeline.logViewer.path}
             </div>
           {:else}
-            <div class="rounded-xl border border-dashed border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm text-white/55">
+            <div class="terminal-card border-dashed p-4 text-sm text-white/55">
               No logs available yet.
             </div>
           {/if}
@@ -425,17 +425,17 @@
           <p class="text-xs uppercase tracking-[0.3em] text-white/45">Recent runs</p>
           <h2 class="mt-2 text-2xl font-semibold tracking-tight text-white">Last 12 jobs</h2>
         </div>
-        <span class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-1 text-xs text-white/70">
+        <span class="terminal-chip">
           {data.pipeline.snapshot.recentRuns.length}
         </span>
       </div>
 
       {#if data.pipeline.snapshot.recentRuns.length === 0}
-        <div class="mt-5 rounded-xl border border-dashed border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm text-white/55">
+        <div class="terminal-card mt-5 border-dashed p-4 text-sm text-white/55">
           No pipeline runs recorded yet.
         </div>
       {:else}
-        <div class="mt-5 overflow-hidden rounded-xl border border-terminal-border-subtle">
+        <div class="terminal-card mt-5 overflow-hidden">
           <table class="w-full border-collapse text-left text-sm">
             <thead class="bg-terminal-bg-subtle text-white/45">
               <tr>
@@ -472,14 +472,14 @@
         </p>
       </div>
       {#if data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale}
-        <div class="rounded-2xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+        <div class="terminal-card border-amber-400/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-50">
           Job running already. The buttons are disabled until the lock clears.
         </div>
       {/if}
     </div>
 
     {#if page.form?.message}
-      <div class="mt-6 rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm text-white/65">
+      <div class="terminal-card mt-6 p-4 text-sm text-white/65">
         {page.form.message}
       </div>
     {/if}
@@ -490,7 +490,7 @@
           type="button"
           onclick={() => openCommand(command)}
           disabled={activeLock}
-          class="flex h-full w-full flex-col justify-between rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-left transition hover:border-white/20 hover:bg-terminal-bg disabled:cursor-not-allowed disabled:opacity-50"
+          class="terminal-card terminal-card--interactive flex h-full w-full flex-col justify-between p-4 text-left disabled:cursor-not-allowed disabled:opacity-50"
         >
           <div>
             <div class="text-base font-semibold text-white">{command.label}</div>
@@ -511,12 +511,12 @@
           This is the actual data table. Filters, detail links, and the usual junk live here.
         </p>
       </div>
-      <div class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3 text-sm text-white/65">
+      <div class="terminal-card px-4 py-3 text-sm text-white/65">
         {data.tableData.length} rows loaded
       </div>
     </div>
 
-    <div class="mt-6 overflow-hidden rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle">
+    <div class="terminal-card mt-6 overflow-hidden">
       <ContentTable data={data.tableData} enableDetailLinks={true} title="Pipeline Data Registry" syncWithUrl={true} />
     </div>
   </section>
@@ -533,7 +533,7 @@
         <button
           type="button"
           onclick={closeDialog}
-          class="rounded-full border border-terminal-border-subtle bg-terminal-bg-subtle px-3 py-2 text-sm text-white/70 transition hover:border-white/20 hover:bg-terminal-bg"
+          class="terminal-action px-3 py-2"
           aria-label="Close dialog"
         >
           ✕
@@ -541,7 +541,7 @@
       </div>
 
       <p class="mt-4 text-sm leading-6 text-white/65">
-        This is a real subprocess run. Type <code class="rounded bg-terminal-bg-subtle px-1.5 py-0.5 text-white">{selectedCommand.name}</code> to unlock the button.
+        This is a real subprocess run. Type <code class="terminal-chip px-1.5 py-0.5 text-white">{selectedCommand.name}</code> to unlock the button.
       </p>
 
       <form method="post" action="?/run" class="mt-6 space-y-4">
@@ -554,11 +554,11 @@
             autocomplete="off"
             spellcheck="false"
             placeholder={selectedCommand.name}
-            class="mt-2 w-full rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-emerald-400/30 focus:ring-2 focus:ring-emerald-500/20"
+            class="terminal-input mt-2"
           />
         </label>
 
-        <div class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-3 text-sm text-white/65">
+        <div class="terminal-card px-4 py-3 text-sm text-white/65">
           {#if activeLock}
             A job is already running. This dialog will still let you submit, but the backend will reject it.
           {:else}
@@ -570,14 +570,14 @@
           <button
             type="button"
             onclick={closeDialog}
-            class="rounded-xl border border-terminal-border-subtle bg-terminal-bg-subtle px-4 py-2 text-sm font-medium text-white transition hover:border-white/20 hover:bg-terminal-bg"
+            class="terminal-action"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={!canConfirm}
-            class="rounded-2xl border border-emerald-400/20 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-100 transition hover:border-emerald-400/35 hover:bg-emerald-500/25 disabled:cursor-not-allowed disabled:opacity-50"
+            class="terminal-action border-emerald-400/20 bg-emerald-500/5 text-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Run {selectedCommand.label}
           </button>

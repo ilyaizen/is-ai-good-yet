@@ -239,8 +239,18 @@
   let sphereRotationX = 0;
   const spotTarget = new THREE.Object3D();
   const pulseRotation = new THREE.Quaternion();
-
-  const pointTexture = (() => {
+  // Hard-edged disk so node corners stay clipped by alphaTest.
+  // Lazily created — Three.js objects are not safe during SSR.
+  let _pointTexture: THREE.Texture | null = null;
+  function getPointTexture() {
+    if (_pointTexture) return _pointTexture;
+    if (typeof document === "undefined") {
+      // SSR fallback — DataTexture works without DOM
+      const data = new Uint8Array(128 * 128 * 4);
+      _pointTexture = new THREE.DataTexture(data, 128, 128, THREE.RGBAFormat);
+      _pointTexture.needsUpdate = true;
+      return _pointTexture;
+    }
     const SIZE = 128;
     const canvas = document.createElement("canvas");
     canvas.width = SIZE;
@@ -262,8 +272,9 @@
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.premultiplyAlpha = true;
     tex.needsUpdate = true;
+    _pointTexture = tex;
     return tex;
-  })();
+    }
 
   let meshMat: THREE.MeshStandardMaterial | undefined = $state();
   let membraneMesh: THREE.Mesh | undefined = $state();
@@ -388,7 +399,7 @@
     backdropGeo.dispose();
     backdropMat.dispose();
     membraneGeo.dispose();
-    pointTexture.dispose();
+    _pointTexture?.dispose();
   });
 
   useTask(
@@ -608,8 +619,8 @@
   >
     <T.PointsMaterial
       bind:ref={pointsMat}
-      map={pointTexture}
-      alphaMap={pointTexture}
+      map={getPointTexture()}
+      alphaMap={getPointTexture()}
       color={params.nodeColor}
       size={params.nodeSize}
       sizeAttenuation

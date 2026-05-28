@@ -5,7 +5,6 @@
   import favicon from "$lib/assets/favicon.svg"
   import { Canvas } from "@threlte/core"
   import SceneBackground from "$lib/components/scene-background.svelte"
-  import BackgroundEffects from "$lib/components/background-effects.svelte"
   import AppHeader from "$lib/components/app-header.svelte"
   import AppFooter from "$lib/components/app-footer.svelte"
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
@@ -99,14 +98,12 @@
   <div class="bg-scene" aria-hidden="true">
     <Canvas>
       <SceneBackground
-        opacity={0.5}
+        opacity={0.75}
         maxFps={60}
         maxDpr={1.5}
       />
     </Canvas>
   </div>
-
-  <BackgroundEffects />
 
   {#if isHomepage}
     <AppHeader mode="animated" visible={scrolledPastVerdict} />

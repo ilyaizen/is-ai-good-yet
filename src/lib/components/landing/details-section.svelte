@@ -2,6 +2,7 @@
   import { ChevronRight, ExternalLink, Info } from "@lucide/svelte"
   import ThemeItem from "./theme-item.svelte"
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
+  import { scrollToElement } from "$lib/scroll"
   import { onMount } from "svelte"
   import themesData from "$lib/data/themes.json"
   import articlesData from "$lib/data/articles.json"
@@ -96,7 +97,7 @@
   function scrollToArticles() {
     const el = document.getElementById("articles-table")
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
+      scrollToElement(el)
     }
   }
 

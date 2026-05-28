@@ -12,6 +12,7 @@
 
   // Get context from layout to control header visibility
   const layoutScrollState = getContext<{
+    scroll: number
     setScrolledPastVerdict: (value: boolean) => void
   }>("layoutScrollState")
 
@@ -64,28 +65,13 @@
       isLoading = false
     }, LOADER_FADE_DELAY_MS)
 
-    let scrollHandler: (() => void) | null = null
-
+    // Scroll-driven header visibility via smooth scroll context
     $effect(() => {
       if (revealed) {
-        scrollHandler = () => {
-          const scrollY = window.scrollY
-          const scrolledPast = scrollY > window.innerHeight * 0.5
-          layoutScrollState.setScrolledPastVerdict(scrolledPast)
-        }
-        window.addEventListener("scroll", scrollHandler, { passive: true })
-        scrollHandler()
+        const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
+        layoutScrollState.setScrolledPastVerdict(scrolledPast)
       } else {
-        if (scrollHandler) {
-          window.removeEventListener("scroll", scrollHandler)
-          scrollHandler = null
-        }
-      }
-
-      return () => {
-        if (scrollHandler) {
-          window.removeEventListener("scroll", scrollHandler)
-        }
+        layoutScrollState.setScrolledPastVerdict(false)
       }
     })
   })

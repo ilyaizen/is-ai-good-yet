@@ -6,9 +6,9 @@
  */
 
 @layer base {
-  /* Scroll lock mechanism for reveal transition */
   html {
     min-height: 100vh;
+    overflow: hidden;
   }
 
   html.scroll-locked {
@@ -25,7 +25,7 @@
     font-family: var(--font-sans);
     font-size: 16px;
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow: hidden;
     min-height: 100vh;
     transition:
       background-color var(--transition-normal),

@@ -58,7 +58,10 @@
     "@lucide/svelte": "^0.577.0",
     "@number-flow/svelte": "^0.4.0",
     "@tanstack/table-core": "^8.21.3",
+    "@threlte/core": "^8.5.16",
+    "@threlte/extras": "^9.20.1",
     "@types/d3-scale": "^4.0.9",
+    "@types/three": "^0.184.1",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
     "better-sqlite3": "^12.6.2",
@@ -74,6 +77,7 @@
     "sveltekit-superforms": "^2.30.0",
     "tailwind-merge": "^3.5.0",
     "tailwind-variants": "^3.2.2",
+    "three": "^0.184.0",
     "tsx": "^4.19.3",
     "vaul-svelte": "^0.3.2"
   }

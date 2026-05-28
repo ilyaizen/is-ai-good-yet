@@ -3,6 +3,8 @@
   import { injectSpeedInsights } from "@vercel/speed-insights/sveltekit"
   import { injectAnalytics } from "@vercel/analytics/sveltekit"
   import favicon from "$lib/assets/favicon.svg"
+  import { Canvas } from "@threlte/core"
+  import SceneBackground from "$lib/components/scene-background.svelte"
   import BackgroundEffects from "$lib/components/background-effects.svelte"
   import AppHeader from "$lib/components/app-header.svelte"
   import AppFooter from "$lib/components/app-footer.svelte"
@@ -11,6 +13,8 @@
   import { ModeWatcher } from "mode-watcher"
   import { onMount, setContext } from "svelte"
   import { page } from "$app/state"
+  import { useSmoothScroll } from "$lib/composables/use-smooth-scroll.svelte"
+  import { setSmoothScroll } from "$lib/scroll"
 
   let { children } = $props()
 
@@ -23,85 +27,66 @@
   // Loader visibility state
   let showLoader = $state(true)
 
-  // Expose scroll state setter for homepage to use
+  // Smooth scroll setup
+  const ss = useSmoothScroll()
+
+  // Expose scroll state and setter for homepage to use
   setContext("layoutScrollState", {
+    get scroll() { return ss.scroll; },
     setScrolledPastVerdict: (value: boolean) => {
       scrolledPastVerdict = value
     },
   })
 
+  // Also expose the smooth scroll instance directly
+  setContext("smoothScroll", ss)
+
   onMount(() => {
-    // Hide loader after 0.5 seconds to simulate loading
+    // Hide loader after 0.5 seconds
     setTimeout(() => {
       showLoader = false
     }, 500)
 
+    // Init smooth scroll
+    const cleanup = ss.init()
+    setSmoothScroll(ss)
+
+    // Prevent native scroll — we handle it
+    document.documentElement.style.overflow = "hidden"
+    document.body.style.overflow = "hidden"
+
     // Inject Vercel analytics and speed insights
     injectSpeedInsights()
     injectAnalytics()
-  })
 
-  // SEO constants
-  const SITE_TITLE = "Is AI “Good” Yet?"
-  const SITE_DESCRIPTION = "A survey website that analyzes Hacker News sentiment toward AI coding."
-  const SITE_URL = "https://www.is-ai-good-yet.com"
-  const SITE_IMAGE = `${SITE_URL}/og-image.png`
-  const AUTHOR = "Ilya Aizenberg"
-  const KEYWORDS = [
-    "AI coding assistants",
-    "developer sentiment",
-    "Hacker News analysis",
-    "GitHub Copilot",
-    "Cursor AI",
-    "LLM coding",
-    "software engineering trends",
-    "AI productivity",
-    "AI skepticism",
-    "AI-assisted coding",
-    "coding automation",
-    "AI agents",
-    "local LLMs",
-    "software development",
-    "data journalism",
-    "sentiment analysis",
-    "is ai good yet",
-    "is-ai-good-yet",
-    "dev tools",
-    "coding trends 2024",
-    "coding trends 2025",
-    "coding trends 2026",
-  ]
+    return () => {
+      cleanup?.()
+    }
+  })
 </script>
 
 <svelte:head>
-  <!-- Favicon -->
   <link rel="icon" href={favicon} />
-
-  <!-- Basic Meta Tags -->
-  <title>{SITE_TITLE}</title>
-  <meta name="description" content={SITE_DESCRIPTION} />
-  <meta name="keywords" content={KEYWORDS.join(", ")} />
-  <meta name="author" content={AUTHOR} />
+  <title>Is AI “Good” Yet?</title>
+  <meta name="description" content="A survey website that analyzes Hacker News sentiment toward AI coding." />
+  <meta name="keywords" content="AI coding assistants, developer sentiment, Hacker News analysis, is ai good yet" />
+  <meta name="author" content="Ilya Aizenberg" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href={SITE_URL} />
-
-  <!-- Open Graph / Facebook -->
+  <link rel="canonical" href="https://www.is-ai-good-yet.com" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={SITE_URL} />
-  <meta property="og:title" content={SITE_TITLE} />
-  <meta property="og:description" content={SITE_DESCRIPTION} />
-  <meta property="og:image" content={SITE_IMAGE} />
+  <meta property="og:url" content="https://www.is-ai-good-yet.com" />
+  <meta property="og:title" content="Is AI “Good” Yet?" />
+  <meta property="og:description" content="A survey tracking developer sentiment on AI-assisted coding through HN posts." />
+  <meta property="og:image" content="https://www.is-ai-good-yet.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="Is AI “Good” Yet?" />
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content={SITE_URL} />
-  <meta name="twitter:title" content={SITE_TITLE} />
-  <meta name="twitter:description" content={SITE_DESCRIPTION} />
-  <meta name="twitter:image" content={SITE_IMAGE} />
+  <meta name="twitter:url" content="https://www.is-ai-good-yet.com" />
+  <meta name="twitter:title" content="Is AI “Good” Yet?" />
+  <meta name="twitter:description" content="A survey tracking developer sentiment on AI-assisted coding through HN posts." />
+  <meta name="twitter:image" content="https://www.is-ai-good-yet.com/og-image.png" />
   <meta name="twitter:creator" content="@ilyaizen" />
 </svelte:head>
 
@@ -110,19 +95,47 @@
 <TooltipProvider>
   <ComprehensiveLoader visible={showLoader} />
 
+  <!-- 3D Scene Background -->
+  <div class="bg-scene" aria-hidden="true">
+    <Canvas>
+      <SceneBackground
+        opacity={0.5}
+        maxFps={60}
+        maxDpr={1.5}
+      />
+    </Canvas>
+  </div>
+
   <BackgroundEffects />
 
   {#if isHomepage}
-    <!-- Homepage: animated header that slides in after scroll -->
     <AppHeader mode="animated" visible={scrolledPastVerdict} />
   {:else}
-    <!-- Other pages: standard sticky header -->
     <AppHeader mode="default" />
   {/if}
 
-  {@render children()}
+  <!-- Smooth scroll wrapper — all page content translate3d'd inside -->
+  <div id="smooth-scroll">
+    {@render children()}
 
-  {#if !isHomepage}
-    <AppFooter />
-  {/if}
+    {#if !isHomepage}
+      <AppFooter />
+    {/if}
+  </div>
 </TooltipProvider>
+
+<style>
+  .bg-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    pointer-events: none;
+  }
+
+  #smooth-scroll {
+    will-change: transform;
+  }
+</style>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { WeeklySnapshot, VerdictScore } from "$lib/server/db"
   import { EASE_SWIFT } from "$lib/constants"
-  import { scrollToBottom } from "$lib/scroll"
+  import { scrollToElement, scrollToBottom } from "$lib/scroll"
   import HistoryChart from "./history-chart.svelte"
   import NumberFlow from "@number-flow/svelte"
   import { onMount } from "svelte"
@@ -158,7 +158,7 @@
   function scrollToArticles() {
     const el = document.getElementById("articles")
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" })
+      scrollToElement(el)
     }
   }
 

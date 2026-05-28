@@ -4,6 +4,7 @@
   import { useTokenStream } from "$lib/composables/use-token-stream.svelte"
   import AnimatedButton from "$lib/components/ui/animated-button.svelte"
   import { Info } from "@lucide/svelte"
+  import { scrollToBottom } from "$lib/scroll"
 
   let {
     onReveal,
@@ -188,45 +189,10 @@
 
   const shouldScaleUp = $derived(revealHovered || buttonFocused)
 
-  function scrollToBottom() {
-    const start = window.scrollY
-    const duration = 1500 // 1.5s for a swift but noticeable effect
-    let startTime = 0
-
-    function animate(currentTime: number) {
-      if (!startTime) startTime = currentTime
-      const timeElapsed = currentTime - startTime
-
-      // Calculate target dynamically to handle layout changes
-      // Use Math.max of body and docElement to get true scrollHeight across browsers
-      const docHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.offsetHeight,
-        document.body.clientHeight,
-        document.documentElement.clientHeight
-      )
-      const target = docHeight - window.innerHeight
-      const change = target - start
-
-      if (timeElapsed < duration) {
-        const progress = timeElapsed / duration
-        // Approximation of EASE_SWIFT cubic-bezier(0, 0.7, 0.1, 1)
-        const ease = 1 - Math.pow(1 - progress, 5)
-        window.scrollTo(0, start + change * ease)
-        requestAnimationFrame(animate)
-      } else {
-        window.scrollTo(0, start + change)
-      }
-    }
-    requestAnimationFrame(animate)
-  }
-
   function handleAbout() {
     handleReveal()
-    // Start scrolling immediately
-    scrollToBottom()
+    // Scroll to bottom using smooth scroll engine
+    scrollToBottom({ duration: 1500 })
   }
 
   let previousResetTrigger = $state(0)

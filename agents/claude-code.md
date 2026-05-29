@@ -23,8 +23,8 @@ Use this for normal repo tasks:
 
 ```bash
 claude -p "<specific repo task>" \
-  --model claude-opus-4-7 \
-  --effort low \
+  --model anthropic/claude-opus-4 \
+  --effort medium \
   --allowedTools 'Read,Edit,Write,Bash(git *),Bash(npm *),Bash(node *),Bash(python3 *),Bash(pytest *),Bash(pip *)' \
   --max-turns 8 \
   --max-budget-usd 1
@@ -32,14 +32,14 @@ claude -p "<specific repo task>" \
 
 Defaults:
 
-- model: `claude-opus-4-7`
-- effort/thinking: `low`
+- model: `anthropic/claude-opus-4`
+- effort/thinking: `medium`
 - workdir: repo root
 - mode: print mode (`claude -p`) for one-shot repo tasks
 - interactive mode: tmux only, and only when the task needs iteration or slash commands
 - permissions: narrow by default; never use blanket bypass for routine repo work
 
-Use higher effort only for design reviews, gnarly debugging, migration plans, or multi-subsystem refactors. Low-thinking Opus is the normal lane because most repo work needs taste and file access, not theatrical cognition.
+Use lower effort only for trivial tasks (typos, single-line fixes). medium Opus is the normal lane.
 
 ## Prerequisites on this box
 
@@ -115,8 +115,8 @@ Good pattern:
 
 ```bash
 claude -p "Update agents/runtime.md so it documents the /srv/apps/is-ai-good-yet production checkout, npm/node runtime, and Python pipeline venv setup. Do not edit code." \
-  --model claude-opus-4-7 \
-  --effort low \
+  --model anthropic/claude-opus-4 \
+  --effort medium \
   --allowedTools 'Read,Edit' \
   --max-turns 4
 ```
@@ -198,7 +198,7 @@ Use only for multi-turn work:
 ```bash
 tmux new-session -d -s claude-is-ai-good-yet -x 140 -y 40
 
-tmux send-keys -t claude-is-ai-good-yet 'cd /srv/apps/is-ai-good-yet && claude --model claude-opus-4-7 --effort low' Enter
+tmux send-keys -t claude-is-ai-good-yet 'cd /srv/apps/is-ai-good-yet && claude --model anthropic/claude-opus-4 --effort medium' Enter
 ```
 
 Monitor:

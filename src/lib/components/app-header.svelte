@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { page } from "$app/state"
-  import { scrollToTop } from "$lib/scroll"
+  import { scrollToTop, handleAnchorClick } from "$lib/scroll"
   import { ChevronRight } from "@lucide/svelte"
   import ThemeToggle from "$lib/components/theme-toggle.svelte"
 
@@ -139,7 +139,7 @@
       <nav class="desktop-nav">
         <ul class="nav-list">
           {#each navLinks as link}
-            <li><a href={link.href} class="nav-link">{link.label}</a></li>
+            <li><a href={link.href} class="nav-link" onclick={(e) => handleAnchorClick(e, link.href)}>{link.label}</a></li>
           {/each}
         </ul>
       </nav>

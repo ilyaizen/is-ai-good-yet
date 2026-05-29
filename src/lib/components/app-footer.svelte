@@ -1,14 +1,14 @@
 <script lang="ts">
   import { ExternalLink } from "@lucide/svelte"
+  import { handleAnchorClick } from "$lib/scroll"
   import VisitorCounter from "./visitor-counter.svelte"
-  // import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip"
 </script>
 
 <footer class="site-footer">
   <div class="footer-inner max-w-5xl mx-auto w-full">
     <div class="footer-top">
       <div class="footer-about">
-        <p class="footer-brand font-mono font-bold">Is AI <span class="highlight">“Good”</span> Yet?</p>
+        <p class="footer-brand font-mono font-bold">Is AI <span class="highlight">"Good"</span> Yet?</p>
         <p class="footer-description">
           A survey tracking developer sentiment on AI-assisted coding through Hacker News posts.
         </p>
@@ -20,9 +20,9 @@
       <nav class="footer-links" aria-label="Footer navigation">
         <div class="footer-links-group">
           <span class="footer-links-label">Navigate</span>
-          <a href="#home">Home</a>
-          <a href="#details">Details</a>
-          <a href="#articles-table">Articles</a>
+          <a href="#home" onclick={(e) => handleAnchorClick(e, "#home")}>Home</a>
+          <a href="#details" onclick={(e) => handleAnchorClick(e, "#details")}>Details</a>
+          <a href="#articles-table" onclick={(e) => handleAnchorClick(e, "#articles-table")}>Articles</a>
         </div>
         <div class="footer-links-group">
           <span class="footer-links-label">links</span>
@@ -43,7 +43,7 @@
     </div>
   </div>
   <div class="font-mono text-xs flex justify-center items-center">
-    <span class="copyright">Is AI “Good” Yet? © {new Date().getFullYear()}</span>
+    <span class="copyright">Is AI "Good" Yet? © {new Date().getFullYear()}</span>
   </div>
 </footer>
 

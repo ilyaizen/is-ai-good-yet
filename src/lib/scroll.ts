@@ -39,8 +39,6 @@ function getSs() {
 export const scrollToTop = (options: { duration?: number; onComplete?: () => void } = {}) => {
   const ss = getSs()
   ss.scrollTo(0)
-  // We use direct scrollTo for instant feedback.
-  // Duration-based animation is handled by the smooth scroll lerp.
   if (options.onComplete) requestAnimationFrame(options.onComplete)
 }
 
@@ -69,7 +67,32 @@ export const scrollToBottom = (options: { duration?: number; onComplete?: () => 
 export function scrollToElement(el: HTMLElement) {
   if (typeof document === "undefined") return
   const top = el.getBoundingClientRect().top
-  // top is relative to viewport. scroll offset = current scroll + top.
   const ss = getSs()
   ss.scrollTo(ss.scroll + top)
+}
+
+/**
+ * Scroll to an element by ID using the smooth scroll engine
+ */
+export function scrollToId(id: string) {
+  if (typeof document === "undefined") return
+  const el = document.getElementById(id.replace(/^#/, ""))
+  if (el) scrollToElement(el)
+}
+
+/**
+ * Click handler for anchor links — prevents native hash scroll, uses smooth scroll.
+ * Usage: onclick={(e) => handleAnchorClick(e, "#details")}
+ */
+export function handleAnchorClick(e: MouseEvent, hash: string) {
+  e.preventDefault()
+  const id = hash.replace(/^#/, "")
+
+  // If on a different page, navigate home first then scroll after mount
+  if (typeof window !== "undefined" && window.location.pathname !== "/") {
+    window.location.href = "/#" + id
+    return
+  }
+
+  scrollToId(id)
 }

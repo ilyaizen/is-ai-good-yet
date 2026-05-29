@@ -37,6 +37,7 @@
     class="scrollbar-thumb"
     class:is-dragging={dragging}
     role="scrollbar"
+    tabindex="0"
     aria-orientation="vertical"
     aria-valuemin={0}
     aria-valuemax={100}

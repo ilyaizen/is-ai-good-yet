@@ -7,7 +7,7 @@ Read `agents/claude-code.md` first. It is the operational spec for Claude Code o
 ## Defaults
 
 - Executor: Claude Code, coordinated by Hermes.
-- Model: `anthropic/claude-opus-4` with reasoning=medium.
+- Model: `anthropic/claude-opus-4-8` with reasoning=medium (explicit — 4.8 defaults to high).
 - Do not downgrade to low-effort unless the task is trivial (typos, single-line fixes).
 - Working directory: `/srv/apps/is-ai-good-yet`.
 - Runtime: npm/Node, not Bun.

@@ -23,7 +23,7 @@ Use this for normal repo tasks:
 
 ```bash
 claude -p "<specific repo task>" \
-  --model anthropic/claude-opus-4 \
+  --model anthropic/claude-opus-4-8 \
   --effort medium \
   --allowedTools 'Read,Edit,Write,Bash(git *),Bash(npm *),Bash(node *),Bash(python3 *),Bash(pytest *),Bash(pip *)' \
   --max-turns 8 \
@@ -32,8 +32,8 @@ claude -p "<specific repo task>" \
 
 Defaults:
 
-- model: `anthropic/claude-opus-4`
-- effort/thinking: `medium`
+- model: `anthropic/claude-opus-4-8`
+- effort/thinking: `medium` (explicit — Opus 4.8 defaults to high)
 - workdir: repo root
 - mode: print mode (`claude -p`) for one-shot repo tasks
 - interactive mode: tmux only, and only when the task needs iteration or slash commands
@@ -115,7 +115,7 @@ Good pattern:
 
 ```bash
 claude -p "Update agents/runtime.md so it documents the /srv/apps/is-ai-good-yet production checkout, npm/node runtime, and Python pipeline venv setup. Do not edit code." \
-  --model anthropic/claude-opus-4 \
+  --model anthropic/claude-opus-4-8 \
   --effort medium \
   --allowedTools 'Read,Edit' \
   --max-turns 4
@@ -198,7 +198,7 @@ Use only for multi-turn work:
 ```bash
 tmux new-session -d -s claude-is-ai-good-yet -x 140 -y 40
 
-tmux send-keys -t claude-is-ai-good-yet 'cd /srv/apps/is-ai-good-yet && claude --model anthropic/claude-opus-4 --effort medium' Enter
+tmux send-keys -t claude-is-ai-good-yet 'cd /srv/apps/is-ai-good-yet && claude --model anthropic/claude-opus-4-8 --effort medium' Enter
 ```
 
 Monitor:

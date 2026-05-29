@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { getSs } from "$lib/scroll";
 
   interface Props {
     progress: number;
@@ -9,27 +9,39 @@
 
   let dragging = $state(false);
   let trackRef: HTMLDivElement | null = $state(null);
+  const THUMB_RATIO = 0.12;
+
+  function moveToPointer(e: PointerEvent) {
+    if (!trackRef) return;
+    const rect = trackRef.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+    const ss = getSs();
+    const el = document.getElementById("smooth-scroll");
+    if (!el) return;
+    const maxScroll = Math.max(0, el.scrollHeight - window.innerHeight);
+    ss.scrollTo(ratio * maxScroll);
+  }
 
   function onPointerDown(e: PointerEvent) {
     dragging = true;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    onPointerMove(e);
+    moveToPointer(e);
   }
 
   function onPointerMove(e: PointerEvent) {
-    if (!dragging || !trackRef) return;
-    const rect = trackRef.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
-    // Dispatch a custom event the layout can listen to
-    trackRef.dispatchEvent(
-      new CustomEvent("scroll-to-ratio", { detail: ratio, bubbles: true })
-    );
+    if (!dragging) return;
+    moveToPointer(e);
   }
 
-  function onPointerUp(e: PointerEvent) {
+  function onPointerUp() {
     dragging = false;
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
   }
+
+  const thumbTransform = $derived(() => {
+    const p = Math.max(0, Math.min(1, progress));
+    return `transform: translateY(calc(${p * 100}% * (1 - ${THUMB_RATIO})));
+            height: ${THUMB_RATIO * 100}%;`;
+  });
 </script>
 
 <div class="scrollbar-track" bind:this={trackRef} onpointerdown={onPointerDown} role="presentation">
@@ -46,7 +58,7 @@
     onpointermove={onPointerMove}
     onpointerup={onPointerUp}
     onpointercancel={onPointerUp}
-    style="top: {progress * 100}%;"
+    style={thumbTransform()}
   ></div>
 </div>
 
@@ -64,20 +76,20 @@
 
   .scrollbar-thumb {
     position: absolute;
+    top: 0;
     right: 0;
     width: 6px;
-    min-height: 40px;
     border-radius: 3px;
-    background: var(--color-text-secondary, #666);
+    background: var(--color-text-secondary, rgba(255, 255, 255, 0.25));
     opacity: 0.35;
     transition: opacity 0.15s ease, width 0.15s ease;
     cursor: grab;
-    will-change: top;
+    will-change: transform;
   }
 
   .scrollbar-thumb:hover,
   .scrollbar-thumb.is-dragging {
-    opacity: 0.6;
+    opacity: 0.7;
     width: 8px;
     cursor: grabbing;
   }

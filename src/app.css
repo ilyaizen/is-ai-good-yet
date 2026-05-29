@@ -151,3 +151,33 @@
   /* Animation */
   --animate-blink: blink 1s step-end infinite;
 }
+
+/* ============================================
+   Glass Override Layer
+   ============================================
+   Overrides bg-card and site-footer to use
+   semi-transparent backgrounds with backdrop-blur,
+   so the threlte scene bleeds through.
+   Applied AFTER Tailwind's @theme to win specificity.
+*/
+@layer utilities {
+  .bg-card {
+    background-color: oklch(0.13 0.008 250 / 0.65) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .light .bg-card {
+    background-color: oklch(1 0 0 / 0.6) !important;
+  }
+
+  .site-footer {
+    background-color: oklch(0.13 0.008 250 / 0.65) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .light .site-footer {
+    background-color: oklch(1 0 0 / 0.6) !important;
+  }
+}

@@ -3,7 +3,7 @@ import { scrollBus } from "./scroll-bus.svelte";
 const SMOOTH_FACTOR = 0.085;
 const WHEEL_MULTIPLIER = 0.8;
 const TOUCH_MULTIPLIER = 0.9;
-const TOUCH_INERTIA = 18;
+const TOUCH_INERTIA = 12;
 
 export function useSmoothScroll() {
   let scroll = $state(0);
@@ -58,6 +58,9 @@ export function useSmoothScroll() {
     function animate() {
       const previousScroll = currentScroll;
       currentScroll = lerp(currentScroll, targetScroll, SMOOTH_FACTOR);
+      // Clamp to prevent overshoot past boundaries
+      if (currentScroll < 0.5) currentScroll = 0;
+      else if (currentScroll > maxScroll - 0.5) currentScroll = maxScroll;
       velocity = currentScroll - previousScroll;
       scrollBus.setDelta(velocity);
 

@@ -6,7 +6,6 @@
   import { Canvas } from "@threlte/core"
   import SceneBackground from "$lib/components/scene-background.svelte"
   import AppHeader from "$lib/components/app-header.svelte"
-  import AppFooter from "$lib/components/app-footer.svelte"
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
   import VerdictVeil from "$lib/components/landing/verdict-veil.svelte"
   import { TooltipProvider } from "$lib/components/ui/tooltip"
@@ -154,8 +153,6 @@
   <div id="smooth-scroll">
     {@render children()}
   </div>
-
-  <AppFooter />
 
   <!-- Custom scrollbar -->
   <Scrollbar progress={ss.progress} />

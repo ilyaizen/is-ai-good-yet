@@ -10,7 +10,7 @@
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
   import VerdictVeil from "$lib/components/landing/verdict-veil.svelte"
   import { TooltipProvider } from "$lib/components/ui/tooltip"
-  import { ModeWatcher } from "mode-watcher"
+  import { ModeWatcher, mode } from "mode-watcher"
   import { onMount, setContext } from "svelte"
   import { page } from "$app/state"
   import { useSmoothScroll } from "$lib/composables/use-smooth-scroll.svelte"
@@ -21,6 +21,8 @@
 
   // Homepage uses animated header mode
   const isHomepage = $derived(page.url.pathname === "/")
+
+  const currentTheme = $derived(mode.current ?? "dark")
 
   // Shared state for homepage scroll position (reactive for header visibility)
   let scrolledPastVerdict = $state(false)
@@ -127,6 +129,7 @@
         opacity={0.75}
         maxFps={60}
         maxDpr={1.5}
+        theme={currentTheme}
       />
     </Canvas>
   </div>

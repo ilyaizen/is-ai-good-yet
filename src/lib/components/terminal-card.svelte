@@ -56,13 +56,19 @@
 
 <style>
   .terminal-card {
-    background: var(--color-surface);
+    background: oklch(0.13 0.008 250 / 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
     font-family: var(--font-mono);
     position: relative;
+  }
+
+  .light .terminal-card {
+    background: oklch(1 0 0 / 0.6);
   }
 
   .terminal-header {

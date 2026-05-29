@@ -14,6 +14,7 @@
   import { onMount, setContext } from "svelte"
   import { page } from "$app/state"
   import { useSmoothScroll } from "$lib/composables/use-smooth-scroll.svelte"
+  import Scrollbar from "$lib/components/ui/scrollbar.svelte"
   import { setSmoothScroll } from "$lib/scroll"
 
   let { children } = $props()
@@ -154,6 +155,9 @@
       <AppFooter />
     {/if}
   </div>
+
+  <!-- Custom scrollbar -->
+  <Scrollbar progress={ss.progress} />
 </TooltipProvider>
 
 <style>

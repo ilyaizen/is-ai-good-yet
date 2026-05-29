@@ -148,8 +148,9 @@ const LIGHT_OVERRIDES = {
     spotIntensity: 95,
     spotColor: "#ffffff",
     edgeColor: "#2a2a27",
-    edgeOpacity: 0.15,
-    nodeOpacity: 0.15,
+    edgeOpacity: 0.1,
+    nodeColor: "#4a4a47",
+    nodeOpacity: 0.08,
     fogColor: "#f4f2ed"
   }
 } satisfies {

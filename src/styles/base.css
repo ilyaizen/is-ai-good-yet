@@ -47,4 +47,29 @@
     line-height: 1.1;
     margin-bottom: 1.5rem;
   }
+
+  /* Scrollbar — thin, subtle, theme-aware */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-text-secondary, #666);
+    border-radius: 3px;
+    opacity: 0.3;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    opacity: 0.6;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-text-secondary, #666) transparent;
+  }
 }

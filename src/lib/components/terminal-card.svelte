@@ -56,9 +56,7 @@
 
 <style>
   .terminal-card {
-    background: oklch(0.13 0.008 250 / 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: oklch(0.13 0.008 250 / 0.75);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -68,7 +66,7 @@
   }
 
   :not(.dark) .terminal-card {
-    background: oklch(1 0 0 / 0.6);
+    background: oklch(0.98 0.003 250 / 0.85);
   }
 
   .terminal-header {

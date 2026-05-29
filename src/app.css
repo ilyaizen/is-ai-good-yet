@@ -162,22 +162,18 @@
 */
 @layer utilities {
   .bg-card {
-    background-color: oklch(0.13 0.008 250 / 0.65) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: oklch(0.13 0.008 250 / 0.7) !important;
   }
 
   :not(.dark) .bg-card {
-    background-color: oklch(1 0 0 / 0.6) !important;
+    background-color: oklch(1 0 0 / 0.65) !important;
   }
 
   .site-footer {
-    background-color: oklch(0.13 0.008 250 / 0.65) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: oklch(0.13 0.008 250 / 0.7) !important;
   }
 
   :not(.dark) .site-footer {
-    background-color: oklch(1 0 0 / 0.6) !important;
+    background-color: oklch(1 0 0 / 0.65) !important;
   }
 }

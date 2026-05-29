@@ -119,7 +119,7 @@ const DARK_DEFAULTS: VisualThemeDefaults = {
     spotX: -0.6,
     spotY: 3.3,
     spotZ: 7.1,
-    rotationGain: 0.008,
+    rotationGain: 0.003,
     wiggleAmp: 0.15,
     wiggleFreq: 4,
     wiggleSpeed: 1.5,

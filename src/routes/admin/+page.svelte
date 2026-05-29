@@ -1,4 +1,34 @@
 <script lang="ts">
+  import { page } from "$app/state"
+  import ContentTable from "$lib/components/content-table.svelte"
+
+  type UrlEntry = {
+    id: number
+    url: string
+    hn_id: number | null
+    hn_score: number | null
+    hn_comments: number | null
+    hn_title: string | null
+    hn_timestamp: number | null
+    hn_author: string | null
+    status: string
+    scraped_status: string | null
+    filter_score: number | null
+    opinion: string | null
+    is_opinion: boolean | null
+    sentiment_score: number | null
+    content_category: string | null
+    content_confidence: number | null
+    classification_json: string | null
+    content_filter_json: string | null
+  }
+
+  type PipelineCommand = {
+    name: string
+    label: string
+    description: string
+  }
+
   type RunRow = {
     id: number
     command: string
@@ -20,6 +50,8 @@
     stale: boolean
   }
 
+  type StageStatus = "completed" | "active" | "pending"
+
   type PipelineData = {
     env: {
       repoRootExists: boolean
@@ -34,6 +66,13 @@
       currentRun: RunRow | null
       lock: LockRow | null
       recentRuns: RunRow[]
+    }
+    commands: PipelineCommand[]
+    logViewer: {
+      run: RunRow | null
+      path: string | null
+      exists: boolean
+      tail: string
     }
     storage: {
       dataDir: string
@@ -50,20 +89,15 @@
       configured: boolean
       dbExists: boolean
       counts: { total: number; approved: number; refused: number; pending: number; other: number }
-      stats: {
-        totalUrls: number
-        resolved: number
-        scraped: number
-        relevant: number
-        analyzed: number
-        failed: number
-      }
+      stats: { totalUrls: number; resolved: number; scraped: number; relevant: number; analyzed: number; failed: number }
+      tableData: UrlEntry[]
       pipeline: PipelineData
       controlHref: string
     }
   } = $props()
 
-  type StageStatus = "completed" | "active" | "pending"
+  let selectedCommand = $state<PipelineCommand | null>(null)
+  let confirmValue = $state("")
 
   function humanizeCommand(command: string): string {
     return command.replaceAll("_", " ")
@@ -94,6 +128,23 @@
     if (status === "active") return "border-sky-400/20 bg-sky-500/10"
     return "border-terminal-border-subtle bg-terminal-bg-subtle"
   }
+
+  function openCommand(command: PipelineCommand): void {
+    selectedCommand = command
+    confirmValue = ""
+  }
+
+  function closeDialog(): void {
+    selectedCommand = null
+    confirmValue = ""
+  }
+
+  let canConfirm = $derived.by(() => {
+    if (!selectedCommand) return false
+    return confirmValue.trim().toLowerCase() === selectedCommand.name.toLowerCase()
+  })
+
+  let activeLock = $derived.by(() => Boolean(data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale))
 
   let stages = $derived.by(() => {
     const stats = data.stats
@@ -144,34 +195,25 @@
 </svelte:head>
 
 <div class="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
+  <!-- Header -->
   <section class="terminal-panel p-6 sm:p-8">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Admin</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-terminal-text sm:text-4xl">Status overview</h1>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-terminal-text sm:text-4xl">Pipeline overview</h1>
         <p class="mt-3 max-w-2xl text-sm leading-6 text-terminal-text-muted">
-          This page is for health and state. Control lives in the nested pipeline control page.
+          Status, control, and data table — all in one place.
         </p>
       </div>
 
       <div class="flex flex-wrap gap-3">
-        <a
-          href={data.controlHref}
-          class="terminal-action"
-        >
-          Open pipeline control
-        </a>
         <form method="post" action="?/logout">
-          <button
-            type="submit"
-            class="terminal-action"
-          >
-            Log out
-          </button>
+          <button type="submit" class="terminal-action">Log out</button>
         </form>
       </div>
     </div>
 
+    <!-- Stats cards -->
     <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
       <div class="terminal-card p-4">
         <div class="text-xs uppercase tracking-[0.25em] text-terminal-text/40">Total URLs</div>
@@ -199,6 +241,7 @@
       </div>
     </div>
 
+    <!-- Config chips -->
     <div class="mt-6 flex flex-wrap gap-3 text-sm text-terminal-text-muted">
       <span class="terminal-chip">Password {data.configured ? "configured" : "missing"}</span>
       <span class="terminal-chip">DB {data.dbExists ? "found" : "missing"}</span>
@@ -226,6 +269,7 @@
     {/if}
   </section>
 
+  <!-- Stage health + Environment -->
   <section class="grid gap-4 xl:grid-cols-[1.25fr_.75fr]">
     <div class="terminal-panel p-6">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -233,7 +277,7 @@
           <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Pipeline</p>
           <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">Stage health</h2>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-terminal-text-muted">
-            Heuristic status from the checked-in data. The point is to see what is alive, not to babysit buttons.
+            Heuristic status from the checked-in data.
           </p>
         </div>
 
@@ -270,7 +314,7 @@
     <div class="terminal-panel p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Environment</p>
       <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">Runtime checks</h2>
-      <p class="mt-3 text-sm leading-6 text-terminal-text-muted">If one of these is missing, the pipeline will be annoying in the usual ways.</p>
+      <p class="mt-3 text-sm leading-6 text-terminal-text-muted">If one is missing, the pipeline gets annoying.</p>
 
       <div class="mt-5 space-y-3 text-sm">
         {#each [
@@ -293,6 +337,7 @@
     </div>
   </section>
 
+  <!-- Current run + Recent runs -->
   <section class="grid gap-4 xl:grid-cols-[1fr_.9fr]">
     <div class="terminal-panel p-6">
       <div class="flex items-center justify-between gap-3">
@@ -333,9 +378,40 @@
         </dl>
       {:else}
         <div class="terminal-card mt-5 border-dashed p-4 text-sm text-terminal-text-muted">
-          No active run. Go to pipeline control if you need to start one.
+          No active run. Start a job below if you need to move the data forward.
         </div>
       {/if}
+
+      <!-- Log viewer -->
+      <div class="terminal-card mt-6 p-4">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 class="text-base font-semibold text-terminal-text">Log tail</h3>
+            <p class="mt-1 text-sm text-terminal-text-muted">The real subprocess output, not an invented summary.</p>
+          </div>
+          <span class="terminal-chip">
+            {data.pipeline.logViewer.run ? `#${data.pipeline.logViewer.run.id}` : "None"}
+          </span>
+        </div>
+
+        <div class="terminal-card mt-4 p-4">
+          {#if data.pipeline.logViewer.run}
+            <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-terminal-text-faint">
+              <span class="terminal-chip">{humanizeCommand(data.pipeline.logViewer.run.command)}</span>
+              <span class="terminal-chip">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
+              <span class="terminal-chip">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
+            </div>
+            <pre class="terminal-card max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-4 text-xs leading-6 text-terminal-text">{data.pipeline.logViewer.tail}</pre>
+            <div class="mt-3 text-xs text-terminal-text-faint" title={data.pipeline.logViewer.path ?? undefined}>
+              {data.pipeline.logViewer.path}
+            </div>
+          {:else}
+            <div class="terminal-card border-dashed p-4 text-sm text-terminal-text-muted">
+              No logs available yet.
+            </div>
+          {/if}
+        </div>
+      </div>
     </div>
 
     <div class="terminal-panel p-6">
@@ -379,5 +455,111 @@
         </div>
       {/if}
     </div>
+  </section>
+
+  <!-- Verified job runs -->
+  <section class="terminal-panel p-6">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Actions</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">Verified job runs</h2>
+        <p class="mt-3 max-w-2xl text-sm leading-6 text-terminal-text-muted">
+          Buttons open a verification dialog. The command name has to be typed before anything actually fires.
+        </p>
+      </div>
+      {#if data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale}
+        <div class="terminal-card border-amber-400/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-800 dark:text-amber-100">
+          Job running already. The buttons are disabled until the lock clears.
+        </div>
+      {/if}
+    </div>
+
+    {#if page.form?.message}
+      <div class="terminal-card mt-6 p-4 text-sm text-terminal-text-muted">
+        {page.form.message}
+      </div>
+    {/if}
+
+    <div class="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      {#each data.pipeline.commands as command}
+        <button
+          type="button"
+          onclick={() => openCommand(command)}
+          disabled={activeLock}
+          class="terminal-card terminal-card--interactive flex h-full w-full flex-col justify-between p-4 text-left disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <div>
+            <div class="text-base font-semibold text-terminal-text">{command.label}</div>
+            <div class="mt-2 text-sm leading-6 text-terminal-text-muted">{command.description}</div>
+          </div>
+          <div class="mt-4 text-xs uppercase tracking-[0.25em] text-terminal-text/35">{humanizeCommand(command.name)}</div>
+        </button>
+      {/each}
+    </div>
+  </section>
+
+  <!-- Confirmation dialog -->
+  {#if selectedCommand}
+    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Confirm run command"
+      onclick={closeDialog}
+    >
+      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+      <div
+        class="terminal-panel w-full max-w-md p-6 sm:p-8"
+        role="document"
+        onclick={(e) => e.stopPropagation()}
+      >
+        <h2 class="text-2xl font-semibold tracking-tight text-terminal-text">Run {selectedCommand.label}</h2>
+        <p class="mt-3 max-w-xl text-sm leading-6 text-terminal-text-muted">
+          {selectedCommand.description}
+        </p>
+
+        <p class="mt-6 text-sm text-terminal-text-muted">
+          Type <code class="rounded bg-terminal-bg-subtle px-1.5 py-0.5 font-mono text-terminal-text">{selectedCommand.name}</code> to confirm:
+        </p>
+
+        <input
+          type="text"
+          bind:value={confirmValue}
+          placeholder={selectedCommand.name}
+          class="mt-3 w-full rounded border border-terminal-border bg-terminal-bg px-3 py-2 font-mono text-sm text-terminal-text outline-none transition-colors focus:border-terminal-text/40"
+          onkeydown={(e) => {
+            if (e.key === "Enter" && canConfirm) {
+              e.preventDefault()
+              const form = e.currentTarget?.closest('div')?.querySelector('form')
+              form?.requestSubmit()
+            }
+          }}
+        />
+
+        <div class="mt-6 flex items-center justify-end gap-3">
+          <button onclick={closeDialog} class="terminal-action text-sm">Cancel</button>
+          <form method="post" action="?/run">
+            <input type="hidden" name="command" value={selectedCommand.name} />
+            <input type="hidden" name="confirm" value={confirmValue} />
+            <button
+              type="submit"
+              disabled={!canConfirm}
+              class="terminal-action disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Run
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  <!-- Content Table -->
+  <section class="terminal-panel p-6">
+    <ContentTable
+      data={data.tableData}
+      title="Pipeline Data"
+    />
   </section>
 </div>

@@ -153,11 +153,11 @@
   <!-- Smooth scroll wrapper — all page content translate3d'd inside -->
   <div id="smooth-scroll">
     {@render children()}
-
-    {#if !isHomepage}
-      <AppFooter />
-    {/if}
   </div>
+
+  {#if !isHomepage}
+    <AppFooter />
+  {/if}
 
   <!-- Custom scrollbar -->
   <Scrollbar progress={ss.progress} />

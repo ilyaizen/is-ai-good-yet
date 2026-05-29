@@ -135,8 +135,6 @@
       <div id="articles-table" class="scroll-mt-24">
         <ArticlesTable articles={data.topArticles} />
       </div>
-
-      <AppFooter />
     </section>
   </main>
 {/if}

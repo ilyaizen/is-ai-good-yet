@@ -57,6 +57,8 @@
 <style>
   .terminal-card {
     background: oklch(0.13 0.008 250 / 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;

@@ -155,9 +155,7 @@
     {@render children()}
   </div>
 
-  {#if !isHomepage}
-    <AppFooter />
-  {/if}
+  <AppFooter />
 
   <!-- Custom scrollbar -->
   <Scrollbar progress={ss.progress} />

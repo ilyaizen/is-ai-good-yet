@@ -50,19 +50,12 @@
 <style>
   .site-footer {
     border-top: 1px solid oklch(from var(--primary) l c h / 0.3);
-    background-color: oklch(from var(--card) l c h / 0.6);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
     margin-top: 4rem;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
     padding-left: calc(50vw - 50%);
     padding-right: calc(50vw - 50%);
     padding-bottom: 1.5rem;
-  }
-
-  :not(.dark) .site-footer {
-    background-color: oklch(from var(--card) l c h / 0.5);
   }
 
   .footer-inner {

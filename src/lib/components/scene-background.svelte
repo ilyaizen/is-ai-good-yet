@@ -538,7 +538,7 @@
       spotTarget.position.set(Math.sin(t * 0.18) * 3, Math.cos(t * 0.23) * 2, 0);
       spotTarget.updateMatrixWorld();
 
-      sphereRotationX = (sphereRotationX - scrollBus.delta * params.rotationGain) % (Math.PI * 2);
+      sphereRotationX = (sphereRotationX + scrollBus.delta * params.rotationGain) % (Math.PI * 2);
       if (sphereGroup) sphereGroup.rotation.x = sphereRotationX;
 
       pointerBus.tick(frameDelta, 2.5);

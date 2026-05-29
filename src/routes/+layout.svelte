@@ -8,6 +8,7 @@
   import AppHeader from "$lib/components/app-header.svelte"
   import AppFooter from "$lib/components/app-footer.svelte"
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
+  import VerdictVeil from "$lib/components/landing/verdict-veil.svelte"
   import { TooltipProvider } from "$lib/components/ui/tooltip"
   import { ModeWatcher } from "mode-watcher"
   import { onMount, setContext } from "svelte"
@@ -26,6 +27,27 @@
   // Loader visibility state
   let showLoader = $state(true)
 
+  // Verdict veil state — controlled by the homepage page via context
+  let veilVisible = $state(false)
+  let veilOnReveal: (() => void) | null = $state(null)
+  let veilArticleCount = $state(0)
+  let veilLastUpdateTimestamp = $state<number | null>(null)
+  let veilResetTrigger = $state(0)
+
+  function setVeilState(params: {
+    visible: boolean
+    onReveal: () => void
+    articleCount: number
+    lastUpdateTimestamp: number | null
+    resetTrigger: number
+  }) {
+    veilVisible = params.visible
+    veilOnReveal = params.onReveal
+    veilArticleCount = params.articleCount
+    veilLastUpdateTimestamp = params.lastUpdateTimestamp
+    veilResetTrigger = params.resetTrigger
+  }
+
   // Smooth scroll setup
   const ss = useSmoothScroll()
 
@@ -36,6 +58,9 @@
       scrolledPastVerdict = value
     },
   })
+
+  // Expose veil control for homepage
+  setContext("veilControl", { setVeilState })
 
   // Also expose the smooth scroll instance directly
   setContext("smoothScroll", ss)
@@ -66,7 +91,7 @@
 
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <title>Is AI “Good” Yet?</title>
+  <title>Is AI "Good" Yet?</title>
   <meta name="description" content="A survey website that analyzes Hacker News sentiment toward AI coding." />
   <meta name="keywords" content="AI coding assistants, developer sentiment, Hacker News analysis, is ai good yet" />
   <meta name="author" content="Ilya Aizenberg" />
@@ -74,16 +99,16 @@
   <link rel="canonical" href="https://www.is-ai-good-yet.com" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.is-ai-good-yet.com" />
-  <meta property="og:title" content="Is AI “Good” Yet?" />
+  <meta property="og:title" content="Is AI &ldquo;Good&rdquo; Yet?" />
   <meta property="og:description" content="A survey tracking developer sentiment on AI-assisted coding through HN posts." />
   <meta property="og:image" content="https://www.is-ai-good-yet.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="Is AI “Good” Yet?" />
+  <meta property="og:site_name" content="Is AI &ldquo;Good&rdquo; Yet?" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://www.is-ai-good-yet.com" />
-  <meta name="twitter:title" content="Is AI “Good” Yet?" />
+  <meta name="twitter:title" content="Is AI &ldquo;Good&rdquo; Yet?" />
   <meta name="twitter:description" content="A survey tracking developer sentiment on AI-assisted coding through HN posts." />
   <meta name="twitter:image" content="https://www.is-ai-good-yet.com/og-image.png" />
   <meta name="twitter:creator" content="@ilyaizen" />
@@ -109,6 +134,16 @@
     <AppHeader mode="animated" visible={scrolledPastVerdict} />
   {:else}
     <AppHeader mode="default" />
+  {/if}
+
+  <!-- Verdict Veil — rendered outside smooth-scroll so fixed positioning works -->
+  {#if veilVisible && isHomepage}
+    <VerdictVeil
+      onReveal={veilOnReveal ?? (() => {})}
+      articleCount={veilArticleCount}
+      lastUpdateTimestamp={veilLastUpdateTimestamp}
+      resetTrigger={veilResetTrigger}
+    />
   {/if}
 
   <!-- Smooth scroll wrapper — all page content translate3d'd inside -->

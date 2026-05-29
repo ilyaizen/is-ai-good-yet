@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PageData } from "./$types"
-  import VerdictVeil from "$lib/components/landing/verdict-veil.svelte"
   import VerdictDisplay from "$lib/components/landing/verdict-display.svelte"
   import ArticlesTable from "$lib/components/landing/articles-table.svelte"
   import AppFooter from "$lib/components/app-footer.svelte"
@@ -15,6 +14,17 @@
     scroll: number
     setScrolledPastVerdict: (value: boolean) => void
   }>("layoutScrollState")
+
+  // Get veil control from layout
+  const veilControl = getContext<{
+    setVeilState: (params: {
+      visible: boolean
+      onReveal: () => void
+      articleCount: number
+      lastUpdateTimestamp: number | null
+      resetTrigger: number
+    }) => void
+  }>("veilControl")
 
   // Local state
   let isLoading = $state(true)
@@ -75,10 +85,23 @@
       }
     })
   })
+
+  // Sync veil visibility state with layout
+  $effect(() => {
+    if (!isLoading) {
+      veilControl.setVeilState({
+        visible: !revealed,
+        onReveal: handleReveal,
+        articleCount: data.permanentRecord.totalArticles,
+        lastUpdateTimestamp: data.lastCatchUpTimestamp,
+        resetTrigger: veilResetTrigger,
+      })
+    }
+  })
 </script>
 
 <svelte:head>
-  <title>Is AI “Good” Yet?</title>
+  <title>Is AI "Good" Yet?</title>
   <meta
     name="description"
     content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts."
@@ -87,16 +110,6 @@
 
 <!-- Comprehensive Loader - shows during initial data fetch -->
 <ComprehensiveLoader visible={isLoading} />
-
-<!-- Veil overlay - covers everything until user reveals -->
-{#if !isLoading && !revealed}
-  <VerdictVeil
-    onReveal={handleReveal}
-    articleCount={data.permanentRecord.totalArticles}
-    lastUpdateTimestamp={data.lastCatchUpTimestamp}
-    resetTrigger={veilResetTrigger}
-  />
-{/if}
 
 {#if revealed}
   <main class="main-content">

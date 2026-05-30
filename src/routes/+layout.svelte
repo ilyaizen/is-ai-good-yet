@@ -19,6 +19,7 @@
   let { children } = $props()
 
   const isHomepage = $derived(page.url.pathname === "/")
+  const isV2 = $derived(page.url.pathname.startsWith("/v2"))
   const currentTheme = $derived(mode.current ?? "dark")
 
   let scrolledPastVerdict = $state(false)
@@ -58,28 +59,45 @@
   setContext("veilControl", { setVeilState })
   setContext("lenis", { getLenis })
 
+  // Toggle v2 class on body for CSS scoping (glass overrides, etc.)
+  // Runs reactively on route changes — onMount only runs once
+  $effect(() => {
+    if (isV2) {
+      document.body.classList.add("v2")
+    } else {
+      document.body.classList.remove("v2")
+    }
+    return () => document.body.classList.remove("v2")
+  })
+
   onMount(() => {
     setTimeout(() => { showLoader = false; }, 500)
 
-    const lenis = initLenis();
+    // Only init Lenis + scrollbar on v2 (smooth scroll route)
+    if (isV2) {
+      const lenis = initLenis();
 
-    lenis.on("scroll", ({ scroll, progress }: { scroll: number; progress: number }) => {
-      scrollY = scroll;
-      scrollProgress = progress;
-    })
+      lenis.on("scroll", ({ scroll, progress }: { scroll: number; progress: number }) => {
+        scrollY = scroll;
+        scrollProgress = progress;
+      })
+
+      injectSpeedInsights()
+      injectAnalytics()
+
+      return () => {
+        destroyLenis();
+      }
+    }
 
     injectSpeedInsights()
     injectAnalytics()
-
-    return () => {
-      destroyLenis();
-    }
   })
 </script>
 
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <title>Is AI "Good" Yet?</title>
+  <title>Is AI &ldquo;Good&rdquo; Yet?</title>
   <meta name="description" content="A survey website that analyzes Hacker News sentiment toward AI coding." />
   <meta name="keywords" content="AI coding assistants, developer sentiment, Hacker News analysis, is ai good yet" />
   <meta name="author" content="Ilya Aizenberg" />
@@ -107,26 +125,28 @@
 <TooltipProvider>
   <ComprehensiveLoader visible={showLoader} />
 
-  <!-- 3D Scene Background -->
-  <div class="bg-scene" aria-hidden="true">
-    <Canvas>
-      <SceneBackground
-        opacity={0.75}
-        maxFps={40}
-        maxDpr={1.25}
-        theme={currentTheme}
-      />
-    </Canvas>
-  </div>
+  <!-- 3D Scene Background — only on v2 -->
+  {#if isV2}
+    <div class="bg-scene" aria-hidden="true">
+      <Canvas>
+        <SceneBackground
+          opacity={0.75}
+          maxFps={40}
+          maxDpr={1.25}
+          theme={currentTheme}
+        />
+      </Canvas>
+    </div>
+  {/if}
 
-  {#if isHomepage}
+  {#if isV2}
     <AppHeader mode="animated" visible={scrolledPastVerdict} />
   {:else}
     <AppHeader mode="default" />
   {/if}
 
-  <!-- Verdict Veil -->
-  {#if veilVisible && isHomepage}
+  <!-- Verdict Veil — only on v2 -->
+  {#if veilVisible && isV2}
     <VerdictVeil
       onReveal={veilOnReveal ?? (() => {})}
       articleCount={veilArticleCount}
@@ -135,15 +155,19 @@
     />
   {/if}
 
-  <!-- Page content (Lenis auto-wraps body scroll) -->
+  <!-- Page content (Lenis auto-wraps body scroll on v2) -->
   {@render children()}
 
-  <!-- Custom scrollbar -->
-  <Scrollbar progress={scrollProgress} />
+  <!-- Custom scrollbar — only on v2 -->
+  {#if isV2}
+    <Scrollbar progress={scrollProgress} />
+  {/if}
 </TooltipProvider>
 
-<!-- Scanlines: scrolls with content, overlays everything including header -->
-<Scanlines />
+<!-- Scanlines: scrolls with content, overlays everything including header — only on v2 -->
+{#if isV2}
+  <Scanlines />
+{/if}
 
 <style>
   .bg-scene {

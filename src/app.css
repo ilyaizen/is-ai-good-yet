@@ -154,30 +154,33 @@
 }
 
 /* ============================================
-   Glass Override Layer
+   Glass Override Layer (v2 only)
    ============================================
    Overrides bg-card and site-footer to use
    semi-transparent backgrounds with backdrop-blur,
    so the threlte scene bleeds through.
    Applied AFTER Tailwind's @theme to win specificity.
+
+   Only active on v2 route (body.v2 class) where
+   the 3D background scene is rendered.
 */
 @layer utilities {
-  .bg-card,
-  .site-header,
-  .site-footer,
-  .terminal-panel,
-  .terminal-card,
-  .terminal-card--interactive {
+  body.v2 .bg-card,
+  body.v2 .site-header,
+  body.v2 .site-footer,
+  body.v2 .terminal-panel,
+  body.v2 .terminal-card,
+  body.v2 .terminal-card--interactive {
     background-color: oklch(from var(--card) l c h / 0.4) !important;
     -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
     backdrop-filter: blur(16px) saturate(1.4) !important;
   }
 
-  :not(.dark) .bg-card,
-  :not(.dark) .site-header,
-  :not(.dark) .site-footer,
-  :not(.dark) .terminal-panel,
-  :not(.dark) .terminal-card {
+  body.v2:not(.dark) .bg-card,
+  body.v2:not(.dark) .site-header,
+  body.v2:not(.dark) .site-footer,
+  body.v2:not(.dark) .terminal-panel,
+  body.v2:not(.dark) .terminal-card {
     background-color: oklch(from var(--card) l c h / 0.4) !important;
   }
 }

@@ -40,3 +40,5 @@ data.7z
 deployment-*.txt
 *-all-logs-*.txt
 package-lock.json
+/.playwright-mcp
+.dev-server.log

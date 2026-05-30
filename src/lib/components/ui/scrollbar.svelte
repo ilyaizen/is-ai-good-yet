@@ -1,7 +1,9 @@
 <script lang="ts">
   import { getLenis } from "$lib/scroll";
+  import { onMount } from "svelte";
 
   interface Props {
+    /** Scroll progress 0..1 (from Lenis). */
     progress: number;
   }
 
@@ -9,31 +11,51 @@
 
   let dragging = $state(false);
   let trackRef: HTMLDivElement | null = $state(null);
-  const THUMB_RATIO = 0.12;
+  // Thumb height as a fraction of the track = viewport / document height.
+  let thumbRatio = $state(0.15);
+
+  const MIN_THUMB = 0.06;
+
+  function measure() {
+    const docHeight = document.documentElement.scrollHeight;
+    const view = window.innerHeight;
+    thumbRatio =
+      docHeight > 0 ? Math.max(MIN_THUMB, Math.min(1, view / docHeight)) : 1;
+  }
+
+  onMount(() => {
+    measure();
+    window.addEventListener("resize", measure);
+    // Document height changes after load (lazy data, images) — keep thumb sized.
+    const ro = new ResizeObserver(measure);
+    ro.observe(document.documentElement);
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro.disconnect();
+    };
+  });
 
   function moveToPointer(e: PointerEvent) {
     if (!trackRef) return;
-    const rect = trackRef.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
     const lenis = getLenis();
     if (!lenis) return;
-    const docHeight = Math.max(
-      0,
-      document.documentElement.scrollHeight - window.innerHeight
-    );
-    lenis.scrollTo(ratio * docHeight);
+    const rect = trackRef.getBoundingClientRect();
+    // Map cursor to thumb-center travel so the thumb follows the pointer 1:1.
+    const usable = rect.height * (1 - thumbRatio);
+    const offset = e.clientY - rect.top - (rect.height * thumbRatio) / 2;
+    const ratio = usable > 0 ? Math.max(0, Math.min(1, offset / usable)) : 0;
+    const limit = document.documentElement.scrollHeight - window.innerHeight;
+    lenis.scrollTo(ratio * limit, { immediate: true });
   }
 
   function onPointerDown(e: PointerEvent) {
     dragging = true;
-    const target = e.currentTarget as HTMLElement;
-    target.setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     moveToPointer(e);
   }
 
   function onPointerMove(e: PointerEvent) {
-    if (!dragging) return;
-    moveToPointer(e);
+    if (dragging) moveToPointer(e);
   }
 
   function onPointerUp() {
@@ -42,9 +64,8 @@
 
   const thumbStyle = $derived(() => {
     const p = Math.max(0, Math.min(1, progress));
-    const travelRatio = p * (1 - THUMB_RATIO);
-    return `transform: translateY(${travelRatio * 100}%);
-            height: ${THUMB_RATIO * 100}%;`;
+    const travel = p * (1 - thumbRatio);
+    return `transform: translateY(${travel * 100}%); height: ${thumbRatio * 100}%;`;
   });
 </script>
 

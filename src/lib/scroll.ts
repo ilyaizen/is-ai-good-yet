@@ -1,11 +1,11 @@
 import Lenis from "@studio-freight/lenis";
-import { scrollDelta } from "$lib/composables/scrollStore";
+import { scrollPosition } from "$lib/composables/scrollStore";
 
 let lenis: Lenis | null = null;
 
 export function initLenis(): Lenis {
   lenis = new Lenis({
-    duration: 1.2,
+    duration: 0.9,
     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: "vertical" as const,
     gestureOrientation: "vertical" as const,
@@ -14,13 +14,10 @@ export function initLenis(): Lenis {
     touchMultiplier: 2,
   });
 
-  // Use Lenis's own scroll events to calculate delta.
-  // Single source of truth for scroll delta (DRY) — consumed by the 3D scene.
-  let prevScroll = 0;
+  // Publish absolute scroll position (DRY) — consumed by the 3D scene to drive
+  // rotation as a pure function of position, so drag jumps don't spin the scene.
   lenis.on("scroll", ({ scroll }: { scroll: number }) => {
-    const delta = scroll - prevScroll;
-    prevScroll = scroll;
-    scrollDelta.set(delta);
+    scrollPosition.set(scroll);
   });
 
   // Lenis 1.0.x has no autoRaf — must drive it manually or nothing scrolls.

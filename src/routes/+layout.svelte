@@ -14,7 +14,6 @@
   import { page } from "$app/state"
   import Scrollbar from "$lib/components/ui/scrollbar.svelte"
   import { initLenis, getLenis, destroyLenis } from "$lib/scroll"
-  import { scrollDelta } from "$lib/composables/scrollStore";
 
   let { children } = $props()
 
@@ -112,8 +111,8 @@
     <Canvas>
       <SceneBackground
         opacity={0.75}
-        maxFps={60}
-        maxDpr={1.5}
+        maxFps={40}
+        maxDpr={1.25}
         theme={currentTheme}
       />
     </Canvas>

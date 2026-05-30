@@ -8,7 +8,6 @@
  * Stays below header (z:50), veil (z:100), and dialog overlays.
  *
  * Scanlines: horizontal lines every --crt-scanline-size pixels.
- * RGB stripes: subtle vertical sub-pixel color fringing.
  * Vignette: slight darkening at the edges.
  */
 
@@ -16,7 +15,6 @@
   body {
     --crt-scanline-opacity: 0.04;
     --crt-scanline-size: 2px;
-    --crt-rgb-stripe-size: 3px;
     --crt-z-index: 10;
     --crt-vignette-opacity: 0.08;
     --crt-flicker-speed: 8s;
@@ -43,19 +41,11 @@
       linear-gradient(
         oklch(0 0 0 / 0) 50%,
         oklch(0 0 0 / var(--crt-scanline-opacity)) 50%
-      ),
-      /* Layer 3: RGB sub-pixel stripes — vertical color fringing */
-      linear-gradient(
-        90deg,
-        oklch(1 0.02 0 / 0.05),
-        oklch(0 0.02 120 / 0.02),
-        oklch(0 0.02 240 / 0.05)
       );
 
     background-size:
       100% 100%,                        /* vignette: cover entire viewport */
-      100% var(--crt-scanline-size),    /* scanlines: full width, 2px tall → horizontal */
-      var(--crt-rgb-stripe-size) 100%;  /* RGB: 3px wide, full height → vertical */
+      100% var(--crt-scanline-size);    /* scanlines: full width, 2px tall → horizontal */
   }
 
   @keyframes crt-flicker {
@@ -83,17 +73,10 @@
       linear-gradient(
         oklch(1 0 0 / 0) 50%,
         oklch(0.5 0 0 / calc(var(--crt-scanline-opacity) * 0.7)) 50%
-      ),
-      linear-gradient(
-        90deg,
-        oklch(0.5 0.01 0 / 0.03),
-        oklch(0.5 0.01 120 / 0.01),
-        oklch(0.5 0.01 240 / 0.03)
       );
 
     background-size:
       100% 100%,
-      100% var(--crt-scanline-size),
-      var(--crt-rgb-stripe-size) 100%;
+      100% var(--crt-scanline-size);
   }
 }

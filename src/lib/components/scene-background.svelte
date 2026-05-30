@@ -21,7 +21,7 @@
     type ThemeMode,
     type SceneBackgroundParams
   } from "$lib/scene-background/defaults";
-  import { scrollDelta } from "$lib/composables/scrollStore";
+  import { scrollPosition } from "$lib/composables/scrollStore";
   import { pointerBus } from "$lib/composables/pointer-bus.svelte";
   import { pageActivity } from "$lib/composables/page-activity.svelte";
 
@@ -538,8 +538,9 @@
       spotTarget.position.set(Math.sin(t * 0.18) * 3, Math.cos(t * 0.23) * 2, 0);
       spotTarget.updateMatrixWorld();
 
-      // Use Svelte store for delta updates instead of scrollBus
-  sphereRotationX = (sphereRotationX + $scrollDelta * params.rotationGain) % (Math.PI * 2);
+      // Rotation as a pure function of absolute scroll position (no delta
+      // accumulation) — drag jumps snap to target instead of spinning the scene.
+      sphereRotationX = ($scrollPosition * params.rotationGain) % (Math.PI * 2);
       if (sphereGroup) sphereGroup.rotation.x = sphereRotationX;
 
       pointerBus.tick(frameDelta, 2.5);

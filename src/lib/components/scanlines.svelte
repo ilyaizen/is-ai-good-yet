@@ -1,4 +1,31 @@
-<div class="scanlines" aria-hidden="true"></div>
+<script lang="ts">
+  import { onMount } from "svelte"
+
+  let el = $state<HTMLDivElement | null>(null)
+  let docHeight = $state("100vh")
+
+  function updateHeight() {
+    docHeight = `${document.documentElement.scrollHeight}px`
+  }
+
+  onMount(() => {
+    updateHeight()
+    const ro = new ResizeObserver(updateHeight)
+    ro.observe(document.body)
+    window.addEventListener("load", updateHeight)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("load", updateHeight)
+    }
+  })
+</script>
+
+<div
+  bind:this={el}
+  class="scanlines"
+  aria-hidden="true"
+  style="height: {docHeight};"
+></div>
 
 <style>
   .scanlines {
@@ -6,8 +33,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    z-index: 10;
+    z-index: 60;
     pointer-events: none;
 
     background-image: linear-gradient(

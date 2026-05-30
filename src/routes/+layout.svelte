@@ -140,10 +140,10 @@
 
   <!-- Custom scrollbar -->
   <Scrollbar progress={scrollProgress} />
-
-  <!-- Scrolling scanlines overlay -->
-  <Scanlines />
 </TooltipProvider>
+
+<!-- Scanlines: scrolls with content, overlays everything including header -->
+<Scanlines />
 
 <style>
   .bg-scene {

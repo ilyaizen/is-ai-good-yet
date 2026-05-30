@@ -14,6 +14,7 @@
   import { page } from "$app/state"
   import Scrollbar from "$lib/components/ui/scrollbar.svelte"
   import { initLenis, getLenis, destroyLenis } from "$lib/scroll"
+  import BackgroundEffects from "$lib/components/background-effects.svelte"
 
   let { children } = $props()
 
@@ -139,6 +140,9 @@
 
   <!-- Custom scrollbar -->
   <Scrollbar progress={scrollProgress} />
+
+  <!-- Background effects (CRT scanlines, grid, vignette) — above all content -->
+  <BackgroundEffects showCrt={true} />
 </TooltipProvider>
 
 <style>

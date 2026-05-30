@@ -5,13 +5,13 @@ let lenis: Lenis | null = null;
 
 export function initLenis(): Lenis {
   lenis = new Lenis({
-    duration: 0.9,
+    duration: 2.0,
     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: "vertical" as const,
     gestureOrientation: "vertical" as const,
     smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 2,
+    wheelMultiplier: 0.6,
+    touchMultiplier: 1.5,
   });
 
   // Publish absolute scroll position (DRY) — consumed by the 3D scene to drive

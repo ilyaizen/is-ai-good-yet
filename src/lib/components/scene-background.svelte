@@ -538,9 +538,9 @@
       spotTarget.position.set(Math.sin(t * 0.18) * 3, Math.cos(t * 0.23) * 2, 0);
       spotTarget.updateMatrixWorld();
 
-      // Rotation as a pure function of absolute scroll position (no delta
-      // accumulation) — drag jumps snap to target instead of spinning the scene.
-      sphereRotationX = ($scrollPosition * params.rotationGain) % (Math.PI * 2);
+      // Rotation from absolute scroll position, smoothed each frame to avoid jumps
+      const target = ($scrollPosition * params.rotationGain) % (Math.PI * 2);
+      sphereRotationX = lerp(sphereRotationX, target, 1 - Math.exp(-2.5 * frameDelta));
       if (sphereGroup) sphereGroup.rotation.x = sphereRotationX;
 
       pointerBus.tick(frameDelta, 2.5);

@@ -51,34 +51,19 @@
       localStorage.removeItem(STORAGE_KEY)
     }
     veilResetTrigger++
-    // Scroll to top natively
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0 })
     }
   }
 
-  onMount(() => {
-    if (typeof localStorage !== "undefined") {
-      const hasRevealed = localStorage.getItem(STORAGE_KEY)
-      if (hasRevealed === "true") {
-        revealed = true
-        contentVisible = true
-      }
+  // Scroll-driven header visibility — top-level $effect so Svelte tracks it properly
+  $effect(() => {
+    if (!revealed) {
+      layoutScrollState.setScrolledPastVerdict(false)
+      return
     }
-
-    setTimeout(() => {
-      isLoading = false
-    }, LOADER_FADE_DELAY_MS)
-
-    // Scroll-driven header visibility via layout context (works with native or Lenis scroll)
-    $effect(() => {
-      if (revealed) {
-        const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
-        layoutScrollState.setScrolledPastVerdict(scrolledPast)
-      } else {
-        layoutScrollState.setScrolledPastVerdict(false)
-      }
-    })
+    const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
+    layoutScrollState.setScrolledPastVerdict(scrolledPast)
   })
 
   // Sync veil visibility state with layout
@@ -92,6 +77,20 @@
         resetTrigger: veilResetTrigger,
       })
     }
+  })
+
+  onMount(() => {
+    if (typeof localStorage !== "undefined") {
+      const hasRevealed = localStorage.getItem(STORAGE_KEY)
+      if (hasRevealed === "true") {
+        revealed = true
+        contentVisible = true
+      }
+    }
+
+    setTimeout(() => {
+      isLoading = false
+    }, LOADER_FADE_DELAY_MS)
   })
 </script>
 

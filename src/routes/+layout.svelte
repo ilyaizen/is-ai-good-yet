@@ -18,7 +18,6 @@
 
   let { children } = $props()
 
-  const isHomepage = $derived(page.url.pathname === "/")
   const isV2 = $derived(page.url.pathname.startsWith("/v2"))
   const currentTheme = $derived(mode.current ?? "dark")
 
@@ -45,7 +44,6 @@
     veilResetTrigger = params.resetTrigger
   }
 
-  // Reactive scroll position — updated by Lenis event, consumed by +page.svelte $effect
   let scrollY = $state(0)
   let scrollProgress = $state(0)
 
@@ -59,8 +57,7 @@
   setContext("veilControl", { setVeilState })
   setContext("lenis", { getLenis })
 
-  // Toggle v2 class on body for CSS scoping (glass overrides, etc.)
-  // Runs reactively on route changes — onMount only runs once
+  // Toggle v2 class on body for CSS scoping (glass overrides only on v2)
   $effect(() => {
     if (isV2) {
       document.body.classList.add("v2")
@@ -73,25 +70,29 @@
   onMount(() => {
     setTimeout(() => { showLoader = false; }, 500)
 
-    // Only init Lenis + scrollbar on v2 (smooth scroll route)
     if (isV2) {
+      // v2: Lenis smooth scroll
       const lenis = initLenis();
-
       lenis.on("scroll", ({ scroll, progress }: { scroll: number; progress: number }) => {
         scrollY = scroll;
         scrollProgress = progress;
       })
-
       injectSpeedInsights()
       injectAnalytics()
-
-      return () => {
-        destroyLenis();
-      }
+      return () => { destroyLenis(); }
+    } else {
+      // v1: native scroll — bridge scroll position to $state for reactive consumers
+      const onScroll = () => {
+        scrollY = window.scrollY;
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        scrollProgress = scrollY / maxScroll;
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll(); // init
+      injectSpeedInsights()
+      injectAnalytics()
+      return () => { window.removeEventListener("scroll", onScroll); }
     }
-
-    injectSpeedInsights()
-    injectAnalytics()
   })
 </script>
 
@@ -139,14 +140,11 @@
     </div>
   {/if}
 
-  {#if isV2}
-    <AppHeader mode="animated" visible={scrolledPastVerdict} />
-  {:else}
-    <AppHeader mode="default" />
-  {/if}
+  <!-- Header: animated on homepage (hidden until scroll), default on other routes -->
+  <AppHeader mode="animated" visible={scrolledPastVerdict} />
 
-  <!-- Verdict Veil — only on v2 -->
-  {#if veilVisible && isV2}
+  <!-- Verdict Veil -->
+  {#if veilVisible}
     <VerdictVeil
       onReveal={veilOnReveal ?? (() => {})}
       articleCount={veilArticleCount}
@@ -155,7 +153,7 @@
     />
   {/if}
 
-  <!-- Page content (Lenis auto-wraps body scroll on v2) -->
+  <!-- Page content -->
   {@render children()}
 
   <!-- Custom scrollbar — only on v2 -->
@@ -164,10 +162,8 @@
   {/if}
 </TooltipProvider>
 
-<!-- Scanlines: scrolls with content, overlays everything including header — only on v2 -->
-{#if isV2}
-  <Scanlines />
-{/if}
+<!-- Scanlines -->
+<Scanlines />
 
 <style>
   .bg-scene {

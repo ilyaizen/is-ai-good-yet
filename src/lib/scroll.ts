@@ -14,13 +14,10 @@ export function initLenis(): Lenis {
     touchMultiplier: 1.5,
   });
 
-  // Publish absolute scroll position (DRY) — consumed by the 3D scene to drive
-  // rotation as a pure function of position, so drag jumps don't spin the scene.
   lenis.on("scroll", ({ scroll }: { scroll: number }) => {
     scrollPosition.set(scroll);
   });
 
-  // Lenis 1.0.x has no autoRaf — must drive it manually or nothing scrolls.
   function raf(time: number) {
     lenis?.raf(time);
     requestAnimationFrame(raf);
@@ -34,44 +31,62 @@ export function getLenis(): Lenis | null {
   return lenis;
 }
 
-/** Scroll to a pixel offset */
+/** Scroll to a pixel offset — Lenis if available, native fallback */
 export function scrollTo(y: number) {
-  if (!lenis) return;
-  lenis.scrollTo(y, { immediate: false });
+  if (lenis) {
+    lenis.scrollTo(y, { immediate: false });
+  } else {
+    window.scrollTo({ top: y });
+  }
 }
 
-/** Scroll to top */
+/** Scroll to top — Lenis if available, native fallback */
 export function scrollToTop(options: { onComplete?: () => void } = {}) {
-  if (!lenis) return;
-  lenis.scrollTo(0, { onComplete: options.onComplete });
+  if (lenis) {
+    lenis.scrollTo(0, { onComplete: options.onComplete });
+  } else {
+    window.scrollTo({ top: 0 });
+    options.onComplete?.();
+  }
 }
 
-/** Scroll to bottom */
-export function scrollToBottom(options: { onComplete?: () => void } = {}) {
-  if (!lenis || typeof document === "undefined") return;
-  const docHeight = Math.max(
-    document.body.scrollHeight,
-    document.documentElement.scrollHeight
-  );
-  lenis.scrollTo(docHeight - window.innerHeight, {
-    onComplete: options.onComplete,
-  });
+/** Scroll to bottom — Lenis if available, native fallback */
+export function scrollToBottom(options: { onComplete?: () => void; duration?: number } = {}) {
+  if (lenis) {
+    const docHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    lenis.scrollTo(docHeight - window.innerHeight, {
+      onComplete: options.onComplete,
+    });
+  } else {
+    const docHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    window.scrollTo({ top: docHeight - window.innerHeight });
+    options.onComplete?.();
+  }
 }
 
-/** Scroll to an element */
+/** Scroll to an element — Lenis if available, native fallback */
 export function scrollToElement(el: HTMLElement) {
-  if (!lenis) return;
-  lenis.scrollTo(el);
+  if (lenis) {
+    lenis.scrollTo(el);
+  } else {
+    el.scrollIntoView();
+  }
 }
 
-/** Scroll to an element by ID */
+/** Scroll to an element by ID — Lenis if available, native fallback */
 export function scrollToId(id: string) {
   if (typeof document === "undefined") return;
   const el = document.getElementById(id.replace(/^#/, ""));
   if (el) scrollToElement(el);
 }
 
-/** Anchor click handler */
+/** Anchor click handler — Lenis if available, native fallback */
 export function handleAnchorClick(e: MouseEvent, hash: string) {
   e.preventDefault();
   const id = hash.replace(/^#/, "");

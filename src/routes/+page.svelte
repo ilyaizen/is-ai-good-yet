@@ -4,15 +4,33 @@
   import ArticlesTable from "$lib/components/landing/articles-table.svelte"
   import AppFooter from "$lib/components/app-footer.svelte"
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
-  import { onMount } from "svelte"
+  import { onMount, getContext } from "svelte"
   import DetailsSection from "$lib/components/landing/details-section.svelte"
 
   let { data }: { data: PageData } = $props()
+
+  // Get context from layout to control header visibility
+  const layoutScrollState = getContext<{
+    scroll: number
+    setScrolledPastVerdict: (value: boolean) => void
+  }>("layoutScrollState")
+
+  // Get veil control from layout
+  const veilControl = getContext<{
+    setVeilState: (params: {
+      visible: boolean
+      onReveal: () => void
+      articleCount: number
+      lastUpdateTimestamp: number | null
+      resetTrigger: number
+    }) => void
+  }>("veilControl")
 
   // Local state
   let isLoading = $state(true)
   let revealed = $state(false)
   let contentVisible = $state(false)
+  let veilResetTrigger = $state(0)
   const LOADER_FADE_DELAY_MS = 100
   const STORAGE_KEY = "isAiGoodYetRevealed"
 
@@ -32,9 +50,10 @@
     if (typeof localStorage !== "undefined") {
       localStorage.removeItem(STORAGE_KEY)
     }
-    // Scroll to top on replay
+    veilResetTrigger++
+    // Scroll to top natively
     if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
+      window.scrollTo({ top: 0 })
     }
   }
 
@@ -50,6 +69,29 @@
     setTimeout(() => {
       isLoading = false
     }, LOADER_FADE_DELAY_MS)
+
+    // Scroll-driven header visibility via layout context (works with native or Lenis scroll)
+    $effect(() => {
+      if (revealed) {
+        const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
+        layoutScrollState.setScrolledPastVerdict(scrolledPast)
+      } else {
+        layoutScrollState.setScrolledPastVerdict(false)
+      }
+    })
+  })
+
+  // Sync veil visibility state with layout
+  $effect(() => {
+    if (!isLoading) {
+      veilControl.setVeilState({
+        visible: !revealed,
+        onReveal: handleReveal,
+        articleCount: data.permanentRecord.totalArticles,
+        lastUpdateTimestamp: data.lastCatchUpTimestamp,
+        resetTrigger: veilResetTrigger,
+      })
+    }
   })
 </script>
 
@@ -63,15 +105,6 @@
 
 <!-- Comprehensive Loader - shows during initial data fetch -->
 <ComprehensiveLoader visible={isLoading} />
-
-<!-- v1: No verdict veil. Reveal is instant. -->
-{#if !revealed && !isLoading}
-  <div class="verdict-veil" onclick={handleReveal} onkeydown={(e) => e.key === 'Enter' && handleReveal()} role="button" tabindex="0">
-    <div class="verdict-veil__content">
-      <p class="verdict-veil__prompt">Click to reveal the verdict</p>
-    </div>
-  </div>
-{/if}
 
 {#if revealed}
   <main class="main-content">
@@ -104,42 +137,14 @@
 {/if}
 
 <style>
-  .verdict-veil {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--background);
-    cursor: pointer;
-  }
-
-  .verdict-veil__content {
-    text-align: center;
-  }
-
-  .verdict-veil__prompt {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--foreground);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-  }
-
   .main-content {
     display: flex;
     flex-direction: column;
   }
 
-  /* Hero: Full viewport, centered verdict display */
   .verdict-hero {
     min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100dvh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -150,19 +155,16 @@
 
   .verdict-hero__container {
     width: 100%;
-    max-width: 48rem; /* max-w-2xl */
+    max-width: 48rem;
   }
 
-  /* Content Section: Fade + slide up animation */
   .content-section {
     padding-top: 2rem;
-    max-width: 56rem; /* max-w-4xl - slightly wider for articles table */
+    max-width: 56rem;
     margin: 0 auto;
     width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
-
-    /* Initial hidden state */
     opacity: 0;
     transform: translateY(24px);
     transition:
@@ -175,7 +177,6 @@
     transform: translateY(0);
   }
 
-  /* Responsive adjustments */
   @media (max-width: 768px) {
     .verdict-hero {
       min-height: calc(100vh - 4rem);

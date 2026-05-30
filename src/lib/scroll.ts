@@ -82,21 +82,23 @@ export function scrollToElement(el: HTMLElement) {
 /** Scroll to an element by ID — Lenis if available, native fallback */
 export function scrollToId(id: string) {
   if (typeof document === "undefined") return;
-  const el = document.getElementById(id.replace(/^#/, ""));
+  const hash = id.includes("#") ? id.slice(id.indexOf("#") + 1) : id;
+  const el = document.getElementById(hash.replace(/^#/, ""));
   if (el) scrollToElement(el);
 }
 
 /** Anchor click handler — Lenis if available, native fallback */
-export function handleAnchorClick(e: MouseEvent, hash: string) {
+export function handleAnchorClick(e: MouseEvent, href: string) {
+  if (typeof window === "undefined") return;
+
+  const target = new URL(href, window.location.href);
+  if (!target.hash) return;
+
+  const isSamePage = target.pathname === window.location.pathname;
+  if (!isSamePage) return;
+
   e.preventDefault();
-  const id = hash.replace(/^#/, "");
-
-  if (typeof window !== "undefined" && window.location.pathname !== "/") {
-    window.location.href = "/#" + id;
-    return;
-  }
-
-  scrollToId(id);
+  scrollToId(target.hash);
 }
 
 /** Destroy the Lenis instance */

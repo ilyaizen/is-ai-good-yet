@@ -33,9 +33,9 @@
           { href: "/admin/pipeline-control", label: "Control" },
         ]
       : [
-          { href: "/#home", label: "Home" },
-          { href: "/#details", label: "Details" },
-          { href: "/#articles-table", label: "Articles" },
+          { href: "#home", label: "Home" },
+          { href: "#details", label: "Details" },
+          { href: "#articles-table", label: "Articles" },
         ]
   )
 

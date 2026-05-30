@@ -59,12 +59,18 @@
 
   // Toggle v2 class on body for CSS scoping (glass overrides only on v2)
   $effect(() => {
+    const root = document.documentElement
     if (isV2) {
       document.body.classList.add("v2")
+      root.classList.add("scroll-locked")
     } else {
       document.body.classList.remove("v2")
+      root.classList.remove("scroll-locked")
     }
-    return () => document.body.classList.remove("v2")
+    return () => {
+      document.body.classList.remove("v2")
+      root.classList.remove("scroll-locked")
+    }
   })
 
   onMount(() => {
@@ -132,7 +138,7 @@
       <Canvas>
         <SceneBackground
           opacity={0.75}
-          maxFps={40}
+          maxFps={140}
           maxDpr={1.25}
           theme={currentTheme}
         />

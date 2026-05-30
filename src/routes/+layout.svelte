@@ -14,7 +14,7 @@
   import { page } from "$app/state"
   import Scrollbar from "$lib/components/ui/scrollbar.svelte"
   import { initLenis, getLenis, destroyLenis } from "$lib/scroll"
-  import { scrollBus } from "$lib/composables/scroll-bus.svelte"
+  import { scrollDelta } from "$lib/composables/scrollStore";
 
   let { children } = $props()
 

@@ -13,12 +13,13 @@ export function initLenis(): Lenis {
     touchMultiplier: 2,
   });
 
-  // RAF loop — Lenis drives itself
-  function raf(time: number) {
-    lenis!.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
+  // Use Lenis's own scroll events to calculate delta
+  let prevScroll = 0;
+  lenis.on("scroll", ({ scrollY }) => {
+    const delta = scrollY - prevScroll;
+    prevScroll = scrollY;
+    scrollDelta.set(delta);  // Use the scrollDelta store
+  });
 
   return lenis;
 }

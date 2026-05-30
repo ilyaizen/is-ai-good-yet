@@ -12,9 +12,9 @@
   import { ModeWatcher, mode } from "mode-watcher"
   import { onMount, setContext } from "svelte"
   import { page } from "$app/state"
-  import { useSmoothScroll } from "$lib/composables/use-smooth-scroll.svelte"
   import Scrollbar from "$lib/components/ui/scrollbar.svelte"
-  import { setSmoothScroll } from "$lib/scroll"
+  import { initLenis, getLenis, destroyLenis } from "$lib/scroll"
+  import { scrollBus } from "$lib/composables/scroll-bus.svelte"
 
   let { children } = $props()
 
@@ -50,12 +50,15 @@
     veilResetTrigger = params.resetTrigger
   }
 
-  // Smooth scroll setup
-  const ss = useSmoothScroll()
+  // Scroll progress (0–1) for the custom scrollbar
+  let scrollProgress = $state(0)
 
-  // Expose scroll state and setter for homepage to use
+  // Expose scroll state for homepage
   setContext("layoutScrollState", {
-    get scroll() { return ss.scroll; },
+    get scroll() {
+      const l = getLenis();
+      return l ? l.scroll : 0;
+    },
     setScrolledPastVerdict: (value: boolean) => {
       scrolledPastVerdict = value
     },
@@ -64,8 +67,8 @@
   // Expose veil control for homepage
   setContext("veilControl", { setVeilState })
 
-  // Also expose the smooth scroll instance directly
-  setContext("smoothScroll", ss)
+  // Expose Lenis instance
+  setContext("lenis", { getLenis })
 
   onMount(() => {
     // Hide loader after 0.5 seconds
@@ -73,20 +76,28 @@
       showLoader = false
     }, 500)
 
-    // Init smooth scroll
-    const cleanup = ss.init()
-    setSmoothScroll(ss)
+    // Init Lenis
+    const lenis = initLenis();
 
-    // Prevent native scroll — we handle it
-    document.documentElement.style.overflow = "hidden"
-    document.body.style.overflow = "hidden"
+    // Bridge Lenis scroll events to the scrollBus for SceneBackground
+    let lastScroll = 0;
+    lenis.on("scroll", ({ scroll, progress, velocity }: { scroll: number; progress: number; velocity: number }) => {
+      // Update scrollBus delta for SceneBackground sphere rotation
+      const delta = scroll - lastScroll;
+      lastScroll = scroll;
+      scrollBus.setDelta(delta);
+
+      // Update progress for scrollbar
+      scrollProgress = progress;
+    });
 
     // Inject Vercel analytics and speed insights
     injectSpeedInsights()
     injectAnalytics()
 
     return () => {
-      cleanup?.()
+      destroyLenis();
+      scrollBus.setDelta(0);
     }
   })
 </script>
@@ -139,7 +150,7 @@
     <AppHeader mode="default" />
   {/if}
 
-  <!-- Verdict Veil — rendered outside smooth-scroll so fixed positioning works -->
+  <!-- Verdict Veil — rendered outside Lenis wrapper so fixed positioning works -->
   {#if veilVisible && isHomepage}
     <VerdictVeil
       onReveal={veilOnReveal ?? (() => {})}
@@ -149,13 +160,11 @@
     />
   {/if}
 
-  <!-- Smooth scroll wrapper — all page content translate3d'd inside -->
-  <div id="smooth-scroll">
-    {@render children()}
-  </div>
+  <!-- Page content — Lenis wraps the body automatically -->
+  {@render children()}
 
   <!-- Custom scrollbar -->
-  <Scrollbar progress={ss.progress} />
+  <Scrollbar progress={scrollProgress} />
 </TooltipProvider>
 
 <style>
@@ -167,9 +176,5 @@
     height: 100%;
     z-index: -3;
     pointer-events: none;
-  }
-
-  #smooth-scroll {
-    will-change: transform;
   }
 </style>

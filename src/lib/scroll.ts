@@ -1,98 +1,86 @@
-/**
- * Custom easing function matching CSS: cubic-bezier(0, 0.7, 0.1, 1)
- */
-export const easeSwift = (x: number): number => {
-  if (x <= 0) return 0
-  if (x >= 1) return 1
-  let low = 0
-  let high = 1
-  let t = x
-  for (let i = 0; i < 15; i++) {
-    t = (low + high) / 2
-    const estimatedX = 0.3 * t * t + 0.7 * t * t * t
-    if (estimatedX < x) low = t
-    else high = t
+import Lenis from "@studio-freight/lenis";
+
+let lenis: Lenis | null = null;
+
+export function initLenis(): Lenis {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: "vertical" as const,
+    gestureOrientation: "vertical" as const,
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+  });
+
+  // RAF loop — Lenis drives itself
+  function raf(time: number) {
+    lenis!.raf(time);
+    requestAnimationFrame(raf);
   }
-  const t2 = t * t
-  return 0.1 * t2 * t - 1.2 * t2 + 2.1 * t
+  requestAnimationFrame(raf);
+
+  return lenis;
 }
 
-// Module-level reference to the smooth scroll instance,
-// set once by the layout during initialization.
-let smoothScrollInstance: { scrollTo: (y: number) => void; scroll: number } | null = null
-
-export function setSmoothScroll(instance: { scrollTo: (y: number) => void; scroll: number }) {
-  smoothScrollInstance = instance
+export function getLenis(): Lenis | null {
+  return lenis;
 }
 
-function getSs() {
-  if (!smoothScrollInstance) {
-    console.warn("[scroll] smooth scroll not initialized, using noop")
-    return { scrollTo: () => {}, scroll: 0 }
-  }
-  return smoothScrollInstance
+/** Scroll to a pixel offset */
+export function scrollTo(y: number) {
+  if (!lenis) return;
+  lenis.scrollTo(y, { immediate: false });
 }
 
-/**
- * Scroll to the top of the page with a smooth animation
- */
-export const scrollToTop = (options: { duration?: number; onComplete?: () => void } = {}) => {
-  const ss = getSs()
-  ss.scrollTo(0)
-  if (options.onComplete) requestAnimationFrame(options.onComplete)
+/** Scroll to top */
+export function scrollToTop(options: { onComplete?: () => void } = {}) {
+  if (!lenis) return;
+  lenis.scrollTo(0, { onComplete: options.onComplete });
 }
 
-/**
- * Scroll to the bottom of the page with a smooth animation
- */
-export const scrollToBottom = (options: { duration?: number; onComplete?: () => void } = {}) => {
-  if (typeof document === "undefined") return
+/** Scroll to bottom */
+export function scrollToBottom(options: { onComplete?: () => void } = {}) {
+  if (!lenis || typeof document === "undefined") return;
   const docHeight = Math.max(
     document.body.scrollHeight,
-    document.documentElement.scrollHeight,
-    document.body.offsetHeight,
-    document.documentElement.offsetHeight,
-    document.body.clientHeight,
-    document.documentElement.clientHeight
-  )
-  const target = docHeight - window.innerHeight
-  const ss = getSs()
-  ss.scrollTo(target)
-  if (options.onComplete) requestAnimationFrame(options.onComplete)
+    document.documentElement.scrollHeight
+  );
+  lenis.scrollTo(docHeight - window.innerHeight, {
+    onComplete: options.onComplete,
+  });
 }
 
-/**
- * Smooth scroll an element into view using the smooth scroll engine
- */
+/** Scroll to an element */
 export function scrollToElement(el: HTMLElement) {
-  if (typeof document === "undefined") return
-  const top = el.getBoundingClientRect().top
-  const ss = getSs()
-  ss.scrollTo(ss.scroll + top)
+  if (!lenis) return;
+  lenis.scrollTo(el);
 }
 
-/**
- * Scroll to an element by ID using the smooth scroll engine
- */
+/** Scroll to an element by ID */
 export function scrollToId(id: string) {
-  if (typeof document === "undefined") return
-  const el = document.getElementById(id.replace(/^#/, ""))
-  if (el) scrollToElement(el)
+  if (typeof document === "undefined") return;
+  const el = document.getElementById(id.replace(/^#/, ""));
+  if (el) scrollToElement(el);
 }
 
-/**
- * Click handler for anchor links — prevents native hash scroll, uses smooth scroll.
- * Usage: onclick={(e) => handleAnchorClick(e, "#details")}
- */
+/** Anchor click handler */
 export function handleAnchorClick(e: MouseEvent, hash: string) {
-  e.preventDefault()
-  const id = hash.replace(/^#/, "")
+  e.preventDefault();
+  const id = hash.replace(/^#/, "");
 
-  // If on a different page, navigate home first then scroll after mount
   if (typeof window !== "undefined" && window.location.pathname !== "/") {
-    window.location.href = "/#" + id
-    return
+    window.location.href = "/#" + id;
+    return;
   }
 
-  scrollToId(id)
+  scrollToId(id);
+}
+
+/** Destroy the Lenis instance */
+export function destroyLenis() {
+  if (lenis) {
+    lenis.destroy();
+    lenis = null;
+  }
 }

@@ -57,6 +57,7 @@
     "@fontsource/tiro-bangla": "^5.2.7",
     "@lucide/svelte": "^0.577.0",
     "@number-flow/svelte": "^0.4.0",
+    "@studio-freight/lenis": "^1.0.42",
     "@tanstack/table-core": "^8.21.3",
     "@threlte/core": "^8.5.16",
     "@threlte/extras": "^9.20.1",

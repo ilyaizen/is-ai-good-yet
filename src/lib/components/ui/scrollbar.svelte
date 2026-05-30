@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getSs } from "$lib/scroll";
+  import { getLenis } from "$lib/scroll";
 
   interface Props {
     progress: number;
@@ -15,11 +15,13 @@
     if (!trackRef) return;
     const rect = trackRef.getBoundingClientRect();
     const ratio = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
-    const ss = getSs();
-    const el = document.getElementById("smooth-scroll");
-    if (!el) return;
-    const maxScroll = Math.max(0, el.scrollHeight - window.innerHeight);
-    ss.scrollTo(ratio * maxScroll);
+    const lenis = getLenis();
+    if (!lenis) return;
+    const maxScroll = Math.max(
+      0,
+      document.body.scrollHeight - window.innerHeight
+    );
+    lenis.scrollTo(ratio * maxScroll, { immediate: false });
   }
 
   function onPointerDown(e: PointerEvent) {
@@ -48,12 +50,13 @@
   <div
     class="scrollbar-thumb"
     class:is-dragging={dragging}
-    role="scrollbar"
+    role="slider"
     tabindex="0"
     aria-orientation="vertical"
     aria-valuemin={0}
     aria-valuemax={100}
     aria-valuenow={Math.round(progress * 100)}
+    aria-label="Scroll position"
     onpointerdown={onPointerDown}
     onpointermove={onPointerMove}
     onpointerup={onPointerUp}

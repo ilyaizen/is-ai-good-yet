@@ -11,7 +11,7 @@ export const SPHERE_RADIUS = 36;
 export const SPHERE_DETAIL = 2;
 export const SPHERE_JITTER = 0.4;
 export const DISPLACEMENT_AMP_MAX = 7;
-export const RELAXATION_PASSES = 2;
+export const RELAXATION_PASSES = 1;
 
 export type MembraneNeighbor = {
   index: number;

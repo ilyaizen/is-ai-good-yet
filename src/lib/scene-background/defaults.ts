@@ -80,7 +80,7 @@ const DARK_DEFAULTS: VisualThemeDefaults = {
     displaceSpeed: 0.3,
     pulseAmp: 1,
     pulseSpeed: 0.5,
-    pulseCount: 4,
+    pulseCount: 3,
     pulseDriftSpeed: 1,
     pulseWidth: 5,
     pulseSharpness: 3,

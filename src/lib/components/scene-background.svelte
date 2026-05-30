@@ -52,6 +52,7 @@
   let vertexNeighbors: ReturnType<typeof createMembraneMeshData>["vertexNeighbors"];
   let vertexInfluence: Float32Array;
   let posAttr: THREE.BufferAttribute | THREE.InterleavedBufferAttribute;
+  let normalAttr: THREE.BufferAttribute | THREE.InterleavedBufferAttribute;
   let vertCount = 0;
   let baseHeight: Float32Array;
   let rawHeight: Float32Array;
@@ -73,6 +74,7 @@
     vertexNeighbors = geo.vertexNeighbors;
     vertexInfluence = geo.vertexInfluence;
     posAttr = membraneGeo.attributes.position as THREE.BufferAttribute;
+    normalAttr = membraneGeo.attributes.normal as THREE.BufferAttribute;
     vertCount = posAttr.count;
 
     baseHeight = new Float32Array(vertCount);
@@ -498,16 +500,20 @@
 
       relaxDisplacement(rawHeight, relaxedHeight, amp);
 
+      const nArr = normalAttr.array as Float32Array;
       for (let i = 0; i < vertCount; i++) {
         const r = RADIUS + relaxedHeight[i];
         baseHeight[i] = r;
         wArr[i * 3] = baseDirections[i * 3] * r;
         wArr[i * 3 + 1] = baseDirections[i * 3 + 1] * r;
         wArr[i * 3 + 2] = baseDirections[i * 3 + 2] * r;
+        nArr[i * 3] = baseDirections[i * 3];
+        nArr[i * 3 + 1] = baseDirections[i * 3 + 1];
+        nArr[i * 3 + 2] = baseDirections[i * 3 + 2];
       }
 
       posAttr.needsUpdate = true;
-      membraneGeo.computeVertexNormals();
+      normalAttr.needsUpdate = true;
 
       if (params.edgesVisible) {
         for (let e = 0; e < edgePairs.length; e++) {

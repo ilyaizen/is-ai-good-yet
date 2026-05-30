@@ -139,7 +139,7 @@
         <SceneBackground
           opacity={0.75}
           maxFps={140}
-          maxDpr={1.25}
+          maxDpr={1}
           theme={currentTheme}
         />
       </Canvas>

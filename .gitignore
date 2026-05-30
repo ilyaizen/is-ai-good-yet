@@ -39,3 +39,4 @@ data.7z
 # Coolify/exported deployment logs
 deployment-*.txt
 *-all-logs-*.txt
+package-lock.json

@@ -66,7 +66,6 @@
     lenis.on("scroll", ({ scroll, progress }: { scroll: number; progress: number }) => {
       scrollY = scroll;
       scrollProgress = progress;
-      scrollBus.setDelta(scroll);
     })
 
     injectSpeedInsights()
@@ -74,7 +73,6 @@
 
     return () => {
       destroyLenis();
-      scrollBus.setDelta(0);
     }
   })
 </script>

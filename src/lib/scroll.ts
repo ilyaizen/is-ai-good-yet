@@ -1,4 +1,5 @@
 import Lenis from "@studio-freight/lenis";
+import { scrollDelta } from "$lib/composables/scrollStore";
 
 let lenis: Lenis | null = null;
 
@@ -13,13 +14,21 @@ export function initLenis(): Lenis {
     touchMultiplier: 2,
   });
 
-  // Use Lenis's own scroll events to calculate delta
+  // Use Lenis's own scroll events to calculate delta.
+  // Single source of truth for scroll delta (DRY) — consumed by the 3D scene.
   let prevScroll = 0;
-  lenis.on("scroll", ({ scrollY }) => {
-    const delta = scrollY - prevScroll;
-    prevScroll = scrollY;
-    scrollDelta.set(delta);  // Use the scrollDelta store
+  lenis.on("scroll", ({ scroll }: { scroll: number }) => {
+    const delta = scroll - prevScroll;
+    prevScroll = scroll;
+    scrollDelta.set(delta);
   });
+
+  // Lenis 1.0.x has no autoRaf — must drive it manually or nothing scrolls.
+  function raf(time: number) {
+    lenis?.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
 
   return lenis;
 }

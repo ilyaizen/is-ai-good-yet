@@ -14,7 +14,7 @@
   import { page } from "$app/state"
   import Scrollbar from "$lib/components/ui/scrollbar.svelte"
   import { initLenis, getLenis, destroyLenis } from "$lib/scroll"
-  import CrtScanlines from "$lib/components/crt-scanlines.svelte"
+  import Scanlines from "$lib/components/scanlines.svelte"
 
   let { children } = $props()
 
@@ -141,8 +141,8 @@
   <!-- Custom scrollbar -->
   <Scrollbar progress={scrollProgress} />
 
-  <!-- CRT scrolling scanlines + vignette -->
-  <CrtScanlines show={true} />
+  <!-- Scrolling scanlines overlay -->
+  <Scanlines />
 </TooltipProvider>
 
 <style>

@@ -164,7 +164,10 @@
 @layer utilities {
   .bg-card,
   .site-header,
-  .site-footer {
+  .site-footer,
+  .terminal-panel,
+  .terminal-card,
+  .terminal-card--interactive {
     background-color: oklch(from var(--card) l c h / 0.4) !important;
     -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
     backdrop-filter: blur(16px) saturate(1.4) !important;
@@ -172,7 +175,9 @@
 
   :not(.dark) .bg-card,
   :not(.dark) .site-header,
-  :not(.dark) .site-footer {
+  :not(.dark) .site-footer,
+  :not(.dark) .terminal-panel,
+  :not(.dark) .terminal-card {
     background-color: oklch(from var(--card) l c h / 0.4) !important;
   }
 }

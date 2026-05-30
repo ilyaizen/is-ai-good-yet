@@ -17,16 +17,17 @@
     const ratio = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
     const lenis = getLenis();
     if (!lenis) return;
-    const maxScroll = Math.max(
+    const docHeight = Math.max(
       0,
-      document.body.scrollHeight - window.innerHeight
+      document.documentElement.scrollHeight - window.innerHeight
     );
-    lenis.scrollTo(ratio * maxScroll, { immediate: false });
+    lenis.scrollTo(ratio * docHeight);
   }
 
   function onPointerDown(e: PointerEvent) {
     dragging = true;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    const target = e.currentTarget as HTMLElement;
+    target.setPointerCapture(e.pointerId);
     moveToPointer(e);
   }
 
@@ -39,29 +40,33 @@
     dragging = false;
   }
 
-  const thumbTransform = $derived(() => {
+  const thumbStyle = $derived(() => {
     const p = Math.max(0, Math.min(1, progress));
-    return `transform: translateY(calc(${p * 100}% * (1 - ${THUMB_RATIO})));
+    const travelRatio = p * (1 - THUMB_RATIO);
+    return `transform: translateY(${travelRatio * 100}%);
             height: ${THUMB_RATIO * 100}%;`;
   });
 </script>
 
-<div class="scrollbar-track" bind:this={trackRef} onpointerdown={onPointerDown} role="presentation">
+<div
+  class="scrollbar-track"
+  bind:this={trackRef}
+  role="slider"
+  tabindex="0"
+  aria-label="Page scroll position"
+  aria-orientation="vertical"
+  aria-valuemin={0}
+  aria-valuemax={100}
+  aria-valuenow={Math.round(progress * 100)}
+  onpointerdown={onPointerDown}
+  onpointermove={onPointerMove}
+  onpointerup={onPointerUp}
+  onpointercancel={onPointerUp}
+>
   <div
     class="scrollbar-thumb"
     class:is-dragging={dragging}
-    role="slider"
-    tabindex="0"
-    aria-orientation="vertical"
-    aria-valuemin={0}
-    aria-valuemax={100}
-    aria-valuenow={Math.round(progress * 100)}
-    aria-label="Scroll position"
-    onpointerdown={onPointerDown}
-    onpointermove={onPointerMove}
-    onpointerup={onPointerUp}
-    onpointercancel={onPointerUp}
-    style={thumbTransform()}
+    style={thumbStyle()}
   ></div>
 </div>
 
@@ -88,9 +93,9 @@
     transition: opacity 0.15s ease, width 0.15s ease;
     cursor: grab;
     will-change: transform;
+    pointer-events: none;
   }
 
-  .scrollbar-thumb:hover,
   .scrollbar-thumb.is-dragging {
     opacity: 0.7;
     width: 8px;

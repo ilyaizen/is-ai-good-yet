@@ -18,18 +18,12 @@
 
   let { children } = $props()
 
-  // Homepage uses animated header mode
   const isHomepage = $derived(page.url.pathname === "/")
-
   const currentTheme = $derived(mode.current ?? "dark")
 
-  // Shared state for homepage scroll position (reactive for header visibility)
   let scrolledPastVerdict = $state(false)
-
-  // Loader visibility state
   let showLoader = $state(true)
 
-  // Verdict veil state — controlled by the homepage page via context
   let veilVisible = $state(false)
   let veilOnReveal: (() => void) | null = $state(null)
   let veilArticleCount = $state(0)
@@ -50,48 +44,31 @@
     veilResetTrigger = params.resetTrigger
   }
 
-  // Scroll progress (0–1) for the custom scrollbar
+  // Reactive scroll position — updated by Lenis event, consumed by +page.svelte $effect
+  let scrollY = $state(0)
   let scrollProgress = $state(0)
 
-  // Expose scroll state for homepage
   setContext("layoutScrollState", {
-    get scroll() {
-      const l = getLenis();
-      return l ? l.scroll : 0;
-    },
+    get scroll() { return scrollY; },
     setScrolledPastVerdict: (value: boolean) => {
       scrolledPastVerdict = value
     },
   })
 
-  // Expose veil control for homepage
   setContext("veilControl", { setVeilState })
-
-  // Expose Lenis instance
   setContext("lenis", { getLenis })
 
   onMount(() => {
-    // Hide loader after 0.5 seconds
-    setTimeout(() => {
-      showLoader = false
-    }, 500)
+    setTimeout(() => { showLoader = false; }, 500)
 
-    // Init Lenis
     const lenis = initLenis();
 
-    // Bridge Lenis scroll events to the scrollBus for SceneBackground
-    let lastScroll = 0;
-    lenis.on("scroll", ({ scroll, progress, velocity }: { scroll: number; progress: number; velocity: number }) => {
-      // Update scrollBus delta for SceneBackground sphere rotation
-      const delta = scroll - lastScroll;
-      lastScroll = scroll;
-      scrollBus.setDelta(delta);
-
-      // Update progress for scrollbar
+    lenis.on("scroll", ({ scroll, progress }: { scroll: number; progress: number }) => {
+      scrollY = scroll;
       scrollProgress = progress;
-    });
+      scrollBus.setDelta(scroll);
+    })
 
-    // Inject Vercel analytics and speed insights
     injectSpeedInsights()
     injectAnalytics()
 
@@ -150,7 +127,7 @@
     <AppHeader mode="default" />
   {/if}
 
-  <!-- Verdict Veil — rendered outside Lenis wrapper so fixed positioning works -->
+  <!-- Verdict Veil -->
   {#if veilVisible && isHomepage}
     <VerdictVeil
       onReveal={veilOnReveal ?? (() => {})}
@@ -160,7 +137,7 @@
     />
   {/if}
 
-  <!-- Page content — Lenis wraps the body automatically -->
+  <!-- Page content (Lenis auto-wraps body scroll) -->
   {@render children()}
 
   <!-- Custom scrollbar -->

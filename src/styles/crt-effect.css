@@ -1,14 +1,15 @@
 /**
  * CRT Scanline Overlay
  * ====================
- * Subtle CRT-style scanline effect applied via body::after.
+ * Subtle CRT-style scanline effect applied via body::before.
  * Inspired by classic terminal/monitor aesthetics.
  *
  * The overlay uses pointer-events: none so it never blocks clicks.
  * Stays below header (z:50), veil (z:100), and dialog overlays.
  *
- * To disable, remove the import from app.css or override:
- *   --crt-opacity: 0
+ * Scanlines: horizontal lines every --crt-scanline-size pixels.
+ * RGB stripes: subtle vertical sub-pixel color fringing.
+ * Vignette: slight darkening at the edges.
  */
 
 @layer base {
@@ -29,20 +30,21 @@
     z-index: var(--crt-z-index);
     pointer-events: none;
 
-    /* Scanlines: horizontal lines every Npx */
     background:
-      /* Vignette – subtle darkening at edges */
+      /* Layer 1: Vignette — subtle darkening at edges */
       radial-gradient(
         ellipse at center,
         oklch(0 0 0 / 0) 50%,
         oklch(0 0 0 / var(--crt-vignette-opacity)) 100%
       ),
-      /* Horizontal scanlines */
+      /* Layer 2: Horizontal scanlines — repeating 2px-tall bands.
+         Default gradient direction (to bottom) with 50/50 hard stop
+         creates a solid band; background-size controls repeat interval. */
       linear-gradient(
         oklch(0 0 0 / 0) 50%,
         oklch(0 0 0 / var(--crt-scanline-opacity)) 50%
       ),
-      /* Subtle RGB sub-pixel stripes (vertical) */
+      /* Layer 3: RGB sub-pixel stripes — vertical color fringing */
       linear-gradient(
         90deg,
         oklch(1 0.02 0 / 0.05),
@@ -51,12 +53,11 @@
       );
 
     background-size:
-      100% 100%,
-      100% var(--crt-scanline-size),
-      var(--crt-rgb-stripe-size) 100%;
+      100% 100%,                        /* vignette: cover entire viewport */
+      100% var(--crt-scanline-size),    /* scanlines: full width, 2px tall → horizontal */
+      var(--crt-rgb-stripe-size) 100%;  /* RGB: 3px wide, full height → vertical */
   }
 
-  /* Very subtle animated flicker */
   @keyframes crt-flicker {
     0%, 100% { opacity: 1; }
     3% { opacity: 0.97; }
@@ -71,7 +72,7 @@
     animation: crt-flicker var(--crt-flicker-speed) linear infinite;
   }
 
-  /* Light theme: invert scanline colors (light lines, not dark) */
+  /* Light theme: lighter, dimmer scanlines */
   :not(.dark) body::before {
     background:
       radial-gradient(
@@ -89,6 +90,7 @@
         oklch(0.5 0.01 120 / 0.01),
         oklch(0.5 0.01 240 / 0.03)
       );
+
     background-size:
       100% 100%,
       100% var(--crt-scanline-size),

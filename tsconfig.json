@@ -12,6 +12,7 @@
     "strict": true,
     "moduleResolution": "bundler"
   },
+  "files": ["cli.ts"],
   "exclude": ["node_modules", ".vercel", "static"]
   // Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
   // except $lib which is handled by https://svelte.dev/docs/kit/configuration#files

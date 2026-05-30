@@ -46,6 +46,9 @@ PYTHON_CMD = sys.executable
 # Pipeline directory
 PIPELINE_DIR = Path(__file__).resolve().parent.parent
 
+# Frontend data output dir (repo-root/src/lib/data/)
+FRONTEND_DATA_DIR = PIPELINE_DIR.parent / "src" / "lib" / "data"
+
 
 @dataclass
 class PhaseResult:
@@ -281,7 +284,7 @@ class InitialE2EPipeline:
         )
 
         # Phase 6: Export to Frontend
-        export_args = []
+        export_args = ["--output", str(FRONTEND_DATA_DIR)]
         if self.verbose:
             export_args.append("-v")
         phases.append(

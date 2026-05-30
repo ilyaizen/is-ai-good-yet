@@ -48728,5 +48728,177 @@
         "timestamp": "2026-05-20T00:41:03.437571+00:00"
       }
     }
+  },
+  "48289950": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with Claude Code, sharing personal takeaways and setup"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1940,
+        "output_tokens": 42,
+        "total_tokens": 1982,
+        "inference_time_ms": 1390.6,
+        "tokens_per_second": 30.2,
+        "prompt_chars": 3967,
+        "timestamp": "2026-05-30T18:01:39.966572+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Claude Code boosts workflow with verifiable loops, but requires deep setup and discipline.",
+        "quotes": [
+          "Boris pegs this single move at a 2-3x quality bump.",
+          "Run 3-5 sessions in parallel. Worktrees beat checkouts."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-30T18:02:00.420610+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2665,
+        "output_tokens": 118,
+        "total_tokens": 2783,
+        "inference_time_ms": 371.5,
+        "tokens_per_second": 317.6,
+        "prompt_chars": 7981,
+        "timestamp": "2026-05-30T18:02:00.420626+00:00"
+      }
+    }
+  },
+  "48276152": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with AI code review, provides workflow comparison and lessons learned"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1850,
+        "output_tokens": 44,
+        "total_tokens": 1894,
+        "inference_time_ms": 590.1,
+        "tokens_per_second": 74.6,
+        "prompt_chars": 3975,
+        "timestamp": "2026-05-30T18:01:44.521795+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI orchestration boosts review speed and accuracy but still needs human oversight, making it a valuable, not magical, workflow enhancer.",
+        "quotes": [
+          "\"They launch up to seven specialised reviewers… and posts a single structured review comment.\"",
+          "\"We’re glad you asked! … the reviewer doesn’t beat around the bush and calls out problems when it sees them.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-30T18:02:03.851794+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2754,
+        "output_tokens": 170,
+        "total_tokens": 2924,
+        "inference_time_ms": 351.7,
+        "tokens_per_second": 483.4,
+        "prompt_chars": 7969,
+        "timestamp": "2026-05-30T18:02:03.851806+00:00"
+      }
+    }
+  },
+  "48272984": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with AI coding, providing a specific skill and its effectiveness"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1996,
+        "output_tokens": 44,
+        "total_tokens": 2040,
+        "inference_time_ms": 414.7,
+        "tokens_per_second": 106.1,
+        "prompt_chars": 3994,
+        "timestamp": "2026-05-30T18:01:37.154599+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI finds bugs but slows work; quality wins over speed, yet no productivity boost.",
+        "quotes": [
+          "I’ve found this is true of non‑Mythos models – some may be better than others at finding subtle bugs…",
+          "When I use this technique, I haven’t necessarily seen my velocity go up…"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-30T18:01:58.549026+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2957,
+        "output_tokens": 184,
+        "total_tokens": 3141,
+        "inference_time_ms": 422.6,
+        "tokens_per_second": 435.4,
+        "prompt_chars": 7979,
+        "timestamp": "2026-05-30T18:01:58.549044+00:00"
+      }
+    }
+  },
+  "48270265": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with multiple AI coding tools, comparing their effectiveness and providing a verdict."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1940,
+        "output_tokens": 46,
+        "total_tokens": 1986,
+        "inference_time_ms": 348.3,
+        "tokens_per_second": 132.1,
+        "prompt_chars": 3963,
+        "timestamp": "2026-05-30T18:01:51.492870+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Java wins for robustness but the author sticks with TypeScript for future MCPB support, showing a pragmatic trade‑off.",
+        "quotes": [
+          "Java is the winner for supporting zip files and XML in its runtime with no issues.",
+          "I used AI to port the code from Java to TypeScript. It only took 1.5 days to do."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-05-30T18:02:06.794565+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2585,
+        "output_tokens": 163,
+        "total_tokens": 2748,
+        "inference_time_ms": 372.7,
+        "tokens_per_second": 437.3,
+        "prompt_chars": 7583,
+        "timestamp": "2026-05-30T18:02:06.794578+00:00"
+      }
+    }
   }
 }

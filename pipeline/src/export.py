@@ -32,8 +32,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Default output path (is-ai-good-yet/src/lib/data/)
-DEFAULT_OUTPUT_PATH = Path(__file__).parent.parent.parent / "is-ai-good-yet" / "src" / "lib" / "data"
+# Default output path (repo-root/src/lib/data/)
+DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent.parent.parent / "src" / "lib" / "data"
 
 # Verdict window (matches frontend constants)
 VERDICT_WINDOW_MONTHS = 12

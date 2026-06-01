@@ -183,4 +183,16 @@
   body.v2:not(.dark) .terminal-card {
     background-color: oklch(from var(--card) l c h / 0.4) !important;
   }
+
+  body.lab-transition {
+    background:
+      radial-gradient(circle at top left, rgb(34 211 238 / 0.12), transparent 42%),
+      radial-gradient(circle at bottom right, rgb(16 185 129 / 0.08), transparent 35%),
+      var(--background);
+  }
+
+  body.lab-transition .site-header,
+  body.lab-transition .site-footer {
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
 }

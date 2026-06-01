@@ -29,6 +29,7 @@
           { href: "/#home", label: "Home" },
           { href: "/#details", label: "Details" },
           { href: "/#articles-table", label: "Articles" },
+          { href: "/lab/threejs-page-transition", label: "Lab" },
           { href: "/admin", label: "Admin" },
           { href: "/admin/pipeline-control", label: "Control" },
         ]
@@ -36,6 +37,7 @@
           { href: "#home", label: "Home" },
           { href: "#details", label: "Details" },
           { href: "#articles-table", label: "Articles" },
+          { href: "/lab/threejs-page-transition", label: "Lab" },
         ]
   )
 

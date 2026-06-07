@@ -65,9 +65,7 @@
     position: relative;
   }
 
-  :not(.dark) .terminal-card {
-    background: oklch(0.98 0.003 250 / 0.85);
-  }
+  /* Light mode already gets the default card surface from the base .terminal-card rule. */
 
   .terminal-header {
     background: rgba(255, 255, 255, 0.03);

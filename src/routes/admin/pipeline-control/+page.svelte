@@ -4,7 +4,7 @@
   import { onMount } from "svelte"
 
   onMount(() => {
-    const runParam = $page.url.searchParams.get("run")
+    const runParam = page.url.searchParams.get("run")
     const target = runParam ? `/admin?run=${runParam}` : "/admin"
     goto(target, { replaceState: true })
   })

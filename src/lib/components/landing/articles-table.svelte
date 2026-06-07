@@ -192,6 +192,19 @@
     return (Math.abs(getContribution(article)) / maxAbsContribution) * 100
   }
 
+  function getScoreVisualStyle(article: InfluentialArticle): string {
+    const contribution = Math.abs(getContribution(article))
+    // Gentle scaling: low scores stay small/dim, high scores get a bit larger/brighter.
+    // Clamp the range so the effect stays subtle instead of loud.
+    const normalized = Math.min(1, contribution / Math.max(100, maxAbsContribution))
+    // Ease-out curve so the change is less mechanical around the middle.
+    const eased = 1 - Math.pow(1 - normalized, 1.7)
+    const fontSizeRem = 0.86 + eased * 0.24
+    const opacity = 0.6 + eased * 0.4
+    const brightness = 0.84 + eased * 0.16
+    return `font-size: ${fontSizeRem.toFixed(3)}rem; opacity: ${opacity.toFixed(3)}; filter: brightness(${brightness.toFixed(3)});`
+  }
+
   function getSentimentColor(label: "positive" | "negative" | "neutral"): string {
     switch (label) {
       case "positive":
@@ -426,13 +439,11 @@
             >
               <div class="flex flex-col gap-0.5">
                 <div class="flex items-center gap-2 justify-between">
-                  <a
-                    href="#"
-                    role="button"
-                    class="text-foreground no-underline flex items-center gap-1 overflow-hidden font-bold font-mono text-left flex-1 min-w-0 cursor-pointer group-hover:text-accent group-hover:underline"
+                  <button
+                    type="button"
+                    class="text-foreground no-underline flex items-center gap-1 overflow-hidden font-bold font-mono text-left flex-1 min-w-0 cursor-pointer bg-transparent border-0 p-0 group-hover:text-accent group-hover:underline"
                     title={`Show details: ${article.hn_title}`}
                     onclick={(e: MouseEvent) => {
-                      e.preventDefault()
                       e.stopPropagation()
                       openArticleSheet(article.hn_id)
                     }}
@@ -443,7 +454,7 @@
                         <ChevronRight class="w-4 h-4 text-accent" />
                       {/snippet}
                     </HoverIcon>
-                  </a>
+                  </button>
                   <div class="inline-flex items-center gap-2 shrink-0 max-[480px]:text-[0.65rem]">
                     <LinkWithHoverIcon
                       href={article.url}
@@ -493,8 +504,8 @@
             >
               <div class="flex flex-col justify-center items-center gap-px leading-none">
                 <span
-                  class="font-bold text-base font-mono tracking-tight leading-none block"
-                  style="color: {sentimentColor}"
+                  class="font-bold text-base font-mono tracking-tight leading-none block transition-[filter,opacity,font-size] duration-200 ease-out"
+                  style="color: {sentimentColor}; {getScoreVisualStyle(article)}"
                 >
                   {formatSentimentProduct(getContribution(article))}
                 </span>

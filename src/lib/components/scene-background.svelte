@@ -46,7 +46,7 @@
 
   const params: SceneBackgroundParams = untrack(() => getDefaultSceneBackgroundParams(theme));
 
-  let membraneGeo: THREE.BufferGeometry;
+  let membraneGeo = $state<THREE.BufferGeometry>();
   let baseDirections: Float32Array;
   let edgePairs: Array<[number, number]>;
   let vertexNeighbors: ReturnType<typeof createMembraneMeshData>["vertexNeighbors"];
@@ -400,7 +400,7 @@
     edgeMat.dispose();
     backdropGeo.dispose();
     backdropMat.dispose();
-    membraneGeo.dispose();
+    membraneGeo!.dispose();
     _pointTexture?.dispose();
   });
 

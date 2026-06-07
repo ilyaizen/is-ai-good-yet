@@ -48,7 +48,7 @@
     "bump-version": "node scripts/bump-version.mjs"
   },
   "devDependencies": {
-    "@clack/prompts": "^1.5.0",
+    "@clack/prompts": "^1.5.1",
     "@sveltejs/adapter-node": "^5.5.4",
     "@sveltejs/kit": "^2.61.1",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",

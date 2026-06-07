@@ -500,20 +500,18 @@
 
   <!-- Confirmation dialog -->
   {#if selectedCommand}
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Confirm run command"
-      onclick={closeDialog}
+      class="fixed inset-0 z-50"
+      aria-hidden="true"
     >
-      <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions a11y_no_noninteractive_element_interactions -->
-      <div
-        class="terminal-panel w-full max-w-md p-6 sm:p-8"
-        role="document"
-        onclick={(e) => e.stopPropagation()}
-      >
+      <button
+        type="button"
+        class="absolute inset-0 h-full w-full border-0 bg-black/60 p-0"
+        aria-label="Close confirmation dialog"
+        onclick={closeDialog}
+      ></button>
+      <div class="relative z-10 flex h-full items-center justify-center p-4">
+        <div class="terminal-panel w-full max-w-md p-6 sm:p-8" role="document">
         <h2 class="text-2xl font-semibold tracking-tight text-terminal-text">Run {selectedCommand.label}</h2>
         <p class="mt-3 max-w-xl text-sm leading-6 text-terminal-text-muted">
           {selectedCommand.description}
@@ -551,6 +549,7 @@
             </button>
           </form>
         </div>
+      </div>
       </div>
     </div>
   {/if}

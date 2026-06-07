@@ -120,14 +120,14 @@
       </div>
     </section>
 
-    <!-- Content Section: Articles Table & Footer -->
+    <!-- Content Section: Articles, Details & Footer -->
     <section id="articles" class="content-section" class:content-section--visible={contentVisible}>
-      <div id="details" class="scroll-mt-24">
-        <DetailsSection visible={contentVisible} />
-      </div>
-
       <div id="articles-table" class="scroll-mt-24">
         <ArticlesTable articles={data.topArticles} />
+      </div>
+
+      <div id="details" class="scroll-mt-24">
+        <DetailsSection visible={contentVisible} />
       </div>
 
       <AppFooter />

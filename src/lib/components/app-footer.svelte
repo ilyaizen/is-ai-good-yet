@@ -19,10 +19,10 @@
 
       <nav class="footer-links" aria-label="Footer navigation">
         <div class="footer-links-group">
-          <span class="footer-links-label">Navigate</span>
+          <span class="footer-links-label">Sections</span>
           <a href="#home" onclick={(e) => handleAnchorClick(e, "#home")}>Home</a>
-          <a href="#details" onclick={(e) => handleAnchorClick(e, "#details")}>Details</a>
           <a href="#articles-table" onclick={(e) => handleAnchorClick(e, "#articles-table")}>Articles</a>
+          <a href="#details" onclick={(e) => handleAnchorClick(e, "#details")}>Details</a>
         </div>
         <div class="footer-links-group">
           <span class="footer-links-label">links</span>

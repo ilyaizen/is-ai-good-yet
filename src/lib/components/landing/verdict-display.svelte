@@ -31,7 +31,7 @@
   let entering = $state(true)
   let hoveredSnapshot = $state<WeeklySnapshot | null>(null)
 
-  // Typing animation state for "Answer:" label
+  // Typing animation state for "Articles:" label
   let typedLabel = $state("")
   let labelTypingComplete = $state(false)
   // Stutter animation for content blocks
@@ -68,7 +68,7 @@
   let replayButtonHovered = $state(false)
   let replayButtonRef = $state<HTMLButtonElement | null>(null)
 
-  const LABEL_TEXT = "Answer:"
+  const LABEL_TEXT = "Articles:"
   const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
   // Description text for token streaming
@@ -165,7 +165,7 @@
   // Derived state
   const isHoveringHistory = $derived(hoveredSnapshot !== null)
 
-  // Track if user is interacting with ANY button except the Details button's simulated focus
+  // Track if user is interacting with ANY button except the Articles button's simulated focus
   const anyOtherButtonInteracted = $derived(
     historyButtonHovered ||
       historyButtonFocused ||
@@ -362,7 +362,7 @@
     class:scale-105={shouldScaleUp && !exiting}
     class:pointer-events-none={exiting}
     onmouseenter={handlePanelEnter}
-    aria-label="Verdict details"
+    aria-label="Articles"
   >
     <!-- Header Title (Left-Top) -->
     <div class="flex items-center gap-1 absolute z-10 transition-opacity duration-300 -ml-2">
@@ -604,7 +604,7 @@
         <!-- Action Buttons -->
         <div class="flex gap-2 sm:gap-3 flex-col sm:flex-row w-full">
           <AnimatedButton
-            label="Details"
+            label="Articles"
             onclick={scrollToArticles}
             class="flex-1 sm:flex-initial"
             bind:hovered={moreInfoButtonHovered}

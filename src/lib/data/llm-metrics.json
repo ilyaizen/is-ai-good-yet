@@ -48900,5 +48900,265 @@
         "timestamp": "2026-05-30T18:02:06.794578+00:00"
       }
     }
+  },
+  "48431981": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with AI tool usage and workflow changes"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1870,
+        "output_tokens": 39,
+        "total_tokens": 1909,
+        "inference_time_ms": 373.1,
+        "tokens_per_second": 104.5,
+        "prompt_chars": 3969,
+        "timestamp": "2026-06-08T04:36:39.985834+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI-driven design prototyping is a game‑changer, enabling instant, real‑time iteration and reducing friction between design and engineering.",
+        "quotes": [
+          "I find myself building prototype features that just do the exact thing I have in mind.",
+          "Claude gave me free, unlimited iteration, unbothered when I changed my mind for the 50th time or asked for a small tweak."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:36:57.458094+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2179,
+        "output_tokens": 172,
+        "total_tokens": 2351,
+        "inference_time_ms": 381.0,
+        "tokens_per_second": 451.4,
+        "prompt_chars": 6145,
+        "timestamp": "2026-06-08T04:36:57.458109+00:00"
+      }
+    }
+  },
+  "48416264": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with leveraging Codex in an agent-first world, highlighting successes and challenges."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1832,
+        "output_tokens": 47,
+        "total_tokens": 1879,
+        "inference_time_ms": 232.6,
+        "tokens_per_second": 202.0,
+        "prompt_chars": 3976,
+        "timestamp": "2026-06-08T04:36:39.496999+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Codex agents dramatically speed development but require careful environment design and ongoing human oversight to maintain quality.",
+        "quotes": [
+          "We estimate that we built this in about 1/10th the time it would have taken to write the code by hand.",
+          "The primary job of our engineering team became enabling the agents to do useful work."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:36:56.971887+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2434,
+        "output_tokens": 168,
+        "total_tokens": 2602,
+        "inference_time_ms": 360.1,
+        "tokens_per_second": 466.6,
+        "prompt_chars": 7971,
+        "timestamp": "2026-06-08T04:36:56.971903+00:00"
+      }
+    }
+  },
+  "48398925": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on AI agent limitations in test-driven development"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1918,
+        "output_tokens": 43,
+        "total_tokens": 1961,
+        "inference_time_ms": 334.9,
+        "tokens_per_second": 128.4,
+        "prompt_chars": 3990,
+        "timestamp": "2026-06-08T04:36:40.429905+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "AI agents need coaching to write useful tests; guidance works, but perfection remains elusive.",
+        "quotes": [
+          "AI agents tend to be, at least as of this writing, lousy at writing tests.",
+          "With a bit of guidance, agents are capable of following a rational TDD process and of writing clear, meaningful tests."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:36:57.915377+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1856,
+        "output_tokens": 187,
+        "total_tokens": 2043,
+        "inference_time_ms": 346.0,
+        "tokens_per_second": 540.5,
+        "prompt_chars": 4469,
+        "timestamp": "2026-06-08T04:36:57.915391+00:00"
+      }
+    }
+  },
+  "48379203": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI tool and critiques coding practices"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1940,
+        "output_tokens": 40,
+        "total_tokens": 1980,
+        "inference_time_ms": 324.7,
+        "tokens_per_second": 123.2,
+        "prompt_chars": 3970,
+        "timestamp": "2026-06-08T04:36:41.459201+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI-generated code is sloppy, unmaintainable, and token‑hungry—destroying quality and trust in production systems.",
+        "quotes": [
+          "\"Clean code is a fucking museum piece.\"",
+          "\"Burns $1,007,484 of tokens an hour on purpose.\"",
+          "\"Your thoughtful fix sits in a queue behind a PR titled fix: typo (added an emoji).\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:36:58.935532+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2123,
+        "output_tokens": 245,
+        "total_tokens": 2368,
+        "inference_time_ms": 481.9,
+        "tokens_per_second": 508.4,
+        "prompt_chars": 5476,
+        "timestamp": "2026-06-08T04:36:58.935546+00:00"
+      }
+    }
+  },
+  "48434342": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with Claude Code, evaluating its effectiveness and affordability."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2091,
+        "output_tokens": 42,
+        "total_tokens": 2133,
+        "inference_time_ms": 354.4,
+        "tokens_per_second": 118.5,
+        "prompt_chars": 3994,
+        "timestamp": "2026-06-08T04:36:50.622857+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "Claude coding adds overhead and cost, not a net productivity win.",
+        "quotes": [
+          "\"I have increased my number of checkins just to be able to backtrack if Claude Code has gotten lost.\"",
+          "\"It doesn’t look like LLM‑coding is going to be affordable (let alone for “AI to build itself”)\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:37:04.707648+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2971,
+        "output_tokens": 186,
+        "total_tokens": 3157,
+        "inference_time_ms": 572.2,
+        "tokens_per_second": 325.1,
+        "prompt_chars": 7975,
+        "timestamp": "2026-06-08T04:37:04.707670+00:00"
+      }
+    }
+  },
+  "48372547": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author presents personal experience and opinion on search as code generation, with clear findings on AI coding effectiveness."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1788,
+        "output_tokens": 48,
+        "total_tokens": 1836,
+        "inference_time_ms": 335.7,
+        "tokens_per_second": 143.0,
+        "prompt_chars": 3977,
+        "timestamp": "2026-06-08T04:36:48.739627+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "SaC delivers game‑changing performance gains and cost advantages for knowledge‑intensive agents.",
+        "quotes": [
+          "'Across the board, SaC provides a substantial boost in performance'",
+          "'The low reasoning setting is cheaper than all other systems while performing better than two of them.'"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T04:37:02.872468+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2416,
+        "output_tokens": 149,
+        "total_tokens": 2565,
+        "inference_time_ms": 1338.4,
+        "tokens_per_second": 111.3,
+        "prompt_chars": 7971,
+        "timestamp": "2026-06-08T04:37:02.872487+00:00"
+      }
+    }
   }
 }

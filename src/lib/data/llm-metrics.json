@@ -43491,6 +43491,49 @@
       }
     }
   },
+  "46746681": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with AI coding tools, evaluating their effectiveness and usability."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1877,
+        "output_tokens": 43,
+        "total_tokens": 1920,
+        "inference_time_ms": 464.3,
+        "tokens_per_second": 92.6,
+        "prompt_chars": 3968,
+        "timestamp": "2026-06-08T13:44:05.705619+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Tool mix feels chaotic; Vibe Kanban shows promise but still buggy, overall verdict: no clear win yet.",
+        "quotes": [
+          "\"Vibe Kanban runs AI coding agents with --dangerously-skip-permissions / --yolo by default...\"",
+          "\"Vibe Kanban is slick and easy to use, feels the most professional of the bunch and I might spend some more time with it as a potential Agor substitute.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T13:44:17.847672+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2537,
+        "output_tokens": 204,
+        "total_tokens": 2741,
+        "inference_time_ms": 491.8,
+        "tokens_per_second": 414.8,
+        "prompt_chars": 7812,
+        "timestamp": "2026-06-08T13:44:17.847687+00:00"
+      }
+    }
+  },
   "46738853": {
     "prefilter": {
       "response": {
@@ -44036,6 +44079,49 @@
         ],
         "model": "manual-override",
         "timestamp": "2026-01-30T11:49:18.787633+00:00"
+      }
+    }
+  },
+  "46814115": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and lessons learned building an in-house AI data agent"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1838,
+        "output_tokens": 43,
+        "total_tokens": 1881,
+        "inference_time_ms": 439.2,
+        "tokens_per_second": 97.9,
+        "prompt_chars": 3975,
+        "timestamp": "2026-06-08T15:43:47.696742+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "The in‑house data agent boosts speed and reliability, but needs careful tuning and evaluation to maintain trust.",
+        "quotes": [
+          "After rollout, we observed that users frequently ran the same analyses for routine repetitive work.",
+          "Agent security… It exposes its reasoning process by summarizing assumptions and execution steps alongside each answer."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-08T15:43:58.242780+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2449,
+        "output_tokens": 200,
+        "total_tokens": 2649,
+        "inference_time_ms": 997.8,
+        "tokens_per_second": 200.4,
+        "prompt_chars": 7974,
+        "timestamp": "2026-06-08T15:43:58.242813+00:00"
       }
     }
   },

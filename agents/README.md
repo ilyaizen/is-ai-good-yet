@@ -11,6 +11,7 @@ Internal repo docs for working this codebase from the box.
 - target/current checkout: `/srv/apps/is-ai-good-yet`
 - old temporary migration checkout: `/tmp/is-ai-good-yet-public` (history only)
 - vault mirror: `HyperVault/Projects/is-ai-good-yet/`
+- Hermes persona source of truth: `~/.hermes/SOUL.md`; vault copy is a plain markdown mirror, not a symlink
 
 Repo-local docs win. Vault copies are mirrors and long-term notes, not the source of truth for executable workflow.
 

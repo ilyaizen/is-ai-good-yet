@@ -70,6 +70,14 @@ is-ai-good-yet/
 └── package.json
 ```
 
+### Hermes soul sync
+
+- Live source of truth: `~/.hermes/SOUL.md`
+- Repo-local explanation: `docs_internal/hermes-soul-sync.md`
+- Vault copy under `HyperVault/Projects/is-ai-good-yet/` is a plain markdown mirror, not a symlink
+- Do **not** rely on rclone/Google Drive to preserve symlink semantics
+- If the persona note changes, restart the Hermes gateway or start a fresh session before expecting the new voice to apply
+
 ## 🚢 Deployment
 
 - **Coolify should deploy the repo root**, not the Python pipeline directory.

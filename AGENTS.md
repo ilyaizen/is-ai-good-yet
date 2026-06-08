@@ -23,7 +23,7 @@ Repository guidance for AI agents working on `is-ai-good-yet`.
 - Production deploy uses `@sveltejs/adapter-node`.
 - Pipeline code stays in `pipeline/` and uses the repo-root `.venv` with Python 3.11.
 - Do not preserve or print secrets. Replace credentials with `[REDACTED]`.
-- Update repo-local docs first, then mirror to HyperVault.
+- Update repo-local docs first, then mirror durable notes to HyperVault as plain markdown mirrors. Do not symlink repo docs into the vault or depend on the rclone mount preserving symlink targets.
 
 ## Verification
 

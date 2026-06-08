@@ -20,6 +20,7 @@ Read `agents/claude-code.md` first. It is the operational spec for Claude Code o
 1. Read `AGENTS.md`.
 2. Read the relevant file in `agents/`.
 3. Read the relevant project doc in `docs_internal/`.
-4. Check git status.
+4. If the change touches the Hermes persona note, remember that `~/.hermes/SOUL.md` is the live source of truth and the vault copy is only a mirrored note.
+5. Check git status.
 
 Do not copy stale Bun-era, nested-frontend, Vercel/static-only, Mistral-current, or Windows-only assumptions into new work unless current code proves them.

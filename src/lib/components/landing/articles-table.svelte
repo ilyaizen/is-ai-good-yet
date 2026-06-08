@@ -456,6 +456,7 @@
                     </HoverIcon>
                   </button>
                   <div class="inline-flex items-center gap-2 shrink-0 max-[480px]:text-[0.65rem]">
+                  {#if article.url && article.url !== "#"}
                     <LinkWithHoverIcon
                       href={article.url}
                       title="Open original article"
@@ -469,6 +470,7 @@
                         <ExternalLink class="size-3" />
                       {/snippet}
                     </LinkWithHoverIcon>
+                  {/if}
                     <LinkWithHoverIcon
                       href={`https://news.ycombinator.com/item?id=${article.hn_id}`}
                       onclick={(e: MouseEvent) => e.stopPropagation()}

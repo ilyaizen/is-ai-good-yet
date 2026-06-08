@@ -46,7 +46,7 @@
 
   const params: SceneBackgroundParams = untrack(() => getDefaultSceneBackgroundParams(theme));
 
-  let membraneGeo = $state<THREE.BufferGeometry>();
+  let membraneGeo = $state<THREE.BufferGeometry | undefined>(undefined);
   let baseDirections: Float32Array;
   let edgePairs: Array<[number, number]>;
   let vertexNeighbors: ReturnType<typeof createMembraneMeshData>["vertexNeighbors"];

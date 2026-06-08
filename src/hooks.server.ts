@@ -25,12 +25,10 @@ const convex = publicEnv.PUBLIC_CONVEX_URL ? new ConvexHttpClient(publicEnv.PUBL
  * @returns SHA-256 hash of (IP + salt)
  */
 function hashIP(ip: string): string {
-  // Normalize localhost IPs in development
-  // ::1 = IPv6 localhost, 127.0.0.1 = IPv4 localhost
   const normalizedIP = ip === "::1" || ip === "127.0.0.1" ? "localhost-dev" : ip
 
   if (!privateEnv.VISITOR_IP_SALT) {
-    throw new Error("VISITOR_IP_SALT is not configured")
+    return ""
   }
 
   return createHash("sha256").update(`${normalizedIP}:${privateEnv.VISITOR_IP_SALT}`).digest("hex")
@@ -104,6 +102,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
       // Hash IP for privacy (GDPR-friendly)
       const ipHash = hashIP(clientIP)
+      if (!ipHash) return resolve(event)
 
       // Record visit to Convex asynchronously
       // Fire-and-forget: doesn't block page rendering
@@ -114,17 +113,12 @@ export const handle: Handle = async ({ event, resolve }) => {
         })
       }
 
-      // Set session cookie to prevent duplicate counts
-      // Cookie expires in 24 hours - same visitor coming back later will be counted again
-      // httpOnly prevents JavaScript access (security best practice)
-      // sameSite: strict prevents CSRF attacks
-      // secure: true in production (HTTPS only)
       event.cookies.set("visitor_session", "1", {
-        path: "/", // Cookie available on all routes
-        maxAge: 60 * 60 * 24, // 24 hours in seconds
-        httpOnly: true, // Prevent JavaScript access
-        sameSite: "strict", // Prevent CSRF attacks
-        secure: process.env.NODE_ENV === "production", // HTTPS only in production
+        path: "/",
+        maxAge: 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
       })
     } catch (error) {
       // Silently fail - don't break site if visitor tracking fails

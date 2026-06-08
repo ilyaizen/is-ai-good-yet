@@ -31,7 +31,7 @@
   let entering = $state(true)
   let hoveredSnapshot = $state<WeeklySnapshot | null>(null)
 
-  // Typing animation state for "Articles:" label
+  // Typing animation state for "Answer:" label
   let typedLabel = $state("")
   let labelTypingComplete = $state(false)
   // Stutter animation for content blocks
@@ -68,7 +68,7 @@
   let replayButtonHovered = $state(false)
   let replayButtonRef = $state<HTMLButtonElement | null>(null)
 
-  const LABEL_TEXT = "Articles:"
+  const LABEL_TEXT = "Answer:"
   const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
   // Description text for token streaming

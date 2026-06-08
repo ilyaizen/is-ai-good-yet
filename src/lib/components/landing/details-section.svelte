@@ -92,7 +92,7 @@
   // Typing animation state
   let typedLabel = $state("")
   let labelTypingComplete = $state(false)
-  const LABEL_TEXT = "Articles:"
+  const LABEL_TEXT = "Details:"
 
   function scrollToArticles() {
     const el = document.getElementById("articles-table")

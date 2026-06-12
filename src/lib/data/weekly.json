@@ -2193,8 +2193,22 @@
     "positiveCount": 307,
     "neutralCount": 125,
     "negativeCount": 208,
-    "positiveContribution": 41934.81,
-    "negativeContribution": -25390.99,
+    "positiveContribution": 41940.25,
+    "negativeContribution": -25391.21,
     "neutralContribution": -5639.44
+  },
+  {
+    "week": "2026-W24",
+    "weekStart": "2026-06-08",
+    "verdictScore": 63.12,
+    "verdict": "YES",
+    "articleCount": 629,
+    "rawSentiment": 0,
+    "positiveCount": 303,
+    "neutralCount": 125,
+    "negativeCount": 201,
+    "positiveContribution": 41663.56,
+    "negativeContribution": -24347.75,
+    "neutralContribution": -5689.62
   }
 ]

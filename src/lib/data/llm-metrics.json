@@ -49246,5 +49246,262 @@
         "timestamp": "2026-06-08T04:37:02.872487+00:00"
       }
     }
+  },
+  "48458586": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience of cleaning up after AI rockstar developers, providing insights and lessons learned."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1896,
+        "output_tokens": 47,
+        "total_tokens": 1943,
+        "inference_time_ms": 311.0,
+        "tokens_per_second": 151.1,
+        "prompt_chars": 3967,
+        "timestamp": "2026-06-12T18:02:26.119809+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI can inflate technical debt; careful, guided use is needed to keep code maintainable.",
+        "quotes": [
+          "\"The AI has a toolbox of best practices that probably don't apply here.\"",
+          "\"If you find yourself lost, unable to understand what the LLM is doing or why, tap the brakes.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:40.529526+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1970,
+        "output_tokens": 223,
+        "total_tokens": 2193,
+        "inference_time_ms": 466.3,
+        "tokens_per_second": 478.2,
+        "prompt_chars": 5143,
+        "timestamp": "2026-06-12T18:02:40.529540+00:00"
+      }
+    }
+  },
+  "48496483": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on LLM-generated designs"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1476,
+        "output_tokens": 40,
+        "total_tokens": 1516,
+        "inference_time_ms": 242.7,
+        "tokens_per_second": 164.8,
+        "prompt_chars": 1928,
+        "timestamp": "2026-06-12T18:02:32.999451+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "LLMs default to bland Tailwind templates, eroding product credibility and user trust.",
+        "quotes": [
+          "Prompting an LLM to \"make a stylish homepage for my product\" is not a good idea.",
+          "The same \"look and feel\" has become an indicator of a slop product."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:48.995247+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1328,
+        "output_tokens": 197,
+        "total_tokens": 1525,
+        "inference_time_ms": 414.7,
+        "tokens_per_second": 475.0,
+        "prompt_chars": 1918,
+        "timestamp": "2026-06-12T18:02:48.995261+00:00"
+      }
+    }
+  },
+  "48489402": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and critical evaluation of AI adoption in software development."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1940,
+        "output_tokens": 42,
+        "total_tokens": 1982,
+        "inference_time_ms": 283.0,
+        "tokens_per_second": 148.4,
+        "prompt_chars": 3978,
+        "timestamp": "2026-06-12T18:02:27.132774+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "AI tools are useful but current metrics are vanity; real gains need outcome focus.",
+        "quotes": [
+          "I think every engineer should be using AI daily. Call it AI‑first, AI‑proficient, whatever you like.",
+          "If your selection evidence is a vanity metric, your selection is a lottery wearing lipstick."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:42.455650+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2659,
+        "output_tokens": 143,
+        "total_tokens": 2802,
+        "inference_time_ms": 1833.5,
+        "tokens_per_second": 78.0,
+        "prompt_chars": 7971,
+        "timestamp": "2026-06-12T18:02:42.455667+00:00"
+      }
+    }
+  },
+  "48492210": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Research with clear findings about AI coding effectiveness, citing specific results and limitations."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1890,
+        "output_tokens": 43,
+        "total_tokens": 1933,
+        "inference_time_ms": 473.7,
+        "tokens_per_second": 90.8,
+        "prompt_chars": 3975,
+        "timestamp": "2026-06-12T18:02:27.703735+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Fable 5 shows significant shortcomings—timeouts, cheating, low security pass—making it unreliable for production.",
+        "quotes": [
+          "\"Fable 5 with Claude Code landed mid‑table on our leaderboard: 59.8% FuncPass and just 19.0% SecPass.\", \"We confirmed cheating on 38 of 200 instances, the highest volume recorded …\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:43.611930+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2579,
+        "output_tokens": 224,
+        "total_tokens": 2803,
+        "inference_time_ms": 729.0,
+        "tokens_per_second": 307.3,
+        "prompt_chars": 7975,
+        "timestamp": "2026-06-12T18:02:43.611943+00:00"
+      }
+    }
+  },
+  "48466812": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience and reasoning behind rewriting Git in Rust with agents"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1934,
+        "output_tokens": 42,
+        "total_tokens": 1976,
+        "inference_time_ms": 355.7,
+        "tokens_per_second": 118.1,
+        "prompt_chars": 4000,
+        "timestamp": "2026-06-12T18:02:30.268997+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Agents can rewrite complex systems, but directed guidance is essential; results are promising yet still buggy.",
+        "quotes": [
+          "\"…I did mark some parts of the testing suite as \"skipped\" because I don't…\"",
+          "\"I feel like I got the best, fastest gains when I directed the agents to work the way I would have.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:47.977837+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2630,
+        "output_tokens": 248,
+        "total_tokens": 2878,
+        "inference_time_ms": 713.3,
+        "tokens_per_second": 347.7,
+        "prompt_chars": 7973,
+        "timestamp": "2026-06-12T18:02:47.977853+00:00"
+      }
+    }
+  },
+  "48451723": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Research with clear findings about AI coding effectiveness: benchmark for code quality and mergeability"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1860,
+        "output_tokens": 45,
+        "total_tokens": 1905,
+        "inference_time_ms": 276.2,
+        "tokens_per_second": 162.9,
+        "prompt_chars": 3990,
+        "timestamp": "2026-06-12T18:02:28.983914+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "FrontierCode reveals current models fall far short of production mergeability, indicating limited real‑world usefulness today.",
+        "quotes": [
+          "\"We find that even today’s most capable models struggle on this new standard.\"",
+          "\"FrontierCode is the benchmark for the next generation of coding agents.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-12T18:02:45.448254+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2538,
+        "output_tokens": 150,
+        "total_tokens": 2688,
+        "inference_time_ms": 429.2,
+        "tokens_per_second": 349.5,
+        "prompt_chars": 7969,
+        "timestamp": "2026-06-12T18:02:45.448270+00:00"
+      }
+    }
   }
 }

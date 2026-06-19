@@ -49503,5 +49503,219 @@
         "timestamp": "2026-06-12T18:02:45.448270+00:00"
       }
     }
+  },
+  "48518969": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with AI coding at home, discussing costs and strategies."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1462,
+        "output_tokens": 43,
+        "total_tokens": 1505,
+        "inference_time_ms": 209.0,
+        "tokens_per_second": 205.7,
+        "prompt_chars": 1988,
+        "timestamp": "2026-06-19T03:18:28.183675+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Blend paid and open-source APIs is practical, but hardware risks and token limits temper enthusiasm.",
+        "quotes": [
+          "“What I’ve seen work best is a blend of the last two.”",
+          "“The hardware you buy today may look like a bad bet in a year.”"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-19T03:18:45.040042+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1318,
+        "output_tokens": 204,
+        "total_tokens": 1522,
+        "inference_time_ms": 437.6,
+        "tokens_per_second": 466.1,
+        "prompt_chars": 1988,
+        "timestamp": "2026-06-19T03:18:45.040057+00:00"
+      }
+    }
+  },
+  "48576824": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and empirical findings about LLM performance in a video game"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2067,
+        "output_tokens": 44,
+        "total_tokens": 2111,
+        "inference_time_ms": 276.8,
+        "tokens_per_second": 159.0,
+        "prompt_chars": 3969,
+        "timestamp": "2026-06-19T03:18:28.577011+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Grok 4.1 Fast dominates wins and cost per win, proving it’s a practical, high‑value choice for real‑world AI‑driven gaming workloads.",
+        "quotes": [
+          "Grok 4.1 Fast won 13 of 30 games at $0.97 per win, a 27x cost‑per‑win advantage over Claude Sonnet 4.6",
+          "The cheapest model in the lineup beat the most expensive one by 27x on cost per win"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-19T03:18:45.720120+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2987,
+        "output_tokens": 279,
+        "total_tokens": 3266,
+        "inference_time_ms": 575.9,
+        "tokens_per_second": 484.5,
+        "prompt_chars": 7969,
+        "timestamp": "2026-06-19T03:18:45.720135+00:00"
+      }
+    }
+  },
+  "48507020": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and comparative evaluation of AI coding agents"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2387,
+        "output_tokens": 40,
+        "total_tokens": 2427,
+        "inference_time_ms": 391.9,
+        "tokens_per_second": 102.1,
+        "prompt_chars": 4015,
+        "timestamp": "2026-06-19T03:18:27.503826+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "MTP draft model boosts Gemma 4 speed, making local coding agent practical but still requires tweaking.",
+        "quotes": [
+          "The main conclusion was that the MTP draft model is worth using. On this machine it took Gemma 4 from 58.2 tokens/second to 72.2 tokens/second",
+          "The useful part is that prompt processing stayed basically the same, while generation improved by about 24%."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-19T03:18:44.173020+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 3579,
+        "output_tokens": 174,
+        "total_tokens": 3753,
+        "inference_time_ms": 521.9,
+        "tokens_per_second": 333.4,
+        "prompt_chars": 7955,
+        "timestamp": "2026-06-19T03:18:44.173037+00:00"
+      }
+    }
+  },
+  "48571851": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author shares personal experience building AI code reviewer and discusses limitations of static code review"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1858,
+        "output_tokens": 44,
+        "total_tokens": 1902,
+        "inference_time_ms": 366.0,
+        "tokens_per_second": 120.2,
+        "prompt_chars": 3971,
+        "timestamp": "2026-06-19T03:18:37.413279+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "TREX effectively surfaces runtime bugs, proving its value as a robust, model‑agnostic code‑reviewer, though it isn’t a magic cure.",
+        "quotes": [
+          "\"TREX ... is Greptile's response to that ceiling: an execution layer built directly into code review.\",\"We intentionally deprioritize latency in our evaluation. A developer waiting on a review would rather wait a little longer and get something accurate than get a fast answer they can't trust.\"]"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-19T03:18:51.433568+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2488,
+        "output_tokens": 270,
+        "total_tokens": 2758,
+        "inference_time_ms": 519.6,
+        "tokens_per_second": 519.6,
+        "prompt_chars": 7981,
+        "timestamp": "2026-06-19T03:18:51.433583+00:00"
+      }
+    }
+  },
+  "48532116": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience, critical evaluation, and lessons learned about AI coding tools"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1837,
+        "output_tokens": 43,
+        "total_tokens": 1880,
+        "inference_time_ms": 292.8,
+        "tokens_per_second": 146.8,
+        "prompt_chars": 3980,
+        "timestamp": "2026-06-19T03:18:35.497790+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI is great for rapid ideation but dangerous for production unless tightly scoped; a balanced workflow is essential.",
+        "quotes": [
+          "A vibe coder gives the model a goal, but a software engineer gives the model a bounded task.",
+          "If AI makes code generation cheaper but makes safe merge more expensive, the team has not gained as much as it thinks."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-19T03:18:50.307644+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2507,
+        "output_tokens": 203,
+        "total_tokens": 2710,
+        "inference_time_ms": 438.4,
+        "tokens_per_second": 463.0,
+        "prompt_chars": 7969,
+        "timestamp": "2026-06-19T03:18:50.307669+00:00"
+      }
+    }
   }
 }

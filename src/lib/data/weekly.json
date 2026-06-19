@@ -2193,22 +2193,36 @@
     "positiveCount": 307,
     "neutralCount": 125,
     "negativeCount": 208,
-    "positiveContribution": 41940.25,
+    "positiveContribution": 41940.79,
     "negativeContribution": -25391.21,
     "neutralContribution": -5639.44
   },
   {
     "week": "2026-W24",
     "weekStart": "2026-06-08",
-    "verdictScore": 63.12,
+    "verdictScore": 63.38,
     "verdict": "YES",
-    "articleCount": 629,
+    "articleCount": 627,
     "rawSentiment": 0,
     "positiveCount": 303,
     "neutralCount": 125,
-    "negativeCount": 201,
-    "positiveContribution": 41663.56,
-    "negativeContribution": -24347.75,
-    "neutralContribution": -5689.62
+    "negativeCount": 199,
+    "positiveContribution": 41972.53,
+    "negativeContribution": -24252.24,
+    "neutralContribution": -5690.31
+  },
+  {
+    "week": "2026-W25",
+    "weekStart": "2026-06-15",
+    "verdictScore": 63.93,
+    "verdict": "YES",
+    "articleCount": 623,
+    "rawSentiment": 0,
+    "positiveCount": 304,
+    "neutralCount": 123,
+    "negativeCount": 196,
+    "positiveContribution": 42166.76,
+    "negativeContribution": -23787.52,
+    "neutralContribution": -5599.43
   }
 ]

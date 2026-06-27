@@ -90,7 +90,14 @@
       configured: boolean
       dbExists: boolean
       counts: { total: number; approved: number; refused: number; pending: number; other: number }
-      stats: { totalUrls: number; resolved: number; scraped: number; relevant: number; analyzed: number; failed: number }
+      stats: {
+        totalUrls: number
+        resolved: number
+        scraped: number
+        relevant: number
+        analyzed: number
+        failed: number
+      }
       tableData: UrlEntry[]
       pipeline: PipelineData
       controlHref: string
@@ -274,7 +281,9 @@
         {/if}
         {#if !data.dbExists}
           <div class="terminal-card p-4 text-sm text-terminal-text-muted">
-            Pipeline DB is missing on this checkout. The dashboard will populate once <code>pipeline/data/pipeline.db</code> exists.
+            Pipeline DB is missing on this checkout. The dashboard will populate once <code
+              >pipeline/data/pipeline.db</code
+            > exists.
           </div>
         {/if}
       </div>
@@ -329,18 +338,12 @@
       <p class="mt-3 text-sm leading-6 text-terminal-text-muted">If one is missing, the pipeline gets annoying.</p>
 
       <div class="mt-5 space-y-3 text-sm">
-        {#each [
-          ["Repo root", data.pipeline.env.repoRootExists],
-          ["Venv Python", data.pipeline.env.venvPythonExists],
-          ["Pipeline dir", data.pipeline.env.pipelineDirExists],
-          ["Admin DB", data.pipeline.env.adminDbExists],
-          ["Logs dir", data.pipeline.env.logDirExists],
-          ["Groq key", data.pipeline.env.groqApiKeyConfigured],
-          ["Mistral key", data.pipeline.env.mistralApiKeyConfigured],
-        ] as [label, ok]}
+        {#each [["Repo root", data.pipeline.env.repoRootExists], ["Venv Python", data.pipeline.env.venvPythonExists], ["Pipeline dir", data.pipeline.env.pipelineDirExists], ["Admin DB", data.pipeline.env.adminDbExists], ["Logs dir", data.pipeline.env.logDirExists], ["Groq key", data.pipeline.env.groqApiKeyConfigured], ["Mistral key", data.pipeline.env.mistralApiKeyConfigured]] as [label, ok]}
           <div class="terminal-card flex items-center justify-between gap-4 px-4 py-3">
             <span class="text-terminal-text-muted">{label}</span>
-            <span class={`terminal-chip text-xs font-medium ${ok ? "bg-emerald-500/15 text-terminal-text" : "bg-rose-500/15 text-terminal-text"}`}>
+            <span
+              class={`terminal-chip text-xs font-medium ${ok ? "bg-emerald-500/15 text-terminal-text" : "bg-rose-500/15 text-terminal-text"}`}
+            >
               {ok ? "OK" : "Missing"}
             </span>
           </div>
@@ -374,11 +377,16 @@
           </div>
           <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-terminal-text-faint">Started</dt>
-            <dd class="text-right text-terminal-text">{formatTimestamp(data.pipeline.snapshot.currentRun.started_at)}</dd>
+            <dd class="text-right text-terminal-text">
+              {formatTimestamp(data.pipeline.snapshot.currentRun.started_at)}
+            </dd>
           </div>
           <div class="terminal-card flex items-start justify-between gap-4 px-4 py-3">
             <dt class="text-terminal-text-faint">Log</dt>
-            <dd class="max-w-[18rem] truncate text-right text-terminal-text-muted" title={data.pipeline.snapshot.currentRun.log_path}>
+            <dd
+              class="max-w-[18rem] truncate text-right text-terminal-text-muted"
+              title={data.pipeline.snapshot.currentRun.log_path}
+            >
               {data.pipeline.snapshot.currentRun.log_path}
             </dd>
           </div>
@@ -413,14 +421,14 @@
               <span class="terminal-chip">{runStatusLabel(data.pipeline.logViewer.run.status)}</span>
               <span class="terminal-chip">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
             </div>
-            <pre class="terminal-card max-h-[30rem] overflow-auto whitespace-pre-wrap break-words p-4 text-xs leading-6 text-terminal-text">{data.pipeline.logViewer.tail}</pre>
+            <pre
+              class="terminal-card max-h-120 overflow-auto whitespace-pre-wrap wrap-break-word p-4 text-xs leading-6 text-terminal-text">{data
+                .pipeline.logViewer.tail}</pre>
             <div class="mt-3 text-xs text-terminal-text-faint" title={data.pipeline.logViewer.path ?? undefined}>
               {data.pipeline.logViewer.path}
             </div>
           {:else}
-            <div class="terminal-card border-dashed p-4 text-sm text-terminal-text-muted">
-              No logs available yet.
-            </div>
+            <div class="terminal-card border-dashed p-4 text-sm text-terminal-text-muted">No logs available yet.</div>
           {/if}
         </div>
       </div>
@@ -460,8 +468,8 @@
                       data-sveltekit-keepfocus
                       data-sveltekit-noscroll
                       class="block font-medium text-terminal-text hover:underline {selectedRunId === run.id
-                        ? "text-sky-500"
-                        : ""}"
+                        ? 'text-sky-500'
+                        : ''}"
                     >
                       #{run.id} · {humanizeCommand(run.command)}
                     </a>
@@ -489,7 +497,9 @@
         </p>
       </div>
       {#if data.pipeline.snapshot.lock && !data.pipeline.snapshot.lock.stale}
-        <div class="terminal-card border-amber-400/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-800 dark:text-amber-100">
+        <div
+          class="terminal-card border-amber-400/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-800 dark:text-amber-100"
+        >
           Job running already. The buttons are disabled until the lock clears.
         </div>
       {/if}
@@ -513,7 +523,9 @@
             <div class="text-base font-semibold text-terminal-text">{command.label}</div>
             <div class="mt-2 text-sm leading-6 text-terminal-text-muted">{command.description}</div>
           </div>
-          <div class="mt-4 text-xs uppercase tracking-[0.25em] text-terminal-text/35">{humanizeCommand(command.name)}</div>
+          <div class="mt-4 text-xs uppercase tracking-[0.25em] text-terminal-text/35">
+            {humanizeCommand(command.name)}
+          </div>
         </button>
       {/each}
     </div>
@@ -521,10 +533,7 @@
 
   <!-- Confirmation dialog -->
   {#if selectedCommand}
-    <div
-      class="fixed inset-0 z-50"
-      aria-hidden="true"
-    >
+    <div class="fixed inset-0 z-50" aria-hidden="true">
       <button
         type="button"
         class="absolute inset-0 h-full w-full border-0 bg-black/60 p-0"
@@ -533,54 +542,52 @@
       ></button>
       <div class="relative z-10 flex h-full items-center justify-center p-4">
         <div class="terminal-panel w-full max-w-md p-6 sm:p-8" role="document">
-        <h2 class="text-2xl font-semibold tracking-tight text-terminal-text">Run {selectedCommand.label}</h2>
-        <p class="mt-3 max-w-xl text-sm leading-6 text-terminal-text-muted">
-          {selectedCommand.description}
-        </p>
+          <h2 class="text-2xl font-semibold tracking-tight text-terminal-text">Run {selectedCommand.label}</h2>
+          <p class="mt-3 max-w-xl text-sm leading-6 text-terminal-text-muted">
+            {selectedCommand.description}
+          </p>
 
-        <p class="mt-6 text-sm text-terminal-text-muted">
-          Type <code class="rounded bg-terminal-bg-subtle px-1.5 py-0.5 font-mono text-terminal-text">{selectedCommand.name}</code> to confirm:
-        </p>
+          <p class="mt-6 text-sm text-terminal-text-muted">
+            Type <code class="rounded bg-terminal-bg-subtle px-1.5 py-0.5 font-mono text-terminal-text"
+              >{selectedCommand.name}</code
+            > to confirm:
+          </p>
 
-        <input
-          type="text"
-          bind:value={confirmValue}
-          placeholder={selectedCommand.name}
-          class="mt-3 w-full rounded border border-terminal-border bg-terminal-bg px-3 py-2 font-mono text-sm text-terminal-text outline-none transition-colors focus:border-terminal-text/40"
-          onkeydown={(e) => {
-            if (e.key === "Enter" && canConfirm) {
-              e.preventDefault()
-              const form = e.currentTarget?.closest('div')?.querySelector('form')
-              form?.requestSubmit()
-            }
-          }}
-        />
+          <input
+            type="text"
+            bind:value={confirmValue}
+            placeholder={selectedCommand.name}
+            class="mt-3 w-full rounded border border-terminal-border bg-terminal-bg px-3 py-2 font-mono text-sm text-terminal-text outline-none transition-colors focus:border-terminal-text/40"
+            onkeydown={(e) => {
+              if (e.key === "Enter" && canConfirm) {
+                e.preventDefault()
+                const form = e.currentTarget?.closest("div")?.querySelector("form")
+                form?.requestSubmit()
+              }
+            }}
+          />
 
-        <div class="mt-6 flex items-center justify-end gap-3">
-          <button onclick={closeDialog} class="terminal-action text-sm">Cancel</button>
-          <form method="post" action="?/run">
-            <input type="hidden" name="command" value={selectedCommand.name} />
-            <input type="hidden" name="confirm" value={confirmValue} />
-            <button
-              type="submit"
-              disabled={!canConfirm}
-              class="terminal-action disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Run
-            </button>
-          </form>
+          <div class="mt-6 flex items-center justify-end gap-3">
+            <button onclick={closeDialog} class="terminal-action text-sm">Cancel</button>
+            <form method="post" action="?/run">
+              <input type="hidden" name="command" value={selectedCommand.name} />
+              <input type="hidden" name="confirm" value={confirmValue} />
+              <button
+                type="submit"
+                disabled={!canConfirm}
+                class="terminal-action disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Run
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   {/if}
 
   <!-- Content Table -->
   <section class="terminal-panel p-6">
-    <ContentTable
-      data={data.tableData}
-      title="Pipeline Data"
-      enableDetailLinks
-    />
+    <ContentTable data={data.tableData} title="Pipeline Data" enableDetailLinks />
   </section>
 </div>

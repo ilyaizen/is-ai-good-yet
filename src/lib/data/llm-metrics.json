@@ -32451,6 +32451,50 @@
       }
     }
   },
+  "46311144": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience with AI agent controlling a vending machine, highlighting its generosity and persistence."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2104,
+        "output_tokens": 46,
+        "total_tokens": 2150,
+        "inference_time_ms": 285.0,
+        "tokens_per_second": 161.4,
+        "prompt_chars": 3997,
+        "timestamp": "2026-06-27T03:42:48.699461+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Claude’s vending bot broke the bank—hallucinated orders, lost money, proved AI agents can wreak havoc if not tightly controlled.",
+        "quotes": [
+          "‘Within days, Claudius had given away nearly all its inventory for free—including a PlayStation 5 it had been talked into buying for “marketing purposes.”’",
+          "‘Profits collapsed. Newsroom morale surged.’"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:42:53.355695+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2871,
+        "output_tokens": 184,
+        "total_tokens": 3055,
+        "inference_time_ms": 601.1,
+        "tokens_per_second": 306.1,
+        "prompt_chars": 7978,
+        "timestamp": "2026-06-27T03:42:53.355712+00:00"
+      }
+    }
+  },
   "46261020": {
     "prefilter": {
       "response": {
@@ -49715,6 +49759,306 @@
         "tokens_per_second": 463.0,
         "prompt_chars": 7969,
         "timestamp": "2026-06-19T03:18:50.307669+00:00"
+      }
+    }
+  },
+  "48630535": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion about Claude Code's limitations."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1455,
+        "output_tokens": 40,
+        "total_tokens": 1495,
+        "inference_time_ms": 274.1,
+        "tokens_per_second": 145.9,
+        "prompt_chars": 1885,
+        "timestamp": "2026-06-27T03:16:15.756259+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Extended Thinking blocks access to full reasoning, leaving developers with incomplete audit trails and reduced trust in Claude Code.",
+        "quotes": [
+          "I’m underwhelmed by how Anthropic is presenting the behavior of their application.",
+          "The API hands back a SUMMARY of reasoning, NOT the reasoning itself."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:31.939988+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1309,
+        "output_tokens": 189,
+        "total_tokens": 1498,
+        "inference_time_ms": 370.8,
+        "tokens_per_second": 509.7,
+        "prompt_chars": 1885,
+        "timestamp": "2026-06-27T03:16:31.940003+00:00"
+      }
+    }
+  },
+  "48622518": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with open models and discusses potential downsides"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1769,
+        "output_tokens": 41,
+        "total_tokens": 1810,
+        "inference_time_ms": 347.3,
+        "tokens_per_second": 118.1,
+        "prompt_chars": 3454,
+        "timestamp": "2026-06-27T03:16:14.933400+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Open models are getting close, but still lag in speed, privacy, and cost—worth a try if you’re okay with a short‑term productivity dip.",
+        "quotes": [
+          "“open models are now very close to the leaders and typically trail only by a few months.”",
+          "“the other option or course is to run them yourself…at least two of expensive, complicated, and comparatively slow.”"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:30.634849+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1626,
+        "output_tokens": 238,
+        "total_tokens": 1864,
+        "inference_time_ms": 599.3,
+        "tokens_per_second": 397.1,
+        "prompt_chars": 3454,
+        "timestamp": "2026-06-27T03:16:30.634864+00:00"
+      }
+    }
+  },
+  "48624327": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on using Agent Skills, backed by empirical findings"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1907,
+        "output_tokens": 44,
+        "total_tokens": 1951,
+        "inference_time_ms": 400.3,
+        "tokens_per_second": 109.9,
+        "prompt_chars": 3977,
+        "timestamp": "2026-06-27T03:16:25.442402+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Skills are powerful yet frustrating; misused often, but when applied properly they double effectiveness.",
+        "quotes": [
+          "\"I see it at work at ton but a paper just came up on Hacker News: ... but I also consistently see them misused by my peers.\", \"I edited the original benchmark to do Skills my way and the results were as I suspected, the Agents nailed the test with proper Skills.\"]"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:36.884950+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2079,
+        "output_tokens": 224,
+        "total_tokens": 2303,
+        "inference_time_ms": 410.1,
+        "tokens_per_second": 546.2,
+        "prompt_chars": 5501,
+        "timestamp": "2026-06-27T03:16:36.884963+00:00"
+      }
+    }
+  },
+  "48615680": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Research with clear findings about AI coding utility and personal experience in building production-ready agentic AI systems"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1737,
+        "output_tokens": 48,
+        "total_tokens": 1785,
+        "inference_time_ms": 325.2,
+        "tokens_per_second": 147.6,
+        "prompt_chars": 3985,
+        "timestamp": "2026-06-27T03:16:22.013945+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "PRINCE shows reliable, trustworthy AI with smart fallback and monitoring, but still needs human oversight and cost tuning.",
+        "quotes": [
+          "\"This mechanism is crucial for maintaining system availability and responsiveness, especially as platform downtimes for external services are outside of our direct control.\",\"We recognize that optimizing for cost prematurely could compromise the system’s effectiveness and hinder user adoption.\n"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:35.337516+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2257,
+        "output_tokens": 223,
+        "total_tokens": 2480,
+        "inference_time_ms": 468.9,
+        "tokens_per_second": 475.6,
+        "prompt_chars": 7973,
+        "timestamp": "2026-06-27T03:16:35.337530+00:00"
+      }
+    }
+  },
+  "48614311": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and research findings about Claude's impact on robotics tasks."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1871,
+        "output_tokens": 43,
+        "total_tokens": 1914,
+        "inference_time_ms": 255.0,
+        "tokens_per_second": 168.6,
+        "prompt_chars": 3983,
+        "timestamp": "2026-06-27T03:16:25.800452+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Claude 4.7 delivers dramatic speedups in robotic tasks, proving a net‑positive tool that outpaces humans, though it still falters on nuanced control.",
+        "quotes": [
+          "The Claude‑enabled team got more done, faster.",
+          "Opus 4.7 was, on average, more than 37 times faster than Team Claude‑less and more than 18 times faster than Team Claude."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:37.749358+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2533,
+        "output_tokens": 203,
+        "total_tokens": 2736,
+        "inference_time_ms": 439.2,
+        "tokens_per_second": 462.2,
+        "prompt_chars": 7975,
+        "timestamp": "2026-06-27T03:16:37.749371+00:00"
+      }
+    }
+  },
+  "48663544": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience with AI-based parser generation and performance improvement"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1940,
+        "output_tokens": 40,
+        "total_tokens": 1980,
+        "inference_time_ms": 295.7,
+        "tokens_per_second": 135.3,
+        "prompt_chars": 3974,
+        "timestamp": "2026-06-27T03:16:22.770462+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI‑driven rewrite delivered 70x speedup, proving large‑scale LLM coding can replace months of manual effort.",
+        "quotes": [
+          "I rewrote PostHog's SQL parser using multiple long-running Claude Code sessions in parallel. The result was 16K lines of 'hand'-rolled parser code, ... a ~70x speed up.",
+          "This was an update for me. It felt extremely empowering to be able to build something that would have taken months for someone with specific knowledge in a couple of days."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:35.994220+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2611,
+        "output_tokens": 196,
+        "total_tokens": 2807,
+        "inference_time_ms": 482.3,
+        "tokens_per_second": 406.4,
+        "prompt_chars": 7974,
+        "timestamp": "2026-06-27T03:16:35.994235+00:00"
+      }
+    }
+  },
+  "48614631": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 1.0,
+        "reasoning": "Author shares personal experience and opinion on rejecting AI code, citing reasons and advocating for human review"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1520,
+        "output_tokens": 47,
+        "total_tokens": 1567,
+        "inference_time_ms": 282.7,
+        "tokens_per_second": 166.3,
+        "prompt_chars": 2313,
+        "timestamp": "2026-06-27T03:16:19.399281+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI-generated code feels unsafe and hard to trust, leading the author to reject most changes despite their speed.",
+        "quotes": [
+          "I reject AI code when I can’t explain the approach in my own words.",
+          "I reject AI code when the diff is bigger than the problem.",
+          "I reject AI code when it works locally but makes the system harder to reason about."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-06-27T03:16:33.247388+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1377,
+        "output_tokens": 227,
+        "total_tokens": 1604,
+        "inference_time_ms": 406.5,
+        "tokens_per_second": 558.5,
+        "prompt_chars": 2313,
+        "timestamp": "2026-06-27T03:16:33.247406+00:00"
       }
     }
   }

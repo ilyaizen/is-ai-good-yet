@@ -4,6 +4,7 @@ import {
   adminAccessConfigured,
   adminCookieOptions,
   buildAdminCookieValue,
+  getConfiguredPassword,
   isValidAdminCookie,
   sanitizeAdminNextPath,
 } from "$lib/server/admin-auth"
@@ -35,7 +36,7 @@ export const actions: Actions = {
       })
     }
 
-    const expected = process.env.PIPELINE_ADMIN_PASSWORD?.trim() ?? ""
+    const expected = getConfiguredPassword() ?? ""
     if (!expected || password !== expected) {
       return fail(401, {
         message: "Wrong password.",

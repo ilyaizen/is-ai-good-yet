@@ -5,7 +5,7 @@ import { createHash, timingSafeEqual } from "crypto"
 export const ADMIN_COOKIE_NAME = "pipeline_admin_session"
 export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 12
 
-function getConfiguredPassword(): string | null {
+export function getConfiguredPassword(): string | null {
   const password = privateEnv.PIPELINE_ADMIN_PASSWORD?.trim()
   return password ? password : null
 }

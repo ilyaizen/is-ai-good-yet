@@ -265,44 +265,44 @@
   },
   {
     "month": "2025-12",
-    "score": 57.24,
+    "score": 57.17,
     "verdict": "YES",
-    "articleCount": 944
+    "articleCount": 945
   },
   {
     "month": "2026-01",
-    "score": 58.02,
+    "score": 57.95,
     "verdict": "YES",
-    "articleCount": 1009
+    "articleCount": 1010
   },
   {
     "month": "2026-02",
-    "score": 58.48,
+    "score": 58.41,
     "verdict": "YES",
-    "articleCount": 1036
+    "articleCount": 1037
   },
   {
     "month": "2026-03",
-    "score": 59.19,
+    "score": 59.13,
     "verdict": "YES",
-    "articleCount": 1069
+    "articleCount": 1070
   },
   {
     "month": "2026-04",
-    "score": 59.25,
+    "score": 59.19,
     "verdict": "YES",
-    "articleCount": 1098
+    "articleCount": 1099
   },
   {
     "month": "2026-05",
-    "score": 59.85,
+    "score": 59.79,
     "verdict": "YES",
-    "articleCount": 1123
+    "articleCount": 1124
   },
   {
     "month": "2026-06",
-    "score": 60.24,
+    "score": 60.26,
     "verdict": "YES",
-    "articleCount": 1140
+    "articleCount": 1148
   }
 ]

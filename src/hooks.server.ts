@@ -2,8 +2,40 @@ import type { Handle } from "@sveltejs/kit"
 import { ConvexHttpClient } from "convex/browser"
 import { api } from "../convex/_generated/api"
 import { createHash } from "crypto"
+import { existsSync, readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { env as publicEnv } from "$env/dynamic/public"
 import { env as privateEnv } from "$env/dynamic/private"
+
+// adapter-node's standalone server doesn't load .env, and SvelteKit's
+// $env/dynamic/* reads process.env live, so without this both the admin env
+// checks and the spawned Python sidecar miss GROQ/MISTRAL keys (and the visitor
+// salt). Parse repo-root .env once at boot; never override real shell env.
+// Resolve .env from this module's location (src/hooks.server.ts → 1 dir up),
+// NOT process.cwd() — which may be wrong under adapter-node standalone.
+;(() => {
+  const modulePath = fileURLToPath(import.meta.url)
+  const repoRoot = path.resolve(path.dirname(modulePath))
+  const envFile = path.join(repoRoot, ".env")
+  if (!existsSync(envFile)) return
+  const lines = readFileSync(envFile, "utf8").split("\n")
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (!line || line.startsWith("#")) continue
+    const eq = line.indexOf("=")
+    if (eq < 0) continue
+    const key = line.slice(0, eq).trim()
+    let value = line.slice(eq + 1).trim()
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1)
+    }
+    if (key && !(key in process.env)) process.env[key] = value
+  }
+})()
 
 // Initialize Convex HTTP client for server-side mutations
 // This client runs on the server only - prevents client-side spoofing of IP addresses

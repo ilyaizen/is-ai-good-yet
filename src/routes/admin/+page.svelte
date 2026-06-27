@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation"
   import { page } from "$app/state"
   import ContentTable from "$lib/components/content-table.svelte"
 
@@ -187,6 +188,17 @@
         description: "Score the final sentiment and verdict",
       },
     ]
+  })
+
+  let selectedRunId = $derived(data.pipeline.logViewer.run?.id ?? null)
+
+  // Auto-refresh while a job runs so status + log tail update without a manual reload.
+  $effect(() => {
+    if (data.pipeline.snapshot.currentRun?.status !== "running") return
+    const handle = setInterval(() => {
+      invalidateAll().catch(() => {})
+    }, 4000)
+    return () => clearInterval(handle)
   })
 </script>
 
@@ -441,9 +453,18 @@
             </thead>
             <tbody class="divide-y divide-terminal-border-subtle bg-terminal-bg-subtle">
               {#each data.pipeline.snapshot.recentRuns as run}
-                <tr>
+                <tr class={selectedRunId === run.id ? "bg-sky-500/5" : ""}>
                   <td class="px-3 py-2 align-top">
-                    <div class="font-medium text-terminal-text">#{run.id} · {humanizeCommand(run.command)}</div>
+                    <a
+                      href="?run={run.id}"
+                      data-sveltekit-keepfocus
+                      data-sveltekit-noscroll
+                      class="block font-medium text-terminal-text hover:underline {selectedRunId === run.id
+                        ? "text-sky-500"
+                        : ""}"
+                    >
+                      #{run.id} · {humanizeCommand(run.command)}
+                    </a>
                     <div class="mt-1 text-xs text-terminal-text-faint">{formatTimestamp(run.started_at)}</div>
                   </td>
                   <td class="px-3 py-2 align-top text-terminal-text-muted">{runStatusLabel(run.status)}</td>
@@ -559,6 +580,7 @@
     <ContentTable
       data={data.tableData}
       title="Pipeline Data"
+      enableDetailLinks
     />
   </section>
 </div>

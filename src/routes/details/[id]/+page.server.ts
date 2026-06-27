@@ -1,6 +1,8 @@
 import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { getStaticArticleById } from "$lib/static-data"
+import { getUrlWithAnalysis } from "$lib/server/db"
+import { getArticleText } from "$lib/server/article-text"
 
 export interface AnalysisPromptsSuccess {
   prefilter: {
@@ -65,12 +67,58 @@ export const load: PageServerLoad = async ({
     throw error(400, "Invalid HN ID")
   }
 
-  // Try to get article from static data
+  // Try live DB article first (covers all 24k URLs in the pipeline)
+  const dbArticle = getUrlWithAnalysis(hnId)
+  if (dbArticle) {
+    const articleText = getArticleText(hnId)
+
+    // Parse content_filter_json if present
+    let contentFilter: ContentFilterResult | null = null
+    if (dbArticle.content_filter_json) {
+      try {
+        contentFilter = JSON.parse(dbArticle.content_filter_json) as ContentFilterResult
+      } catch {
+        contentFilter = null
+      }
+    }
+
+    return {
+      article: {
+        title: dbArticle.hn_title || "Untitled Article",
+        url: dbArticle.url,
+        sentiment_score: dbArticle.sentiment_score ?? 0,
+        analysis: dbArticle.analysis ?? {
+          utility: "unknown",
+          trajectory: "uncertain",
+          topic: "",
+          summary: "",
+          quotes: [],
+        },
+        hn_author: dbArticle.hn_author ?? null,
+        hn_timestamp: dbArticle.hn_timestamp ?? 0,
+        hn_score: dbArticle.hn_score ?? 0,
+        hn_comments: dbArticle.hn_comments ?? 0,
+        hn_id: hnId,
+        content_category: dbArticle.content_category ?? "",
+        opinion: dbArticle.opinion ?? null,
+        is_opinion: dbArticle.is_opinion,
+        content_filter_json: contentFilter,
+        text: articleText?.text ?? null,
+        text_missing: !articleText,
+      },
+      prompts: null,
+    }
+  }
+
+  // Fall back to static data (pre-exported articles)
   const article = getStaticArticleById(hnId)
 
   if (!article) {
     throw error(404, "Article not found")
   }
+
+  // Even for static articles, try the scraped text store
+  const articleText = getArticleText(hnId)
 
   return {
     article: {
@@ -87,9 +135,8 @@ export const load: PageServerLoad = async ({
       opinion: null,
       is_opinion: null,
       content_filter_json: null,
-      // Static mode: no full article text available
-      text: null,
-      text_missing: true,
+      text: articleText?.text ?? null,
+      text_missing: !articleText,
     },
     prompts: null,
   }

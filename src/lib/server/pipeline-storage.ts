@@ -1,11 +1,27 @@
 import { existsSync, mkdirSync } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 type PipelineStoragePaths = {
   dataDir: string
   pipelineDbPath: string
   adminDbPath: string
   logDir: string
+}
+
+/**
+ * Resolve the project root from this module's location, NOT process.cwd().
+ *
+ * This file lives at src/lib/server/pipeline-storage.ts.
+ * Going up 3 levels (server → lib → src) gets us to the repo root.
+ * This works regardless of where the Node process was started from
+ * (adapter-node standalone, PM2, Coolify, etc.).
+ */
+function getRepoRoot(): string {
+  // fileURLToPath converts the ESM import.meta.url to a filesystem path
+  const modulePath = fileURLToPath(import.meta.url)
+  // src/lib/server/pipeline-storage.ts → repo root is 3 dirs up
+  return path.resolve(path.dirname(modulePath), "..", "..", "..")
 }
 
 function uniquePaths(paths: Array<string | undefined>): string[] {
@@ -28,13 +44,15 @@ function resolvePreferredPath(candidates: string[]): string {
 }
 
 function getBaseCandidates(): string[] {
-  const appRoot = process.cwd()
+  const repoRoot = getRepoRoot()
 
   return uniquePaths([
     process.env.PIPELINE_DATA_DIR,
     process.env.PIPELINE_STORAGE_DIR,
-    path.join(appRoot, "pipeline", "data"),
+    path.join(repoRoot, "pipeline", "data"),
+    path.join(process.cwd(), "pipeline", "data"),
     "/app/pipeline/data",
+    "/srv/apps/is-ai-good-yet/pipeline/data",
     "/data/is-ai-good-yet/pipeline/data",
     "/var/lib/is-ai-good-yet/pipeline/data",
   ])

@@ -1,8 +1,10 @@
 import { createWriteStream, existsSync } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { spawn } from "node:child_process"
 import Database from "better-sqlite3"
 import { ensurePipelineStoragePaths, getPipelineStoragePaths } from "$lib/server/pipeline-storage"
+import { env as privateEnv } from "$env/dynamic/private"
 
 export type PipelineCommandName =
   | "catch_up"
@@ -55,13 +57,26 @@ export type PipelineEnvironmentStatus = {
   mistralApiKeyConfigured: boolean
 }
 
-const REPO_ROOT = process.cwd()
-const VENV_PYTHON = path.join(REPO_ROOT, ".venv", "bin", "python")
+/**
+ * Resolve repo root from this module's location, not process.cwd().
+ * This file lives at src/lib/server/pipeline-runner.ts → 3 dirs up = repo root.
+ */
+function getRepoRoot(): string {
+  const modulePath = fileURLToPath(import.meta.url)
+  return path.resolve(path.dirname(modulePath), "..", "..", "..")
+}
+
+const REPO_ROOT = getRepoRoot()
 const STALE_LOCK_THRESHOLD_MS = 6 * 60 * 60 * 1000
 const STORAGE_PATHS = getPipelineStoragePaths()
 const PIPELINE_DIR = path.dirname(STORAGE_PATHS.dataDir)
 const ADMIN_DB_PATH = STORAGE_PATHS.adminDbPath
 const PIPELINE_LOG_DIR = STORAGE_PATHS.logDir
+// venv lives under pipeline/.venv. Win = Scripts/python.exe, POSIX = bin/python.
+const VENV_PYTHON =
+  process.platform === "win32"
+    ? path.join(PIPELINE_DIR, ".venv", "Scripts", "python.exe")
+    : path.join(PIPELINE_DIR, ".venv", "bin", "python")
 
 const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
   catch_up: {
@@ -157,8 +172,8 @@ export function getPipelineEnvironmentStatus(): PipelineEnvironmentStatus {
     pipelineDirExists: existsSync(PIPELINE_DIR),
     adminDbExists: existsSync(ADMIN_DB_PATH),
     logDirExists: existsSync(PIPELINE_LOG_DIR),
-    groqApiKeyConfigured: Boolean(process.env.GROQ_API_KEY?.trim()),
-    mistralApiKeyConfigured: Boolean(process.env.MISTRAL_API_KEY?.trim()),
+    groqApiKeyConfigured: Boolean(privateEnv.GROQ_API_KEY?.trim()),
+    mistralApiKeyConfigured: Boolean(privateEnv.MISTRAL_API_KEY?.trim()),
   }
 }
 

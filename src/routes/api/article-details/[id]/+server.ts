@@ -3,17 +3,22 @@ import type { RequestHandler } from "./$types"
 import { getStaticArticleById } from "$lib/static-data"
 import { getUrlWithAnalysis } from "$lib/server/db"
 import { getArticleText } from "$lib/server/article-text"
+import { isValidAdminCookie, ADMIN_COOKIE_NAME } from "$lib/server/admin-auth"
 import type { ArticleDetails, ArticleDetailsResponse } from "$lib/types/article-details"
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, cookies }) => {
   const hnId = parseInt(params.id, 10)
   if (isNaN(hnId)) {
     throw error(400, "Invalid HN ID")
   }
 
+  // SECURITY: full scraped article bodies (copyright third-party content) are
+  // admin-only. Public callers receive metadata + analysis only.
+  const isAdmin = isValidAdminCookie(cookies.get(ADMIN_COOKIE_NAME))
+  const articleText = isAdmin ? getArticleText(hnId) : null
+
   const dbArticle = getUrlWithAnalysis(hnId)
   if (dbArticle) {
-    const articleText = getArticleText(hnId)
     const response: { article: ArticleDetails } = {
       article: {
         id: Number(dbArticle.id ?? hnId),
@@ -36,8 +41,6 @@ export const GET: RequestHandler = async ({ params }) => {
 
   const staticArticle = getStaticArticleById(hnId)
   if (staticArticle) {
-    // Even for static-exported articles, try the scraped text store first
-    const articleText = getArticleText(hnId)
     const response: { article: ArticleDetails } = {
       article: {
         id: staticArticle.hn_id,
@@ -58,5 +61,6 @@ export const GET: RequestHandler = async ({ params }) => {
     return json(response)
   }
 
-  throw error(404, "Article not found")
+  const notFound: ArticleDetailsResponse = { article: null, error: "Article not found" }
+  throw error(404, notFound.error)
 }

@@ -50061,5 +50061,221 @@
         "timestamp": "2026-06-27T03:16:33.247406+00:00"
       }
     }
+  },
+  "48782671": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and critical evaluation of AI coding agents"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1908,
+        "output_tokens": 39,
+        "total_tokens": 1947,
+        "inference_time_ms": 317.9,
+        "tokens_per_second": 122.7,
+        "prompt_chars": 3985,
+        "timestamp": "2026-07-07T17:06:35.368175+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Agents help but demand constant human oversight; productivity gains are offset by frequent failure modes.",
+        "quotes": [
+          "\"The loops tend to degrade in productivity over time. Even if nothing is badly wrong, the loops are a lot more productive if I'm actively at the keyboard typing instructions...\"",
+          "\"I found various things that can help, but I haven't figured out how to replace myself (yet?).\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-07T17:06:52.020328+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2574,
+        "output_tokens": 188,
+        "total_tokens": 2762,
+        "inference_time_ms": 636.0,
+        "tokens_per_second": 295.6,
+        "prompt_chars": 7977,
+        "timestamp": "2026-07-07T17:06:52.020342+00:00"
+      }
+    }
+  },
+  "48766026": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on using AI agents in software development."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1886,
+        "output_tokens": 42,
+        "total_tokens": 1928,
+        "inference_time_ms": 413.5,
+        "tokens_per_second": 101.6,
+        "prompt_chars": 3964,
+        "timestamp": "2026-07-07T17:06:33.925882+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Method shows AI can help but requires expert oversight; not a panacea, yet effective for high‑quality code when managed correctly.",
+        "quotes": [
+          "\"The short leash method… will lead to Fable‑beating results even if you aren’t using a frontier model.\"",
+          "\"AI must have access to sufficient context… the PR must be reviewed by the PR ‘author’ if it used AI.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-07T17:06:50.077893+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2252,
+        "output_tokens": 232,
+        "total_tokens": 2484,
+        "inference_time_ms": 691.5,
+        "tokens_per_second": 335.5,
+        "prompt_chars": 6328,
+        "timestamp": "2026-07-07T17:06:50.077911+00:00"
+      }
+    }
+  },
+  "48762008": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion about LLM code in dependencies"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1357,
+        "output_tokens": 41,
+        "total_tokens": 1398,
+        "inference_time_ms": 248.9,
+        "tokens_per_second": 164.7,
+        "prompt_chars": 1409,
+        "timestamp": "2026-07-07T17:06:36.195929+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "LLM‑generated code in dependencies is a serious risk—hallucinations, copyright, and quality issues outweigh any productivity gain.",
+        "quotes": [
+          "Large LLM generated changes being reverted in the next release without any explanation.",
+          "I now have additional information about the quality of dependencies which will surely influence future decisions."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-07T17:06:52.586965+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1205,
+        "output_tokens": 139,
+        "total_tokens": 1344,
+        "inference_time_ms": 468.1,
+        "tokens_per_second": 296.9,
+        "prompt_chars": 1409,
+        "timestamp": "2026-07-07T17:06:52.586982+00:00"
+      }
+    }
+  },
+  "48815117": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares experience, critique of YC CEO's AI claims with code analysis"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 2039,
+        "output_tokens": 44,
+        "total_tokens": 2083,
+        "inference_time_ms": 498.4,
+        "tokens_per_second": 88.3,
+        "prompt_chars": 4001,
+        "timestamp": "2026-07-07T17:06:38.425217+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "AI produces bloated code; tools are helpful but demand rigorous scrutiny.",
+        "quotes": [
+          "The site’s logo is an illustration of a bear. The site downloads the logo in eight different formats, including a completely empty 0-byte file that somehow made it to production, Gregorein found.",
+          "The larger point is that while AI coding tools make it easy to pump out lots of code, it’s really (still) the quality of the code that matters. Quantity, in other words, doesn’t necessarily equal quality."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-07T17:06:53.403804+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2501,
+        "output_tokens": 287,
+        "total_tokens": 2788,
+        "inference_time_ms": 704.1,
+        "tokens_per_second": 407.6,
+        "prompt_chars": 6932,
+        "timestamp": "2026-07-07T17:06:53.403819+00:00"
+      }
+    }
+  },
+  "48776232": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on the effectiveness of session transcript-based memory for AI agents"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1873,
+        "output_tokens": 46,
+        "total_tokens": 1919,
+        "inference_time_ms": 412.3,
+        "tokens_per_second": 111.6,
+        "prompt_chars": 3976,
+        "timestamp": "2026-07-07T17:06:34.942614+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "reject": false,
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Session transcripts waste tokens, degrade agent quality, and add no tangible benefit.",
+        "quotes": [
+          "We have found zero performance benefit on SWE tasks when agents have search access to their previous transcript sessions, provided they have access to other forms of context.",
+          "The agents are also terrible at actually removing context, which is a critical capability for maintaining long‑term memory."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-07T17:06:51.242957+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1979,
+        "output_tokens": 271,
+        "total_tokens": 2250,
+        "inference_time_ms": 528.9,
+        "tokens_per_second": 512.4,
+        "prompt_chars": 5299,
+        "timestamp": "2026-07-07T17:06:51.242973+00:00"
+      }
+    }
   }
 }

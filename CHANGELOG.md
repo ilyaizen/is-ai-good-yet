@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add an isolated v2 two-tier sentiment pipeline for broader AI capability, trajectory, and societal-impact analysis.
+- Add strict versioned article and per-comment prompt contracts with explicit missing-dimension handling.
+- Add deterministic adaptive Hacker News ranked-tree sampling with isolated context-aware comment annotation.
+- Add visibility-weighted and diversity-balanced community estimates, disagreement/polarization diagnostics, and broad-capture v2 prompt contracts without commenter-karma influence.
+- Add normalized v2 analysis storage with prompt/input hashes and confidence-aware source aggregation.
+- Add separate v2 static exports so existing sentiment data and frontend consumers remain backward compatible.
+
 - **Phase 1.5 (Algolia Discovery)**: New pipeline phase to directly query HN Algolia API for high-signal AI stories.
 - **Token Streaming**: Implemented token-by-token text streaming effects for verdict animations.
 - **Replay Functionality**: Added replay button for verdict veil with reset mechanism.

@@ -459,6 +459,40 @@ python -m src.prefilter_content --reset-only                # Clear filter data 
 python -m src.prefilter_content --stats                     # Show classification stats
 ```
 
+### V2 Two-Tier Sentiment Analysis
+
+V2 is additive and does not modify the v1 `sentiment_score`, `classification_json`, or static JSON
+contracts. It stores source data and analyses in separate `hn_*` and `v2_*` tables and exports to
+`src/lib/data/v2/`.
+
+The normative prompt and methodology contract is
+[`docs/v2-sentiment-prompt.md`](../docs/v2-sentiment-prompt.md).
+
+1. `hn_comments_v2.py` preserves every parent's public ranked `kids` order, local sibling rank,
+   ancestry, and snapshot time. Adaptive sampling targets 12–32 accepted comments with deterministic
+   top-level/branch waves, author and branch caps, and refill after rejection or non-addressing.
+2. Account karma is absent from v2.2 selection, prompts, annotation, aggregation, confidence, and
+   export. Public sibling rank is an ordinal visibility signal, not a reconstruction of private votes.
+3. `sentiment_v2.py` analyzes the article independently and sends one isolated request per voting
+   comment. Structured article thesis/evidence, immediate parent, and distinct root are context-only;
+   only the voting comment receives an annotation.
+4. Absolute AI stance, article relation, and parent relation remain separate. Only applicable
+   absolute stances enter per-dimension aggregation. Missing dimensions are `not_addressed`, not zero.
+5. Community aggregation produces a primary visibility-weighted estimate and a diversity-balanced
+   diagnostic. It exports ranking sensitivity, direction shares, disagreement, polarization, ESS,
+   coverage/counts, clarity, and per-dimension dissent. Disagreement and sentiment direction or
+   magnitude never reduce measurement confidence.
+6. `export_v2.py` starts from 40% article and 60% community priors. Per-dimension source confidence
+   changes effective influence without changing a source's sentiment or pulling it toward neutral.
+7. Prompt, input, contract, parser, selection, and aggregation versions or hashes are persisted for
+   reproducibility. Article and community runs are saved independently, including valid rejections.
+
+The estimand is visible expressed HN discussion at collection time, not silent readers, all HN users,
+or public opinion. Story comment volume may enlarge the sample but does not directly affect sentiment
+or global influence; existing story score/time decay remains the engagement signal. The three
+dimension verdicts are primary. The equal-weight composite is a secondary summary.
+The `/v2` route remains on its existing static data until this contract has reviewed initial data.
+
 ### Phase 6: Sentiment Analysis
 
 - **Goal:** 2-dimension sentiment analysis for AI coding workflow content with explicit rejection.

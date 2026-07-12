@@ -314,3 +314,28 @@
     --table-row-hover: oklch(0.2632 0.0026 196.9418);
   }
 }
+
+/* v2 terminal dashboard semantics. Scoped so v1 keeps its existing theme. */
+body.v2 {
+  --v2-bg: #08090b;
+  --v2-recess: #060708;
+  --v2-surface: #141518;
+  --v2-surface-high: #1c1d21;
+  --v2-accent: #a3e635;
+  --v2-accent-dim: #84cc16;
+  --v2-amber: #ff9f1c;
+  --v2-red: #ff3b3b;
+  --v2-text: #e8eaed;
+  --v2-text-bright: #ffffff;
+  --v2-text-dim: #9aa0a6;
+  --v2-text-faint: #6c7178;
+  --v2-border-frame: rgb(255 255 255 / 0.16);
+  --v2-border-card: rgb(255 255 255 / 0.1);
+  --v2-border-nested: rgb(255 255 255 / 0.06);
+  --v2-accent-border: rgb(163 230 53 / 0.4);
+  --v2-accent-fill: rgb(163 230 53 / 0.06);
+  --v2-accent-glow: rgb(163 230 53 / 0.35);
+  --v2-font: "Share Tech Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --v2-frame-shadow: 0 4px 20px -2px rgb(0 0 0 / 0.65), 0 2px 6px rgb(0 0 0 / 0.4), inset 0 0 0 2px rgb(255 255 255 / 0.06);
+  --v2-card-shadow: 0 2px 12px -2px rgb(0 0 0 / 0.5), inset 0 0 0 2px rgb(0 0 0 / 0.65), inset 0 2px 0 rgb(255 255 255 / 0.04);
+}

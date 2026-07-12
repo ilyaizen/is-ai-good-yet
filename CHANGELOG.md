@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
+- Export analyzed articles independently of legacy `articles-text` files.
+
 ### Added
 
 - Add an isolated v2 two-tier sentiment pipeline for broader AI capability, trajectory, and societal-impact analysis.

@@ -226,6 +226,9 @@
       </div>
 
       <div class="flex flex-wrap gap-3">
+        {#if data.controlHref.startsWith("/v2/")}
+          <a href="#v2-methodology-title" class="terminal-action">Methodology</a>
+        {/if}
         <form method="post" action="?/logout">
           <button type="submit" class="terminal-action">Log out</button>
         </form>
@@ -491,7 +494,9 @@
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Actions</p>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">Verified job runs</h2>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">
+          {data.controlHref.startsWith("/v2/") ? "Manual v2 runs" : "Verified job runs"}
+        </h2>
         <p class="mt-3 max-w-2xl text-sm leading-6 text-terminal-text-muted">
           Buttons open a verification dialog. The command name has to be typed before anything actually fires.
         </p>

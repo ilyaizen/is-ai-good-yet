@@ -48,16 +48,9 @@
   const COLOR_YELLOW = "var(--color-warning)"
   const COLOR_RED = "var(--color-destructive)"
 
-  function hexToRgb(hex: string): [number, number, number] {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [0, 0, 0]
-  }
-
-  function interpolateColor(color1: string, color2: string, factor: number): string {
-    const rgb1 = hexToRgb(color1)
-    const rgb2 = hexToRgb(color2)
-    const result = rgb1.map((c, i) => Math.round(c + factor * (rgb2[i] - c)))
-    return `rgb(${result[0]}, ${result[1]}, ${result[2]})`
+  function mixColor(color1: string, color2: string, factor: number): string {
+    const firstWeight = Math.round((1 - factor) * 100)
+    return `color-mix(in srgb, ${color1} ${firstWeight}%, ${color2})`
   }
 
   function getTimeColor(timestamp: number | null): string {
@@ -68,11 +61,11 @@
 
     if (age < 0) return COLOR_GREEN
     if (age <= TIME_DECAY_MS) {
-      return interpolateColor(COLOR_GREEN, COLOR_YELLOW, age / TIME_DECAY_MS)
+      return mixColor(COLOR_GREEN, COLOR_YELLOW, age / TIME_DECAY_MS)
     }
     if (age <= TIME_WINDOW_MS) {
       const remainingRatio = (age - TIME_DECAY_MS) / (TIME_WINDOW_MS - TIME_DECAY_MS)
-      return interpolateColor(COLOR_YELLOW, COLOR_RED, remainingRatio)
+      return mixColor(COLOR_YELLOW, COLOR_RED, remainingRatio)
     }
     return COLOR_RED
   }
@@ -290,7 +283,12 @@
   let filteredItems = $derived(
     data
       .filter((item) => {
-        const matchesSearch = item.url.toLowerCase().includes(searchQuery.toLowerCase())
+        const normalizedQuery = searchQuery.trim().toLowerCase()
+        const matchesSearch =
+          normalizedQuery.length === 0 ||
+          item.url.toLowerCase().includes(normalizedQuery) ||
+          item.hn_title?.toLowerCase().includes(normalizedQuery) ||
+          item.hn_author?.toLowerCase().includes(normalizedQuery)
         let displayStatus = getDisplayStatus(item)
         const matchesStatus = statusFilter === "all" || displayStatus === statusFilter
         const matchesRelevant = !showOnlyRelevant || isRelevantUrl(item.url)
@@ -416,7 +414,7 @@
               <InputGroup.Addon>
                 <Search class="h-4 w-4" />
               </InputGroup.Addon>
-              <InputGroup.Input type="text" bind:value={searchQuery} placeholder="Search URLs..." />
+              <InputGroup.Input type="text" bind:value={searchQuery} placeholder="Search title, URL, or author..." />
             </InputGroup.Root>
           </div>
         </div>
@@ -530,7 +528,7 @@
 
 <div class="terminal-panel content-table-section">
   <h3 class="section-title">{title}</h3>
-  <p class="section-subtitle">Displaying {filteredItems.length} articles</p>
+  <p class="section-subtitle">Displaying {filteredItems.length} of {data.length} pipeline articles</p>
 
   {@render tableControls()}
   {@render paginationControls()}
@@ -541,7 +539,7 @@
         <tr>
           <th class="col-time">
             <button class="sort-btn" onclick={() => handleSort("hn_timestamp")} title="Sort by time">
-              Time
+              Age
               {#if sortField === "hn_timestamp"}
                 {#if sortDirection === "asc"}
                   <ChevronUp class="sort-icon" />

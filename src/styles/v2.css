@@ -3,6 +3,7 @@ body.v2 .site-header { display: none; }
 body.v2 * { box-sizing: border-box; }
 body.v2 a { color: inherit; text-decoration: none; }
 body.v2 button { font: inherit; }
+.v2-admin { --terminal-bg: var(--v2-surface); --terminal-bg-subtle: var(--v2-recess); --terminal-bg-header: var(--v2-surface-high); --terminal-border: var(--v2-accent-border); --terminal-border-strong: var(--v2-accent); --terminal-border-subtle: var(--v2-border-nested); --terminal-text: var(--v2-text); --terminal-text-muted: var(--v2-text-dim); --terminal-text-faint: var(--v2-text-faint); --terminal-accent: var(--v2-accent); --terminal-accent-glow: var(--v2-accent-glow); --terminal-accent-hover: var(--v2-accent-fill); --color-primary: var(--v2-accent); --color-warning: var(--v2-amber); --color-destructive: var(--v2-red); --color-foreground: var(--v2-text); --color-muted-foreground: var(--v2-text-dim); --color-card: var(--v2-surface); --color-muted: var(--v2-surface-high); --color-border: var(--v2-border-nested); min-height: 100vh; }
 .v2-shell { width: min(1180px, calc(100% - clamp(2rem, 8vw, 5rem))); margin: auto; padding: 2rem 0 7rem; display: grid; gap: 1.25rem; opacity: 0; transform: translateY(14px); transition: opacity .55s var(--ease-swift), transform .55s var(--ease-swift); }
 .v2-shell--visible { opacity: 1; transform: none; }
 .v2-masthead { display: grid; grid-template-columns: 1fr auto; gap: .35rem 2rem; align-items: end; padding-bottom: 1rem; border-bottom: 1px solid var(--v2-border-card); }

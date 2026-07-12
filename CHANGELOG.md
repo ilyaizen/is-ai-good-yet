@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add a live v2 admin methodology ledger with the exact versioned article and comment prompts.
+- Add manual v2 comment-collection and analysis controls backed by the existing server pipeline runner.
 - Add an isolated v2 two-tier sentiment pipeline for broader AI capability, trajectory, and societal-impact analysis.
 - Add strict versioned article and per-comment prompt contracts with explicit missing-dimension handling.
 - Add deterministic adaptive Hacker News ranked-tree sampling with isolated context-aware comment annotation.
@@ -69,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix unreadable black age values in the admin content table and expand table search to titles and authors.
 - Scroll inversion and verdict veil placement outside smooth-scroll container.
 - SSR guard for `pointTexture` in 3D background scene.
 - Light-theme node colors and info card values in admin views.

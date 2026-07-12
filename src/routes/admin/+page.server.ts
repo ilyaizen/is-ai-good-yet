@@ -70,6 +70,7 @@ function readLogTail(logPath: string | null, lines = 120): { exists: boolean; ta
 }
 
 export const load = (event: RequestEvent) => {
+  const commandScope = event.url.pathname.startsWith("/v2/") ? "v2" : "v1"
   const rows = getPipelineTableData()
   const stats = getPipelineStats()
   const snapshot = getPipelineRunSnapshot()
@@ -115,25 +116,26 @@ export const load = (event: RequestEvent) => {
     pipeline: {
       env,
       snapshot,
-      commands: getPipelineCommandList() as PipelineCommand[],
+      commands: getPipelineCommandList(commandScope) as PipelineCommand[],
       logViewer,
       storage,
     },
-    controlHref: "/admin",
+    controlHref: event.url.pathname,
   }
 }
 
 export const actions: Actions = {
   logout: async (event: RequestEvent) => {
     event.cookies.delete(ADMIN_COOKIE_NAME, { path: "/" })
-    throw redirect(303, "/admin/login")
+    throw redirect(303, event.url.pathname.startsWith("/v2/") ? "/v2/admin/login" : "/admin/login")
   },
   run: async (event: RequestEvent) => {
     const form = await event.request.formData()
     const commandName = form.get("command")
     const confirmValue = form.get("confirm")
 
-    if (typeof commandName !== "string" || !getPipelineCommandList().some((command) => command.name === commandName)) {
+    const commandScope = event.url.pathname.startsWith("/v2/") ? "v2" : "v1"
+    if (typeof commandName !== "string" || !getPipelineCommandList(commandScope).some((command) => command.name === commandName)) {
       return fail(400, { message: "Unknown pipeline command." })
     }
 
@@ -150,6 +152,6 @@ export const actions: Actions = {
       return fail(/already running/i.test(message) ? 409 : 500, { message })
     }
 
-    throw redirect(303, `/admin?run=${result.run.id}`)
+    throw redirect(303, `${event.url.pathname}?run=${result.run.id}`)
   },
 }

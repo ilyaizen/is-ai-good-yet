@@ -1,9 +1,19 @@
 [variables]
 NIXPACKS_NODE_VERSION = "22.12.0"
 NPM_CONFIG_PRODUCTION = "false"
+PIPELINE_PYTHON = "/opt/pipeline-venv/bin/python"
+PLAYWRIGHT_BROWSERS_PATH = "/opt/playwright-browsers"
+
+[phases.setup]
+nixPkgs = ["python311", "python311Packages.pip", "chromium"]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = [
+  "bun install",
+  "python3 -m venv /opt/pipeline-venv",
+  "/opt/pipeline-venv/bin/pip install --no-cache-dir -r pipeline/requirements.txt",
+  "/opt/pipeline-venv/bin/python -m playwright install chromium"
+]
 
 [phases.build]
 cmds = ["bun run build"]

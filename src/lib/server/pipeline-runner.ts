@@ -3,6 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { spawn } from "node:child_process"
 import Database from "better-sqlite3"
+import { createOnceFinalizer, resolvePipelinePython } from "$lib/server/pipeline-runtime"
 import { ensurePipelineStoragePaths, getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 import { env as privateEnv } from "$env/dynamic/private"
 
@@ -74,11 +75,13 @@ const STORAGE_PATHS = getPipelineStoragePaths()
 const PIPELINE_DIR = path.dirname(STORAGE_PATHS.dataDir)
 const ADMIN_DB_PATH = STORAGE_PATHS.adminDbPath
 const PIPELINE_LOG_DIR = STORAGE_PATHS.logDir
-// venv lives under pipeline/.venv. Win = Scripts/python.exe, POSIX = bin/python.
-const VENV_PYTHON =
-  process.platform === "win32"
-    ? path.join(PIPELINE_DIR, ".venv", "Scripts", "python.exe")
-    : path.join(PIPELINE_DIR, ".venv", "bin", "python")
+const PIPELINE_PYTHON = resolvePipelinePython({
+  explicit: privateEnv.PIPELINE_PYTHON,
+  repoRoot: REPO_ROOT,
+  pipelineDir: PIPELINE_DIR,
+  platform: process.platform,
+  exists: existsSync,
+})
 
 const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
   catch_up: {
@@ -182,7 +185,7 @@ function isProcessAlive(pid: number | null): boolean {
 export function getPipelineEnvironmentStatus(): PipelineEnvironmentStatus {
   return {
     repoRootExists: existsSync(REPO_ROOT),
-    venvPythonExists: existsSync(VENV_PYTHON),
+    venvPythonExists: existsSync(PIPELINE_PYTHON),
     pipelineDirExists: existsSync(PIPELINE_DIR),
     adminDbExists: existsSync(ADMIN_DB_PATH),
     logDirExists: existsSync(PIPELINE_LOG_DIR),
@@ -293,10 +296,10 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
   const output = createWriteStream(logPath, { flags: "a" })
   output.write(`[${startedAt}] start ${commandName}\n`)
   output.write(`cwd=${PIPELINE_DIR}\n`)
-  output.write(`python=${VENV_PYTHON}\n`)
+  output.write(`python=${PIPELINE_PYTHON}\n`)
   output.write(`args=${command.args.join(" ")}\n\n`)
 
-  const child = spawn(VENV_PYTHON, command.args, {
+  const child = spawn(PIPELINE_PYTHON, command.args, {
     cwd: PIPELINE_DIR,
     env: {
       ...process.env,
@@ -312,25 +315,31 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
   child.stdout?.pipe(output, { end: false })
   child.stderr?.pipe(output, { end: false })
 
-  child.on("error", (error) => {
-    const finishedAt = isoNow()
-    output.write(`\n[${finishedAt}] spawn error: ${error.message}\n`)
-    output.end()
-    db.prepare(
-      "UPDATE pipeline_runs SET status = 'failed', finished_at = ?, exit_code = NULL, error = ? WHERE id = ?",
-    ).run(finishedAt, error.message, runId)
-    db.prepare("DELETE FROM pipeline_locks WHERE id = 1 AND run_id = ?").run(runId)
+  output.on("error", (error) => {
+    console.error("Pipeline log stream error:", error)
   })
 
-  child.on("close", (exitCode) => {
+  const finalize = createOnceFinalizer((exitCode: number | null, errorMessage: string | null) => {
     const finishedAt = isoNow()
-    const success = exitCode === 0
-    output.write(`\n[${finishedAt}] exit code ${exitCode ?? "null"}\n`)
+    const success = exitCode === 0 && errorMessage === null
+    output.write(
+      errorMessage
+        ? `\n[${finishedAt}] error: ${errorMessage}\n`
+        : `\n[${finishedAt}] exit code ${exitCode ?? "null"}\n`,
+    )
     output.end()
     db.prepare(
       "UPDATE pipeline_runs SET status = ?, finished_at = ?, exit_code = ?, error = ? WHERE id = ?",
-    ).run(success ? "succeeded" : "failed", finishedAt, exitCode ?? null, success ? null : `Exited with code ${exitCode ?? "null"}`, runId)
+    ).run(success ? "succeeded" : "failed", finishedAt, exitCode, errorMessage, runId)
     db.prepare("DELETE FROM pipeline_locks WHERE id = 1 AND run_id = ?").run(runId)
+  })
+
+  child.on("error", (error) => {
+    finalize(null, error.message)
+  })
+
+  child.on("close", (exitCode) => {
+    finalize(exitCode, exitCode === 0 ? null : `Exited with code ${exitCode ?? "null"}`)
   })
 
   child.unref()

@@ -85,7 +85,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 
 current_dir = Path(__file__).resolve().parent
 if str(current_dir) not in sys.path:
-    sys.path.append(str(current_dir))
+    # Prepend so the pipeline's utils package wins over unrelated site packages.
+    sys.path.insert(0, str(current_dir))
 
 from store.db import (init_db, migrate_database, get_urls_to_scrape, update_scraped_status,
                       get_pending_scrape_count, get_pending_opinion_count)

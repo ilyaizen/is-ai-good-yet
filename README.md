@@ -5,117 +5,130 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-green)
 
-A **premium, terminal-themed dashboard** that visualizes Hacker News sentiment toward AI coding tools. Built with **Svelte 5**, **SvelteKit 2**, and **Tailwind CSS 4**, featuring rich animations, dynamic theming, and a unique "verdict reveal" experience.
+A terminal-themed dashboard that tracks Hacker News sentiment toward AI coding tools through two lenses: what article **authors** write and what the **community** says in comments. Built with Svelte 5, SvelteKit 2, and Tailwind CSS 4.
 
 ---
 
-## 🤔 What is this?
+## What is this?
 
-**Is AI “Good” Yet?** tracks Hacker News to see what developers _actually_ think about AI coding tools.
+**Is AI "Good" Yet?** measures whether developers think AI coding tools are actually useful — not by vibes, but by systematically analyzing thousands of HN discussions.
 
-It runs a multi-stage Python pipeline that:
+It produces two scores, Metacritic-style:
 
-1. Collects AI-tagged submissions via [Histre](https://histre.com/hn/?tags=+ai)
-2. Resolves them using [Algolia's HN API](https://hn.algolia.com)
-3. Scrapes all possible article links
-4. Uses an LLM to filter out noise, then performs sentiment analysis
-5. Ranks articles based on **utility** and **trajectory** scores, weighted by engagement and recency
+- **Editorial Score** — LLM sentiment analysis of article content. What do the people who took the time to write a blog post or opinion piece actually think?
+- **Community Score** — LLM sentiment analysis of top-rated HN comments on selected stories. What does the crowd in the comment section think?
 
-The frontend you're looking at is the pretty face that makes all that data digestible.
+Both scores use the same verdict scale (0–100) and the same YES / NOT YET / NO thresholds, but they capture different signals: considered opinion vs. raw crowd reaction.
+
+### Pipeline
+
+A multi-stage Python pipeline collects and scores the data:
+
+1. **Ingest** — Collects AI-tagged HN submissions via [Histre](https://histre.com/hn/?tags=+ai) and [Algolia's HN API](https://hn.algolia.com)
+2. **Scrape** — Fetches article content with Playwright (anti-bot evasion + archive fallbacks)
+3. **Filter** — LLM classifies articles into AI_DISCOURSE (opinion/experience), AI_NEWS, AI_OTHER, or NOISE
+4. **Analyze** — LLM scores each AI_DISCOURSE article on two dimensions: **utility** (how useful right now) and **trajectory** (where it's heading)
+5. **Export** — Generates static JSON for the production frontend
+
+Scores are weighted by HN engagement (power-law scaled upvotes) and time decay (2-year half-life), so a viral discussion from last month matters more than a forgotten post from two years ago.
+
+### Verdict Scale
+
+| Score | Verdict | Meaning |
+|:------|:--------|:--------|
+| ≥ 55 | **YES** | Net positive — AI coding tools are earning developer trust |
+| 45–55 | **NOT YET** | Too close to call |
+| < 45 | **NO** | Net negative — skepticism dominates |
 
 ---
 
-## 💡 Why does this exist?
+## Why does this exist?
 
-> _"I kept seeing waves of AI-hate that just didn't match my experience, and as I don't jive with vibes or tribes, I built this to find out if HN's hivemind shares similar sentiments."_
+I wanted a data-driven answer to a question that usually gets answered with vibes or tribalism. Every week, waves of AI hype and AI doom crash through HN — but what does the signal actually look like when you aggregate thousands of real developer experiences, weight them by engagement, and track them over time?
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 is-ai-good-yet/
 ├── src/
 │   ├── lib/
 │   │   ├── components/
-│   │   │   ├── landing/           # Landing page components
-│   │   │   │   ├── verdict-veil.svelte      # Initial "question" overlay
-│   │   │   │   ├── verdict-display.svelte   # Main answer reveal
-│   │   │   │   ├── details-section.svelte   # Themes, methodology, stats
-│   │   │   │   ├── articles-table.svelte    # Sortable article explorer
-│   │   │   │   ├── history-chart.svelte     # Sentiment over time
-│   │   │   │   └── ...
-│   │   │   ├── ui/                # Reusable UI primitives (bits-ui based)
-│   │   │   ├── app-header.svelte  # Global header with nav
-│   │   │   ├── app-footer.svelte  # Global footer with links
-│   │   │   └── ...
-│   │   ├── composables/           # Svelte 5 composables (e.g., useTokenStream)
-│   │   ├── data/                  # Static JSON data (from pipeline export)
-│   │   │   ├── articles.json
-│   │   │   ├── themes.json
-│   │   │   └── verdict.json
-│   │   ├── server/                # Server-side utilities
-│   │   └── types/                 # TypeScript type definitions
+│   │   │   ├── landing/           # Verdict display, articles table, history chart
+│   │   │   └── ui/                # Reusable UI primitives (bits-ui / shadcn-svelte)
+│   │   ├── composables/           # Svelte 5 composables (useTokenStream, etc.)
+│   │   ├── data/                  # Static JSON exported by pipeline
+│   │   │   ├── articles.json     # All scored articles with sentiment & metadata
+│   │   │   ├── verdict.json      # Current + permanent verdict scores
+│   │   │   ├── historical.json   # Monthly verdict snapshots
+│   │   │   ├── weekly.json       # Weekly rolling-window snapshots
+│   │   │   ├── themes.json       # Synthesized themes by sentiment
+│   │   │   └── llm-metrics.json  # LLM speed & token metrics
+│   │   ├── server/               # Server-side DB utilities (dev-only admin)
+│   │   └── types/                # TypeScript type definitions
 │   ├── routes/
-│   │   ├── +page.svelte           # Landing page
-│   │   ├── +layout.svelte         # Root layout (fonts, analytics)
-│   │   └── details/               # Article detail routes
-│   └── styles/                    # Global CSS & design tokens
-├── pipeline/                      # Python data pipeline source and CLI
-├── docs/                          # Public docs
-├── docs_internal/                 # Operational/internal docs (archived task history)
-├── scripts/                       # tsx helper scripts
-├── static/                        # Static assets (favicon, OG images)
-├── convex/                        # Convex backend (visitor counter)
+│   │   ├── +page.svelte          # Landing page (v1 — verdict reveal)
+│   │   ├── +layout.svelte        # Root layout (fonts, theme, analytics)
+│   │   ├── details/[id]/         # Article detail routes
+│   │   ├── v2/                   # v2 prototype (Lenis smooth scroll + 3D)
+│   │   ├── lab/                  # Experiments (threejs-page-transition)
+│   │   └── admin/                # Pipeline control (dev-only, blocked in prod)
+│   └── styles/                   # Design tokens, terminal theme, animations
+├── pipeline/                     # Python data pipeline (source + CLI)
+├── convex/                       # Convex backend (visitor counter)
+├── scripts/                      # tsx helper scripts (bump-version, diagnose)
+├── static/                       # Favicon, OG images
+├── docs_internal/                # Operational docs (architecture, guide, troubleshooting)
 └── package.json
 ```
 
-## 🚢 Deployment
+---
 
-- **Coolify should deploy the repo root**, not the Python pipeline directory.
-- The SvelteKit app uses `@sveltejs/adapter-node`, so Coolify gets a real Node server instead of a dead-end static build.
-- `nixpacks.toml` pins Node 22.12, installs dev deps, builds with `bun run build`, and starts with `HOST=0.0.0.0 node build/index.js`.
-- The pipeline lives in `pipeline/` as source only; its data directory is gitignored.
-- Keep frontend env vars separate from pipeline secrets. Frontend runtime needs the Convex/public visitor settings; pipeline needs its own Python/LLM env.
+## Tech Stack
+
+- **Frontend**: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4 + shadcn-svelte + D3/LayerCake
+- **Pipeline**: Python 3.11+ — Polars, aiohttp, trafilatura, Playwright, Groq LLM API
+- **Visitor counter**: Convex
+- **Runtime**: Node 22.12, bun package manager
+- **Data**: SQLite (pipeline) → static JSON export (production frontend)
 
 ---
 
-## 🚀 Getting Started
+## Deployment
+
+The repo root is a SvelteKit app deployed via Coolify using `@sveltejs/adapter-node`. `nixpacks.toml` pins Node 22.12, builds with `bun run build`, and runs `HOST=0.0.0.0 node build/index.js`.
+
+The pipeline is source only — its data directory is gitignored. Frontend env vars (Convex/public) are separate from pipeline secrets (LLM API keys).
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 22.12+ (SvelteKit runtime/build)
+- Node.js 22.12+
 - bun
-- Python 3.11+ for the pipeline
-
-### Installation
+- Python 3.11+ (for the pipeline)
 
 ```bash
-# Clone the repo (if standalone)
-cd is-ai-good-yet
-
-# Install dependencies
 bun install
-
-# Start development server
-bun run dev
+bun run dev          # → http://localhost:5173
 ```
 
-The app will be available at <http://localhost:5173> (or port 3050 if configured).
+### Scripts
 
-### Available Scripts
-
-| Command           | Description                       |
-| ----------------- | --------------------------------- |
-| `bun run dev`     | Start Vite dev server with HMR    |
-| `bun run build`   | Production build                  |
-| `bun run preview` | Preview production build locally  |
-| `bun run check`   | TypeScript + Svelte type checking |
-| `bun run lint`    | Run Prettier + ESLint             |
-| `bun run format`  | Auto-format with Prettier         |
+| Command | Description |
+|:--------|:------------|
+| `bun run dev` | Vite dev server with HMR |
+| `bun run build` | Production build |
+| `bun run check` | TypeScript + Svelte type checking |
+| `bun run lint` | Prettier + ESLint |
+| `bun run format` | Auto-format |
+| `bun run cli` | Pipeline CLI wrapper |
 
 ---
 
 <p align="center">
-  <i>Built with ☕ and curiosity — <a href="https://github.com/ilyaizen">@ilyaizen</a></i>
+  <i>Built by <a href="https://github.com/ilyaizen">@ilyaizen</a></i>
 </p>

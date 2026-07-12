@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Docs Consolidation**: Rebuilt `AGENTS.md` as a single source of truth — stripped an obsolete Tauri/habit-tracker template (bun commands, `src-tauri/`, habits/calendars stores, `develop/0.1.0` branches) and fixed literal `TODO`s. Consolidated `docs_internal/` from 11 files (176K) into 4 focused docs (`README.md`, `ARCHITECTURE.md`, `GUIDE.md`, `TROUBLESHOOTING.md`) plus an `archive/` for completed history (`tasks.md`, `progress.md`, `plan.md`). Fixed all stale references: Bun→bun, nested `is-ai-good-yet/src/`→`src/`, dead `agents/` and `docs/*_prompt.md` paths, `vercel.json`/Vercel→Coolify/nixpacks, `/pipeline-admin`→`/admin`, old monorepo layout→flat.
+
 - **Groq Migration**: Migrated summary summarizer and theme synthesis from Anthropic Claude to Groq (`openai/gpt-oss-20b`).
 - **Frontend Refactor**: Removed direct Groq API integration/types from frontend core; switched to generic analysis fields.
 - **UI Refinements**: Refined focus handling, accessibility (semantic section), and scroll behavior.

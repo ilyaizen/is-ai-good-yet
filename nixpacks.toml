@@ -3,10 +3,10 @@ NIXPACKS_NODE_VERSION = "22.12.0"
 NPM_CONFIG_PRODUCTION = "false"
 
 [phases.install]
-cmds = ["npm install --include=dev"]
+cmds = ["bun install"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["bun run build"]
 
 [start]
 cmd = "HOST=0.0.0.0 node build/index.js"

@@ -42,3 +42,5 @@ deployment-*.txt
 package-lock.json
 /.playwright-mcp
 .dev-server.log
+/archive
+# /docs_internal

@@ -22,7 +22,7 @@ async function runScript(command: string, args: string[], cwd: string = PROJECT_
   return new Promise<boolean>((resolve) => {
     console.log(`\n> Executing: ${command} ${args.join(' ')}\n`);
 
-    // Use shell only for bare commands (npm, node, py, python3) — not for absolute paths.
+    // Use shell only for bare commands (bun, node, py, python3) — not for absolute paths.
     // shell:true + args array triggers DEP0190 and is a security risk.
     const useShell = !path.isAbsolute(command);
 
@@ -571,13 +571,13 @@ async function main() {
 
     try {
       if (action === 'dev') {
-        await runScript('npm', ['run', 'dev']);
+        await runScript('bun', ['run', 'dev']);
       }
       else if (action === 'build') {
-        await runScript('npm', ['run', 'build']);
+        await runScript('bun', ['run', 'build']);
       }
       else if (action === 'start') {
-        await runScript('npm', ['run', 'start']);
+        await runScript('bun', ['run', 'start']);
       }
       else if (action === 'pipeline-initial') {
         const args = await configureInitialE2EArgs();
@@ -680,10 +680,10 @@ async function main() {
         await runScript(pythonCmd, ['src/reclassify_sterile.py', ...(dryRun ? ['--dry-run', '-v'] : ['-v'])], PIPELINE_DIR);
       }
       else if (action === 'pipeline-bootstrap') {
-        await runScript('npm', ['run', 'pipeline:bootstrap']);
+        await runScript('bun', ['run', 'pipeline:bootstrap']);
       }
       else if (action === 'pipeline-stats') {
-        await runScript('npm', ['run', 'pipeline:stats']);
+        await runScript('bun', ['run', 'pipeline:stats']);
       }
       else if (action === 'python-setup') {
         const venvDir = path.join(PIPELINE_DIR, '.venv');

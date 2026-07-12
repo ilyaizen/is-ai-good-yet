@@ -11,7 +11,7 @@ Diagnoses v3→v4 schema migration impact by counting articles with old vs. new 
 **Usage:**
 
 ```bash
-npm run diagnose:schema-migration
+bun run diagnose:schema-migration
 ```
 
 **Output:**
@@ -30,7 +30,7 @@ Verifies that the backward compatibility fix correctly includes old-schema artic
 **Usage:**
 
 ```bash
-npm run verify:fix
+bun run verify:fix
 ```
 
 **Output:**
@@ -47,7 +47,7 @@ Tests that old-schema articles load correctly through SvelteKit's server-side da
 **Usage:**
 
 ```bash
-npm run test:article-display
+bun run test:article-display
 ```
 
 **Note:** This script uses the app's server-side DB helpers and expects the pipeline database at `pipeline/data/pipeline.db`.

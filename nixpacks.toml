@@ -5,7 +5,8 @@ PIPELINE_PYTHON = "/opt/pipeline-venv/bin/python"
 PLAYWRIGHT_BROWSERS_PATH = "/opt/playwright-browsers"
 
 [phases.setup]
-nixPkgs = ["nodejs_22", "bun", "python311", "python311Packages.pip", "chromium"]
+nixPkgs = ["...", "python311", "python311Packages.pip", "chromium"]
+nixLibs = ["...", "gcc-unwrapped"]
 
 [phases.install]
 cmds = [

@@ -50277,5 +50277,221 @@
         "timestamp": "2026-07-07T17:06:51.242973+00:00"
       }
     }
+  },
+  "48883275": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author compares two AI tools with empirical data, making a verdict on their effectiveness."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1907,
+        "output_tokens": 44,
+        "total_tokens": 1951,
+        "inference_time_ms": 319.4,
+        "tokens_per_second": 137.8,
+        "prompt_chars": 3971,
+        "timestamp": "2026-07-12T20:00:57.871949+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Claude Code inflates token usage and cost, making it a net negative for production workflows.",
+        "quotes": [
+          "Claude Code is far hungrier: When we asked both harnesses for a one-line reply, Claude Code used roughly 33,000 tokens of system prompt, tool schemas, and injected scaffolding before the prompt even arrived.",
+          "OpenCode used about 7,000. Claude Code is far more cache inefficient: OpenCode's request prefix was byte-identical in every run we captured; it paid to cache its payload once per session and read it back for pennies."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-12T20:01:11.291616+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2636,
+        "output_tokens": 336,
+        "total_tokens": 2972,
+        "inference_time_ms": 581.0,
+        "tokens_per_second": 578.3,
+        "prompt_chars": 7974,
+        "timestamp": "2026-07-12T20:01:11.291630+00:00"
+      }
+    }
+  },
+  "48837696": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Research with clear findings about AI coding effectiveness on a multi-million line codebase"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1924,
+        "output_tokens": 44,
+        "total_tokens": 1968,
+        "inference_time_ms": 238.0,
+        "tokens_per_second": 184.9,
+        "prompt_chars": 3992,
+        "timestamp": "2026-07-12T20:00:58.586202+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Databricks’ benchmark shows AI agents can boost productivity, but requires careful model/harness selection for best cost‑performance.",
+        "quotes": [
+          "\"The results showed clear clustering of the models and harnesses into 3 capability tiers.\"",
+          "\"The answer is a definitive yes, and because we can be data driven, we can start building capabilities to select the right models automatically and track efficiency.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-12T20:01:12.331058+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2520,
+        "output_tokens": 206,
+        "total_tokens": 2726,
+        "inference_time_ms": 502.1,
+        "tokens_per_second": 410.3,
+        "prompt_chars": 7974,
+        "timestamp": "2026-07-12T20:01:12.331072+00:00"
+      }
+    }
+  },
+  "48823981": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Lisp and AI development, reflecting on the past and speculating about the future of AI agents."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1917,
+        "output_tokens": 52,
+        "total_tokens": 1969,
+        "inference_time_ms": 249.8,
+        "tokens_per_second": 208.1,
+        "prompt_chars": 3967,
+        "timestamp": "2026-07-12T20:00:56.717219+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Lisp enables minimal, self‑generating agent loops—simple, elegant, but still early, not a full game‑changer.",
+        "quotes": [
+          "\"An agent is a recursive function# Don’t let the power of Claude Code, OpenClaw or any other AI agent tooling fool you - strip away the frameworks and an agent loop is incredibly simple.\"",
+          "\"Code is data, data is code, and capability is just conversation.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-12T20:01:09.985900+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2681,
+        "output_tokens": 242,
+        "total_tokens": 2923,
+        "inference_time_ms": 547.0,
+        "tokens_per_second": 442.4,
+        "prompt_chars": 7978,
+        "timestamp": "2026-07-12T20:01:09.985913+00:00"
+      }
+    }
+  },
+  "48837162": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and critical evaluation of Fable's usefulness for software development."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1926,
+        "output_tokens": 44,
+        "total_tokens": 1970,
+        "inference_time_ms": 246.9,
+        "tokens_per_second": 178.2,
+        "prompt_chars": 3962,
+        "timestamp": "2026-07-12T20:00:57.438928+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "workflow",
+        "summary": "Fable’s safety filters choke legitimate code‑rewrite work, making it a net blocker for developers.",
+        "quotes": [
+          "“Fable failed at helping me with my software development and porting tasks, presumably because of the type of data that software deals with.”",
+          "“I was unable to get Fable to provide me with any useful help.”"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-12T20:01:10.601313+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2732,
+        "output_tokens": 189,
+        "total_tokens": 2921,
+        "inference_time_ms": 515.4,
+        "tokens_per_second": 366.7,
+        "prompt_chars": 7973,
+        "timestamp": "2026-07-12T20:01:10.601328+00:00"
+      }
+    }
+  },
+  "48841446": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 1.0,
+        "reasoning": "Author shares personal experience and opinion on AI's impact on software rewrites"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1397,
+        "output_tokens": 43,
+        "total_tokens": 1440,
+        "inference_time_ms": 426.5,
+        "tokens_per_second": 100.8,
+        "prompt_chars": 1862,
+        "timestamp": "2026-07-12T20:01:00.645632+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI boosts rewrites for clean, common patterns, but struggles with proprietary or messy codebases, making context the bottleneck.",
+        "quotes": [
+          "AI changes rewrite economics because codebases with clear, common patterns get more leverage than proprietary or inconsistent systems.",
+          "In the first workflow, the codebase has established patterns the model easily understands.",
+          "In the second, the model spends effort inferring them before it can solve the problem."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-12T20:01:13.964483+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1248,
+        "output_tokens": 261,
+        "total_tokens": 1509,
+        "inference_time_ms": 404.6,
+        "tokens_per_second": 645.2,
+        "prompt_chars": 1862,
+        "timestamp": "2026-07-12T20:01:13.964496+00:00"
+      }
+    }
   }
 }

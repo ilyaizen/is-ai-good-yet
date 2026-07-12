@@ -15,13 +15,16 @@
 
 The system uses a **Linear Phase Pipeline** architecture. It is designed to be interruptible and resumable. It supports both **fresh full-database scrapes** (see [Initial E2E Pipeline](#initial-e2e-pipeline-fresh-start)) and **incremental updates** (see [Catch-Up E2E Pipeline](#catch-up-e2e-pipeline-incremental)).
 
-### Core Philosophy: Hybrid Storage
+### Core Philosophy: Split Storage
 
 To ensure performance and maintainability, data is split between:
 
 1. **SQLite (`pipeline/data/pipeline.db`)**: Mutable metadata (status flags, HN scores, computed sentiment scores). Fast relational queries.
-2. **Text Files (`pipeline/data/articles-text/*.txt`)**: **Ground Truth** for content. Human-readable/editable. Deleting a file removes that article from future exports.
-3. **Parquet (`pipeline/data/articles/*.parquet`)**: Derived cache for heavy data (scraped HTML, full text content). Built from Text Files + SQLite. Columnar storage using `zstd` compression.
+2. **Parquet (`pipeline/data/articles/*.parquet`)**: Canonical scraped article content. Columnar storage using `zstd` compression.
+
+Legacy plain-text copies remain in `pipeline/data/articles-text/` and
+`pipeline/data/articles-text-backup/` for recovery, but new scrapes do not write them and exports do
+not use their presence as a curation signal.
 
 ### Directory Structure
 
@@ -186,12 +189,9 @@ The catch-up pipeline runs phases in sequence:
 1. **Backfill Histre** (Phase 2) - Scrape recent pages (default: 5)
 2. **Resolve HN Links** (Phase 3) - Query Algolia for new URLs
 3. **Scrape Content** (Phase 4) - Fetch article text for NEW URLs only (not retrying failures)
-4. **Clean Article Text** (Phase 4.5a) - Normalize text formatting
-5. **Content Prefilter** (Phase 5) - Classify with Groq API
-6. **Sentiment Analysis** (Phase 6) - Score with Groq API
-7. **Export to Frontend** (Phase 7) - Generate static JSON for production deployment
-
-> **Note:** Ground-Truth Uptake (Phase 4.5b) is NOT included in the automated catch-up pipeline. Run it manually when needed.
+4. **Content Prefilter** (Phase 5) - Classify with Groq API
+5. **Sentiment Analysis** (Phase 6) - Score with Groq API
+6. **Export to Frontend** (Phase 7) - Generate static JSON for production deployment
 
 > **Scraping Behavior:** The catch-up pipeline does NOT retry previously failed URLs to avoid wasteful retries of known-broken pages. To retry failures, use the standalone scraper with `--retry-failed`.
 
@@ -327,15 +327,18 @@ python -m src.scraper --retry-failed     # Retry previously failed URLs
 
 #### Output
 
-1. Save simplified format `title`, `url`, `text` to `pipeline/data/articles-text/<hn_id>.txt` (Title + URL only, no Author/Date).
-2. Append to Parquet shards.
-3. (Optional) Run `rebuild_parquet.py` to sync manual edits in text files to Parquet.
+Append extracted article content and metadata to compressed Parquet shards in
+`pipeline/data/articles/`. SQLite is marked successful only after the Parquet buffer flushes.
 
-### Phase 4.5: Data Cleaning & Ground-Truth Uptake
+### Legacy Text Recovery Utilities
 
-- **Goal:** Clean and sanitize article text data, simplify formats, and synchronize all data stores.
+- **Goal:** Recover or inspect article data written before Parquet became canonical.
 - **Primary Modules:** `clean_articles.py`, `uptake_ground_truth.py`
-- **When to Run:** After scraping is complete OR after manual editing/deletion of article-text files.
+- **When to Run:** Only when deliberately restoring the legacy plain-text dataset.
+
+These utilities are no longer part of the active scrape or catch-up pipeline. In particular,
+`uptake_ground_truth.py` replaces canonical Parquet shards from legacy text files and should not be
+used as a routine synchronization step.
 
 #### Data Cleaning Script (`clean_articles.py`)
 
@@ -459,6 +462,40 @@ python -m src.prefilter_content --reset-only                # Clear filter data 
 python -m src.prefilter_content --stats                     # Show classification stats
 ```
 
+### V2 Two-Tier Sentiment Analysis
+
+V2 is additive and does not modify the v1 `sentiment_score`, `classification_json`, or static JSON
+contracts. It stores source data and analyses in separate `hn_*` and `v2_*` tables and exports to
+`src/lib/data/v2/`.
+
+The normative prompt and methodology contract is
+[`docs/v2-sentiment-prompt.md`](../docs/v2-sentiment-prompt.md).
+
+1. `hn_comments_v2.py` preserves every parent's public ranked `kids` order, local sibling rank,
+   ancestry, and snapshot time. Adaptive sampling targets 12–32 accepted comments with deterministic
+   top-level/branch waves, author and branch caps, and refill after rejection or non-addressing.
+2. Account karma is absent from v2.2 selection, prompts, annotation, aggregation, confidence, and
+   export. Public sibling rank is an ordinal visibility signal, not a reconstruction of private votes.
+3. `sentiment_v2.py` analyzes the article independently and sends one isolated request per voting
+   comment. Structured article thesis/evidence, immediate parent, and distinct root are context-only;
+   only the voting comment receives an annotation.
+4. Absolute AI stance, article relation, and parent relation remain separate. Only applicable
+   absolute stances enter per-dimension aggregation. Missing dimensions are `not_addressed`, not zero.
+5. Community aggregation produces a primary visibility-weighted estimate and a diversity-balanced
+   diagnostic. It exports ranking sensitivity, direction shares, disagreement, polarization, ESS,
+   coverage/counts, clarity, and per-dimension dissent. Disagreement and sentiment direction or
+   magnitude never reduce measurement confidence.
+6. `export_v2.py` starts from 40% article and 60% community priors. Per-dimension source confidence
+   changes effective influence without changing a source's sentiment or pulling it toward neutral.
+7. Prompt, input, contract, parser, selection, and aggregation versions or hashes are persisted for
+   reproducibility. Article and community runs are saved independently, including valid rejections.
+
+The estimand is visible expressed HN discussion at collection time, not silent readers, all HN users,
+or public opinion. Story comment volume may enlarge the sample but does not directly affect sentiment
+or global influence; existing story score/time decay remains the engagement signal. The three
+dimension verdicts are primary. The equal-weight composite is a secondary summary.
+The `/v2` route remains on its existing static data until this contract has reviewed initial data.
+
 ### Phase 6: Sentiment Analysis
 
 - **Goal:** 2-dimension sentiment analysis for AI coding workflow content with explicit rejection.
@@ -579,7 +616,7 @@ python -m src.sentiment_analyzer --reanalyze -v        # Include already-analyze
 - `hn_score >= 20`
 - `topic != 'business'` (v4) OR `subtopic != 'business'` (v3)
 - `sentiment_score IS NOT NULL`
-- Article text file exists in `pipeline/data/articles-text/` (ground truth sync)
+- `scraped_status = 'success'`
 
 #### CLI Usage
 

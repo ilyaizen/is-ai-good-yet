@@ -32,6 +32,7 @@
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 @import "@fontsource/ibm-plex-mono/700.css";
+@import "@fontsource/share-tech-mono/400.css";
 
 /* Force IBM Plex Mono to block display to prevent font flash */
 @font-face {
@@ -49,6 +50,7 @@
 @import "./styles/components.css";
 @import "./styles/animations.css";
 @import "./styles/crt-effect.css";
+@import "./styles/v2.css";
 
 /* ============================================
    Tailwind CSS v4 Theme Bridge
@@ -153,37 +155,7 @@
   --animate-blink: blink 1s step-end infinite;
 }
 
-/* ============================================
-   Glass Override Layer (v2 only)
-   ============================================
-   Overrides bg-card and site-footer to use
-   semi-transparent backgrounds with backdrop-blur,
-   so the threlte scene bleeds through.
-   Applied AFTER Tailwind's @theme to win specificity.
-
-   Only active on v2 route (body.v2 class) where
-   the 3D background scene is rendered.
-*/
 @layer utilities {
-  body.v2 .bg-card,
-  body.v2 .site-header,
-  body.v2 .site-footer,
-  body.v2 .terminal-panel,
-  body.v2 .terminal-card,
-  body.v2 .terminal-card--interactive {
-    background-color: oklch(from var(--card) l c h / 0.4) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
-    backdrop-filter: blur(16px) saturate(1.4) !important;
-  }
-
-  body.v2:not(.dark) .bg-card,
-  body.v2:not(.dark) .site-header,
-  body.v2:not(.dark) .site-footer,
-  body.v2:not(.dark) .terminal-panel,
-  body.v2:not(.dark) .terminal-card {
-    background-color: oklch(from var(--card) l c h / 0.4) !important;
-  }
-
   body.lab-transition {
     background:
       radial-gradient(circle at top left, rgb(34 211 238 / 0.12), transparent 42%),

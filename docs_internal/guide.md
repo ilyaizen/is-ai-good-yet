@@ -18,7 +18,7 @@ Setup, usage, conventions, and agent mandates for `is-ai-good-yet`. For system d
 
 - **Language:** Python 3.11+
 - **Dataframes:** Polars
-- **Storage:** SQLite (metadata), Parquet (content), `.txt` ground truth
+- **Storage:** SQLite (metadata and analysis), Parquet (canonical scraped content)
 - **Network:** aiohttp, aiolimiter, tenacity
 - **LLM Interface:** pydantic (schema validation), Groq API (sentiment), Mistral API (prefilter), Anthropic Claude (themes)
 - **Scraping:** trafilatura, Playwright + camoufox (bot evasion), SeleniumBase (archive fallback)
@@ -93,8 +93,6 @@ python -m src.catch_up --skip-scrape # reuse existing content
 
 **Catch-up flags:** `-v/--verbose`, `-p/--pages N` (default 5), `--skip-scrape`, `--skip-analyze`, `--dry-run`. Continues on errors, shows per-phase summary, handles Ctrl+C gracefully.
 
-> Ground-Truth Uptake (Phase 4.5b) is **not** in the automated catch-up — run it manually when needed.
-
 ### Individual phases
 
 | Phase               | Command (from `pipeline/`)                                                                     | Notes                                  |
@@ -102,8 +100,8 @@ python -m src.catch_up --skip-scrape # reuse existing content
 | Histre backfill     | `python -m src.backfill_histre --start 1 --end 10`                                             | `--resume` resumes from last state     |
 | HN resolution       | `python -m src.hn_resolver`                                                                    | resolves HN metadata via Algolia       |
 | Scraping            | `python -m src.scraper -v --lean --stealth-mode=seleniumbase --no-headful-switch -b 100 -c 16` | see scraper flags below                |
-| Cleaning            | `python src/clean_articles.py`                                                                 | `--no-backup` skips backup             |
-| Ground-truth uptake | `python src/uptake_ground_truth.py`                                                            | sync DB + parquet with cleaned text    |
+| Legacy text cleanup | `python src/clean_articles.py`                                                                 | recovery use only                      |
+| Legacy text uptake  | `python src/uptake_ground_truth.py`                                                            | destructively rebuilds Parquet         |
 | Consistency check   | `python src/check_consistency.py`                                                              | `--fix` resets phantom articles        |
 | Pre-filtering       | `python -m src.prefilter_content -v`                                                           | `--stats`, `--reset`                   |
 | Sentiment analysis  | `python -m src.sentiment_analyzer -v`                                                          | `--limit 10`, `--reset`, `--reanalyze` |

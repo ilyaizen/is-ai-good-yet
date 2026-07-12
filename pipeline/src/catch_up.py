@@ -188,17 +188,6 @@ class CatchUpPipeline:
                 )
             )
 
-        # Phase 3.5a: Clean Article Text (incremental - only new files)
-        phases.append(
-            PhaseConfig(
-                name="Clean Article Text",
-                phase_id="3.5a",
-                module="src/clean_articles.py",
-                args=["--no-backup", "--new-only"],
-                is_script=True,
-            )
-        )
-
         # Phase 4: Content Prefilter (optional)
         if not self.skip_analyze:
             prefilter_args = []

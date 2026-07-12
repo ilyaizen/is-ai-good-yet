@@ -47,5 +47,5 @@ export function sanitizeAdminNextPath(value: FormDataEntryValue | string | null 
   const next = typeof value === "string" ? value.trim() : ""
   if (!next || !next.startsWith("/")) return "/admin"
   if (next.startsWith("//")) return "/admin"
-  return next.startsWith("/admin") ? next : "/admin"
+  return next.startsWith("/admin") || next.startsWith("/v2/admin") ? next : "/admin"
 }

@@ -43,11 +43,6 @@ TIMELINE_DISPLAY_MONTHS = 48
 # Negative value means neutral articles contribute negatively to the verdict
 NEUTRAL_MULTIPLIER = -0.5
 
-# Ground truth text files directory (articles-text/*.txt)
-# Articles deleted from here are excluded from export
-GROUND_TRUTH_DIR = Path(__file__).parent.parent / "data" / "articles-text"
-
-
 def get_decay_factor(timestamp_seconds: int) -> float:
     """
     Calculate decay factor for articles based on age.
@@ -106,10 +101,6 @@ def export_articles(cursor) -> list[dict]:
     """
     Export all verdict-included articles with analysis data.
     Matches the frontend's getTopArticles() filtering.
-
-    Ground truth sync: Articles are only included if their ground truth
-    text file exists in GROUND_TRUTH_DIR. This allows manual curation by
-    deleting text files to remove articles from the verdict.
     """
     query = """
         SELECT
@@ -126,6 +117,7 @@ def export_articles(cursor) -> list[dict]:
             url
         FROM urls
         WHERE sentiment_score IS NOT NULL
+          AND scraped_status = 'success'
           AND content_category = 'AI_DISCOURSE'
           AND hn_score IS NOT NULL
           AND hn_score >= 20
@@ -145,29 +137,10 @@ def export_articles(cursor) -> list[dict]:
     cursor.execute(query)
     rows = cursor.fetchall()
 
-    # Build set of hn_ids that have ground truth text files
-    ground_truth_ids = set()
-    if GROUND_TRUTH_DIR.exists():
-        for txt_file in GROUND_TRUTH_DIR.glob("*.txt"):
-            try:
-                hn_id = int(txt_file.stem)
-                ground_truth_ids.add(hn_id)
-            except ValueError:
-                pass  # Skip non-numeric filenames
-        logger.debug(f"  Found {len(ground_truth_ids)} ground truth text files")
-    else:
-        logger.warning(f"Ground truth directory not found: {GROUND_TRUTH_DIR}")
-
     articles = []
-    skipped_count = 0
 
     for row in rows:
         url_id, hn_id, hn_title, hn_score, hn_comments, hn_timestamp, hn_author, sentiment_score, classification_json, content_category, url = row
-
-        # Skip articles without ground truth text files (deleted from curation)
-        if ground_truth_ids and hn_id not in ground_truth_ids:
-            skipped_count += 1
-            continue
 
         classification = parse_classification_json(classification_json)
         influence_score = round(calculate_influence_score(hn_score, hn_timestamp), 2)
@@ -190,9 +163,6 @@ def export_articles(cursor) -> list[dict]:
             "quotes": classification.get("quotes", []),
         }
         articles.append(article)
-
-    if skipped_count > 0:
-        logger.info(f"  Skipped {skipped_count} articles without ground truth text files")
 
     return articles
 

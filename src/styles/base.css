@@ -12,13 +12,6 @@
     overflow-y: auto;
   }
 
-  html.scroll-locked {
-    overflow: hidden !important;
-  }
-
-  html.scroll-locked body {
-    overflow: hidden !important;
-  }
 
   body {
     background-color: var(--background);

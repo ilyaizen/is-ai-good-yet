@@ -9,7 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
+- Export analyzed articles independently of legacy `articles-text` files.
+
 ### Added
+
+- Add a live v2 admin methodology ledger with the exact versioned article and comment prompts.
+- Add manual v2 comment-collection and analysis controls backed by the existing server pipeline runner.
+- Add an isolated v2 two-tier sentiment pipeline for broader AI capability, trajectory, and societal-impact analysis.
+- Add strict versioned article and per-comment prompt contracts with explicit missing-dimension handling.
+- Add deterministic adaptive Hacker News ranked-tree sampling with isolated context-aware comment annotation.
+- Add visibility-weighted and diversity-balanced community estimates, disagreement/polarization diagnostics, and broad-capture v2 prompt contracts without commenter-karma influence.
+- Add normalized v2 analysis storage with prompt/input hashes and confidence-aware source aggregation.
+- Add separate v2 static exports so existing sentiment data and frontend consumers remain backward compatible.
 
 - **Phase 1.5 (Algolia Discovery)**: New pipeline phase to directly query HN Algolia API for high-signal AI stories.
 - **Token Streaming**: Implemented token-by-token text streaming effects for verdict animations.
@@ -57,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix unreadable black age values in the admin content table and expand table search to titles and authors.
 - Scroll inversion and verdict veil placement outside smooth-scroll container.
 - SSR guard for `pointTexture` in 3D background scene.
 - Light-theme node colors and info card values in admin views.

@@ -1,101 +1,26 @@
 <script lang="ts">
-  import type { PageData } from "./$types"
-  import VerdictDisplay from "$lib/components/landing/verdict-display.svelte"
-  import ArticlesTable from "$lib/components/landing/articles-table.svelte"
-  import AppFooter from "$lib/components/app-footer.svelte"
-  import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte"
-  import { onMount, getContext } from "svelte"
-  import DetailsSection from "$lib/components/landing/details-section.svelte"
+  import type { PageData } from "./$types";
+  import VerdictDisplay from "$lib/components/landing/verdict-display.svelte";
+  import ArticlesTable from "$lib/components/landing/articles-table.svelte";
+  import AppFooter from "$lib/components/app-footer.svelte";
+  import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte";
+  import DetailsSection from "$lib/components/landing/details-section.svelte";
+  import { useVeil } from "$lib/composables/use-veil.svelte";
 
-  let { data }: { data: PageData } = $props()
+  let { data }: { data: PageData } = $props();
 
-  // Get context from layout to control header visibility
-  const layoutScrollState = getContext<{
-    scroll: number
-    setScrolledPastVerdict: (value: boolean) => void
-  }>("layoutScrollState")
-
-  // Get veil control from layout
-  const veilControl = getContext<{
-    setVeilState: (params: {
-      visible: boolean
-      onReveal: () => void
-      articleCount: number
-      lastUpdateTimestamp: number | null
-      resetTrigger: number
-    }) => void
-  }>("veilControl")
-
-  // Local state
-  let isLoading = $state(true)
-  let revealed = $state(false)
-  let contentVisible = $state(false)
-  let veilResetTrigger = $state(0)
-  const LOADER_FADE_DELAY_MS = 100
-  const STORAGE_KEY = "isAiGoodYetRevealed"
-
-  function handleReveal() {
-    revealed = true
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem(STORAGE_KEY, "true")
+  const veil = useVeil({
+    get articleCount() {
+      return data.permanentRecord.totalArticles;
+    },
+    get lastUpdateTimestamp() {
+      return data.lastCatchUpTimestamp;
     }
-    setTimeout(() => {
-      contentVisible = true
-    }, 300)
-  }
-
-  function handleReplay() {
-    revealed = false
-    contentVisible = false
-    if (typeof localStorage !== "undefined") {
-      localStorage.removeItem(STORAGE_KEY)
-    }
-    veilResetTrigger++
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0 })
-    }
-  }
-
-  // Scroll-driven header visibility — top-level $effect so Svelte tracks it properly
-  $effect(() => {
-    if (!revealed) {
-      layoutScrollState.setScrolledPastVerdict(false)
-      return
-    }
-    const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
-    layoutScrollState.setScrolledPastVerdict(scrolledPast)
-  })
-
-  // Sync veil visibility state with layout
-  $effect(() => {
-    if (!isLoading) {
-      veilControl.setVeilState({
-        visible: !revealed,
-        onReveal: handleReveal,
-        articleCount: data.permanentRecord.totalArticles,
-        lastUpdateTimestamp: data.lastCatchUpTimestamp,
-        resetTrigger: veilResetTrigger,
-      })
-    }
-  })
-
-  onMount(() => {
-    if (typeof localStorage !== "undefined") {
-      const hasRevealed = localStorage.getItem(STORAGE_KEY)
-      if (hasRevealed === "true") {
-        revealed = true
-        contentVisible = true
-      }
-    }
-
-    setTimeout(() => {
-      isLoading = false
-    }, LOADER_FADE_DELAY_MS)
-  })
+  });
 </script>
 
 <svelte:head>
-  <title>Is AI "Good" Yet?</title>
+  <title>Is AI &ldquo;Good&rdquo; Yet?</title>
   <meta
     name="description"
     content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts."
@@ -103,9 +28,9 @@
 </svelte:head>
 
 <!-- Comprehensive Loader - shows during initial data fetch -->
-<ComprehensiveLoader visible={isLoading} />
+<ComprehensiveLoader visible={veil.isLoading} />
 
-{#if revealed}
+{#if veil.revealed}
   <main class="main-content">
     <!-- Hero Section: Full-Viewport Verdict Display -->
     <section id="home" class="verdict-hero">
@@ -115,19 +40,19 @@
           score={data.verdictScore.finalScore}
           weeklySnapshots={data.weeklySnapshots}
           verdictScore={data.verdictScore}
-          onReplay={handleReplay}
+          onReplay={veil.handleReplayScrollToTop}
         />
       </div>
     </section>
 
     <!-- Content Section: Articles, Details & Footer -->
-    <section id="articles" class="content-section" class:content-section--visible={contentVisible}>
+    <section id="articles" class="content-section" class:content-section--visible={veil.contentVisible}>
       <div id="articles-table" class="scroll-mt-24">
         <ArticlesTable articles={data.topArticles} />
       </div>
 
       <div id="details" class="scroll-mt-24">
-        <DetailsSection visible={contentVisible} />
+        <DetailsSection visible={veil.contentVisible} />
       </div>
 
       <AppFooter />

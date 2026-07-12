@@ -12,6 +12,8 @@ export type PipelineCommandName =
   | "clean_articles"
   | "prefilter_content"
   | "sentiment_analyzer"
+  | "v2_comments"
+  | "v2_analyze"
   | "export"
 
 export type PipelineCommandSpec = {
@@ -109,6 +111,18 @@ const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
     description: "Score utility and trajectory with the Groq analyzer.",
     args: ["-m", "src.sentiment_analyzer", "-v"],
   },
+  v2_comments: {
+    name: "v2_comments",
+    label: "Collect v2 comments",
+    description: "Fetch and deterministically rank Hacker News comment candidates for v2.",
+    args: ["-m", "src.hn_comments_v2", "-v"],
+  },
+  v2_analyze: {
+    name: "v2_analyze",
+    label: "Analyze v2 sentiment",
+    description: "Run the versioned article and isolated-comment analysis against live pipeline data.",
+    args: ["-m", "src.sentiment_v2", "-v"],
+  },
   export: {
     name: "export",
     label: "Export",
@@ -177,8 +191,13 @@ export function getPipelineEnvironmentStatus(): PipelineEnvironmentStatus {
   }
 }
 
-export function getPipelineCommandList(): PipelineCommandSpec[] {
-  return Object.values(COMMANDS)
+export function getPipelineCommandList(scope: "v1" | "v2" = "v1"): PipelineCommandSpec[] {
+  const names: PipelineCommandName[] =
+    scope === "v2"
+      ? ["catch_up", "scrape", "clean_articles", "prefilter_content", "v2_comments", "v2_analyze"]
+      : ["catch_up", "scrape", "clean_articles", "prefilter_content", "sentiment_analyzer", "export"]
+
+  return names.map((name) => COMMANDS[name])
 }
 
 export function getPipelineCommand(command: PipelineCommandName): PipelineCommandSpec {

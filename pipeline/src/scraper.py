@@ -90,7 +90,6 @@ if str(current_dir) not in sys.path:
 from store.db import (init_db, migrate_database, get_urls_to_scrape, update_scraped_status,
                       get_pending_scrape_count, get_pending_opinion_count)
 from store.parquet import ParquetArticleStore
-from store.text_store import TextArticleStore
 from scrapers import TrafilaturaScraper, NewspaperScraper, ArchiveScraper, SimpleScraper  # noqa: F401
 from scrapers.selenium_archive import SeleniumArchiveScraper, SELENIUM_AVAILABLE as SELENIUM_ARCHIVE_AVAILABLE  # noqa: F401
 from utils import (
@@ -693,7 +692,6 @@ async def process_batch(
     scraper: UnifiedScraper,
     batch: List[Tuple],
     parquet_store: ParquetArticleStore,
-    text_store: TextArticleStore,
     progress: Progress,
     task_id: int,
     pending_success_urls: List[str],
@@ -722,12 +720,6 @@ async def process_batch(
                     logging.warning(f"Discarding short content for {url} ({len(text_content)} bytes)")
                     update_scraped_status(url, 'failed', f"content_too_short_{len(text_content)}b", "empty_content")
                 else:
-                    text_store.save_article(
-                        hn_id,
-                        content.get('title'), content.get('author'), content.get('publish_date'),
-                        url, text_content
-                    )
-
                     parquet_store.add_article(
                         url_id, url,
                         content.get('title'), content.get('author'), content.get('publish_date'),
@@ -837,7 +829,6 @@ async def main(
 
     shard_size_limit = max(batch_size * 2, 1000)
     parquet_store = ParquetArticleStore(shard_size=shard_size_limit)
-    text_store = TextArticleStore()
 
     target_rate = rate_limit if rate_limit > 0 else float(concurrency)
     limiter = AsyncLimiter(target_rate, 1.0)
@@ -1061,7 +1052,7 @@ async def main(
 
                         sub_batch = urls_to_process[i : i + concurrency]
                         await process_batch(
-                            scraper, sub_batch, parquet_store, text_store,
+                            scraper, sub_batch, parquet_store,
                             progress, task, pending_success_urls, session
                         )
 

@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import logging
 import os
 from datetime import datetime, timezone
 from typing import Any
@@ -67,22 +68,23 @@ def pending_rows(limit: int | None, reprocess: bool) -> list[dict[str, Any]]:
 
 async def classify(client: AsyncGroq, story: dict[str, Any], content: str) -> dict[str, Any] | None:
     source = f"Title: {story['hn_title'] or 'Untitled'}\n\n<UNTRUSTED_ARTICLE>\n{content[:7000]}\n</UNTRUSTED_ARTICLE>"
-    for _attempt in range(2):
-        response = await client.chat.completions.create(
-            model=MODEL,
-            messages=[{"role": "system", "content": PROMPT}, {"role": "user", "content": source}],
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "v2_prefilter", "strict": True, "schema": PREFILTER_SCHEMA,
-                },
-            },
-            temperature=0.1,
-            max_completion_tokens=500,
-        )
+    for attempt in range(2):
         try:
+            response = await client.chat.completions.create(
+                model=MODEL,
+                messages=[{"role": "system", "content": PROMPT}, {"role": "user", "content": source}],
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "v2_prefilter", "strict": True, "schema": PREFILTER_SCHEMA,
+                    },
+                },
+                temperature=0.1,
+                max_completion_tokens=1200,
+            )
             result = json.loads(response.choices[0].message.content or "{}")
-        except json.JSONDecodeError:
+        except Exception as exc:
+            logging.warning("V2 prefilter attempt %s failed: %s", attempt + 1, exc)
             continue
         valid, _error = validate_prefilter_result(result)
         if valid:

@@ -16,6 +16,7 @@ from groq import AsyncGroq
 from .sentiment_v2 import get_article_content
 from .store.v2 import connect_rows, init_v2_schema, save_prefilter_decision
 from .v2_models import PREFILTER_CONTRACT_VERSION, validate_prefilter_result
+from .v2_schemas import PREFILTER_SCHEMA
 
 MODEL = "openai/gpt-oss-20b"
 PROMPT_VERSION = "v2-prefilter-prompt-v2.0.0"
@@ -70,7 +71,12 @@ async def classify(client: AsyncGroq, story: dict[str, Any], content: str) -> di
         response = await client.chat.completions.create(
             model=MODEL,
             messages=[{"role": "system", "content": PROMPT}, {"role": "user", "content": source}],
-            response_format={"type": "json_object"},
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "v2_prefilter", "strict": True, "schema": PREFILTER_SCHEMA,
+                },
+            },
             temperature=0.1,
             max_completion_tokens=500,
         )

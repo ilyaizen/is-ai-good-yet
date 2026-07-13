@@ -77,7 +77,9 @@ Candidate waves are: one top-level per author in story-child rank; one reply per
 root-rank/local-sibling round-robin; remaining top-level; remaining replies in branch round-robin.
 Unused quota transfers only after its stratum is exhausted. Model rejection, invalid response, or an
 accepted result with all dimensions `not_addressed` does not consume the accepted target. Refill uses
-the next deterministic candidate. Author and branch caps apply to accepted comments.
+the next deterministic candidate, bounded to at most `2T` attempted candidates per story. This gives
+each target slot one deterministic replacement without allowing malformed model output to trigger an
+unbounded API loop. Author and branch caps apply to accepted comments.
 
 Comment length beyond non-empty text, article stance, model sentiment, story score, and account
 reputation never affect candidate ordering or acceptance capacity.

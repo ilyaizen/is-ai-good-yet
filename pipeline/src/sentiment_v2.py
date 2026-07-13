@@ -31,6 +31,9 @@ from .v2_models import (
     aggregate_comment_dimension, composite_score, validate_article_analysis,
     validate_comment_analysis,
 )
+from .v2_schemas import (
+    ARTICLE_SCHEMA, COMMENT_SCHEMA, normalize_article_result, normalize_comment_result,
+)
 
 
 MODEL = "openai/gpt-oss-20b"
@@ -237,6 +240,8 @@ def evidence_occurs_in_article(result: dict[str, Any], text: str) -> tuple[bool,
 async def call_model(
     client: AsyncGroq, system_prompt: str, user_prompt: str,
     validator: Callable[[dict[str, Any]], tuple[bool, str]],
+    schema_name: str, response_schema: dict[str, Any],
+    normalizer: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]] | None:
     for attempt in range(2):
         started = time.perf_counter()
@@ -244,9 +249,17 @@ async def call_model(
             response = await client.chat.completions.create(
                 model=MODEL,
                 messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
-                response_format={"type": "json_object"}, **MODEL_PARAMETERS,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": schema_name, "strict": True, "schema": response_schema,
+                    },
+                },
+                **MODEL_PARAMETERS,
             )
             result = json.loads(response.choices[0].message.content or "{}")
+            if normalizer:
+                result = normalizer(result)
             valid, error = validator(result)
             if not valid:
                 raise ValueError(error)
@@ -291,6 +304,7 @@ async def analyze_article(
             if not validate_article_analysis(result)[0]
             else evidence_occurs_in_article(result, text)
         ),
+        "v2_article_analysis", ARTICLE_SCHEMA, normalize_article_result,
     )
     if not response:
         return None, None
@@ -314,6 +328,11 @@ def as_selected(story_id: int, row: dict[str, Any]) -> SelectedComment:
     )
 
 
+def candidate_attempt_limit(target: int, available: int) -> int:
+    """Bound deterministic refill to one replacement candidate per target slot."""
+    return min(available, target * 2)
+
+
 async def analyze_community(
     client: AsyncGroq, story: dict[str, Any], rows: list[dict[str, Any]],
     article: dict[str, Any] | None, article_run: dict[str, Any] | None,
@@ -324,7 +343,7 @@ async def analyze_community(
     considered = []
     outcomes: dict[int, str] = {}
     total_metrics = {"input_tokens": 0, "output_tokens": 0, "inference_time_ms": 0.0}
-    for row in rows:
+    for row in rows[:candidate_attempt_limit(target, len(rows))]:
         candidate = as_selected(story["hn_id"], row)
         if not candidate_is_eligible(candidate, accepted, target):
             continue
@@ -332,6 +351,7 @@ async def analyze_community(
         response = await call_model(
             client, COMMENT_PROMPT, model_input,
             lambda result, comment_id=candidate.hn_comment_id: validate_comment_analysis(result, comment_id),
+            "v2_comment_analysis", COMMENT_SCHEMA, normalize_comment_result,
         )
         if not response:
             outcomes[candidate.hn_comment_id] = "invalid_response_refill"

@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Resolve the production pipeline source from the real runtime filesystem instead of the bundled `/app/build` path, and add an article-text reconciliation command for registering orphan files without replacing canonical duplicate-URL rows.
 - Restore `libstdc++.so.6` availability for Playwright/greenlet in Nixpacks and declare Newspaper's modern `lxml-html-clean` dependency.
 - Keep V1 catch-up and analysis commands out of `/v2/admin`, expose the isolated V2 prefilter/orchestrator/export, and align Node/Python storage paths.
 - Restore intentional phosphor city highlights on the V2 globe and remove the unintended whole-landmass flicker.

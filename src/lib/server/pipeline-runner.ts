@@ -3,7 +3,11 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { spawn, spawnSync } from "node:child_process"
 import Database from "better-sqlite3"
-import { createOnceFinalizer, resolvePipelinePython } from "$lib/server/pipeline-runtime"
+import {
+  createOnceFinalizer,
+  resolvePipelinePython,
+  resolvePipelineSourceDirectory,
+} from "$lib/server/pipeline-runtime"
 import { ensurePipelineStoragePaths, getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 import {
   evaluateCommandReadiness,
@@ -65,7 +69,12 @@ function getRepoRoot(): string {
 const REPO_ROOT = getRepoRoot()
 const STALE_LOCK_THRESHOLD_MS = 6 * 60 * 60 * 1000
 const STORAGE_PATHS = getPipelineStoragePaths()
-const PIPELINE_DIR = privateEnv.PIPELINE_SOURCE_DIR?.trim() || path.join(REPO_ROOT, "pipeline")
+const PIPELINE_DIR = resolvePipelineSourceDirectory({
+  explicit: privateEnv.PIPELINE_SOURCE_DIR,
+  repoRoot: REPO_ROOT,
+  cwd: process.cwd(),
+  exists: existsSync,
+})
 const ADMIN_DB_PATH = STORAGE_PATHS.adminDbPath
 const PIPELINE_LOG_DIR = STORAGE_PATHS.logDir
 const PIPELINE_PYTHON = resolvePipelinePython({

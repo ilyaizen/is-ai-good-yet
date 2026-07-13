@@ -20,6 +20,7 @@ from groq import APIError, AsyncGroq
 from .hn_comments_v2 import SELECTION_VERSION, accepted_target, candidate_is_eligible
 from .store.parquet import read_articles
 from .store.paths import get_articles_dir
+from .store.text_store import TextArticleStore
 from .store.v2 import (
     connect_rows, init_v2_schema, save_normalized_analysis, update_candidate_outcomes,
 )
@@ -134,11 +135,20 @@ def get_story_rows(limit: int | None, reanalyze: bool) -> list[dict[str, Any]]:
         conn.close()
 
 
-def get_article_content(urls: list[str]) -> dict[str, str]:
-    if not urls:
+def get_article_content(stories: list[dict[str, Any]]) -> dict[str, str]:
+    if not stories:
         return {}
+    urls = [story["url"] for story in stories]
     frame = read_articles(get_articles_dir()).filter(pl.col("url").is_in(urls)).select(["url", "text"]).collect()
-    return {row["url"]: row["text"] for row in frame.iter_rows(named=True)}
+    content = {row["url"]: row["text"] for row in frame.iter_rows(named=True)}
+    text_store = TextArticleStore()
+    for story in stories:
+        if story["url"] in content:
+            continue
+        article = text_store.load_article(story["hn_id"])
+        if article and article["text"].strip():
+            content[story["url"]] = article["text"]
+    return content
 
 
 def get_comment_candidates(story_id: int) -> list[dict[str, Any]]:
@@ -376,7 +386,7 @@ async def run(limit: int | None, reanalyze: bool) -> None:
         raise RuntimeError("GROQ_API_KEY is required")
     init_v2_schema()
     stories = get_story_rows(limit, reanalyze)
-    content = get_article_content([story["url"] for story in stories])
+    content = get_article_content(stories)
     client = AsyncGroq(api_key=api_key)
     for story in stories:
         text = content.get(story["url"], "")

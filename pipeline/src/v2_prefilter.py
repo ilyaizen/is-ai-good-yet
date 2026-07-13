@@ -96,7 +96,7 @@ async def run(limit: int | None, reprocess: bool) -> dict[str, int]:
         raise RuntimeError("GROQ_API_KEY is required")
     init_v2_schema()
     stories = pending_rows(limit, reprocess)
-    content = get_article_content([story["url"] for story in stories])
+    content = get_article_content(stories)
     client = AsyncGroq(api_key=api_key)
     saved = 0
     for story in stories:

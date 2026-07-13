@@ -32,6 +32,8 @@
     "pipeline:v2-analyze": "python3 -m pipeline.src.sentiment_v2",
     "pipeline:v2-export": "python3 -m pipeline.src.export_v2",
     "pipeline:v2-run": "python3 -m pipeline.src.v2_orchestrator",
+    "pipeline:preflight": "python3 -m pipeline.src.preflight",
+    "pipeline:residential-fetcher": "python3 pipeline/residential_fetcher.py",
     "pipeline:bootstrap": "python3 pipeline/bootstrap_pipeline_db.py",
     "pipeline:stats": "python3 pipeline/check_stats.py",
     "pipeline:consistency": "python3 pipeline/src/check_consistency.py",

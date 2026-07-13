@@ -23,7 +23,7 @@ Features:
 """
 
 import sys
-import io
+
 import asyncio
 import logging
 import argparse
@@ -90,6 +90,7 @@ if str(current_dir) not in sys.path:
 
 from store.db import (init_db, migrate_database, get_urls_to_scrape, update_scraped_status,
                       get_pending_scrape_count, get_pending_opinion_count)
+from store.paths import get_data_path
 from store.parquet import ParquetArticleStore
 from scrapers import TrafilaturaScraper, NewspaperScraper, ArchiveScraper, SimpleScraper  # noqa: F401
 from scrapers.selenium_archive import SeleniumArchiveScraper, SELENIUM_AVAILABLE as SELENIUM_ARCHIVE_AVAILABLE  # noqa: F401
@@ -98,10 +99,17 @@ from utils import (
     get_random_delay_range, ProxyRotator, StealthConnector
 )  # noqa: F401
 from interactive import InteractiveSession  # noqa: F401
+from article_fetch import (
+    CurlCffiHtmlFetcher,
+    ResidentialHtmlFetcher,
+    is_public_http_url,
+)
 
 if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
 
     # Patch asyncio to silence "ValueError: I/O operation on closed pipe" on Windows shutdown
     # This happens when ProactorEventLoop closes pipes while transports are being collected
@@ -183,7 +191,7 @@ FORCE_ARCHIVE_DOMAINS = [
     "reuters.com", "telegraph.co.uk", "bloomberg.com", "sfgate.com"
 ]
 
-STORAGE_STATE_FILE = Path(__file__).parent.parent / "data" / "archive_session.json"
+STORAGE_STATE_FILE = get_data_path("archive_session.json")
 
 BAD_PATTERNS = [
     "enable javascript", "please turn javascript on", "access denied",
@@ -200,6 +208,11 @@ HUMAN_DELAY_MIN = 0.5            # Min human-like delay (was randomized ~2-4)
 HUMAN_DELAY_MAX = 1.5            # Max human-like delay (was randomized ~4-7)
 ARCHIVE_OP_TIMEOUT = 30          # Timeout for archive operations (30s)
 INTERACTIVE_OP_TIMEOUT = 45      # Timeout for interactive operations (45s)
+HTTP_FETCH_TIMEOUT = float(os.getenv("PIPELINE_HTTP_FETCH_TIMEOUT", "15"))
+MAX_HTML_BYTES = int(os.getenv("PIPELINE_MAX_HTML_BYTES", str(2 * 1024 * 1024)))
+RESIDENTIAL_FETCHER_URL = os.getenv("PIPELINE_RESIDENTIAL_FETCHER_URL", "")
+RESIDENTIAL_FETCHER_SECRET = os.getenv("PIPELINE_RESIDENTIAL_FETCHER_SECRET", "")
+RESIDENTIAL_FETCHER_TIMEOUT = float(os.getenv("PIPELINE_RESIDENTIAL_FETCHER_TIMEOUT", "45"))
 
 # Lean mode configuration overrides (balanced for retry-failed use case)
 LEAN_SCRAPE_TIMEOUT_MS = 90000   # Page timeout in lean mode (90s - gives slow sites more time)
@@ -240,6 +253,16 @@ class UnifiedScraper:
         self.lean_mode = lean_mode
         self.use_selenium = use_selenium
         self.archive_scraper = ArchiveScraper(headful=headful)
+        self.http_fetcher = CurlCffiHtmlFetcher(
+            timeout_seconds=HTTP_FETCH_TIMEOUT,
+            max_bytes=MAX_HTML_BYTES,
+        )
+        self.residential_fetcher = ResidentialHtmlFetcher(
+            base_url=RESIDENTIAL_FETCHER_URL,
+            secret=RESIDENTIAL_FETCHER_SECRET,
+            timeout_seconds=RESIDENTIAL_FETCHER_TIMEOUT,
+            max_bytes=MAX_HTML_BYTES,
+        )
 
         # Apply lean mode overrides
         if lean_mode:
@@ -251,47 +274,54 @@ class UnifiedScraper:
             self.archive_op_timeout = ARCHIVE_OP_TIMEOUT
 
     async def scrape_url(self, url: str) -> Tuple[Optional[dict], Optional[str], Optional[str]]:
-        """
-        Scrape a URL using the full fallback chain.
+        """Scrape one public URL through HTTP, browser, residential, then archive fallbacks."""
+        if not is_public_http_url(url):
+            return None, None, "unsafe_url"
 
-        Returns: (content_dict, method_name, error_reason)
-        """
-        force_archive = any(d in url for d in FORCE_ARCHIVE_DOMAINS)
-
+        force_archive = any(domain in url for domain in FORCE_ARCHIVE_DOMAINS)
         content = None
         method = None
         error = None
 
         if not force_archive:
             async with self.rate_limiter:
+                content, method, error = await self._scrape_with_http(url)
+
+        if not force_archive and not content:
+            async with self.rate_limiter:
                 try:
                     content, method, error = await asyncio.wait_for(
                         self._scrape_with_playwright(url),
-                        timeout=self.scrape_timeout_ms / 1000 + 5  # slightly higher than the page timeout
+                        timeout=self.scrape_timeout_ms / 1000 + 5,
                     )
                 except asyncio.TimeoutError:
                     content, method, error = None, None, "scraping_timeout_exceeded"
-                except Exception as e:
-                    # Lean mode: never crash on a single URL
+                except Exception as exception:
                     if self.lean_mode:
-                        content, method, error = None, None, f"skipped_exception_{type(e).__name__}"
+                        content, method, error = (
+                            None,
+                            None,
+                            f"skipped_exception_{type(exception).__name__}",
+                        )
                     else:
                         raise
+
+        if not force_archive and not content and RESIDENTIAL_FETCHER_URL:
+            content, method, residential_error = await self._scrape_with_residential(url)
+            if residential_error:
+                error = residential_error
 
         if force_archive or (not content and error and self._should_try_archive(error)):
             if force_archive:
                 logging.info(f"Forcing archive fallback for {url}")
             else:
-                logging.info(f"Playwright failed ({error}), trying archive fallback for {url}")
+                logging.info(f"Direct fetches failed ({error}), trying archive fallback for {url}")
 
             await asyncio.sleep(random.uniform(ARCHIVE_WAIT_MIN, ARCHIVE_WAIT_MAX))
-
             try:
-                # Use full fallback chain: Wayback -> Google Cache -> Playwright archive.is
-                # Only use Selenium if explicitly enabled (it's heavy and often blocked)
                 content = await asyncio.wait_for(
                     self.archive_scraper.extract(None, url, use_selenium=self.use_selenium),  # type: ignore
-                    timeout=self.archive_op_timeout
+                    timeout=self.archive_op_timeout,
                 )
                 if content:
                     method = "archive_automated"
@@ -300,8 +330,8 @@ class UnifiedScraper:
                         logging.info(f"[ARCHIVE AUTO SUCCESS] {url[:60]}...")
             except asyncio.TimeoutError:
                 error = "archive_auto_timeout"
-            except Exception as e:
-                error = f"archive_auto_error_{str(e)[:50]}"
+            except Exception as exception:
+                error = f"archive_auto_error_{str(exception)[:50]}"
 
         if not content and self.interactive_mode and self.interactive_page:
             if self._should_try_interactive(error):
@@ -309,7 +339,7 @@ class UnifiedScraper:
                 try:
                     content = await asyncio.wait_for(
                         self._scrape_with_interactive_archive(url),
-                        timeout=INTERACTIVE_OP_TIMEOUT
+                        timeout=INTERACTIVE_OP_TIMEOUT,
                     )
                     if content:
                         method = "archive_interactive"
@@ -317,18 +347,54 @@ class UnifiedScraper:
                         logging.info(f"[ARCHIVE INTERACTIVE SUCCESS] {url[:60]}...")
                 except asyncio.TimeoutError:
                     error = "archive_interactive_timeout"
-                except Exception as e:
-                    logging.error(f"Interactive archive error: {e}")
-                    error = f"archive_interactive_error_{str(e)[:50]}"
+                except Exception as exception:
+                    logging.error(f"Interactive archive error: {exception}")
+                    error = f"archive_interactive_error_{str(exception)[:50]}"
 
         return content, method, error
+
+    async def _extract_html(
+        self, html: str, url: str, fetch_method: str
+    ) -> Tuple[Optional[dict], Optional[str], Optional[str]]:
+        for strategy in self.strategies:
+            strategy_name = strategy.name if hasattr(strategy, "name") else type(strategy).__name__
+            try:
+                result = await strategy.extract(html, url)
+            except Exception:
+                continue
+            if not result:
+                continue
+            text = result.get("text", "")
+            text_lower = text.lower()
+            if not text_lower or any(pattern in text_lower[:500] for pattern in BAD_PATTERNS):
+                continue
+            return result, f"{fetch_method}:{strategy_name}", None
+        return None, None, f"extraction_failed_{fetch_method}"
+
+    async def _scrape_with_http(
+        self, url: str
+    ) -> Tuple[Optional[dict], Optional[str], Optional[str]]:
+        result = await self.http_fetcher.fetch(url)
+        if not result.html:
+            failure = result.failure.value if result.failure else "unknown"
+            return None, None, f"http_{failure}:{result.detail or ''}"
+        return await self._extract_html(result.html, result.final_url or url, result.method)
+
+    async def _scrape_with_residential(
+        self, url: str
+    ) -> Tuple[Optional[dict], Optional[str], Optional[str]]:
+        result = await self.residential_fetcher.fetch(url)
+        if not result.html:
+            failure = result.failure.value if result.failure else "unknown"
+            return None, None, f"residential_{failure}:{result.detail or ''}"
+        return await self._extract_html(result.html, result.final_url or url, result.method)
 
     def _should_try_archive(self, error: Optional[str]) -> bool:
         if not error:
             return False
         triggers = ["blocked", "http_error_403", "http_error_429", "empty_or_short_html",
                    "scraping_timeout_exceeded", "playwright_error", "all_retries_exhausted",
-                   "extraction_failed_bad_patterns"]
+                   "extraction_failed", "network", "timeout", "non_html"]
         return any(t in str(error) for t in triggers)
 
     def _should_try_interactive(self, error: Optional[str]) -> bool:
@@ -361,13 +427,30 @@ class UnifiedScraper:
                 logging.debug(f"[PLAYWRIGHT] Applying stealth patches...")
                 await stealth_async(page)
 
-                # Step 3: Setup resource blocking
-                # Note: We ALLOW stylesheets because blocking them often breaks SPA rendering
-                # or triggers anti-bot protections that check for computed styles.
-                logging.debug(f"[PLAYWRIGHT] Setting up resource blocking (images, media, fonts)...")
-                await page.route("**/*", lambda route: route.abort()
-                    if route.request.resource_type in ["image", "media", "font"]
-                    else route.continue_())
+                # Step 3: Block heavy resources and private-network requests before fetch.
+                from urllib.parse import urlsplit
+
+                safe_origins: dict[tuple[str, str, int | None], bool] = {}
+
+                async def guard_route(route):
+                    if route.request.resource_type in ["image", "media", "font"]:
+                        await route.abort()
+                        return
+                    request_url = route.request.url
+                    parsed = urlsplit(request_url)
+                    if parsed.scheme in {"http", "https"}:
+                        origin = (parsed.scheme, parsed.hostname or "", parsed.port)
+                        safe = safe_origins.get(origin)
+                        if safe is None:
+                            safe = await asyncio.to_thread(is_public_http_url, request_url)
+                            safe_origins[origin] = safe
+                        if not safe:
+                            await route.abort("blockedbyclient")
+                            return
+                    await route.continue_()
+
+                logging.debug(f"[PLAYWRIGHT] Setting up resource and SSRF guards...")
+                await page.route("**/*", guard_route)
 
                 # Step 4: Apply human timing
                 delay_min, delay_max = HUMAN_DELAY_MIN, HUMAN_DELAY_MAX
@@ -741,6 +824,16 @@ async def process_batch(
                         failure_category = "archive_failed"
                     elif "blocked" in error or "403" in error or "429" in error:
                         failure_category = "blocked"
+                    elif "unsafe_url" in error:
+                        failure_category = "unsafe_url"
+                    elif "too_large" in error:
+                        failure_category = "response_too_large"
+                    elif "non_html" in error:
+                        failure_category = "non_html"
+                    elif "network" in error:
+                        failure_category = "network"
+                    elif "residential" in error:
+                        failure_category = "residential_unavailable"
                     elif "timeout" in error:
                         failure_category = "timeout"
                     elif "empty" in error or "short" in error:

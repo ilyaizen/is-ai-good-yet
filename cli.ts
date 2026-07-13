@@ -551,6 +551,7 @@ async function main() {
         { value: 'pipeline-v2-comments', label: 'V2: Collect HN Comments', hint: 'Fetch and select representative discussion' },
         { value: 'pipeline-v2-analyze', label: 'V2: Analyze Two Tiers', hint: 'Score articles and HN response' },
         { value: 'pipeline-v2-export', label: 'V2: Export Data', hint: 'Generate isolated v2 JSON' },
+        { value: 'pipeline-v2-run', label: 'V2: Run Isolated Pipeline', hint: 'Prefilter → comments → analysis → atomic export' },
         { value: 'separator-utils', label: '────── Utilities ──────', hint: '' },
         { value: 'pipeline-themes', label: 'Synthesize Themes', hint: 'Extract themes from summaries' },
         { value: 'pipeline-reclassify', label: 'Reclassify Sterile Articles', hint: 'Re-run classification' },
@@ -671,6 +672,9 @@ async function main() {
       }
       else if (action === 'pipeline-v2-export') {
         await runScript(pythonCmd, ['-m', 'src.export_v2'], PIPELINE_DIR);
+      }
+      else if (action === 'pipeline-v2-run') {
+        await runScript(pythonCmd, ['-m', 'src.v2_orchestrator'], PIPELINE_DIR);
       }
       else if (action === 'pipeline-export') {
         const args = await configureExportArgs();

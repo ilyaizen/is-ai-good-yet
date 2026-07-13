@@ -15,6 +15,7 @@ from typing import Any
 
 from .hn_comments_v2 import SELECTION_VERSION
 from .store.v2 import connect_rows, init_v2_schema
+from .store.paths import get_data_path
 from .v2_models import (
     AGGREGATION_VERSION,
     ANALYSIS_VERSION,
@@ -26,7 +27,7 @@ from .v2_models import (
 )
 
 DEFAULT_OUTPUT = Path(__file__).resolve().parent.parent.parent / "src" / "lib" / "data" / "v2"
-DEFAULT_BOT_INPUT = Path(__file__).resolve().parent.parent / "data" / "bot_feed.json"
+DEFAULT_BOT_INPUT = get_data_path("bot_feed.json")
 ARTICLE_WEIGHT = 0.4
 COMMUNITY_WEIGHT = 0.6
 VERDICT_MONTHS = 12

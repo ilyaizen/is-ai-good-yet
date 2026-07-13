@@ -8,18 +8,19 @@ import subprocess
 import sys
 import uuid
 from datetime import datetime, timezone
-from pathlib import Path
+
 
 from .export_v2 import DEFAULT_OUTPUT, update_status_export
 from .store.v2 import connect_rows, init_v2_schema
+from .store.paths import get_data_path
 
-LOCK_PATH = Path(__file__).resolve().parent.parent / "data" / "v2-cron.lock"
+LOCK_PATH = get_data_path("v2-cron.lock")
 STALE_LOCK_SECONDS = 12 * 60 * 60
 STAGES = (
-    ("prefilter", "pipeline.src.v2_prefilter"),
-    ("comments", "pipeline.src.hn_comments_v2"),
-    ("article", "pipeline.src.sentiment_v2"),
-    ("export", "pipeline.src.export_v2"),
+    ("prefilter", f"{__package__}.v2_prefilter"),
+    ("comments", f"{__package__}.hn_comments_v2"),
+    ("article", f"{__package__}.sentiment_v2"),
+    ("export", f"{__package__}.export_v2"),
 )
 
 

@@ -9,11 +9,13 @@ type ResolvePipelinePythonOptions = {
 }
 
 export function resolvePipelinePython(options: ResolvePipelinePythonOptions): string {
-  const executable = options.platform === "win32" ? path.join("Scripts", "python.exe") : path.join("bin", "python")
+  const pathApi = options.platform === "win32" ? path.win32 : path.posix
+  const executable =
+    options.platform === "win32" ? pathApi.join("Scripts", "python.exe") : pathApi.join("bin", "python")
   const candidates = [
     options.explicit?.trim(),
-    path.join(options.repoRoot, ".venv", executable),
-    path.join(options.pipelineDir, ".venv", executable),
+    pathApi.join(options.repoRoot, ".venv", executable),
+    pathApi.join(options.pipelineDir, ".venv", executable),
     options.platform === "win32" ? undefined : "/usr/bin/python3",
   ].filter((candidate): candidate is string => Boolean(candidate))
 

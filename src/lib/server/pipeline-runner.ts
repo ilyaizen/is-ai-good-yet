@@ -1,29 +1,22 @@
 import { createWriteStream, existsSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { spawn } from "node:child_process"
+import { spawn, spawnSync } from "node:child_process"
 import Database from "better-sqlite3"
 import { createOnceFinalizer, resolvePipelinePython } from "$lib/server/pipeline-runtime"
 import { ensurePipelineStoragePaths, getPipelineStoragePaths } from "$lib/server/pipeline-storage"
+import {
+  evaluateCommandReadiness,
+  getPipelineCommand as getConfiguredPipelineCommand,
+  getPipelineCommandList as getConfiguredPipelineCommandList,
+  type PipelineCommandName,
+  type PipelineCommandReadiness,
+  type PipelineCommandSpec,
+  type PipelinePreflightSnapshot,
+} from "$lib/server/pipeline-command-config"
 import { env as privateEnv } from "$env/dynamic/private"
 
-export type PipelineCommandName =
-  | "catch_up"
-  | "scrape"
-  | "clean_articles"
-  | "prefilter_content"
-  | "sentiment_analyzer"
-  | "v2_prefilter"
-  | "v2_comments"
-  | "v2_analyze"
-  | "export"
-
-export type PipelineCommandSpec = {
-  name: PipelineCommandName
-  label: string
-  description: string
-  args: string[]
-}
+export type { PipelineCommandName, PipelineCommandSpec } from "$lib/server/pipeline-command-config"
 
 export type PipelineRunRow = {
   id: number
@@ -57,8 +50,7 @@ export type PipelineEnvironmentStatus = {
   pipelineDirExists: boolean
   adminDbExists: boolean
   logDirExists: boolean
-  groqApiKeyConfigured: boolean
-  mistralApiKeyConfigured: boolean
+  preflight: PipelinePreflightSnapshot
 }
 
 /**
@@ -73,7 +65,7 @@ function getRepoRoot(): string {
 const REPO_ROOT = getRepoRoot()
 const STALE_LOCK_THRESHOLD_MS = 6 * 60 * 60 * 1000
 const STORAGE_PATHS = getPipelineStoragePaths()
-const PIPELINE_DIR = path.dirname(STORAGE_PATHS.dataDir)
+const PIPELINE_DIR = privateEnv.PIPELINE_SOURCE_DIR?.trim() || path.join(REPO_ROOT, "pipeline")
 const ADMIN_DB_PATH = STORAGE_PATHS.adminDbPath
 const PIPELINE_LOG_DIR = STORAGE_PATHS.logDir
 const PIPELINE_PYTHON = resolvePipelinePython({
@@ -84,61 +76,66 @@ const PIPELINE_PYTHON = resolvePipelinePython({
   exists: existsSync,
 })
 
-const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
-  catch_up: {
-    name: "catch_up",
-    label: "Catch-up",
-    description: "Run the full catch-up orchestrator.",
-    args: ["-m", "src.catch_up", "-v"],
-  },
-  scrape: {
-    name: "scrape",
-    label: "Scrape",
-    description: "Fetch article content with the normal browser-backed scraper.",
-    args: ["-m", "src.scraper", "-v", "--lean", "--stealth-mode=seleniumbase", "--no-headful-switch", "-b", "50", "-c", "4"],
-  },
-  clean_articles: {
-    name: "clean_articles",
-    label: "Clean articles",
-    description: "Normalize extracted article text files.",
-    args: ["src/clean_articles.py"],
-  },
-  prefilter_content: {
-    name: "prefilter_content",
-    label: "Prefilter",
-    description: "Classify article relevance before sentiment analysis.",
-    args: ["-m", "src.prefilter_content", "-v"],
-  },
-  sentiment_analyzer: {
-    name: "sentiment_analyzer",
-    label: "Sentiment",
-    description: "Score utility and trajectory with the Groq analyzer.",
-    args: ["-m", "src.sentiment_analyzer", "-v"],
-  },
-  v2_prefilter: {
-    name: "v2_prefilter",
-    label: "Prefilter v2",
-    description: "Classify broad AI eligibility and scopes without touching the V1 contract.",
-    args: ["-m", "src.v2_prefilter"],
-  },
-  v2_comments: {
-    name: "v2_comments",
-    label: "Collect v2 comments",
-    description: "Fetch and deterministically rank Hacker News comment candidates for v2.",
-    args: ["-m", "src.hn_comments_v2", "-v"],
-  },
-  v2_analyze: {
-    name: "v2_analyze",
-    label: "Analyze v2 sentiment",
-    description: "Run the versioned article and isolated-comment analysis against live pipeline data.",
-    args: ["-m", "src.sentiment_v2", "-v"],
-  },
-  export: {
-    name: "export",
-    label: "Export",
-    description: "Rebuild static JSON for the SvelteKit app.",
-    args: ["-m", "src.export", "-v"],
-  },
+const PREFLIGHT_CACHE_MS = 30_000
+let preflightCache: { checkedAt: number; snapshot: PipelinePreflightSnapshot } | null = null
+
+function failedPreflight(reason: string): PipelinePreflightSnapshot {
+  const failed = { ok: false, reason }
+  const groqConfigured = Boolean(privateEnv.GROQ_API_KEY?.trim())
+  return {
+    python: failed,
+    storage: failed,
+    scraper: failed,
+    groq: {
+      ok: groqConfigured,
+      reason: groqConfigured
+        ? "GROQ_API_KEY is configured."
+        : "GROQ_API_KEY is not configured in the application environment.",
+    },
+    residential: { ok: true, reason: "Residential configuration was not checked." },
+  }
+}
+
+export function getPipelinePreflightSnapshot(force = false): PipelinePreflightSnapshot {
+  if (!force && preflightCache && Date.now() - preflightCache.checkedAt < PREFLIGHT_CACHE_MS) {
+    return preflightCache.snapshot
+  }
+  if (!existsSync(PIPELINE_PYTHON)) {
+    return failedPreflight(`Pipeline Python executable is missing: ${PIPELINE_PYTHON}`)
+  }
+  if (!existsSync(PIPELINE_DIR)) {
+    return failedPreflight(`Pipeline source directory is missing: ${PIPELINE_DIR}`)
+  }
+
+  const result = spawnSync(PIPELINE_PYTHON, ["-m", "src.preflight", "--json"], {
+    cwd: PIPELINE_DIR,
+    env: {
+      ...process.env,
+      PIPELINE_DATA_DIR: STORAGE_PATHS.dataDir,
+      PIPELINE_DB_PATH: STORAGE_PATHS.pipelineDbPath,
+      PYTHONIOENCODING: "utf-8",
+      PYTHONUTF8: "1",
+    },
+    encoding: "utf8",
+    timeout: 20_000,
+  })
+
+  let snapshot: PipelinePreflightSnapshot
+  try {
+    const jsonLine = result.stdout
+      ?.split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .at(-1)
+    if (!jsonLine) throw new Error("Preflight produced no JSON output.")
+    snapshot = JSON.parse(jsonLine) as PipelinePreflightSnapshot
+  } catch {
+    const detail =
+      result.error?.message || result.stderr?.trim() || `preflight exited ${result.status ?? "without a status"}`
+    snapshot = failedPreflight(`Pipeline preflight failed: ${detail}`)
+  }
+  preflightCache = { checkedAt: Date.now(), snapshot }
+  return snapshot
 }
 
 function ensureDirectories(): void {
@@ -196,22 +193,23 @@ export function getPipelineEnvironmentStatus(): PipelineEnvironmentStatus {
     pipelineDirExists: existsSync(PIPELINE_DIR),
     adminDbExists: existsSync(ADMIN_DB_PATH),
     logDirExists: existsSync(PIPELINE_LOG_DIR),
-    groqApiKeyConfigured: Boolean(privateEnv.GROQ_API_KEY?.trim()),
-    mistralApiKeyConfigured: Boolean(privateEnv.MISTRAL_API_KEY?.trim()),
+    preflight: getPipelinePreflightSnapshot(),
   }
 }
 
 export function getPipelineCommandList(scope: "v1" | "v2" = "v1"): PipelineCommandSpec[] {
-  const names: PipelineCommandName[] =
-    scope === "v2"
-      ? ["catch_up", "scrape", "clean_articles", "prefilter_content", "v2_comments", "v2_analyze"]
-      : ["catch_up", "scrape", "clean_articles", "prefilter_content", "sentiment_analyzer", "export"]
-
-  return names.map((name) => COMMANDS[name])
+  return getConfiguredPipelineCommandList(scope)
 }
 
 export function getPipelineCommand(command: PipelineCommandName): PipelineCommandSpec {
-  return COMMANDS[command]
+  return getConfiguredPipelineCommand(command)
+}
+
+export function getPipelineCommandReadiness(
+  command: PipelineCommandName,
+  force = false,
+): PipelineCommandReadiness {
+  return evaluateCommandReadiness(command, getPipelinePreflightSnapshot(force))
 }
 
 export function getPipelineRunSnapshot(): PipelineRunSnapshot {
@@ -262,6 +260,10 @@ export type StartPipelineRunResult = {
 
 export function startPipelineRun(commandName: PipelineCommandName): StartPipelineRunResult {
   const command = getPipelineCommand(commandName)
+  const readiness = getPipelineCommandReadiness(commandName, true)
+  if (!readiness.ready) {
+    throw new Error(`Pipeline command is not ready: ${readiness.reasons.join(" ")}`)
+  }
   const db = getDb()
   bootstrapDb(db)
 
@@ -310,6 +312,8 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
     cwd: PIPELINE_DIR,
     env: {
       ...process.env,
+      PIPELINE_DATA_DIR: STORAGE_PATHS.dataDir,
+      PIPELINE_DB_PATH: STORAGE_PATHS.pipelineDbPath,
       PYTHONUNBUFFERED: "1",
     },
     stdio: ["ignore", "pipe", "pipe"],

@@ -28,6 +28,7 @@
     name: string
     label: string
     description: string
+    readiness: { ready: boolean; reasons: string[] }
   }
 
   type RunRow = {
@@ -60,8 +61,13 @@
       pipelineDirExists: boolean
       adminDbExists: boolean
       logDirExists: boolean
-      groqApiKeyConfigured: boolean
-      mistralApiKeyConfigured: boolean
+      preflight: {
+        python: { ok: boolean; reason: string }
+        storage: { ok: boolean; reason: string }
+        scraper: { ok: boolean; reason: string }
+        groq: { ok: boolean; reason: string }
+        residential: { ok: boolean; reason: string }
+      }
     }
     snapshot: {
       currentRun: RunRow | null
@@ -338,10 +344,12 @@
     <div class="terminal-panel p-6">
       <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Environment</p>
       <h2 class="mt-2 text-2xl font-semibold tracking-tight text-terminal-text">Runtime checks</h2>
-      <p class="mt-3 text-sm leading-6 text-terminal-text-muted">If one is missing, the pipeline gets annoying.</p>
+      <p class="mt-3 text-sm leading-6 text-terminal-text-muted">
+        Real import, browser, storage, API-key, and fallback diagnostics. Failed prerequisites block execution.
+      </p>
 
       <div class="mt-5 space-y-3 text-sm">
-        {#each [["Repo root", data.pipeline.env.repoRootExists], ["Venv Python", data.pipeline.env.venvPythonExists], ["Pipeline dir", data.pipeline.env.pipelineDirExists], ["Admin DB", data.pipeline.env.adminDbExists], ["Logs dir", data.pipeline.env.logDirExists], ["Groq key", data.pipeline.env.groqApiKeyConfigured], ["Mistral key", data.pipeline.env.mistralApiKeyConfigured]] as [label, ok]}
+        {#each [["Repo root", data.pipeline.env.repoRootExists], ["Venv Python", data.pipeline.env.venvPythonExists], ["Pipeline dir", data.pipeline.env.pipelineDirExists], ["Admin DB", data.pipeline.env.adminDbExists], ["Logs dir", data.pipeline.env.logDirExists]] as [label, ok]}
           <div class="terminal-card flex items-center justify-between gap-4 px-4 py-3">
             <span class="text-terminal-text-muted">{label}</span>
             <span
@@ -349,6 +357,19 @@
             >
               {ok ? "OK" : "Missing"}
             </span>
+          </div>
+        {/each}
+        {#each Object.entries(data.pipeline.env.preflight) as [label, check]}
+          <div class="terminal-card px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+              <span class="capitalize text-terminal-text-muted">{label}</span>
+              <span
+                class={`terminal-chip text-xs font-medium ${check.ok ? "bg-emerald-500/15 text-terminal-text" : "bg-rose-500/15 text-terminal-text"}`}
+              >
+                {check.ok ? "Ready" : "Blocked"}
+              </span>
+            </div>
+            <p class="mt-2 break-words text-xs leading-5 text-terminal-text-faint">{check.reason}</p>
           </div>
         {/each}
       </div>
@@ -521,12 +542,19 @@
         <button
           type="button"
           onclick={() => openCommand(command)}
-          disabled={activeLock}
+          disabled={activeLock || !command.readiness.ready}
           class="terminal-card terminal-card--interactive flex h-full w-full flex-col justify-between p-4 text-left disabled:cursor-not-allowed disabled:opacity-50"
         >
           <div>
             <div class="text-base font-semibold text-terminal-text">{command.label}</div>
             <div class="mt-2 text-sm leading-6 text-terminal-text-muted">{command.description}</div>
+            {#if !command.readiness.ready}
+              <div class="mt-3 space-y-1 text-xs leading-5 text-rose-500">
+                {#each command.readiness.reasons as reason}
+                  <div>{reason}</div>
+                {/each}
+              </div>
+            {/if}
           </div>
           <div class="mt-4 text-xs uppercase tracking-[0.25em] text-terminal-text/35">
             {humanizeCommand(command.name)}

@@ -25,6 +25,7 @@ from rich.logging import RichHandler
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
 
 from store.db import init_db, migrate_database, get_existing_urls, upsert_hn_metadata, get_failed_urls, get_urls_missing_author, get_recent_resolved_urls
+from store.paths import get_data_path
 from interactive import InteractiveSession
 
 # Force UTF-8 encoding for standard output (handles piping issues on Windows)
@@ -225,9 +226,7 @@ async def resolve_hn_links(input_file: str, verbose: bool = False, force: bool =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Resolve HN links from a JSON file.")
-    default_input = "pipeline/data/histre_feed.json"
-    if not os.path.exists(default_input) and os.path.exists(os.path.join("..", default_input)):
-        default_input = os.path.join("..", default_input)
+    default_input = str(get_data_path("histre_feed.json"))
 
     parser.add_argument("input_file", nargs="?", default=default_input, help="Path to the JSON file containing URLs")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose logging")

@@ -6,7 +6,7 @@ PLAYWRIGHT_BROWSERS_PATH = "/opt/playwright-browsers"
 
 [phases.setup]
 nixPkgs = ["...", "python311", "python311Packages.pip", "chromium"]
-nixLibs = ["...", "gcc-unwrapped"]
+nixLibs = ["...", "stdenv.cc.cc.lib"]
 
 [phases.install]
 cmds = [

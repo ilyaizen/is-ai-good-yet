@@ -1,15 +1,11 @@
 import { fail, redirect, type RequestEvent } from "@sveltejs/kit"
 import { existsSync, readFileSync } from "fs"
-import {
-  PIPELINE_DB_PATH,
-  getPipelineStats,
-  getPipelineTableData,
-  type UrlEntry,
-} from "$lib/server/db"
+import { PIPELINE_DB_PATH, getPipelineStats, getPipelineTableData, type UrlEntry } from "$lib/server/db"
 import { getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 import { ADMIN_COOKIE_NAME, adminAccessConfigured } from "$lib/server/admin-auth"
 import {
   getPipelineCommandList,
+  getPipelineCommandReadiness,
   getPipelineEnvironmentStatus,
   getPipelineRunSnapshot,
   startPipelineRun,
@@ -21,6 +17,7 @@ type PipelineCommand = {
   name: string
   label: string
   description: string
+  readiness: { ready: boolean; reasons: string[] }
 }
 
 type RunRow = {
@@ -61,7 +58,11 @@ function readLogTail(logPath: string | null, lines = 120): { exists: boolean; ta
 
   const content = readFileSync(logPath, "utf8")
   const parts = content.split(/\r?\n/)
-  const tail = parts.slice(Math.max(0, parts.length - lines)).join("\n").trimEnd() || "(log is empty)"
+  const tail =
+    parts
+      .slice(Math.max(0, parts.length - lines))
+      .join("\n")
+      .trimEnd() || "(log is empty)"
 
   return {
     exists: true,
@@ -79,7 +80,7 @@ export const load = (event: RequestEvent) => {
 
   const requestedRunId = Number.parseInt(event.url.searchParams.get("run") ?? "", 10)
   const requestedRun = Number.isFinite(requestedRunId)
-    ? [snapshot.currentRun, ...snapshot.recentRuns].find((run) => run?.id === requestedRunId) ?? null
+    ? ([snapshot.currentRun, ...snapshot.recentRuns].find((run) => run?.id === requestedRunId) ?? null)
     : null
   const selectedRun = requestedRun ?? snapshot.currentRun ?? snapshot.recentRuns[0] ?? null
 
@@ -116,7 +117,10 @@ export const load = (event: RequestEvent) => {
     pipeline: {
       env,
       snapshot,
-      commands: getPipelineCommandList(commandScope) as PipelineCommand[],
+      commands: getPipelineCommandList(commandScope).map((command) => ({
+        ...command,
+        readiness: getPipelineCommandReadiness(command.name),
+      })) as PipelineCommand[],
       logViewer,
       storage,
     },
@@ -135,7 +139,10 @@ export const actions: Actions = {
     const confirmValue = form.get("confirm")
 
     const commandScope = event.url.pathname.startsWith("/v2/") ? "v2" : "v1"
-    if (typeof commandName !== "string" || !getPipelineCommandList(commandScope).some((command) => command.name === commandName)) {
+    if (
+      typeof commandName !== "string" ||
+      !getPipelineCommandList(commandScope).some((command) => command.name === commandName)
+    ) {
       return fail(400, { message: "Unknown pipeline command." })
     }
 

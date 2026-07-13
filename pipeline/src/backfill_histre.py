@@ -21,6 +21,7 @@ if str(parent_dir) not in sys.path:
     sys.path.append(str(parent_dir))
 
 from interactive import InteractiveSession
+from store.paths import get_data_path
 
 # Setup Rich Console
 console = Console()
@@ -35,7 +36,7 @@ logging.basicConfig(
 DEFAULT_TIMEOUT = 15
 DEFAULT_END_PAGE = 10  # Only scrape recent pages by default (page 1 = newest)
 
-STATE_FILE = current_dir.parent / "data" / "backfill_state.json"
+STATE_FILE = get_data_path("backfill_state.json")
 
 def load_state():
     if STATE_FILE.exists():
@@ -194,7 +195,7 @@ if __name__ == "__main__":
 
     # Set default output path relative to script location if not provided
     if args.output is None:
-        args.output = str(current_dir.parent / "data" / "histre_feed.json")
+        args.output = str(get_data_path("histre_feed.json"))
 
     # Ensure output directory exists
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)

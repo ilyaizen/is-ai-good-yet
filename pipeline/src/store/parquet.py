@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Optional
 import logging
 
+from .paths import get_articles_dir
+
 logger = logging.getLogger(__name__)
 
 ARTICLE_SCHEMA = {
@@ -24,19 +26,14 @@ ARTICLE_SCHEMA = {
 class ParquetArticleStore:
     """Manager for storing extracted articles in Parquet shards."""
 
-    def __init__(self, shard_dir: str | Path = "pipeline/data/articles", shard_size: int = 200):
+    def __init__(self, shard_dir: str | Path | None = None, shard_size: int = 200):
         """Initialize the Parquet store.
 
         Args:
             shard_dir: Directory to store Parquet shards
             shard_size: Number of articles per shard
         """
-        # Resolve path relative to project root if possible, or use provided absolute path
-        # Assuming run from project root, data/articles is correct.
-        if str(shard_dir) == "pipeline/data/articles":
-           self.shard_dir = Path(__file__).resolve().parent.parent.parent.parent / "pipeline" / "data" / "articles"
-        else:
-           self.shard_dir = Path(shard_dir)
+        self.shard_dir = get_articles_dir() if shard_dir is None else Path(shard_dir)
         self.shard_dir.mkdir(parents=True, exist_ok=True)
         self.shard_size = shard_size
         self.buffer = []
@@ -114,7 +111,7 @@ class ParquetArticleStore:
         """Flush any remaining buffered articles and close the store."""
         return self.flush()
 
-def read_articles(shard_dir: str | Path = "data/articles") -> pl.LazyFrame:
+def read_articles(shard_dir: str | Path | None = None) -> pl.LazyFrame:
     """Read all article shards as a lazy frame for efficient processing.
 
     Args:
@@ -123,7 +120,7 @@ def read_articles(shard_dir: str | Path = "data/articles") -> pl.LazyFrame:
     Returns:
         Polars LazyFrame for lazy evaluation of all articles
     """
-    shard_dir = Path(shard_dir)
+    shard_dir = get_articles_dir() if shard_dir is None else Path(shard_dir)
     files = list(shard_dir.glob("articles_*.parquet"))
 
     if not files:

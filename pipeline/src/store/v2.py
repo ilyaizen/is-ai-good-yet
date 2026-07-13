@@ -33,6 +33,33 @@ def init_v2_schema() -> None:
             );
             CREATE INDEX IF NOT EXISTS idx_hn_comments_story ON hn_comments(hn_story_id);
 
+            CREATE TABLE IF NOT EXISTS v2_prefilter_decisions (
+                hn_story_id INTEGER NOT NULL,
+                contract_version TEXT NOT NULL,
+                prompt_version TEXT NOT NULL,
+                prompt_hash TEXT NOT NULL,
+                input_hash TEXT NOT NULL,
+                eligible INTEGER NOT NULL,
+                scopes_json TEXT NOT NULL,
+                reason_code TEXT NOT NULL,
+                reason TEXT NOT NULL,
+                model TEXT NOT NULL,
+                decided_at TEXT NOT NULL,
+                PRIMARY KEY (hn_story_id, contract_version)
+            );
+
+            CREATE TABLE IF NOT EXISTS v2_orchestration_runs (
+                run_id TEXT PRIMARY KEY,
+                status TEXT NOT NULL,
+                stage TEXT NOT NULL,
+                started_at TEXT NOT NULL,
+                finished_at TEXT,
+                stories_discovered INTEGER NOT NULL DEFAULT 0,
+                articles_processed INTEGER NOT NULL DEFAULT 0,
+                comments_analyzed INTEGER NOT NULL DEFAULT 0,
+                error_code TEXT
+            );
+
             CREATE TABLE IF NOT EXISTS v2_comment_selections (
                 hn_story_id INTEGER NOT NULL,
                 hn_comment_id INTEGER NOT NULL,
@@ -280,6 +307,40 @@ def save_normalized_analysis(
                         for item in comment_results
                     ],
                 )
+    finally:
+        conn.close()
+
+
+def save_prefilter_decision(decision: dict[str, Any]) -> None:
+    """Persist a V2 prefilter decision without touching V1 category fields."""
+    conn = get_db_connection()
+    try:
+        with conn:
+            conn.execute(
+                """
+                INSERT INTO v2_prefilter_decisions (
+                    hn_story_id, contract_version, prompt_version, prompt_hash, input_hash,
+                    eligible, scopes_json, reason_code, reason, model, decided_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(hn_story_id, contract_version) DO UPDATE SET
+                    prompt_version = excluded.prompt_version,
+                    prompt_hash = excluded.prompt_hash,
+                    input_hash = excluded.input_hash,
+                    eligible = excluded.eligible,
+                    scopes_json = excluded.scopes_json,
+                    reason_code = excluded.reason_code,
+                    reason = excluded.reason,
+                    model = excluded.model,
+                    decided_at = excluded.decided_at
+                """,
+                (
+                    decision["hn_story_id"], decision["contract_version"],
+                    decision["prompt_version"], decision["prompt_hash"], decision["input_hash"],
+                    int(decision["eligible"]), json.dumps(decision["scopes"]),
+                    decision["reason_code"], decision["reason"], decision["model"],
+                    decision["decided_at"],
+                ),
+            )
     finally:
         conn.close()
 

@@ -24,7 +24,8 @@ from .store.v2 import (
 )
 from .v2_models import (
     AGGREGATION_VERSION, ANALYSIS_VERSION, ARTICLE_CONTRACT_VERSION,
-    COMMENT_CONTRACT_VERSION, DIMENSIONS, PARSER_VERSION, SelectedComment,
+    COMMENT_CONTRACT_VERSION, DIMENSIONS, PARSER_VERSION, PREFILTER_CONTRACT_VERSION,
+    SelectedComment,
     aggregate_comment_dimension, composite_score, validate_article_analysis,
     validate_comment_analysis,
 )
@@ -101,8 +102,12 @@ def get_story_rows(limit: int | None, reanalyze: bool) -> list[dict[str, Any]]:
         query = """
             SELECT u.hn_id, u.url, u.hn_title, u.hn_score, u.hn_comments
             FROM urls u WHERE u.hn_id IS NOT NULL AND u.scraped_status = 'success'
+              AND EXISTS (
+                SELECT 1 FROM v2_prefilter_decisions p
+                WHERE p.hn_story_id = u.hn_id AND p.contract_version = ? AND p.eligible = 1
+              )
         """
-        params: list[Any] = []
+        params: list[Any] = [PREFILTER_CONTRACT_VERSION]
         if not reanalyze:
             query += """
               AND (

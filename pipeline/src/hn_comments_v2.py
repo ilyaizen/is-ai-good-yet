@@ -15,7 +15,7 @@ import aiohttp
 
 from .store.db import get_db_connection
 from .store.v2 import init_v2_schema, replace_selection, replace_story_comments
-from .v2_models import SelectedComment, raw_visibility_weight
+from .v2_models import PREFILTER_CONTRACT_VERSION, SelectedComment, raw_visibility_weight
 
 
 HN_API = "https://hacker-news.firebaseio.com/v0"
@@ -182,9 +182,13 @@ def get_story_ids(limit: int | None, min_score: int, min_comments: int) -> list[
             SELECT hn_id FROM urls
             WHERE hn_id IS NOT NULL AND scraped_status = 'success'
               AND hn_score >= ? AND hn_comments >= ?
+              AND EXISTS (
+                SELECT 1 FROM v2_prefilter_decisions p
+                WHERE p.hn_story_id = urls.hn_id AND p.contract_version = ? AND p.eligible = 1
+              )
             ORDER BY hn_score DESC
         """
-        params: list[int] = [min_score, min_comments]
+        params: list[Any] = [min_score, min_comments, PREFILTER_CONTRACT_VERSION]
         if limit is not None:
             query += " LIMIT ?"
             params.append(limit)

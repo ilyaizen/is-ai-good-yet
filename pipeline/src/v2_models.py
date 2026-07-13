@@ -10,7 +10,9 @@ from typing import Any
 ANALYSIS_VERSION = "v2.2.0"
 ARTICLE_CONTRACT_VERSION = "article-v2.2.0"
 COMMENT_CONTRACT_VERSION = "comment-v2.2.0"
+PREFILTER_CONTRACT_VERSION = "prefilter-v2.0.0"
 AGGREGATION_VERSION = "community-aggregation-v2.2.0"
+GLOBAL_INFLUENCE_VERSION = "hn-score-0.85_decay-24m_v1"
 PARSER_VERSION = "v2.2.0"
 
 DIMENSIONS = ("capability", "trajectory", "impact")
@@ -37,6 +39,32 @@ VALID_PARENT_RELATIONS = {
     "agrees", "disagrees", "clarifies", "questions", "corrects", "other",
     "not_applicable",
 }
+
+
+def validate_prefilter_result(result: dict[str, Any]) -> tuple[bool, str]:
+    """Validate the isolated broad-scope prefilter contract."""
+    required = {"contract_version", "eligible", "scopes", "reason_code", "reason"}
+    errors = []
+    if set(result) != required:
+        errors.append(f"Prefilter result must contain exactly {sorted(required)}")
+    if result.get("contract_version") != PREFILTER_CONTRACT_VERSION:
+        errors.append(f"Invalid contract_version: {result.get('contract_version')}")
+    if not isinstance(result.get("eligible"), bool):
+        errors.append("eligible must be boolean")
+    scopes = result.get("scopes")
+    if not isinstance(scopes, list) or len(scopes) != len(set(scopes)) or not all(
+        scope in VALID_SCOPES for scope in scopes
+    ):
+        errors.append("scopes must contain unique approved V2 scopes")
+    elif result.get("eligible") and not scopes:
+        errors.append("eligible content requires at least one scope")
+    elif not result.get("eligible") and scopes:
+        errors.append("ineligible content requires an empty scopes list")
+    if not isinstance(result.get("reason_code"), str) or not result["reason_code"].strip():
+        errors.append("reason_code must be non-empty")
+    if not isinstance(result.get("reason"), str) or not result["reason"].strip():
+        errors.append("reason must be non-empty")
+    return not errors, "; ".join(errors)
 
 
 @dataclass(frozen=True)

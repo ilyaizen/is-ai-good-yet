@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implement the public V2 broadcast-terminal dashboard with typed static contracts, bot-feed and HN evidence cards, source-tension diagnostics, dimensional history, persisted `lil-gui` controls, reduced-motion canvas effects, and explicit unavailable states.
+- Add the isolated broad-scope V2 prefilter, immutable global-influence version, orchestration records, cron-safe locking, public pipeline telemetry, manifest hashing, and atomic generation publication with rollback.
+- Vendor the Natural Earth 110m land asset for the dotted canvas globe.
 - Add a live v2 admin methodology ledger with the exact versioned article and comment prompts.
 - Add manual v2 comment-collection and analysis controls backed by the existing server pipeline runner.
 - Add an isolated v2 two-tier sentiment pipeline for broader AI capability, trajectory, and societal-impact analysis.

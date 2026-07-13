@@ -1,0 +1,12 @@
+{
+  "contractVersion": "v2-manifest-1",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "influenceVersion": "hn-score-0.85_decay-24m_v1",
+  "files": {
+    "verdict.json": { "contractVersion": "verdict-v2.0.0", "recordCount": 1, "sha256": "a16a50cc7ff5db6432778388ff2d21a5416cef4d185be14fda42a3fe9cb36664" },
+    "stories.json": { "contractVersion": "stories-v2.0.0", "recordCount": 0, "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570" },
+    "history.json": { "contractVersion": "history-v2.0.0", "recordCount": 0, "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570" },
+    "bot-feed.json": { "contractVersion": "bot-feed-v2.0.0", "recordCount": 0, "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570" },
+    "pipeline-status.json": { "contractVersion": "pipeline-status-v2.0.0", "recordCount": 1, "sha256": "4638547ac8c43a7a3a08e7459003bc96a0a9ea1468085d5322093512fcf5e640" }
+  }
+}

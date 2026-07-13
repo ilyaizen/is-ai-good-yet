@@ -13,6 +13,7 @@ export type PipelineCommandName =
   | "clean_articles"
   | "prefilter_content"
   | "sentiment_analyzer"
+  | "v2_prefilter"
   | "v2_comments"
   | "v2_analyze"
   | "export"
@@ -113,6 +114,12 @@ const COMMANDS: Record<PipelineCommandName, PipelineCommandSpec> = {
     label: "Sentiment",
     description: "Score utility and trajectory with the Groq analyzer.",
     args: ["-m", "src.sentiment_analyzer", "-v"],
+  },
+  v2_prefilter: {
+    name: "v2_prefilter",
+    label: "Prefilter v2",
+    description: "Classify broad AI eligibility and scopes without touching the V1 contract.",
+    args: ["-m", "src.v2_prefilter"],
   },
   v2_comments: {
     name: "v2_comments",

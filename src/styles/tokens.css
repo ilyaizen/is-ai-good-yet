@@ -315,27 +315,25 @@
   }
 }
 
-/* v2 terminal dashboard semantics. Scoped so v1 keeps its existing theme. */
+/* v2 broadcast-terminal semantics. Scoped so v1 keeps its existing theme. */
 body.v2 {
-  --v2-bg: #08090b;
-  --v2-recess: #060708;
-  --v2-surface: #141518;
-  --v2-surface-high: #1c1d21;
-  --v2-accent: #a3e635;
-  --v2-accent-dim: #84cc16;
-  --v2-amber: #ff9f1c;
-  --v2-red: #ff3b3b;
-  --v2-text: #e8eaed;
-  --v2-text-bright: #ffffff;
-  --v2-text-dim: #9aa0a6;
-  --v2-text-faint: #6c7178;
-  --v2-border-frame: rgb(255 255 255 / 0.16);
-  --v2-border-card: rgb(255 255 255 / 0.1);
-  --v2-border-nested: rgb(255 255 255 / 0.06);
-  --v2-accent-border: rgb(163 230 53 / 0.4);
-  --v2-accent-fill: rgb(163 230 53 / 0.06);
-  --v2-accent-glow: rgb(163 230 53 / 0.35);
-  --v2-font: "Share Tech Mono", "IBM Plex Mono", ui-monospace, monospace;
-  --v2-frame-shadow: 0 4px 20px -2px rgb(0 0 0 / 0.65), 0 2px 6px rgb(0 0 0 / 0.4), inset 0 0 0 2px rgb(255 255 255 / 0.06);
-  --v2-card-shadow: 0 2px 12px -2px rgb(0 0 0 / 0.5), inset 0 0 0 2px rgb(0 0 0 / 0.65), inset 0 2px 0 rgb(255 255 255 / 0.04);
+  --v2-canvas: oklch(0.105 0.012 145);
+  --v2-recess: oklch(0.085 0.01 145);
+  --v2-surface-1: oklch(0.155 0.014 145);
+  --v2-surface-2: oklch(0.195 0.018 145);
+  --v2-text: oklch(0.94 0.014 130);
+  --v2-text-muted: oklch(0.7 0.018 145);
+  --v2-text-faint: oklch(0.52 0.018 145);
+  --v2-phosphor: oklch(0.86 0.2 125);
+  --v2-amber: oklch(0.78 0.16 75);
+  --v2-red: oklch(0.67 0.22 27);
+  --v2-cyan: oklch(0.77 0.12 210);
+  --v2-violet: oklch(0.72 0.13 300);
+  --v2-separator: oklch(0.72 0.03 145 / 0.16);
+  --v2-separator-quiet: oklch(0.72 0.03 145 / 0.08);
+  --v2-focus: oklch(0.88 0.2 125);
+  --v2-shadow: 0 18px 48px oklch(0.04 0.02 145 / 0.55);
+  --v2-font-display: "Share Tech Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --v2-font-data: "IBM Plex Mono", ui-monospace, monospace;
+  --v2-font-copy: "Armata", system-ui, sans-serif;
 }

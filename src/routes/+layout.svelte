@@ -103,7 +103,7 @@
 <ModeWatcher defaultMode="dark" />
 
 <TooltipProvider>
-  <ComprehensiveLoader visible={showLoader} />
+  <ComprehensiveLoader visible={showLoader && !isV2} />
   <AppHeader mode="animated" visible={scrolledPastVerdict} />
 
   {#if veilVisible}

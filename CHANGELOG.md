@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add command-specific production preflight diagnostics and block pipeline commands with missing imports, browsers, storage, or API keys.
+- Add a bounded `curl_cffi` article fetch path and optional authenticated residential rendered-HTML service before archive fallback.
 - Implement the public V2 broadcast-terminal dashboard with typed static contracts, bot-feed and HN evidence cards, source-tension diagnostics, dimensional history, persisted `lil-gui` controls, reduced-motion canvas effects, and explicit unavailable states.
 - Add the isolated broad-scope V2 prefilter, immutable global-influence version, orchestration records, cron-safe locking, public pipeline telemetry, manifest hashing, and atomic generation publication with rollback.
 - Vendor the Natural Earth 110m land asset for the dotted canvas globe.
@@ -74,6 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restore `libstdc++.so.6` availability for Playwright/greenlet in Nixpacks and declare Newspaper's modern `lxml-html-clean` dependency.
+- Keep V1 catch-up and analysis commands out of `/v2/admin`, expose the isolated V2 prefilter/orchestrator/export, and align Node/Python storage paths.
 - Restore intentional phosphor city highlights on the V2 globe and remove the unintended whole-landmass flicker.
 - Fix unreadable black age values in the admin content table and expand table search to titles and authors.
 - Scroll inversion and verdict veil placement outside smooth-scroll container.

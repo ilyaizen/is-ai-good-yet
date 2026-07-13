@@ -1,9 +1,11 @@
 import sqlite3
-from pathlib import Path
+
 from typing import Set, Optional, List, Tuple
 import logging
 
-DB_PATH = Path(__file__).parent.parent.parent / "data" / "pipeline.db"
+from .paths import get_pipeline_db_path
+
+DB_PATH = get_pipeline_db_path()
 logger = logging.getLogger(__name__)
 
 

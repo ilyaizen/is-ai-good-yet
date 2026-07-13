@@ -19,6 +19,7 @@ from groq import APIError, AsyncGroq
 
 from .hn_comments_v2 import SELECTION_VERSION, accepted_target, candidate_is_eligible
 from .store.parquet import read_articles
+from .store.paths import get_articles_dir
 from .store.v2 import (
     connect_rows, init_v2_schema, save_normalized_analysis, update_candidate_outcomes,
 )
@@ -136,8 +137,7 @@ def get_story_rows(limit: int | None, reanalyze: bool) -> list[dict[str, Any]]:
 def get_article_content(urls: list[str]) -> dict[str, str]:
     if not urls:
         return {}
-    data_dir = Path(__file__).resolve().parent.parent / "data" / "articles"
-    frame = read_articles(data_dir).filter(pl.col("url").is_in(urls)).select(["url", "text"]).collect()
+    frame = read_articles(get_articles_dir()).filter(pl.col("url").is_in(urls)).select(["url", "text"]).collect()
     return {row["url"]: row["text"] for row in frame.iter_rows(named=True)}
 
 

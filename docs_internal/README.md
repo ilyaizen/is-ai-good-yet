@@ -4,11 +4,12 @@ Operational documentation for `is-ai-good-yet`. This directory is the canonical 
 
 ## Index
 
-| Doc                                        | Contents                                                             |
-| ------------------------------------------ | -------------------------------------------------------------------- |
-| [architecture.md](./architecture.md)       | System design, data flow, pipeline phases, verdict scoring           |
-| [guide.md](./guide.md)                     | Setup, usage, dev conventions, agent mandates, bun command reference |
-| [troubleshooting.md](./troubleshooting.md) | Common issues: prefilter JSON, archive CAPTCHA, HN ID mismatch       |
+| Doc                                                                        | Contents                                                               |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [architecture.md](./architecture.md)                                       | System design, data flow, pipeline phases, verdict scoring             |
+| [guide.md](./guide.md)                                                     | Setup, usage, dev conventions, agent mandates, bun command reference   |
+| [troubleshooting.md](./troubleshooting.md)                                 | Common issues: prefilter JSON, archive CAPTCHA, HN ID mismatch         |
+| [pipeline-production-reliability.md](./pipeline-production-reliability.md) | Production preflight, storage alignment, and residential HTML fallback |
 
 ## Project Overview
 

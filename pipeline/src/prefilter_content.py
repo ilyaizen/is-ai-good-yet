@@ -51,6 +51,7 @@ if str(current_dir) not in sys.path:
 
 from store.db import get_db_connection, init_db, migrate_database
 from store.parquet import read_articles
+from store.paths import get_articles_dir
 from interactive import InteractiveSession
 
 # Force UTF-8 encoding for standard output (handles piping issues on Windows)
@@ -532,7 +533,7 @@ def get_article_content_batch(url_list: List[str]) -> Dict[str, str]:
     Returns dict mapping URL -> text content.
     """
     try:
-        data_dir = current_dir.parent / "data" / "articles"
+        data_dir = get_articles_dir()
         if not data_dir.exists():
             logging.warning(f"Parquet directory not found: {data_dir}")
             return {}

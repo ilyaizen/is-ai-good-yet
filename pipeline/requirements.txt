@@ -14,7 +14,9 @@ playwright
 playwright-stealth-plus
 curl-cffi  # Optional: TLS fingerprint randomization
 newspaper3k
-importlib-metadata  # For pkg_resources compatibility
+lxml-html-clean  # newspaper3k compatibility with modern lxml
+setuptools<81  # playwright-stealth-plus still imports pkg_resources
+importlib-metadata
 
 # Selenium + undetected-chromedriver (Cloudflare bypass for archive.is)
 undetected-chromedriver

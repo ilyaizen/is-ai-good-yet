@@ -15,7 +15,7 @@ import re
 import json
 from typing import Optional, Dict, List
 from urllib.parse import quote, urljoin, urlparse
-from pathlib import Path
+
 
 from playwright.async_api import async_playwright, BrowserContext, Page, TimeoutError as PlaywrightTimeoutError
 try:
@@ -26,6 +26,7 @@ import aiohttp
 import trafilatura
 
 from .base import ScraperStrategy
+from store.paths import get_data_path
 
 # Import Selenium-based scraper (optional, used as fallback)
 try:
@@ -452,7 +453,7 @@ class ArchiveScraper(ScraperStrategy):
                         }
 
                         # Load saved session if available
-                        storage_state_path = Path(__file__).parent.parent.parent / "data" / "archive_session.json"
+                        storage_state_path = get_data_path("archive_session.json")
                         if storage_state_path.exists() and storage_state_path.stat().st_size > 0:
                             logger.info(f"Loading session from {storage_state_path}")
                             context_args["storage_state"] = str(storage_state_path)

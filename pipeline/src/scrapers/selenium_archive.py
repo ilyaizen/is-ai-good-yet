@@ -28,7 +28,7 @@ import re
 import time
 import threading
 from functools import partial
-from pathlib import Path
+
 from typing import Optional, Dict, List, Any, Tuple, cast
 
 try:
@@ -55,6 +55,7 @@ except ImportError:
     uc = None  # type: ignore
 
 import trafilatura
+from store.paths import get_data_path
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +77,7 @@ class SeleniumArchiveScraper:
     ARCHIVE_DOMAINS = ["archive.ph", "archive.is", "archive.today"]
 
     # Session file path for cookie persistence
-    SESSION_FILE = Path(__file__).parent.parent.parent / "data" / "archive_session.json"
+    SESSION_FILE = get_data_path("archive_session.json")
 
     # Class-level rate limiting
     _last_request_time = 0.0

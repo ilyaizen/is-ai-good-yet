@@ -150,9 +150,25 @@ def normalize_article_result(result: dict[str, Any]) -> dict[str, Any]:
 def normalize_comment_result(result: dict[str, Any]) -> dict[str, Any]:
     if result.get("reject"):
         keys = ("contract_version", "comment_id", "reject", "reason_code", "reason")
-    else:
-        keys = (
+        return {key: result.get(key) for key in keys}
+
+    normalized = {
+        key: result.get(key)
+        for key in (
             "contract_version", "comment_id", "reject", "ai_dimensions",
             "article_relation", "parent_relation", "summary",
         )
-    return {key: result.get(key) for key in keys}
+    }
+    if normalized["article_relation"] is None:
+        normalized["article_relation"] = {
+            "relation": "not_applicable", "targets": [], "confidence": 0,
+            "rationale": "No article relation provided.",
+        }
+    if normalized["parent_relation"] is None:
+        normalized["parent_relation"] = {
+            "relation": "not_applicable", "confidence": 0,
+            "rationale": "No parent relation provided.",
+        }
+    if isinstance(normalized["summary"], str):
+        normalized["summary"] = " ".join(normalized["summary"].split()[:20])
+    return normalized

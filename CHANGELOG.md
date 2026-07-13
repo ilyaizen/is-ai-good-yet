@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
 - Export analyzed articles independently of legacy `articles-text` files.
-- Constrain V2 Groq responses with strict JSON schemas, retry transient prefilter generation failures, and cap comment refill at `2T` candidates per story to prevent runaway model-call loops.
+- Constrain V2 Groq responses with strict JSON schemas, normalize nullable relation metadata, retry transient prefilter generation failures, and cap comment refill at `2T` candidates per story to prevent runaway model-call loops.
 
 ### Added
 

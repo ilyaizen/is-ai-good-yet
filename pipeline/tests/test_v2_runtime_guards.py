@@ -90,3 +90,25 @@ def test_prefilter_retries_transient_generation_failure() -> None:
 
     assert calls == 2
     assert result is not None
+
+
+def test_comment_normalizer_repairs_nullable_context_and_long_summary() -> None:
+    result = normalize_comment_result(
+        {
+            "contract_version": "comment-v2.2.0", "comment_id": 7, "reject": False,
+            "ai_dimensions": {"capability": {}, "trajectory": {}, "impact": {}},
+            "article_relation": None, "parent_relation": None,
+            "summary": "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one",
+            "reason_code": None, "reason": None,
+        }
+    )
+
+    assert result["article_relation"] == {
+        "relation": "not_applicable", "targets": [], "confidence": 0,
+        "rationale": "No article relation provided.",
+    }
+    assert result["parent_relation"] == {
+        "relation": "not_applicable", "confidence": 0,
+        "rationale": "No parent relation provided.",
+    }
+    assert len(result["summary"].split()) == 20

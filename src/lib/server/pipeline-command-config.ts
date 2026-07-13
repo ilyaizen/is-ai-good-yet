@@ -149,8 +149,27 @@ const COMMAND_REQUIREMENTS: Record<PipelineCommandName, Array<keyof PipelinePref
 export function getPipelineCommandList(scope: "v1" | "v2" = "v1"): PipelineCommandSpec[] {
   const names: PipelineCommandName[] =
     scope === "v2"
-      ? ["backfill", "resolve", "scrape", "v2_prefilter", "v2_comments", "v2_analyze", "v2_export", "v2_run"]
-      : ["catch_up", "backfill", "resolve", "scrape", "prefilter_content", "sentiment_analyzer", "export"]
+      ? [
+          "backfill",
+          "resolve",
+          "scrape",
+          "clean_articles",
+          "v2_prefilter",
+          "v2_comments",
+          "v2_analyze",
+          "v2_export",
+          "v2_run",
+        ]
+      : [
+          "catch_up",
+          "backfill",
+          "resolve",
+          "scrape",
+          "clean_articles",
+          "prefilter_content",
+          "sentiment_analyzer",
+          "export",
+        ]
   return names.map((name) => COMMANDS[name])
 }
 

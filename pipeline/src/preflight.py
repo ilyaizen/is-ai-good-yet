@@ -101,6 +101,8 @@ def check_residential_config() -> Check:
         return _failed(
             "Residential fetcher is configured without PIPELINE_RESIDENTIAL_FETCHER_SECRET."
         )
+    if len(secret) < 24:
+        return _failed("Residential fetcher secret must be at least 24 characters.")
     return _ok(f"Residential fetcher is configured for {parsed.scheme}://{parsed.hostname}.")
 
 

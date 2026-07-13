@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib
 from pathlib import Path
 
-from pipeline.src.preflight import check_imports, check_storage
+from pipeline.src.preflight import check_imports, check_residential_config, check_storage
 
 
 def test_import_preflight_preserves_actionable_loader_error() -> None:
@@ -27,3 +27,13 @@ def test_storage_preflight_reports_alignment_and_writability(tmp_path: Path) -> 
 
     assert result["ok"]
     assert str(db_path.resolve()) in result["reason"]
+
+
+def test_residential_preflight_rejects_short_secret(monkeypatch) -> None:
+    monkeypatch.setenv("PIPELINE_RESIDENTIAL_FETCHER_URL", "https://residential.example")
+    monkeypatch.setenv("PIPELINE_RESIDENTIAL_FETCHER_SECRET", "too-short")
+
+    result = check_residential_config()
+
+    assert not result["ok"]
+    assert "at least 24 characters" in result["reason"]

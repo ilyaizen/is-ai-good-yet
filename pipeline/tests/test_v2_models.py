@@ -1,8 +1,9 @@
 import math
 
 from pipeline.src.v2_models import (
-    COMMENT_CONTRACT_VERSION, SelectedComment, aggregate_comment_dimension,
-    combine_sources, raw_visibility_weight, validate_comment_analysis,
+    COMMENT_CONTRACT_VERSION, PREFILTER_CONTRACT_VERSION, SelectedComment,
+    aggregate_comment_dimension, combine_sources, raw_visibility_weight,
+    validate_comment_analysis, validate_prefilter_result,
 )
 
 
@@ -88,3 +89,27 @@ def test_source_combination_keeps_confidence_as_influence() -> None:
     )
     assert math.isclose(result["score"], -0.25)
     assert math.isclose(result["confidence"], 0.8)
+
+
+def test_v2_prefilter_requires_scopes_only_for_eligible_content() -> None:
+    eligible = {
+        "contract_version": PREFILTER_CONTRACT_VERSION,
+        "eligible": True,
+        "scopes": ["research", "general"],
+        "reason_code": "substantive_ai_claim",
+        "reason": "The source evaluates an AI research system.",
+    }
+    assert validate_prefilter_result(eligible) == (True, "")
+    eligible["scopes"] = []
+    assert not validate_prefilter_result(eligible)[0]
+
+
+def test_v2_prefilter_rejects_unknown_scope() -> None:
+    result = {
+        "contract_version": PREFILTER_CONTRACT_VERSION,
+        "eligible": True,
+        "scopes": ["marketing"],
+        "reason_code": "substantive_ai_claim",
+        "reason": "Invalid scope should fail.",
+    }
+    assert not validate_prefilter_result(result)[0]

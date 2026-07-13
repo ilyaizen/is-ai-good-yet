@@ -547,6 +547,7 @@ async function main() {
         { value: 'pipeline-analyze', label: 'Phase 5: Analyze Sentiment', hint: 'Score articles with LLM' },
         { value: 'pipeline-export', label: 'Phase 6: Export Data', hint: 'Generate static JSON' },
         { value: 'separator-v2', label: '────── V2 Sentiment ──────', hint: '' },
+        { value: 'pipeline-v2-prefilter', label: 'V2: Broad Prefilter', hint: 'Classify all AI domains without changing V1' },
         { value: 'pipeline-v2-comments', label: 'V2: Collect HN Comments', hint: 'Fetch and select representative discussion' },
         { value: 'pipeline-v2-analyze', label: 'V2: Analyze Two Tiers', hint: 'Score articles and HN response' },
         { value: 'pipeline-v2-export', label: 'V2: Export Data', hint: 'Generate isolated v2 JSON' },
@@ -658,6 +659,9 @@ async function main() {
         const args = await configureSentimentAnalyzerArgs();
         if (args === null) continue;
         await runScript(pythonCmd, ['-m', 'src.sentiment_analyzer', ...args], PIPELINE_DIR);
+      }
+      else if (action === 'pipeline-v2-prefilter') {
+        await runScript(pythonCmd, ['-m', 'src.v2_prefilter'], PIPELINE_DIR);
       }
       else if (action === 'pipeline-v2-comments') {
         await runScript(pythonCmd, ['-m', 'src.hn_comments_v2', '-v'], PIPELINE_DIR);

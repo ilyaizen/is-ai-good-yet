@@ -1,0 +1,36 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import type { V2Verdict } from "$lib/types/v2";
+  import { verdictDecode } from "$lib/actions/verdict-decode";
+  import DottedGlow from "../effects/dotted-glow.svelte";
+  import DottedGlobe from "../effects/dotted-globe.svelte";
+  import DimensionRail from "./v2-dimension-rail.svelte";
+
+  interface Props { verdict: V2Verdict; pipelineState: string; }
+  let { verdict, pipelineState }: Props = $props();
+  let answerNode: HTMLElement;
+  let beam = $state(false);
+  const answer = $derived(verdict.composite?.verdict.replace("_", " ") ?? "NO DATA");
+  const explanation = $derived(verdict.composite
+    ? `${verdict.articleCount} stories resolve to ${verdict.composite.rawScore >= 0 ? "+" : ""}${verdict.composite.rawScore.toFixed(2)} across addressed dimensions.`
+    : "The V2 analysis contract is wired. No accepted V2 generation has been published yet.");
+
+  onMount(() => verdictDecode(answerNode, answer, { delay: 180, onDone: () => beam = true }));
+</script>
+
+<section class="v2-hero" aria-labelledby="v2-question">
+  <DottedGlow />
+  <div class="v2-hero__globe"><DottedGlobe /></div>
+  <div class="v2-hero__content">
+    <div class="v2-hero__command"><span>$ ./assess --scope all-ai --window 12m</span><b>{pipelineState}</b></div>
+    <p id="v2-question" class="v2-hero__question">Is AI good yet?</p>
+    <h1 class="v2-hero__answer" class:v2-hero__answer--beam={beam} bind:this={answerNode} aria-label={`Aggregate verdict: ${answer}`}>{answer}</h1>
+    <p class="v2-hero__summary">{explanation}</p>
+    <div class="v2-dimension-rail" aria-label="Aggregate dimension scores">
+      <DimensionRail label="CAPABILITY" value={verdict.dimensions.capability} />
+      <DimensionRail label="TRAJECTORY" value={verdict.dimensions.trajectory} />
+      <DimensionRail label="IMPACT" value={verdict.dimensions.impact} />
+    </div>
+    <p class="v2-hero__window">WINDOW {verdict.windowMonths} MONTHS · {verdict.articleCount} ANALYZED STORIES · INFLUENCE {verdict.influenceVersion}</p>
+  </div>
+</section>

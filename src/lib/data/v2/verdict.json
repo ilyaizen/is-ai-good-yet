@@ -1,0 +1,9 @@
+{
+  "contractVersion": "verdict-v2.0.0",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "influenceVersion": "hn-score-0.85_decay-24m_v1",
+  "windowMonths": 12,
+  "articleCount": 0,
+  "dimensions": { "capability": null, "trajectory": null, "impact": null },
+  "composite": null
+}

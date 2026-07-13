@@ -1,0 +1,22 @@
+{
+  "contractVersion": "pipeline-status-v2.0.0",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "schedule": {
+    "expression": "0 */6 * * *",
+    "timezone": "UTC",
+    "human": "every 6 hours",
+    "nextRunAt": "1970-01-01T00:00:00.000Z",
+    "graceMinutes": 60
+  },
+  "currentRun": null,
+  "lastRun": null,
+  "coverage": {
+    "corpusEligible": 0,
+    "articleAnalyzed": 0,
+    "communityAnalyzed": 0,
+    "botPreviewReady": 0,
+    "articlePercent": 0,
+    "communityPercent": 0,
+    "botPreviewPercent": 0
+  }
+}

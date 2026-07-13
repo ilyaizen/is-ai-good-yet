@@ -1,0 +1,1 @@
+<footer class="v2-page-footer"><p>IS AI “GOOD” YET? · PUBLIC STATIC V2 CONTRACT · BUILT FOR SCRUTINY</p><nav aria-label="Footer links"><a href="#main-content">TOP ↑</a><a href="https://github.com/ilyaizen/is-ai-good-yet" target="_blank" rel="noreferrer">SOURCE ↗</a></nav></footer>

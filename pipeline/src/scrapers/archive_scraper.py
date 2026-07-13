@@ -26,6 +26,7 @@ import aiohttp
 import trafilatura
 
 from .base import ScraperStrategy
+from browser_runtime import resolve_chromium_executable
 from store.paths import get_data_path
 
 # Import Selenium-based scraper (optional, used as fallback)
@@ -431,6 +432,7 @@ class ArchiveScraper(ScraperStrategy):
                     logger.debug("No shared context - launching new browser for archive.is")
                     async with async_playwright() as p:
                         browser = await p.chromium.launch(
+                            executable_path=resolve_chromium_executable(),
                             headless=True,
                             args=[
                                 '--disable-blink-features=AutomationControlled',

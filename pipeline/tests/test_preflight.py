@@ -3,7 +3,12 @@ from __future__ import annotations
 import importlib
 from pathlib import Path
 
-from pipeline.src.preflight import check_imports, check_residential_config, check_storage
+from pipeline.src.preflight import (
+    check_browser_launch,
+    check_imports,
+    check_residential_config,
+    check_storage,
+)
 
 
 def test_import_preflight_preserves_actionable_loader_error() -> None:
@@ -15,6 +20,16 @@ def test_import_preflight_preserves_actionable_loader_error() -> None:
     assert not result["ok"]
     assert "playwright.async_api" in result["reason"]
     assert "libstdc++.so.6" in result["reason"]
+
+
+def test_browser_preflight_launches_binary_and_reports_runtime_library_errors() -> None:
+    def failing_launch(_executable: str) -> str:
+        raise RuntimeError("libglib-2.0.so.0: cannot open shared object file")
+
+    result = check_browser_launch("/nix/store/chromium", launcher=failing_launch)
+
+    assert not result["ok"]
+    assert "libglib-2.0.so.0" in result["reason"]
 
 
 def test_storage_preflight_reports_alignment_and_writability(tmp_path: Path) -> None:

@@ -182,6 +182,13 @@ def get_story_ids(limit: int | None, min_score: int, min_comments: int) -> list[
             SELECT hn_id FROM urls
             WHERE hn_id IS NOT NULL AND scraped_status = 'success'
               AND hn_score >= ? AND hn_comments >= ?
+              AND id = (
+                SELECT canonical.id FROM urls canonical
+                WHERE canonical.hn_id = urls.hn_id AND canonical.scraped_status = 'success'
+                ORDER BY COALESCE(canonical.hn_score, 0) DESC,
+                         COALESCE(canonical.hn_comments, 0) DESC, canonical.id ASC
+                LIMIT 1
+              )
               AND EXISTS (
                 SELECT 1 FROM v2_prefilter_decisions p
                 WHERE p.hn_story_id = urls.hn_id AND p.contract_version = ? AND p.eligible = 1

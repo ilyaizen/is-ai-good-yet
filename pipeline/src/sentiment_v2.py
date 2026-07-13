@@ -104,6 +104,13 @@ def get_story_rows(limit: int | None, reanalyze: bool) -> list[dict[str, Any]]:
         query = """
             SELECT u.hn_id, u.url, u.hn_title, u.hn_score, u.hn_comments
             FROM urls u WHERE u.hn_id IS NOT NULL AND u.scraped_status = 'success'
+              AND u.id = (
+                SELECT canonical.id FROM urls canonical
+                WHERE canonical.hn_id = u.hn_id AND canonical.scraped_status = 'success'
+                ORDER BY COALESCE(canonical.hn_score, 0) DESC,
+                         COALESCE(canonical.hn_comments, 0) DESC, canonical.id ASC
+                LIMIT 1
+              )
               AND EXISTS (
                 SELECT 1 FROM v2_prefilter_decisions p
                 WHERE p.hn_story_id = u.hn_id AND p.contract_version = ? AND p.eligible = 1

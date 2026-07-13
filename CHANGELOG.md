@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Let the isolated V2 pipeline read reconciled article-text files when a scraped article is not yet present in Parquet.
+- Let the isolated V2 pipeline read reconciled article-text files when a scraped article is not yet present in Parquet, and process duplicate `hn_id` rows only once.
 - Launch the installed Nix Chromium wrapper for scraping and make preflight perform a real browser launch, replacing the broken duplicate Playwright Chromium download.
 - Resolve the production pipeline source from the real runtime filesystem instead of the bundled `/app/build` path, and add an article-text reconciliation command for registering orphan files without replacing canonical duplicate-URL rows.
 - Restore `libstdc++.so.6` availability for Playwright/greenlet in Nixpacks and declare Newspaper's modern `lxml-html-clean` dependency.

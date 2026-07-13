@@ -38,6 +38,13 @@ def pending_rows(limit: int | None, reprocess: bool) -> list[dict[str, Any]]:
         query = """
             SELECT hn_id, hn_title, url FROM urls
             WHERE hn_id IS NOT NULL AND scraped_status = 'success'
+              AND id = (
+                SELECT canonical.id FROM urls canonical
+                WHERE canonical.hn_id = urls.hn_id AND canonical.scraped_status = 'success'
+                ORDER BY COALESCE(canonical.hn_score, 0) DESC,
+                         COALESCE(canonical.hn_comments, 0) DESC, canonical.id ASC
+                LIMIT 1
+              )
         """
         params: list[Any] = []
         if not reprocess:
@@ -96,7 +103,7 @@ async def run(limit: int | None, reprocess: bool) -> dict[str, int]:
         raise RuntimeError("GROQ_API_KEY is required")
     init_v2_schema()
     stories = pending_rows(limit, reprocess)
-    content = get_article_content([story["url"] for story in stories])
+    content = get_article_content(stories)
     client = AsyncGroq(api_key=api_key)
     saved = 0
     for story in stories:

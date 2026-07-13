@@ -16,6 +16,8 @@ assert(!v2Names.includes("sentiment_analyzer"), "V2 must never expose the V1 ana
 assert(v2Names.includes("v2_prefilter"), "V2 exposes its broad prefilter")
 assert(v2Names.includes("v2_run"), "V2 exposes its isolated orchestrator")
 assert(v2Names.includes("v2_export"), "V2 exposes its isolated export")
+assert(v1Names.includes("clean_articles"), "V1 exposes shared article cleanup")
+assert(v2Names.includes("clean_articles"), "V2 exposes shared article cleanup")
 
 const baseSnapshot: PipelinePreflightSnapshot = {
   python: { ok: true, reason: "Python imports succeeded." },

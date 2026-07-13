@@ -44,3 +44,4 @@ package-lock.json
 .dev-server.log
 /archive
 # /docs_internal
+/.agents

@@ -3,6 +3,7 @@ import json
 from types import SimpleNamespace
 
 from pipeline.src import sentiment_v2
+from pipeline.src.v2_prefilter import classify
 from pipeline.src.v2_schemas import normalize_article_result, normalize_comment_result
 
 
@@ -62,3 +63,30 @@ def test_strict_superset_results_normalize_to_immutable_contracts() -> None:
         "contract_version": "comment-v2.2.0", "comment_id": 7, "reject": True,
         "reason_code": "no_ai_judgment", "reason": "No stance.",
     }
+
+
+def test_prefilter_retries_transient_generation_failure() -> None:
+    calls = 0
+
+    class Completions:
+        async def create(self, **_kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 1:
+                raise RuntimeError("json generation failed")
+            value = {
+                "contract_version": "prefilter-v2.0.0", "eligible": True,
+                "scopes": ["research"], "reason_code": "eligible",
+                "reason": "Contains an attributable AI claim.",
+            }
+            return SimpleNamespace(
+                choices=[SimpleNamespace(message=SimpleNamespace(content=json.dumps(value)))]
+            )
+
+    client = SimpleNamespace(chat=SimpleNamespace(completions=Completions()))
+    result = asyncio.run(
+        classify(client, {"hn_id": 1, "hn_title": "AI research"}, "AI improves research.")
+    )
+
+    assert calls == 2
+    assert result is not None

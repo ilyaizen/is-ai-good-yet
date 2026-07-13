@@ -34,11 +34,11 @@ Scores are weighted by HN engagement (power-law scaled upvotes) and time decay (
 
 ### Verdict Scale
 
-| Score | Verdict | Meaning |
-|:------|:--------|:--------|
-| ≥ 55 | **YES** | Net positive — AI coding tools are earning developer trust |
-| 45–55 | **NOT YET** | Too close to call |
-| < 45 | **NO** | Net negative — skepticism dominates |
+| Score | Verdict     | Meaning                                                    |
+| :---- | :---------- | :--------------------------------------------------------- |
+| ≥ 55  | **YES**     | Net positive — AI coding tools are earning developer trust |
+| 45–55 | **NOT YET** | Too close to call                                          |
+| < 45  | **NO**      | Net negative — skepticism dominates                        |
 
 ---
 
@@ -108,7 +108,6 @@ The pipeline is source only — its data directory is gitignored. Frontend env v
 ### Prerequisites
 
 - Node.js 22.12+
-- bun
 - Python 3.11+ (for the pipeline)
 
 ```bash
@@ -118,14 +117,14 @@ bun run dev          # → http://localhost:5173
 
 ### Scripts
 
-| Command | Description |
-|:--------|:------------|
-| `bun run dev` | Vite dev server with HMR |
-| `bun run build` | Production build |
-| `bun run check` | TypeScript + Svelte type checking |
-| `bun run lint` | Prettier + ESLint |
-| `bun run format` | Auto-format |
-| `bun run cli` | Pipeline CLI wrapper |
+| Command          | Description                       |
+| :--------------- | :-------------------------------- |
+| `bun run dev`    | Vite dev server with HMR          |
+| `bun run build`  | Production build                  |
+| `bun run check`  | TypeScript + Svelte type checking |
+| `bun run lint`   | Prettier + ESLint                 |
+| `bun run format` | Auto-format                       |
+| `bun run cli`    | Pipeline CLI wrapper              |
 
 ---
 

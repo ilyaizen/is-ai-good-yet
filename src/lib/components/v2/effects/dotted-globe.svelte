@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { createWireframeGlobe } from "./dotted-globe";
+  import { WORLD_CITIES } from "./world-cities";
 
   let host: HTMLDivElement;
   onMount(() => createWireframeGlobe(host, {
@@ -12,8 +13,9 @@
     landResolution: 2,
     radiusFraction: 0.43,
     limbPadding: 0.2,
-    flicker: true,
-    initialRotation: [-18, 12]
+    flicker: false,
+    initialRotation: [-18, 12],
+    cities: WORLD_CITIES
   }));
 </script>
 

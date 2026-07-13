@@ -4,40 +4,52 @@
 
 ## Project
 
-**Is AI "Good" Yet?** — a terminal-themed dashboard that visualizes Hacker News sentiment toward AI coding tools. A Python pipeline scrapes and LLM-analyzes AI-tagged HN submissions; a SvelteKit frontend renders the verdict, timeline, and article explorer.
+**Is AI "Good" Yet?** — a terminal-themed dashboard that visualizes Hacker News sentiment toward AI. The legacy V1 experience focuses on AI coding tools. V2 broadens the question across capability, trajectory, and societal impact, combining article analysis with visible Hacker News discussion and a separate bot-discovered news feed.
 
 - GitHub repo: `ilyaizen/is-ai-good-yet`
 - Production deploy: repo root via Coolify/nixpacks (Node 22.12), `@sveltejs/adapter-node`
-- Status: all 7 backend pipeline phases complete; frontend live with static JSON data export
+- Status: V1 remains stable; the isolated V2 pipeline, static export contracts, public `/v2` dashboard, and `/v2/admin` methodology controls are implemented
 
 ## Stack
 
 - **Frontend** (repo root, _not_ a nested `frontend/` or `is-ai-good-yet/` dir): SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4.1 + shadcn-svelte + D3/LayerCake
 - **Backend pipeline** (`pipeline/`): Python 3.11+ — Polars, aiohttp, trafilatura, Playwright/camoufox scraping, Groq/Mistral/Anthropic LLM APIs
+- **V2 analysis**: isolated broad-scope prefilter + article thesis analysis + deterministic ranked-tree HN comment sampling; versioned methodology lives in `docs/v2-*.md`
 - **Visitor counter** (`convex/`): Convex backend
 - **Package manager: bun/Node 22.12** (bun.lock committed; `nixpacks.toml` uses `bun install` + `bun run build`)
-- **Data storage**: SQLite (`pipeline/data/pipeline.db`) + Parquet + exported static JSON (`src/lib/data/`)
+- **Data storage**: SQLite (`pipeline/data/pipeline.db`) + compressed Parquet article bodies + separate V1/V2 static JSON exports under `src/lib/data/`
 
 ## Project Structure
 
 ```
 src/
   lib/
-    components/   # landing/ (verdict-veil, verdict-display, articles-table, history-chart), ui/ (shadcn)
-    composables/  # Svelte 5 composables (useTokenStream, etc.)
-    data/         # static JSON exported by the pipeline (articles, themes, verdict)
-    server/       # server-side DB utilities
-    types/        # TypeScript types
+    components/
+      landing/    # V1 verdict, article explorer, history, and supporting UI
+      v2/         # V2 broadcast dashboard: shell, hero, evidence, bot-feed, history, effects, settings
+      ui/         # shadcn-svelte primitives
+    composables/  # Svelte 5 composables
+    data/
+      v2/         # atomic V2 generation: manifest, verdict, stories, history, bot-feed, pipeline status
+      *.json      # V1 static exports
+    server/       # DB/pipeline utilities plus V2 page adapter and methodology loader
+    state/        # V2 persisted visual settings
+    types/        # shared TypeScript contracts, including types/v2.ts
     convex/       # Convex client
     constants.ts, version.ts, utils.ts
-  routes/         # +page (landing), +layout, details/[id], admin/, api/, v2/, lab/
-  styles/         # tokens.css (design tokens — single source of truth), terminal.css, base.css, animations.css, components.css, crt-effect.css
-pipeline/         # Python data pipeline source + CLI (run from pipeline/, see pipeline/README.md)
+  routes/
+    +page.svelte  # V1 landing page
+    v2/           # public V2 dashboard and authenticated admin methodology controls
+    admin/, api/, details/[id], lab/
+  styles/         # shared tokens plus V1/V2 route styles and effects
+pipeline/
+  src/            # V1 phases plus isolated V2 prefilter, comments, sentiment, orchestration, storage, export
+  tests/          # pipeline tests, including V2 contract and comment-selection coverage
 convex/           # Convex visitor-counter backend
-docs/             # Public docs (README only)
-docs_internal/    # Operational/internal docs (see below)
+docs/             # public docs and normative V2 methodology/prompt contracts
+docs_internal/    # operational docs and V2 design specification
 scripts/          # tsx helper scripts (bump-version, verify-fix, diagnose, tests)
-static/           # favicon, OG images
+static/           # favicon, OG images, and vendored visual assets
 cli.ts            # Pipeline CLI wrapper
 ```
 
@@ -110,6 +122,9 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 - **TypeScript**: strict mode, no unused vars, explicit return types for public functions, prefer `interface` over `type`, `satisfies` over type assertions, never `!` non-null assertion
 - **Svelte 5**: use `$state`, `$derived`, `$props`, `$effect` (not `$:`); `onclick` not `on:click`; call derived signals as `doubled()` not `doubled`; import from `$app/state` not `$app/stores`
 - **Styling**: Tailwind utility-first; design tokens live in `src/styles/tokens.css` (single source of truth — never hardcode OKLCH values); animation easing `cubic-bezier(0, 0.7, 0.1, 1)`
+- **V2 isolation**: do not reuse V1 prompt, storage, export, or route contracts for V2; never silently fall back from V2 data to V1 data
+- **V2 methodology**: preserve immutable contract/version identifiers and the documented capability/trajectory/impact semantics; update the normative `docs/v2-*.md` contract when changing analysis behavior
+- **V2 publication**: publish `src/lib/data/v2/` as one manifest-validated atomic generation; keep explicit unavailable states for missing or invalid generations
 - **CLI wrapper**: when adding arguments to a Python pipeline script, also expose them in `cli.ts`
 
 ## Git Workflow
@@ -125,6 +140,8 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 - Frontend is the repo-root SvelteKit app, not a nested `frontend/` directory.
 - Production deploy uses `@sveltejs/adapter-node` via `nixpacks.toml`.
 - Pipeline code stays in `pipeline/` and uses the repo-root `.venv` with Python 3.11. Run pipeline commands from `pipeline/` (or via the `bun run pipeline:*` scripts).
+- V1 and V2 are additive, separate systems. V2 changes must not alter V1 sentiment fields or overwrite V1 static exports.
+- `/v2` reads only the manifest-validated files in `src/lib/data/v2/` through `src/lib/server/v2-page-adapter.ts`.
 - **Do not preserve or print secrets.** Replace credentials with `[REDACTED]`.
 
 ## Internal Docs (`docs_internal/`)

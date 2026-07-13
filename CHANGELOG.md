@@ -74,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restore intentional phosphor city highlights on the V2 globe and remove the unintended whole-landmass flicker.
 - Fix unreadable black age values in the admin content table and expand table search to titles and authors.
 - Scroll inversion and verdict veil placement outside smooth-scroll container.
 - SSR guard for `pointTexture` in 3D background scene.

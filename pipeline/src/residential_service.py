@@ -12,6 +12,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from .article_fetch import is_public_http_url, redact_url
+from .browser_runtime import resolve_chromium_executable
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +68,7 @@ class ResidentialBrowser:
 
             self._playwright = await async_playwright().start()
             self._browser = await self._playwright.chromium.launch(
+                executable_path=resolve_chromium_executable(),
                 headless=self.settings.headless,
                 args=[
                     "--disable-blink-features=AutomationControlled",

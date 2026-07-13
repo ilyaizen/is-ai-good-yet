@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable, Iterable
 from urllib.parse import urlsplit
 
+from .browser_runtime import resolve_chromium_executable
 from .store.paths import get_pipeline_data_dir, get_pipeline_db_path
 
 Check = dict[str, object]
@@ -56,6 +57,33 @@ def check_storage(*, data_dir: Path, db_path: Path) -> Check:
         return _failed(f"Pipeline storage check failed: {type(error).__name__}: {error}")
 
 
+def _launch_chromium(executable: str) -> str:
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            executable_path=executable,
+            headless=True,
+            args=["--disable-dev-shm-usage", "--no-sandbox"],
+        )
+        try:
+            return browser.version
+        finally:
+            browser.close()
+
+
+def check_browser_launch(
+    executable: str, launcher: Callable[[str], str] = _launch_chromium
+) -> Check:
+    try:
+        version = launcher(executable)
+        return _ok(f"Chromium {version} launched successfully from {executable}.")
+    except Exception as error:
+        return _failed(
+            f"Chromium launch failed from {executable}: {type(error).__name__}: {error}"
+        )
+
+
 def check_scraper() -> Check:
     scraper_module = f"{__package__}.scraper"
     imports = check_imports(
@@ -75,18 +103,12 @@ def check_scraper() -> Check:
         return _failed(
             "playwright_stealth imported but does not expose the required stealth_async API."
         )
-    try:
-        from playwright.sync_api import sync_playwright
-
-        with sync_playwright() as playwright:
-            executable = Path(playwright.chromium.executable_path)
-        if not executable.is_file():
-            return _failed(
-                "Playwright Chromium is missing. Run: python -m playwright install chromium"
-            )
-        return _ok(f"Scraper imports succeeded; Chromium found at {executable}.")
-    except Exception as error:
-        return _failed(f"Playwright browser check failed: {type(error).__name__}: {error}")
+    executable = resolve_chromium_executable()
+    if not executable:
+        return _failed(
+            "System Chromium is missing. Install Chromium or set PIPELINE_CHROMIUM_EXECUTABLE."
+        )
+    return check_browser_launch(executable)
 
 
 def check_residential_config() -> Check:

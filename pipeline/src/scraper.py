@@ -79,6 +79,7 @@ except ModuleNotFoundError:
 
 from playwright_stealth import stealth_async
 from aiolimiter import AsyncLimiter
+from .browser_runtime import resolve_chromium_executable
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
@@ -885,6 +886,8 @@ async def main(
     use_selenium: bool = False,
     oldest_first: bool = False
 ):
+    stealth_mode = os.getenv("PIPELINE_STEALTH_MODE", stealth_mode).strip() or stealth_mode
+
     # Logging level configuration:
     # - Default: INFO (detailed logs visible by default)
     # - With -v/--verbose: DEBUG (very verbose trace logs)
@@ -1011,6 +1014,7 @@ async def main(
         # Standard Playwright launch (used as primary or fallback)
         if not browser:
             browser = await p.chromium.launch(
+                executable_path=resolve_chromium_executable(),
                 headless=not headful,
                 args=[
                     '--disable-blink-features=AutomationControlled',

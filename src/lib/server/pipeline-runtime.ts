@@ -8,6 +8,24 @@ type ResolvePipelinePythonOptions = {
   exists: (candidate: string) => boolean
 }
 
+type ResolvePipelineSourceDirectoryOptions = {
+  explicit?: string
+  repoRoot: string
+  cwd: string
+  exists: (candidate: string) => boolean
+}
+
+export function resolvePipelineSourceDirectory(options: ResolvePipelineSourceDirectoryOptions): string {
+  const candidates = [
+    options.explicit?.trim(),
+    path.join(options.repoRoot, "pipeline"),
+    path.join(options.cwd, "pipeline"),
+    "/app/pipeline",
+  ].filter((candidate): candidate is string => Boolean(candidate))
+
+  return candidates.find(options.exists) ?? candidates[0]
+}
+
 export function resolvePipelinePython(options: ResolvePipelinePythonOptions): string {
   const pathApi = options.platform === "win32" ? path.win32 : path.posix
   const executable =

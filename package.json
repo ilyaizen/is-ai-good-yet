@@ -37,6 +37,7 @@
     "pipeline:bootstrap": "python3 pipeline/bootstrap_pipeline_db.py",
     "pipeline:stats": "python3 pipeline/check_stats.py",
     "pipeline:consistency": "python3 pipeline/src/check_consistency.py",
+    "pipeline:reconcile-text": "python3 -m pipeline.src.reconcile_article_texts",
     "pipeline:export": "python3 pipeline/src/export.py",
     "pipeline:export-titles": "python3 pipeline/src/export_titles.py",
     "pipeline:catch-up": "python3 pipeline/src/catch_up.py",

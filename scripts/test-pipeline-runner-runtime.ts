@@ -1,5 +1,9 @@
 import assert from "node:assert/strict"
-import { createOnceFinalizer, resolvePipelinePython } from "../src/lib/server/pipeline-runtime"
+import {
+  createOnceFinalizer,
+  resolvePipelinePython,
+  resolvePipelineSourceDirectory,
+} from "../src/lib/server/pipeline-runtime"
 
 let finalized = 0
 const finalize = createOnceFinalizer(() => {
@@ -30,6 +34,26 @@ assert.equal(
     exists: (candidate) => candidate === "/opt/pipeline-venv/bin/python",
   }),
   "/opt/pipeline-venv/bin/python",
+)
+
+assert.equal(
+  resolvePipelineSourceDirectory({
+    explicit: undefined,
+    repoRoot: "/app/build",
+    cwd: "/app",
+    exists: (candidate) => candidate === "/app/pipeline",
+  }),
+  "/app/pipeline",
+  "production bundles must resolve the pipeline beside /app, not under /app/build",
+)
+assert.equal(
+  resolvePipelineSourceDirectory({
+    explicit: "/custom/pipeline",
+    repoRoot: "/app/build",
+    cwd: "/app",
+    exists: (candidate) => candidate === "/custom/pipeline",
+  }),
+  "/custom/pipeline",
 )
 
 console.log("pipeline runner runtime tests passed")

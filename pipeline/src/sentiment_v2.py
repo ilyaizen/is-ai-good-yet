@@ -26,7 +26,8 @@ from .store.v2 import (
 )
 from .v2_models import (
     AGGREGATION_VERSION, ANALYSIS_VERSION, ARTICLE_CONTRACT_VERSION,
-    COMMENT_CONTRACT_VERSION, DIMENSIONS, PARSER_VERSION, PREFILTER_CONTRACT_VERSION,
+    ARTICLE_SUMMARY_MAX_WORDS, COMMENT_CONTRACT_VERSION, COMMENT_SUMMARY_MAX_WORDS,
+    DIMENSIONS, PARSER_VERSION, PREFILTER_CONTRACT_VERSION,
     SelectedComment,
     aggregate_comment_dimension, composite_score, validate_article_analysis,
     validate_comment_analysis,
@@ -37,8 +38,8 @@ from .v2_schemas import (
 
 
 MODEL = "openai/gpt-oss-20b"
-ARTICLE_PROMPT_VERSION = "article-prompt-v2.2.0"
-COMMENT_PROMPT_VERSION = "comment-prompt-v2.2.0"
+ARTICLE_PROMPT_VERSION = "article-prompt-v2.2.1"
+COMMENT_PROMPT_VERSION = "comment-prompt-v2.2.1"
 MAX_ARTICLE_CHARS = 10_000
 MAX_COMMENT_CHARS = 1_200
 MAX_CONTEXT_CHARS = 500
@@ -61,7 +62,7 @@ ARTICLE_PROMPT = f"""Analyze the article's adopted AI claims and return strict J
 {ARTICLE_CONTRACT_VERSION}. Reject only not-AI content, no attributable AI judgment/finding, unusable
 extraction, or insufficient context. Include scopes; all three dimensions with applicability, score,
 confidence, rationale, and evidence_ids; exact evidence excerpts (maximum 240 characters) with
-attribution and supports; and a 25-word summary. Addressed dimensions require evidence and
+attribution and supports; and a concise summary of at most {ARTICLE_SUMMARY_MAX_WORDS} words. Addressed dimensions require evidence and
 not_addressed dimensions require score null, confidence 0, and no evidence IDs.
 
 {DIMENSION_RUBRIC}
@@ -85,7 +86,7 @@ or not_applicable and has targets, confidence, rationale. parent_relation is agr
 clarifies, questions, corrects, other, or not_applicable and has confidence, rationale. Relation
 confidence never enters AI scoring. Reject only when no defensible AI judgment exists or context is
 insufficient. Accepted keys exactly: contract_version, comment_id, reject, ai_dimensions,
-article_relation, parent_relation, summary. Rejection keys exactly: contract_version, comment_id,
+article_relation, parent_relation, summary. Keep the summary to at most {COMMENT_SUMMARY_MAX_WORDS} words. Rejection keys exactly: contract_version, comment_id,
 reject, reason_code, reason. Do not use author karma or infer consensus.
 """
 

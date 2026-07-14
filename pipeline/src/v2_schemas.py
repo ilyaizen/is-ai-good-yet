@@ -6,7 +6,9 @@ from typing import Any
 
 from .v2_models import (
     ARTICLE_CONTRACT_VERSION,
+    ARTICLE_SUMMARY_MAX_WORDS,
     COMMENT_CONTRACT_VERSION,
+    COMMENT_SUMMARY_MAX_WORDS,
     DIMENSIONS,
     PREFILTER_CONTRACT_VERSION,
     VALID_APPLICABILITY,
@@ -147,7 +149,9 @@ def normalize_article_result(result: dict[str, Any]) -> dict[str, Any]:
     keys = ("contract_version", "reject", "scopes", "dimensions", "evidence", "summary")
     normalized = {key: result.get(key) for key in keys}
     if isinstance(normalized["summary"], str):
-        normalized["summary"] = " ".join(normalized["summary"].split()[:20])
+        normalized["summary"] = " ".join(
+            normalized["summary"].split()[:ARTICLE_SUMMARY_MAX_WORDS]
+        )
     for item in normalized["evidence"] or []:
         if isinstance(item.get("quote"), str):
             item["quote"] = item["quote"][:240]
@@ -177,5 +181,7 @@ def normalize_comment_result(result: dict[str, Any]) -> dict[str, Any]:
             "rationale": "No parent relation provided.",
         }
     if isinstance(normalized["summary"], str):
-        normalized["summary"] = " ".join(normalized["summary"].split()[:20])
+        normalized["summary"] = " ".join(
+            normalized["summary"].split()[:COMMENT_SUMMARY_MAX_WORDS]
+        )
     return normalized

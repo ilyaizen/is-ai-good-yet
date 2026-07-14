@@ -5,9 +5,9 @@ plan fully before starting and honor its STOP conditions.
 
 ## Execution order and status
 
-| Plan | Title | Priority | Effort | Depends on | Status |
-| --- | --- | --- | --- | --- | --- |
-| 001 | Redesign the v2 community sentiment methodology and broad-capture prompts | P1 | L | — | IN PROGRESS |
+| Plan | Title                                                                     | Priority | Effort | Depends on | Status      |
+| ---- | ------------------------------------------------------------------------- | -------- | ------ | ---------- | ----------- |
+| 001  | Redesign the v2 community sentiment methodology and broad-capture prompts | P1       | L      | —          | IN PROGRESS |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED | REJECTED
 

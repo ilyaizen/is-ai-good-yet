@@ -82,24 +82,21 @@ function scoreTone(score: number): LabTransitionTone {
 
 function hexToRgb(hex: string) {
   const normalized = hex.replace("#", "")
-  const pairs = normalized.length === 3 ? normalized.split("").map((part) => part + part) : normalized.match(/.{2}/g) ?? ["00", "00", "00"]
+  const pairs =
+    normalized.length === 3
+      ? normalized.split("").map((part) => part + part)
+      : (normalized.match(/.{2}/g) ?? ["00", "00", "00"])
   return pairs.map((part) => Number.parseInt(part, 16)) as [number, number, number]
 }
 
 function rgbToHex(rgb: [number, number, number]) {
-  return `#${rgb
-    .map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, "0"))
-    .join("")}`
+  return `#${rgb.map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, "0")).join("")}`
 }
 
 function mixHex(a: string, b: string, amount: number) {
   const [ar, ag, ab] = hexToRgb(a)
   const [br, bg, bb] = hexToRgb(b)
-  return rgbToHex([
-    ar + (br - ar) * amount,
-    ag + (bg - ag) * amount,
-    ab + (bb - ab) * amount,
-  ])
+  return rgbToHex([ar + (br - ar) * amount, ag + (bg - ag) * amount, ab + (bb - ab) * amount])
 }
 
 function paletteForArticle(article: InfluentialArticle) {

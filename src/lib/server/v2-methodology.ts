@@ -41,7 +41,7 @@ function findPipelineSource(): string {
   const candidates = [
     process.env.PIPELINE_SOURCE_DIR?.trim(),
     path.join(process.cwd(), "pipeline", "src"),
-    path.resolve(path.dirname(modulePath), "..", "..", "..", "pipeline", "src")
+    path.resolve(path.dirname(modulePath), "..", "..", "..", "pipeline", "src"),
   ]
 
   const sourceDir = candidates.find((candidate) => candidate && existsSync(path.join(candidate, "sentiment_v2.py")))
@@ -73,10 +73,7 @@ function extractArgumentDefault(source: string, argument: string): number {
 }
 
 function renderPrompt(template: string, values: Record<string, string>): string {
-  return Object.entries(values).reduce(
-    (result, [key, value]) => result.replaceAll(`{${key}}`, value),
-    template
-  )
+  return Object.entries(values).reduce((result, [key, value]) => result.replaceAll(`{${key}}`, value), template)
 }
 
 export function getV2Methodology(): V2Methodology {
@@ -92,7 +89,7 @@ export function getV2Methodology(): V2Methodology {
   const values = {
     ARTICLE_CONTRACT_VERSION: articleContractVersion,
     COMMENT_CONTRACT_VERSION: commentContractVersion,
-    DIMENSION_RUBRIC: dimensionRubric
+    DIMENSION_RUBRIC: dimensionRubric,
   }
 
   return {
@@ -101,7 +98,7 @@ export function getV2Methodology(): V2Methodology {
       articlePrompt: extractString(sentimentSource, "ARTICLE_PROMPT_VERSION"),
       commentPrompt: extractString(sentimentSource, "COMMENT_PROMPT_VERSION"),
       selection: extractString(commentsSource, "SELECTION_VERSION"),
-      aggregation: extractString(modelSource, "AGGREGATION_VERSION")
+      aggregation: extractString(modelSource, "AGGREGATION_VERSION"),
     },
     model: extractString(sentimentSource, "MODEL"),
     modelParameters: sentimentSource.match(/MODEL_PARAMETERS\s*=\s*(\{[^\n]+\})/)?.[1] ?? "Unavailable",
@@ -109,23 +106,23 @@ export function getV2Methodology(): V2Methodology {
       articleCharacters: extractNumber(sentimentSource, "MAX_ARTICLE_CHARS"),
       commentCharacters: extractNumber(sentimentSource, "MAX_COMMENT_CHARS"),
       contextCharacters: extractNumber(sentimentSource, "MAX_CONTEXT_CHARS"),
-      minimumArticleCharacters: extractNumber(sentimentSource, "MIN_ARTICLE_CHARS")
+      minimumArticleCharacters: extractNumber(sentimentSource, "MIN_ARTICLE_CHARS"),
     },
     selection: {
       minimumStoryScore: extractArgumentDefault(commentsSource, "--min-score"),
       minimumCommentCount: extractArgumentDefault(commentsSource, "--min-comments"),
       authorCap: extractNumber(commentsSource, "AUTHOR_CAP"),
       target: "min(eligible, max(12, min(32, ceil(4 × √eligible))))",
-      branchCap: "max(3, ceil(15% × target))"
+      branchCap: "max(3, ceil(15% × target))",
     },
     aggregation: {
       articleWeight: extractNumber(exportSource, "ARTICLE_WEIGHT"),
       communityWeight: extractNumber(exportSource, "COMMUNITY_WEIGHT"),
       verdictMonths: extractNumber(exportSource, "VERDICT_MONTHS"),
       dimensions: ["capability", "trajectory", "impact"],
-      scoreScale: "Source scores −2…+2; displayed score = (clamped score + 2) × 25"
+      scoreScale: "Source scores −2…+2; displayed score = (clamped score + 2) × 25",
     },
     articlePrompt: renderPrompt(extractString(sentimentSource, "ARTICLE_PROMPT"), values).trim(),
-    commentPrompt: renderPrompt(extractString(sentimentSource, "COMMENT_PROMPT"), values).trim()
+    commentPrompt: renderPrompt(extractString(sentimentSource, "COMMENT_PROMPT"), values).trim(),
   }
 }

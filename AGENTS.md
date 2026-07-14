@@ -16,7 +16,7 @@
 - **Backend pipeline** (`pipeline/`): Python 3.11+ — Polars, aiohttp, trafilatura, Playwright/camoufox scraping, Groq/Mistral/Anthropic LLM APIs
 - **V2 analysis**: isolated broad-scope prefilter + article thesis analysis + deterministic ranked-tree HN comment sampling; versioned methodology lives in `docs/v2-*.md`
 - **Visitor counter** (`convex/`): Convex backend
-- **Package manager: bun/Node 22.12** (bun.lock committed; `nixpacks.toml` uses `bun install` + `bun run build`)
+- **Package manager: Vite+ (pnpm)/Node 22.12** (pnpm-lock.yaml committed; `nixpacks.toml` uses `vp install` + `vp build`)
 - **Data storage**: SQLite (`pipeline/data/pipeline.db`) + compressed Parquet article bodies + separate V1/V2 static JSON exports under `src/lib/data/`
 
 ## Project Structure
@@ -102,12 +102,12 @@ cli.ts            # Pipeline CLI wrapper
 
 ## Verification Commands
 
-Use the narrowest relevant check. Frontend uses bun; pipeline uses Python from `.venv`.
+Use the narrowest relevant check. Frontend uses Vite+; pipeline uses Python from `.venv`.
 
 ```bash
-bun run check        # svelte-kit sync + svelte-check (type checking)
-bun run lint         # prettier --check + eslint
-bun run build        # production build (slow — only when deploying)
+vp run check        # Vite+ checks plus Svelte type checking
+vp lint             # Vite+ linting
+vp build            # production build (slow — only when deploying)
 . .venv/bin/activate && python -m pytest pipeline/tests -q   # pipeline tests (may fail until pipeline.db exists)
 ```
 
@@ -115,7 +115,7 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 
 ## Code Style
 
-- **Indentation**: 2 spaces · **Line width**: 100 (frontend prettier `printWidth: 120`)
+- **Indentation**: 2 spaces · **Line width**: 100 (frontend Oxfmt `printWidth: 120`)
 - **Strings**: double quotes · **Semicolons**: always · **Trailing commas**: none
 - **Files**: `kebab-case` · **Svelte components**: `kebab-case.svelte`
 - **Variables/functions**: `camelCase` · **Types/interfaces**: `PascalCase` · **Constants**: `UPPER_SNAKE_CASE` · **Python/Rust modules**: `snake_case`
@@ -136,10 +136,10 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 
 ## Hard Rules
 
-- Use bun/Node, not Bun.
+- Use Vite+/Node.
 - Frontend is the repo-root SvelteKit app, not a nested `frontend/` directory.
 - Production deploy uses `@sveltejs/adapter-node` via `nixpacks.toml`.
-- Pipeline code stays in `pipeline/` and uses the repo-root `.venv` with Python 3.11. Run pipeline commands from `pipeline/` (or via the `bun run pipeline:*` scripts).
+- Pipeline code stays in `pipeline/` and uses the repo-root `.venv` with Python 3.11. Run pipeline commands from `pipeline/` (or via the `vp run pipeline:*` scripts).
 - V1 and V2 are additive, separate systems. V2 changes must not alter V1 sentiment fields or overwrite V1 static exports.
 - `/v2` reads only the manifest-validated files in `src/lib/data/v2/` through `src/lib/server/v2-page-adapter.ts`.
 - **Do not preserve or print secrets.** Replace credentials with `[REDACTED]`.

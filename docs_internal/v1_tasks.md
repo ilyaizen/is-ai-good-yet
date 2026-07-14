@@ -17,7 +17,7 @@ The pipeline has been restructured for optimal workflow:
 
 | ID                           | Description                                            | Status   | Dependencies    | Acceptance Criteria                                                                                                                                                                                 |
 | :--------------------------- | :----------------------------------------------------- | :------- | :-------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **TSK-B00**                  | **Histre Backfill (Legacy)**                           | **Done** | -               | *Deprecated*: Original backfill for Jan-June 2025.                                                                                                                                                  |
+| **TSK-B00**                  | **Histre Backfill (Legacy)**                           | **Done** | -               | _Deprecated_: Original backfill for Jan-June 2025.                                                                                                                                                  |
 | **TSK-B00-REWORK**           | **Architecture Rework**                                | **Done** | TSK-B00         | Deprecate `posted_links.json`. Use `backfill_histre.py` (pages 1-340) as main ingestion source. Data reset.                                                                                         |
 | **TSK-B00-LATEST**           | **Scrape Latest Pages**                                | **Done** | -               | Scrape Histre pages 1-2 to capture latest stories. Integrated into `backfill_histre.py`.                                                                                                            |
 | **TSK-B01**                  | **Verify/Update Database Schema**                      | **Done** | -               | `pipeline.db` created with `urls` table; schema matches design (fields for HN metadata, scores, status).                                                                                            |
@@ -551,12 +551,14 @@ bun run cli  # Select "Phase 2: Scrape Content" → preset mode
 ### TSK-F28: V4.0 Schema Backward Compatibility
 
 **Problem Identified:**
+
 - v4.0 architecture overhaul changed classification_json schema from v3 (subtopic/primary_theme/secondary_theme) to v4 (single topic field)
 - 340 articles (33% of total) analyzed with old schema were being excluded from verdict calculations
 - WHERE clauses in 8 database queries checked for `topic` field which didn't exist in old articles
 - Specific example: Article 45465098 ("Be Worried", sentiment: -2.0, HN score: 106) was excluded despite being highly relevant
 
 **Implementation:**
+
 - [x] **Root Cause Analysis:** Identified 8 WHERE clauses in `db.ts` using `json_extract(classification_json, '$.topic')` that failed for old schema articles
 - [x] **Backward-Compatible SQL:** Updated all 8 WHERE clauses to check both new (`$.topic`) and old (`$.subtopic`) schema fields:
   ```sql
@@ -580,12 +582,14 @@ bun run cli  # Select "Phase 2: Scrape Content" → preset mode
 - [x] **Summaries Fix:** Updated `getSummariesList()` to normalize classification JSON before extracting topic field
 
 **Results:**
+
 - Before fix: 678 articles included in verdict (340 excluded)
 - After fix: 939 articles included in verdict (only 79 business articles correctly excluded)
 - All 340 old-schema articles now properly included in verdict calculations
 - Article 45465098 now displays correctly with topic="society" (mapped from subtopic)
 
 **Files Modified:**
+
 - `is-ai-good-yet/src/lib/server/db.ts` (lines 67, 211, 347-357, 363-392, 419-430, 627, 664, 922, 1095, 1187, 1331)
   - 8 WHERE clause updates
   - Added normalizeAnalysis() helper

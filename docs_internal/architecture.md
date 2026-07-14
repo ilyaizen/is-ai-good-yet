@@ -149,10 +149,12 @@ Pipeline (Python)                    Frontend (SvelteKit)
 The `/admin` route provides a development-only interface to inspect the raw pipeline data in SQLite.
 
 **Access Control:**
+
 - **Production:** Returns 404 (route guard blocks access)
 - **Development:** Full access to live SQLite data
 
 **Why it exists:** When running the pipeline locally, you need visibility into:
+
 - Which URLs are pending, scraped, failed
 - Content classification status
 - Sentiment analysis coverage
@@ -317,7 +319,7 @@ The scraper (`src/scraper.py`) combines direct scraping with an archive.is fallb
 
 ```bash
 # Recommended: Scraper with all fallbacks
-bun run pipeline:scrape        # or: cd pipeline && python -m src.scraper
+vp run pipeline:scrape        # or: cd pipeline && python -m src.scraper
 
 # Or run directly:
 python -m src.scraper                    # Default automated mode
@@ -567,6 +569,7 @@ Single `topic` field replaces previous `subtopic` + `primary_theme` + `secondary
 #### Rejection Criteria (Two-Layer Defense)
 
 The analyzer will reject articles that slip through the prefilter:
+
 - Product announcements without author experience/opinion
 - Tutorial, course, book, or educational content
 - Research paper or academic content
@@ -626,9 +629,10 @@ python -m src.export -v                    # Default export to src/lib/data/
 python -m src.export -v -o /custom/path    # Custom output directory
 ```
 
-Or via bun script:
+Or via a Vite+ script:
+
 ```bash
-bun run pipeline:export
+vp run pipeline:export
 ```
 
 #### Version Bumping (Post-Export)
@@ -636,6 +640,7 @@ bun run pipeline:export
 After a successful export, the CLI prompts to bump the frontend version. This tracks when new data was exported and deployed.
 
 **Files Updated:**
+
 - `package.json` - Package version
 - `src/lib/version.ts` - Exported version constant
 
@@ -648,6 +653,7 @@ After a successful export, the CLI prompts to bump the frontend version. This tr
 | `major` | Breaking changes to frontend/data schema |
 
 **Manual Version Bump:**
+
 ```bash
 node scripts/bump-version.mjs minor    # Bump minor version (0.x.0)
 node scripts/bump-version.mjs patch    # Bump patch version (0.0.x)
@@ -713,11 +719,13 @@ weighted_sentiment = sum(contributions) / sum(influence)
 ```
 
 **Example with 1000 upvotes, recent article (influence = 355):**
+
 - sentiment +0.9 → contributes +319.5 to weighted sum
 - sentiment +0.2 → contributes +71 to weighted sum
 - sentiment -0.8 → contributes -284 to weighted sum
 
 **Rationale:**
+
 - **Power law** ensures that high-engagement discussions have meaningful impact without extreme dominance (a 1000↑ article doesn't have 1000× the influence of a 10↑ article, just 27× more).
 - **Time decay** recognizes that older discourse reflects outdated tool capabilities and community consensus. Recent discussions are more relevant to the question "Is AI good **yet**?"
 - **Direct multiplication** (`sentiment × influence`) provides an intuitive metric that's consistent between the articles table and the verdict calculation.
@@ -739,9 +747,11 @@ weighted_sentiment = sum(contributions) / sum(influence)
 3. **Calculate Score (Contribution Ratio):** `score = |positiveContribution| / (|positiveContribution| + |negativeContribution|) × 100`
 
 **Example:** If +83k positive contribution and -66k negative contribution:
+
 - score = 83k / (83k + 66k) = 83k / 149k ≈ **55.7%**
 
 **Interpretation:**
+
 - **50** = Balanced (equal positive and negative contributions)
 - **100** = All positive contributions
 - **0** = All negative contributions
@@ -749,11 +759,13 @@ weighted_sentiment = sum(contributions) / sum(influence)
 ### Sentiment Scale
 
 The sentiment analyzer uses a 2-dimension formula (v4.0 - equal weighting):
+
 - **Utility (5-tier):** magic(+2.0), tool(+1.0), mixed(0), toil(-1.0), hazard(-2.0)
 - **Trajectory (3-tier):** optimistic(+2.0), uncertain(0), pessimistic(-2.0)
 - **Formula:** `sentiment = utility × 0.5 + trajectory × 0.5` (equal weighting)
 
 This creates a full range of **-2.0 to +2.0**:
+
 - **Max:** magic(2.0) × 0.5 + optimistic(2.0) × 0.5 = +2.0
 - **Min:** hazard(-2.0) × 0.5 + pessimistic(-2.0) × 0.5 = -2.0
 
@@ -774,6 +786,7 @@ This creates a full range of **-2.0 to +2.0**:
 ### Momentum Calculation
 
 Compares last 3 months' weighted sentiment against previous 3 months:
+
 ```
 momentum = (recent_sentiment - previous_sentiment) / 0.2
 ```
@@ -785,6 +798,7 @@ Clamped to [-1, +1]. A 0.2 sentiment swing equals 100% momentum.
 The timeline displays **TIMELINE_DISPLAY_MONTHS** (default: 36 months) of weekly sentiment data, providing historical context.
 
 **Visual Encoding:**
+
 - **Bar Height:** Proportional to total engagement weight (HN upvotes) for that week
 - **Bar Color:** Based on sentiment (positive=green, negative=red, neutral=yellow)
 

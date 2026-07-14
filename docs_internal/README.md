@@ -7,7 +7,7 @@ Operational documentation for `is-ai-good-yet`. This directory is the canonical 
 | Doc                                                                        | Contents                                                               |
 | -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | [architecture.md](./architecture.md)                                       | System design, data flow, pipeline phases, verdict scoring             |
-| [guide.md](./guide.md)                                                     | Setup, usage, dev conventions, agent mandates, bun command reference   |
+| [guide.md](./guide.md)                                                     | Setup, usage, dev conventions, agent mandates, Vite+ command reference |
 | [troubleshooting.md](./troubleshooting.md)                                 | Common issues: prefilter JSON, archive CAPTCHA, HN ID mismatch         |
 | [pipeline-production-reliability.md](./pipeline-production-reliability.md) | Production preflight, storage alignment, and residential HTML fallback |
 
@@ -37,4 +37,4 @@ Frontend is live with the verdict reveal, history chart, and article details. Th
 - [`../AGENTS.md`](../AGENTS.md) — agent guidance (single source of truth for agents)
 - [`../README.md`](../README.md) — project README
 - [`../CHANGELOG.md`](../CHANGELOG.md) — changelog (Keep a Changelog format)
-- [`cli.md`](cli.md) — bun command reference
+- [`cli.md`](cli.md) — Vite+ command reference

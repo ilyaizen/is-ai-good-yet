@@ -1,1 +1,1 @@
-export { load } from "../../admin/+layout.server";
+export { load } from "../../admin/+layout.server"

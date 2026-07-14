@@ -23,7 +23,7 @@ assert.equal(
     platform: "linux",
     exists: (candidate) => existing.has(candidate),
   }),
-  "/app/.venv/bin/python",
+  "/app/.venv/bin/python"
 )
 assert.equal(
   resolvePipelinePython({
@@ -33,7 +33,7 @@ assert.equal(
     platform: "linux",
     exists: (candidate) => candidate === "/opt/pipeline-venv/bin/python",
   }),
-  "/opt/pipeline-venv/bin/python",
+  "/opt/pipeline-venv/bin/python"
 )
 
 assert.equal(
@@ -44,7 +44,7 @@ assert.equal(
     exists: (candidate) => candidate === "/app/pipeline",
   }),
   "/app/pipeline",
-  "production bundles must resolve the pipeline beside /app, not under /app/build",
+  "production bundles must resolve the pipeline beside /app, not under /app/build"
 )
 assert.equal(
   resolvePipelineSourceDirectory({
@@ -53,7 +53,7 @@ assert.equal(
     cwd: "/app",
     exists: (candidate) => candidate === "/custom/pipeline",
   }),
-  "/custom/pipeline",
+  "/custom/pipeline"
 )
 
 console.log("pipeline runner runtime tests passed")

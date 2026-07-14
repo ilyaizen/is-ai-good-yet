@@ -1,1 +1,1 @@
-export { load, actions } from "../../../admin/login/+page.server";
+export { load, actions } from "../../../admin/login/+page.server"

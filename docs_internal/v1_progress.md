@@ -153,8 +153,8 @@ Is AI Good Yet has evolved from a concept into a fully functional data journalis
 
 ### Dashboard Components
 
-| Component           | Status     | Description                                                             |
-| :------------------ | :--------- | :---------------------------------------------------------------------- |
+| Component           | Status      | Description                                                             |
+| :------------------ | :---------- | :---------------------------------------------------------------------- |
 | **Verdict Display** | ✅ Complete | Green/Red/Yellow verdict with animated ring and confidence percentage   |
 | **Timeline Chart**  | ✅ Complete | Weekly sentiment timeline with stacked bars (positive/neutral/negative) |
 | **Topics Section**  | ✅ Complete | Dynamic theme display with sentiment icons and descriptions             |
@@ -229,11 +229,11 @@ Is AI Good Yet has evolved from a concept into a fully functional data journalis
 3. **Frontend Refactors** — Implemented token streaming, replay functionality, and removed legacy Groq dependencies from frontend core.
 4. **Premium UI Animations** (2026-01-19) — Consistent `cubic-bezier(0, 0.7, 0.1, 1)` easing across all animations for swift, premium feel.
 5. **Verdict Display Redesign** (2026-01-19) — Star ratings, terminal-style container, integrated mini history chart, glow pulse animation.
-3. **Version Bump Workflow** (2026-01-18) — CLI prompts for version bump after export, updates package.json and version.ts.
-4. **Static Data Export** (2026-01-17) — `export.py` generates JSON for Vercel; all routes use static data.
-5. **V4.0 Schema Migration** (2026-01-13) — Backward compatible SQL for v3/v4 schema; 340 old articles restored.
-6. **Catch-Up Pipeline** (2026-01-13) — Automated phases 2-7 for daily/weekly updates.
-7. **Frontend Directory Rename** (2026-01-17) — `frontend` → `is-ai-good-yet` across all docs and code.
+6. **Version Bump Workflow** (2026-01-18) — CLI prompts for version bump after export, updates package.json and version.ts.
+7. **Static Data Export** (2026-01-17) — `export.py` generates JSON for Vercel; all routes use static data.
+8. **V4.0 Schema Migration** (2026-01-13) — Backward compatible SQL for v3/v4 schema; 340 old articles restored.
+9. **Catch-Up Pipeline** (2026-01-13) — Automated phases 2-7 for daily/weekly updates.
+10. **Frontend Directory Rename** (2026-01-17) — `frontend` → `is-ai-good-yet` across all docs and code.
 
 ---
 

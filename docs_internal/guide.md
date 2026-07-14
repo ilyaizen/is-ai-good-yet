@@ -10,7 +10,7 @@ Setup, usage, conventions, and agent mandates for `is-ai-good-yet`. For system d
 - **Shell:** PowerShell 7 / bash
 - **Node:** 22.12+ (pinned via `nixpacks.toml`)
 - **Python:** 3.11+ — virtual env at repo root (`.venv`)
-- **Package manager: bun** (`bun.lock` committed; `nixpacks.toml` runs `bun install` + `bun run build`)
+- **Package manager: Vite+ (pnpm)** (`pnpm-lock.yaml` committed; `nixpacks.toml` runs `vp install` + `vp build`)
 
 ## 2. Tech Stack
 
@@ -43,7 +43,7 @@ git clone https://github.com/ilyaizen/is-ai-good-yet.git
 cd is-ai-good-yet
 
 # 2. Frontend deps
-bun install
+vp install
 
 # 3. Python venv at repo root
 python -m venv .venv
@@ -75,14 +75,14 @@ cd ..
 
 ## 4. Running the Pipeline
 
-The pipeline runs in phases. The canonical interface is the **bun `pipeline:*` scripts** (see [`cli.md`](./cli.md)); for full control run the Python modules directly from `pipeline/`.
+The pipeline runs in phases. The canonical interface is the **Vite+ `pipeline:*` scripts** (see [`cli.md`](./cli.md)); for full control run the Python modules directly from `pipeline/`.
 
 ### Quick update — Catch-Up Pipeline (recommended)
 
 Runs the full sequence (ingest → scrape → analyze) for recent articles:
 
 ```bash
-bun run pipeline:catch-up            # default (5 pages)
+vp run pipeline:catch-up            # default (5 pages)
 # or directly:
 cd pipeline
 python -m src.catch_up -v            # verbose, 5 pages
@@ -106,7 +106,7 @@ python -m src.catch_up --skip-scrape # reuse existing content
 | Pre-filtering       | `python -m src.prefilter_content -v`                                                           | `--stats`, `--reset`                   |
 | Sentiment analysis  | `python -m src.sentiment_analyzer -v`                                                          | `--limit 10`, `--reset`, `--reanalyze` |
 | Theme synthesis     | `python -m src.summary_summarizer -v`                                                          | requires `ANTHROPIC_API_KEY`           |
-| Export              | `bun run pipeline:export`                                                                      | writes `src/lib/data/*.json`           |
+| Export              | `vp run pipeline:export`                                                                       | writes `src/lib/data/*.json`           |
 
 ### Scraper CLI flags
 
@@ -123,22 +123,22 @@ python -m src.catch_up --skip-scrape # reuse existing content
 ## 5. Running the Frontend
 
 ```bash
-bun run dev       # Vite dev server with HMR (http://localhost:5173)
-bun run build     # production build (adapter-node)
-bun run preview   # preview production build
+vp dev       # Vite dev server with HMR (http://localhost:5173)
+vp build     # production build (adapter-node)
+vp preview   # preview production build
 ```
 
-### All bun scripts
+### All Vite+ scripts
 
-| Command              | Description                                                |
-| -------------------- | ---------------------------------------------------------- |
-| `bun run dev`        | Start Vite dev server with HMR                             |
-| `bun run build`      | Production build                                           |
-| `bun run start`      | Run production server (`HOST=0.0.0.0 node build/index.js`) |
-| `bun run check`      | svelte-kit sync + svelte-check (type checking)             |
-| `bun run lint`       | Prettier `--check` + ESLint                                |
-| `bun run format`     | Auto-format with Prettier                                  |
-| `bun run pipeline:*` | Pipeline phase scripts (see `../cli.md`)                   |
+| Command             | Description                                                |
+| ------------------- | ---------------------------------------------------------- |
+| `vp dev`            | Start Vite dev server with HMR                             |
+| `vp build`          | Production build                                           |
+| `vp run start`      | Run production server (`HOST=0.0.0.0 node build/index.js`) |
+| `vp run check`      | Vite+ checks plus Svelte type checking                     |
+| `vp lint`           | Vite+ linting                                              |
+| `vp fmt`            | Auto-format with Oxfmt                                     |
+| `vp run pipeline:*` | Pipeline phase scripts (see `../cli.md`)                   |
 
 ## 6. Frontend Conventions
 
@@ -167,10 +167,10 @@ All colors are defined at the top of `src/styles/tokens.css`:
 
 ```css
 /* PALETTE - THE ONLY PLACE TO CHANGE COLORS */
---palette-lime-light: oklch(0.50 0.16 131.5);    /* Light mode accent */
---palette-lime-dark:  oklch(0.68 0.18 130.85);   /* Dark mode accent */
---palette-warning-light:      oklch(0.65 0.12 95);  /* Warning yellow */
---palette-destructive-light:  oklch(0.45 0.18 25);  /* Error red */
+--palette-lime-light: oklch(0.5 0.16 131.5); /* Light mode accent */
+--palette-lime-dark: oklch(0.68 0.18 130.85); /* Dark mode accent */
+--palette-warning-light: oklch(0.65 0.12 95); /* Warning yellow */
+--palette-destructive-light: oklch(0.45 0.18 25); /* Error red */
 ```
 
 To change the primary lime across the whole app: edit `--palette-lime-light`/`--palette-lime-dark`, then update the derived terminal tokens (documented in the file). Light mode uses darker lime (`L≈0.50`) for readability; dark mode brighter (`L≈0.68`). Both use OKLCH for perceptual uniformity.
@@ -198,7 +198,7 @@ Affected components: `verdict-veil.svelte`, `verdict-display.svelte`, `details-s
 
 ### Formatting (`.prettierrc`)
 
-2-space indent, double quotes, no trailing commas, `printWidth: 120`, plugins: `prettier-plugin-tailwindcss` + `prettier-plugin-svelte`.
+2-space indent, double quotes, no trailing commas, `printWidth: 120`, formatter: Oxfmt via `vite.config.ts`.
 
 ### Animation easing
 
@@ -232,14 +232,14 @@ You are an interactive agent specializing in software engineering. Adhere to str
 1. **Understand** — read the relevant code before editing.
 2. **Plan** — break down complex tasks.
 3. **Implement** — prefer editing over rewriting.
-4. **Verify** — for frontend changes run `bun run check` and `bun run lint`; do **NOT** run `bun run build` unless deploying. For pipeline, run `pytest` from `.venv`.
+4. **Verify** — for frontend changes run `vp run check`; do **NOT** run `vp build` unless deploying. For pipeline, run `pytest` from `.venv`.
 5. **Finalize** — leave no artifacts behind (unless intentional).
 
 ### Verification (don't run unprompted — ask first)
 
 ```bash
-bun run check     # frontend types + svelte-check
-bun run lint      # prettier + eslint
+vp run check # Vite+ checks plus Svelte type checking
+vp lint      # Vite+ linting
 # pipeline (from .venv):
 python -m pytest pipeline/tests -q
 ```

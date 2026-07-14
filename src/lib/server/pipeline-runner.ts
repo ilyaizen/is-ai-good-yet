@@ -214,10 +214,7 @@ export function getPipelineCommand(command: PipelineCommandName): PipelineComman
   return getConfiguredPipelineCommand(command)
 }
 
-export function getPipelineCommandReadiness(
-  command: PipelineCommandName,
-  force = false,
-): PipelineCommandReadiness {
+export function getPipelineCommandReadiness(command: PipelineCommandName, force = false): PipelineCommandReadiness {
   return evaluateCommandReadiness(command, getPipelinePreflightSnapshot(force))
 }
 
@@ -229,19 +226,25 @@ export function getPipelineRunSnapshot(): PipelineRunSnapshot {
     | PipelineLockRow
     | undefined
   const currentRun = lockRow?.run_id
-    ? (db.prepare("SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs WHERE id = ?").get(lockRow.run_id) as PipelineRunRow | undefined)
+    ? (db
+        .prepare(
+          "SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs WHERE id = ?"
+        )
+        .get(lockRow.run_id) as PipelineRunRow | undefined)
     : undefined
 
   const recentRuns = db
     .prepare(
-      "SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs ORDER BY id DESC LIMIT 12",
+      "SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs ORDER BY id DESC LIMIT 12"
     )
     .all() as PipelineRunRow[]
 
   const lock = lockRow
     ? {
         ...lockRow,
-        stale: !isProcessAlive(lockRow.pid) || Date.now() - new Date(lockRow.acquired_at).getTime() > STALE_LOCK_THRESHOLD_MS,
+        stale:
+          !isProcessAlive(lockRow.pid) ||
+          Date.now() - new Date(lockRow.acquired_at).getTime() > STALE_LOCK_THRESHOLD_MS,
       }
     : null
 
@@ -257,7 +260,7 @@ function clearStaleLock(db: Database.Database, lock: PipelineLockRow): void {
   if (!stale) return
 
   db.prepare(
-    "UPDATE pipeline_runs SET status = 'failed', finished_at = ?, error = ? WHERE id = ? AND status = 'running'",
+    "UPDATE pipeline_runs SET status = 'failed', finished_at = ?, error = ? WHERE id = ? AND status = 'running'"
   ).run(isoNow(), "Stale lock cleared automatically.", lock.run_id)
   db.prepare("DELETE FROM pipeline_locks WHERE id = 1").run()
 }
@@ -276,17 +279,17 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
   const db = getDb()
   bootstrapDb(db)
 
-  const existingLock = db.prepare("SELECT id, run_id, command, pid, acquired_at FROM pipeline_locks WHERE id = 1").get() as
-    | PipelineLockRow
-    | undefined
+  const existingLock = db
+    .prepare("SELECT id, run_id, command, pid, acquired_at FROM pipeline_locks WHERE id = 1")
+    .get() as PipelineLockRow | undefined
 
   if (existingLock) {
     clearStaleLock(db, existingLock)
   }
 
-  const activeLock = db.prepare("SELECT id, run_id, command, pid, acquired_at FROM pipeline_locks WHERE id = 1").get() as
-    | PipelineLockRow
-    | undefined
+  const activeLock = db
+    .prepare("SELECT id, run_id, command, pid, acquired_at FROM pipeline_locks WHERE id = 1")
+    .get() as PipelineLockRow | undefined
 
   if (activeLock) {
     throw new Error(`Pipeline is already running ${activeLock.command} (PID ${activeLock.pid ?? "?"})`)
@@ -297,19 +300,22 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
   const logPath = path.join(PIPELINE_LOG_DIR, logFileName)
 
   const insertRun = db
-    .prepare(
-      "INSERT INTO pipeline_runs (command, status, started_at, log_path) VALUES (?, 'running', ?, ?)",
-    )
+    .prepare("INSERT INTO pipeline_runs (command, status, started_at, log_path) VALUES (?, 'running', ?, ?)")
     .run(commandName, startedAt, logPath)
   const runId = Number(insertRun.lastInsertRowid)
 
-  const runRow = db.prepare(
-    "SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs WHERE id = ?",
-  ).get(runId) as PipelineRunRow
+  const runRow = db
+    .prepare(
+      "SELECT id, command, status, started_at, finished_at, exit_code, log_path, pid, error FROM pipeline_runs WHERE id = ?"
+    )
+    .get(runId) as PipelineRunRow
 
-  db.prepare(
-    "INSERT INTO pipeline_locks (id, run_id, command, pid, acquired_at) VALUES (1, ?, ?, ?, ?)",
-  ).run(runId, commandName, null, startedAt)
+  db.prepare("INSERT INTO pipeline_locks (id, run_id, command, pid, acquired_at) VALUES (1, ?, ?, ?, ?)").run(
+    runId,
+    commandName,
+    null,
+    startedAt
+  )
 
   const output = createWriteStream(logPath, { flags: "a" })
   output.write(`[${startedAt}] start ${commandName}\n`)
@@ -345,12 +351,16 @@ export function startPipelineRun(commandName: PipelineCommandName): StartPipelin
     output.write(
       errorMessage
         ? `\n[${finishedAt}] error: ${errorMessage}\n`
-        : `\n[${finishedAt}] exit code ${exitCode ?? "null"}\n`,
+        : `\n[${finishedAt}] exit code ${exitCode ?? "null"}\n`
     )
     output.end()
-    db.prepare(
-      "UPDATE pipeline_runs SET status = ?, finished_at = ?, exit_code = ?, error = ? WHERE id = ?",
-    ).run(success ? "succeeded" : "failed", finishedAt, exitCode, errorMessage, runId)
+    db.prepare("UPDATE pipeline_runs SET status = ?, finished_at = ?, exit_code = ?, error = ? WHERE id = ?").run(
+      success ? "succeeded" : "failed",
+      finishedAt,
+      exitCode,
+      errorMessage,
+      runId
+    )
     db.prepare("DELETE FROM pipeline_locks WHERE id = 1 AND run_id = ?").run(runId)
   })
 

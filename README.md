@@ -90,14 +90,14 @@ is-ai-good-yet/
 - **Frontend**: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4 + shadcn-svelte + D3/LayerCake
 - **Pipeline**: Python 3.11+ — Polars, aiohttp, trafilatura, Playwright, Groq LLM API
 - **Visitor counter**: Convex
-- **Runtime**: Node 22.12, bun package manager
+- **Runtime**: Node 22.12, Vite+ package manager
 - **Data**: SQLite (pipeline) → static JSON export (production frontend)
 
 ---
 
 ## Deployment
 
-The repo root is a SvelteKit app deployed via Coolify using `@sveltejs/adapter-node`. `nixpacks.toml` pins Node 22.12, builds with `bun run build`, and runs `HOST=0.0.0.0 node build/index.js`.
+The repo root is a SvelteKit app deployed via Coolify using `@sveltejs/adapter-node`. `nixpacks.toml` pins Node 22.12, builds with `vp build`, and runs `HOST=0.0.0.0 node build/index.js`.
 
 The pipeline is source only — its data directory is gitignored. Frontend env vars (Convex/public) are separate from pipeline secrets (LLM API keys).
 
@@ -111,20 +111,20 @@ The pipeline is source only — its data directory is gitignored. Frontend env v
 - Python 3.11+ (for the pipeline)
 
 ```bash
-bun install
-bun run dev          # → http://localhost:5173
+vp install
+vp dev          # → http://localhost:5173
 ```
 
 ### Scripts
 
-| Command          | Description                       |
-| :--------------- | :-------------------------------- |
-| `bun run dev`    | Vite dev server with HMR          |
-| `bun run build`  | Production build                  |
-| `bun run check`  | TypeScript + Svelte type checking |
-| `bun run lint`   | Prettier + ESLint                 |
-| `bun run format` | Auto-format                       |
-| `bun run cli`    | Pipeline CLI wrapper              |
+| Command        | Description                            |
+| :------------- | :------------------------------------- |
+| `vp dev`       | Vite dev server with HMR               |
+| `vp build`     | Production build                       |
+| `vp run check` | Vite+ checks plus Svelte type checking |
+| `vp lint`      | Vite+ linting                          |
+| `vp fmt`       | Auto-format                            |
+| `vp run cli`   | Pipeline CLI wrapper                   |
 
 ---
 

@@ -61,7 +61,9 @@ function getBaseCandidates(): string[] {
 export function getPipelineStoragePaths(): PipelineStoragePaths {
   const explicitDbPath = process.env.PIPELINE_DB_PATH?.trim()
   const explicitDataDir =
-    process.env.PIPELINE_DATA_DIR?.trim() || process.env.PIPELINE_STORAGE_DIR?.trim() || (explicitDbPath ? path.dirname(explicitDbPath) : "")
+    process.env.PIPELINE_DATA_DIR?.trim() ||
+    process.env.PIPELINE_STORAGE_DIR?.trim() ||
+    (explicitDbPath ? path.dirname(explicitDbPath) : "")
   const dataDir = explicitDataDir || resolvePreferredPath(getBaseCandidates())
 
   return {

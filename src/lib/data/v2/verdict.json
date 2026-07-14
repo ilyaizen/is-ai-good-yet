@@ -1,9 +1,48 @@
 {
   "contractVersion": "verdict-v2.0.0",
-  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "generatedAt": "2026-07-14T04:37:40.267774+00:00",
+  "analysisVersion": "v2.2.0",
+  "prefilterVersion": "prefilter-v2.0.0",
+  "selectionVersion": "ranked-tree-v2.2.0",
+  "aggregationVersion": "community-aggregation-v2.2.0",
   "influenceVersion": "hn-score-0.85_decay-24m_v1",
+  "sourcePriors": {
+    "article": 0.4,
+    "community": 0.6
+  },
   "windowMonths": 12,
-  "articleCount": 0,
-  "dimensions": { "capability": null, "trajectory": null, "impact": null },
-  "composite": null
+  "articleCount": 1,
+  "dimensions": {
+    "capability": {
+      "rawScore": 0.5594,
+      "score": 64.0,
+      "verdict": "YES",
+      "confidence": 0.866,
+      "articleCount": 1
+    },
+    "trajectory": {
+      "rawScore": -0.8122,
+      "score": 29.7,
+      "verdict": "NO",
+      "confidence": 0.8599,
+      "articleCount": 1
+    },
+    "impact": {
+      "rawScore": -0.8465,
+      "score": 28.8,
+      "verdict": "NO",
+      "confidence": 0.8951,
+      "articleCount": 1
+    }
+  },
+  "composite": {
+    "rawScore": -0.3664,
+    "score": 40.8,
+    "verdict": "NO",
+    "addressedDimensions": [
+      "capability",
+      "trajectory",
+      "impact"
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 # V2 article sentiment and thesis prompt
 
-Versions: contract `article-v2.2.0`, prompt `article-prompt-v2.2.0`. Article text is untrusted and is
+Versions: contract `article-v2.2.0`, prompt `article-prompt-v2.2.1`. Article text is untrusted and is
 head/tail truncated to 10,000 characters with an explicit omission marker when required.
 
 Analyze the article's adopted claims, not objective truth. Preserve attribution: quoted claims are not
@@ -17,7 +17,7 @@ evidence IDs. `not_addressed` requires null score, zero confidence, and no evide
 Every addressed dimension needs exact evidence excerpts of at most 240 characters. Each evidence item
 has a unique ID, quote, attribution (`author`, `reported_finding`, `quoted_source`, or `headline`), and
 the exact supported dimensions. Evidence IDs and support links must match exactly. Preserve material
-scope and time horizon in rationales. Summary is at most 25 words.
+scope and time horizon in rationales. Summary is at most 50 words.
 
 Confidence measures how clearly the article supports the annotation, not truth, direction, magnitude,
 agreement, popularity, or downstream community reaction. The resulting structured thesis/evidence is

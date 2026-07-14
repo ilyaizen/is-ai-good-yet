@@ -98,13 +98,13 @@ def test_prefilter_retries_transient_generation_failure() -> None:
     assert result is not None
 
 
-def test_article_normalizer_bounds_generated_text_to_immutable_contract() -> None:
+def test_article_normalizer_preserves_up_to_fifty_summary_words() -> None:
     result = normalize_article_result(
         {
             "contract_version": "article-v2.2.0", "reject": False,
             "scopes": ["research"], "dimensions": {},
             "evidence": [{"id": "e1", "quote": "x" * 300, "attribution": "author", "supports": ["capability"]}],
-            "summary": "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one",
+            "summary": " ".join(f"word-{index}" for index in range(1, 71)),
             "reason_code": None, "reason": None,
         }
     )
@@ -112,16 +112,16 @@ def test_article_normalizer_bounds_generated_text_to_immutable_contract() -> Non
     quote_schema = ARTICLE_SCHEMA["properties"]["evidence"]["items"]["properties"]["quote"]
     assert quote_schema["maxLength"] > 240
     assert len(result["evidence"][0]["quote"]) == 240
-    assert len(result["summary"].split()) == 20
+    assert len(result["summary"].split()) == 50
 
 
-def test_comment_normalizer_repairs_nullable_context_and_long_summary() -> None:
+def test_comment_normalizer_preserves_up_to_thirty_summary_words() -> None:
     result = normalize_comment_result(
         {
             "contract_version": "comment-v2.2.0", "comment_id": 7, "reject": False,
             "ai_dimensions": {"capability": {}, "trajectory": {}, "impact": {}},
             "article_relation": None, "parent_relation": None,
-            "summary": "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one",
+            "summary": " ".join(f"word-{index}" for index in range(1, 51)),
             "reason_code": None, "reason": None,
         }
     )
@@ -134,7 +134,7 @@ def test_comment_normalizer_repairs_nullable_context_and_long_summary() -> None:
         "relation": "not_applicable", "confidence": 0,
         "rationale": "No parent relation provided.",
     }
-    assert len(result["summary"].split()) == 20
+    assert len(result["summary"].split()) == 30
 
 
 def test_export_publication_survives_overlayfs_directory_rename_exdev(

@@ -1,22 +1,32 @@
 {
   "contractVersion": "pipeline-status-v2.0.0",
-  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "generatedAt": "2026-07-14T04:37:40.268010+00:00",
   "schedule": {
     "expression": "0 */6 * * *",
     "timezone": "UTC",
     "human": "every 6 hours",
-    "nextRunAt": "1970-01-01T00:00:00.000Z",
+    "nextRunAt": "2026-07-14T06:00:00+00:00",
     "graceMinutes": 60
   },
   "currentRun": null,
-  "lastRun": null,
+  "lastRun": {
+    "runId": "15b8a3e525784348bb3d95b8a6273cb4",
+    "status": "failed",
+    "startedAt": "2026-07-13T21:55:27.605264+00:00",
+    "finishedAt": "2026-07-13T21:56:57.550719+00:00",
+    "durationSeconds": 90,
+    "storiesDiscovered": 0,
+    "articlesProcessed": 0,
+    "commentsAnalyzed": 0,
+    "errorCode": "STAGE_EXIT_1"
+  },
   "coverage": {
-    "corpusEligible": 0,
-    "articleAnalyzed": 0,
-    "communityAnalyzed": 0,
+    "corpusEligible": 19,
+    "articleAnalyzed": 5,
+    "communityAnalyzed": 10,
     "botPreviewReady": 0,
-    "articlePercent": 0,
-    "communityPercent": 0,
-    "botPreviewPercent": 0
+    "articlePercent": 26.3,
+    "communityPercent": 52.6,
+    "botPreviewPercent": 0.0
   }
 }

@@ -8,12 +8,13 @@ probability sample of readers, HN users, or public opinion.
 
 | Concern               | Version                        |
 | --------------------- | ------------------------------ |
-| Analysis/parser       | `v2.2.0`                       |
+| Analysis              | `v2.2.0`                       |
+| Parser                | `v2.2.1`                       |
 | Article contract      | `article-v2.2.0`               |
-| Article prompt        | `article-prompt-v2.2.0`        |
+| Article prompt        | `article-prompt-v2.2.1`        |
 | Selection             | `ranked-tree-v2.2.0`           |
 | Comment contract      | `comment-v2.2.0`               |
-| Comment prompt        | `comment-prompt-v2.2.0`        |
+| Comment prompt        | `comment-prompt-v2.2.1`        |
 | Community aggregation | `community-aggregation-v2.2.0` |
 
 ## Dimensions and source combination
@@ -31,6 +32,7 @@ Confidence changes influence only; it never changes a source's direction or dist
 
 The article contract contains scopes, a short summary, three dimension results, exact evidence,
 attribution, and evidence links. See `v2-article-sentiment-prompt.md`.
+Article summaries are capped at 50 words; individual comment summaries are capped at 30 words.
 
 Every considered voting comment receives its own model request. No unrelated selected comment may
 appear in that request. Its packet contains:

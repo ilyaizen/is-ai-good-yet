@@ -19,7 +19,7 @@ from groq import APIError, AsyncGroq
 
 from .hn_comments_v2 import SELECTION_VERSION, accepted_target, candidate_is_eligible
 from .store.parquet import read_articles
-from .store.paths import get_articles_dir
+from .store.paths import get_articles_dir, get_articles_text_dir
 from .store.text_store import TextArticleStore
 from .store.v2 import (
     connect_rows, init_v2_schema, save_normalized_analysis, update_candidate_outcomes,
@@ -151,7 +151,7 @@ def get_article_content(stories: list[dict[str, Any]]) -> dict[str, str]:
     urls = [story["url"] for story in stories]
     frame = read_articles(get_articles_dir()).filter(pl.col("url").is_in(urls)).select(["url", "text"]).collect()
     content = {row["url"]: row["text"] for row in frame.iter_rows(named=True)}
-    text_store = TextArticleStore()
+    text_store = TextArticleStore(get_articles_text_dir())
     for story in stories:
         if story["url"] in content:
             continue
@@ -343,10 +343,15 @@ async def analyze_community(
     considered = []
     outcomes: dict[int, str] = {}
     total_metrics = {"input_tokens": 0, "output_tokens": 0, "inference_time_ms": 0.0}
-    for row in rows[:candidate_attempt_limit(target, len(rows))]:
+    attempt_budget = candidate_attempt_limit(target, len(rows))
+    model_attempts = 0
+    for row in rows:
         candidate = as_selected(story["hn_id"], row)
         if not candidate_is_eligible(candidate, accepted, target):
             continue
+        model_attempts += 1
+        if model_attempts > attempt_budget:
+            break
         model_input, snapshot = format_comment_packet(story, row, article)
         response = await call_model(
             client, COMMENT_PROMPT, model_input,

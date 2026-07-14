@@ -436,7 +436,7 @@ def publish_atomic(output: Path, bot_input: Path) -> dict[str, Any]:
     return result
 
 
-def update_status_export(output: Path) -> None:
+def update_status_export(output: Path, generation: str | None = None) -> None:
     """Refresh allowlisted public telemetry after a failed run without clearing good data."""
     if not output.exists():
         return
@@ -453,6 +453,8 @@ def update_status_export(output: Path) -> None:
             "sha256": sha256(status_path),
         }
         manifest["generatedAt"] = datetime.now(timezone.utc).isoformat()
+        if generation:
+            manifest["generation"] = generation
         manifest_temp = output / ".manifest.json.tmp"
         write_json(manifest_temp, manifest)
         manifest_temp.replace(manifest_path)

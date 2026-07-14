@@ -10,10 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-
 - Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
 - Export analyzed articles independently of legacy `articles-text` files.
 - Constrain V2 Groq responses with strict JSON schemas, normalize nullable relation metadata, retry transient prefilter generation failures, and cap comment refill at `2T` candidates per story to prevent runaway model-call loops.
+- Replace fragmented SSRF private-address check with `ip.is_global` policy that covers CGNAT `100.64.0.0/10` and other non-global ranges.
+- Wire `TextArticleStore` in `sentiment_v2` through configurable `paths.py` instead of a hardcoded default.
+- Count community-analysis model attempts only after deterministic eligibility passes so cap-ineligible rows never consume API budget.
+- Validate V2 generation SHA-256 hashes at build time in the page adapter and keep manifest hashes in sync during status-only exports.
 
 ### Added
 

@@ -71,18 +71,17 @@ def classify_fetch_exception(error: BaseException) -> FetchFailure:
     return FetchFailure.NETWORK
 
 
-def _is_private_address(address: str) -> bool:
+def _is_non_global_address(address: str) -> bool:
+    """Block anything that is not a routable unicast address (SSRF defense).
+
+    Using ``ipaddress.ip_address.is_global`` covers private, loopback,
+    link-local, reserved, unspecified, and CGNAT (``100.64.0.0/10``) ranges.
+    Multicast addresses are technically "global" in the ipaddress module but
+    must also be rejected for SSRF — no legitimate article fetch targets a
+    multicast group.  This does not fully mitigate DNS-rebinding.
+    """
     ip = ipaddress.ip_address(address)
-    return any(
-        (
-            ip.is_private,
-            ip.is_loopback,
-            ip.is_link_local,
-            ip.is_reserved,
-            ip.is_multicast,
-            ip.is_unspecified,
-        )
-    )
+    return ip.is_multicast or not ip.is_global
 
 
 def is_public_http_url(url: str | None) -> bool:
@@ -96,14 +95,16 @@ def is_public_http_url(url: str | None) -> bool:
         if hostname in {"localhost", "localhost.localdomain"} or hostname.endswith(".local"):
             return False
         try:
-            return not _is_private_address(hostname)
+            return not _is_non_global_address(hostname)
         except ValueError:
             pass
         try:
             addresses = socket.getaddrinfo(hostname, parsed.port or 443, type=socket.SOCK_STREAM)
         except socket.gaierror:
             return False
-        return bool(addresses) and all(not _is_private_address(item[4][0]) for item in addresses)
+        return bool(addresses) and all(
+            not _is_non_global_address(str(item[4][0])) for item in addresses
+        )
     except (TypeError, ValueError):
         return False
 

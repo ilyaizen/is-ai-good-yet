@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import botFeedJson from "$lib/data/v2/bot-feed.json";
 import historyJson from "$lib/data/v2/history.json";
 import manifestJson from "$lib/data/v2/manifest.json";
@@ -147,8 +148,12 @@ function mapStory(raw: RawStory): V2StoryCard {
   };
 }
 
+function sha256hex(data: unknown): string {
+  return createHash("sha256").update(JSON.stringify(data, null, 2) + "\n").digest("hex");
+}
+
 function validateGeneration(): boolean {
-  const files = manifestJson.files as Record<string, { contractVersion: string; recordCount: number }>;
+  const files = manifestJson.files as Record<string, { contractVersion: string; recordCount: number; sha256: string }>;
   const expected = {
     "verdict.json": "verdict-v2.0.0",
     "stories.json": "stories-v2.0.0",
@@ -156,9 +161,20 @@ function validateGeneration(): boolean {
     "bot-feed.json": "bot-feed-v2.0.0",
     "pipeline-status.json": "pipeline-status-v2.0.0"
   } satisfies Record<string, string>;
+  const payloads: Record<string, unknown> = {
+    "verdict.json": verdictJson,
+    "stories.json": storiesJson,
+    "history.json": historyJson,
+    "bot-feed.json": botFeedJson,
+    "pipeline-status.json": pipelineJson
+  };
   return manifestJson.contractVersion === "v2-manifest-1"
     && manifestJson.influenceVersion === verdictJson.influenceVersion
-    && Object.entries(expected).every(([filename, contract]) => files[filename]?.contractVersion === contract)
+    && Object.entries(expected).every(([filename, contract]) => {
+      const entry = files[filename];
+      return entry?.contractVersion === contract
+        && entry?.sha256 === sha256hex(payloads[filename]);
+    })
     && files["stories.json"]?.recordCount === storiesJson.length
     && files["history.json"]?.recordCount === historyJson.length
     && files["bot-feed.json"]?.recordCount === botFeedJson.length;

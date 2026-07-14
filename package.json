@@ -31,6 +31,8 @@
     "test:article-display": "tsx scripts/test-article-display.ts",
     "test:pipeline-runner": "tsx scripts/test-pipeline-runner-runtime.ts",
     "test:v2-generation-integrity": "tsx scripts/test-v2-generation-integrity.ts",
+    "test:v2-admin-data": "tsx scripts/test-v2-admin-data.ts",
+    "test:v2-admin-layout": "tsx scripts/test-v2-admin-layout.ts",
     "pipeline:run": "python3 pipeline/run.py --phase all",
     "pipeline:ingest": "python3 pipeline/run.py --phase ingest",
     "pipeline:scrape": "python3 pipeline/run.py --phase scrape",

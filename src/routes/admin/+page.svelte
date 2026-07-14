@@ -2,6 +2,7 @@
   import { invalidateAll } from "$app/navigation"
   import { page } from "$app/state"
   import ContentTable from "$lib/components/content-table.svelte"
+  import type { V2AdminData } from "$lib/server/v2-admin-data"
 
   type UrlEntry = {
     id: number
@@ -107,6 +108,7 @@
       tableData: UrlEntry[]
       pipeline: PipelineData
       controlHref: string
+      v2?: V2AdminData
     }
   } = $props()
 
@@ -221,6 +223,7 @@
 
 <div class="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
   <!-- Header -->
+  {#if !data.v2}
   <section class="terminal-panel p-6 sm:p-8">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
@@ -298,8 +301,10 @@
       </div>
     {/if}
   </section>
+  {/if}
 
   <!-- Stage health + Environment -->
+  {#if !data.v2}
   <section class="grid gap-4 xl:grid-cols-[1.25fr_.75fr]">
     <div class="terminal-panel p-6">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -375,9 +380,10 @@
       </div>
     </div>
   </section>
+  {/if}
 
   <!-- Current run + Recent runs -->
-  <section class="grid gap-4 xl:grid-cols-[1fr_.9fr]">
+  <section class="grid gap-4">
     <div class="terminal-panel p-6">
       <div class="flex items-center justify-between gap-3">
         <div>
@@ -446,7 +452,7 @@
               <span class="terminal-chip">PID {data.pipeline.logViewer.run.pid ?? "?"}</span>
             </div>
             <pre
-              class="terminal-card max-h-120 overflow-auto whitespace-pre-wrap wrap-break-word p-4 text-xs leading-6 text-terminal-text">{data
+              class="terminal-card max-h-120 overflow-x-auto overflow-y-auto whitespace-pre p-4 text-xs leading-6 text-terminal-text">{data
                 .pipeline.logViewer.tail}</pre>
             <div class="mt-3 text-xs text-terminal-text-faint" title={data.pipeline.logViewer.path ?? undefined}>
               {data.pipeline.logViewer.path}
@@ -620,7 +626,9 @@
   {/if}
 
   <!-- Content Table -->
+  {#if !data.v2}
   <section class="terminal-panel p-6">
     <ContentTable data={data.tableData} title="Pipeline Data" enableDetailLinks />
   </section>
+  {/if}
 </div>

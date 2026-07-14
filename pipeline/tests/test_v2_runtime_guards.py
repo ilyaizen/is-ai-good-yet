@@ -1,8 +1,10 @@
 import asyncio
+import errno
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
-from pipeline.src import sentiment_v2
+from pipeline.src import export_v2, sentiment_v2
 from pipeline.src.v2_prefilter import classify
 from pipeline.src.v2_schemas import normalize_article_result, normalize_comment_result
 
@@ -112,3 +114,32 @@ def test_comment_normalizer_repairs_nullable_context_and_long_summary() -> None:
         "rationale": "No parent relation provided.",
     }
     assert len(result["summary"].split()) == 20
+
+
+def test_export_publication_survives_overlayfs_directory_rename_exdev(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    output = tmp_path / "v2"
+    output.mkdir()
+    (output / "stories.json").write_text("old", encoding="utf-8")
+    bot_input = tmp_path / "bot-feed.json"
+    bot_input.write_text("[]", encoding="utf-8")
+
+    def fake_generation(directory: Path, _bot_input: Path) -> dict:
+        directory.mkdir()
+        (directory / "stories.json").write_text("new", encoding="utf-8")
+        (directory / "manifest.json").write_text("manifest", encoding="utf-8")
+        return {"stories": 1}
+
+    def reject_directory_rename(_self: Path, _target: Path) -> Path:
+        raise OSError(errno.EXDEV, "Invalid cross-device link")
+
+    monkeypatch.setattr(export_v2, "init_v2_schema", lambda: None)
+    monkeypatch.setattr(export_v2, "write_generation", fake_generation)
+    monkeypatch.setattr(Path, "rename", reject_directory_rename)
+
+    result = export_v2.publish_atomic(output, bot_input)
+
+    assert (output / "stories.json").read_text(encoding="utf-8") == "new"
+    assert (output / "manifest.json").read_text(encoding="utf-8") == "manifest"
+    assert Path(result["rollback"], "stories.json").read_text(encoding="utf-8") == "old"

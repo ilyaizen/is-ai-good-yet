@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { mkdtempSync, rmSync } from "node:fs"
+import { copyFileSync, mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import Database from "better-sqlite3"
@@ -11,7 +11,8 @@ const db = new Database(databasePath)
 
 db.exec(`
   CREATE TABLE urls (
-    hn_id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
+    hn_id INTEGER,
     hn_title TEXT,
     url TEXT,
     hn_score INTEGER,
@@ -19,7 +20,7 @@ db.exec(`
     hn_timestamp INTEGER
   );
   CREATE TABLE v2_prefilter_decisions (
-    hn_story_id INTEGER PRIMARY KEY,
+    hn_story_id INTEGER,
     eligible INTEGER,
     scopes_json TEXT,
     reason_code TEXT,
@@ -29,7 +30,8 @@ db.exec(`
     prompt_version TEXT,
     prompt_hash TEXT,
     input_hash TEXT,
-    decided_at TEXT
+    decided_at TEXT,
+    PRIMARY KEY (hn_story_id, contract_version)
   );
   CREATE TABLE v2_analysis_runs (
     hn_story_id INTEGER,
@@ -98,13 +100,23 @@ db.exec(`
   );
 `)
 
-db.prepare("INSERT INTO urls VALUES (?, ?, ?, ?, ?, ?)").run(
+db.prepare("INSERT INTO urls VALUES (?, ?, ?, ?, ?, ?, ?)").run(
+  1,
   42,
   "A measured AI story",
   "https://example.com/story",
   321,
   87,
   1_700_000_000
+)
+db.prepare("INSERT INTO urls VALUES (?, ?, ?, ?, ?, ?, ?)").run(
+  2,
+  42,
+  "Canonical measured AI story",
+  "https://example.com/story-canonical",
+  322,
+  88,
+  1_700_000_001
 )
 db.prepare("INSERT INTO v2_prefilter_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
   42,
@@ -118,6 +130,19 @@ db.prepare("INSERT INTO v2_prefilter_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?
   "prompt-hash",
   "input-hash",
   "2026-07-14T01:00:00Z"
+)
+db.prepare("INSERT INTO v2_prefilter_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
+  42,
+  0,
+  '["stale-scope"]',
+  "OLD_DECISION",
+  "Superseded prefilter decision.",
+  "old-prefilter-model",
+  "prefilter-v1",
+  "prefilter-prompt-v1",
+  "old-prompt-hash",
+  "old-input-hash",
+  "2026-07-14T00:00:00Z"
 )
 const insertAnalysis = db.prepare(`
   INSERT INTO v2_analysis_runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -142,6 +167,26 @@ insertAnalysis.run(
   JSON.stringify({ summary: "Article summary", scopes: ["coding"], raw: fullResultSentinel }),
   '{"input_tokens":100,"output_tokens":50,"inference_time_ms":900}',
   "2026-07-14T02:00:00Z"
+)
+insertAnalysis.run(
+  42,
+  "article",
+  "v2.1.0",
+  "",
+  "article-v2.1.0",
+  "article-prompt-v2.1.0",
+  "old-article-prompt-hash",
+  "old-article-input-hash",
+  "{}",
+  "v2.1.0",
+  "old-analysis-model",
+  '{"temperature":0.1}',
+  "accepted",
+  null,
+  null,
+  '{"summary":"Superseded article result"}',
+  '{"input_tokens":10,"output_tokens":5,"inference_time_ms":100}',
+  "2026-07-14T01:00:00Z"
 )
 insertAnalysis.run(
   42,
@@ -175,6 +220,19 @@ db.prepare("INSERT INTO v2_dimension_analyses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,
   null,
   2,
   '{"rationale":"Strong capability evidence."}'
+)
+db.prepare("INSERT INTO v2_dimension_analyses VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
+  42,
+  "article",
+  "v2.1.0",
+  "",
+  "capability",
+  "explicit",
+  -2,
+  0.1,
+  null,
+  1,
+  '{"rationale":"Superseded dimension evidence."}'
 )
 db.prepare("INSERT INTO v2_comment_analyses_normalized VALUES (?, ?, ?, ?, ?, ?, ?)").run(
   42,
@@ -215,15 +273,16 @@ try {
   assert.equal(result.available, true)
   assert.deepEqual(result.summary, {
     eligibleStories: 1,
-    articleAccepted: 1,
+    articleAccepted: 2,
     communityAccepted: 1,
     commentsAccepted: 1,
     failedAnalyses: 0,
-    inputTokens: 400,
-    outputTokens: 170,
+    inputTokens: 410,
+    outputTokens: 175,
   })
   assert.equal(result.stories.length, 1)
-  assert.equal(result.stories[0].title, "A measured AI story")
+  assert.equal(result.stories[0].title, "Canonical measured AI story")
+  assert.equal(result.stories[0].url, "https://example.com/story-canonical")
   assert.deepEqual(result.stories[0].scopes, ["coding", "research"])
   assert.equal(result.stories[0].articleStatus, "accepted")
   assert.equal(result.stories[0].communityStatus, "accepted")
@@ -240,8 +299,19 @@ try {
   assert.equal(details.article?.metrics.inputTokens, 100)
   assert.equal(details.article?.result.raw, fullResultSentinel)
   assert.equal(details.community?.result.summary, "Community summary")
+  assert.equal(details.prefilterReasonCode, "AI_CAPABILITY_REPORT")
+  assert.equal(details.prefilterModel, "prefilter-model")
+  assert.equal(details.dimensions.length, 1)
   assert.equal(details.dimensions[0].dimension, "capability")
   assert.equal(details.dimensions[0].rationale, "Strong capability evidence.")
+
+  const incompatibleDatabasePath = path.join(directory, "pipeline-without-diagnostics.db")
+  copyFileSync(databasePath, incompatibleDatabasePath)
+  const incompatibleDb = new Database(incompatibleDatabasePath)
+  incompatibleDb.exec("ALTER TABLE v2_dimension_analyses DROP COLUMN diagnostics_json")
+  incompatibleDb.close()
+  assert.equal(getV2AdminData(incompatibleDatabasePath).available, false)
+  assert.equal(getV2AdminStoryDetails(42, incompatibleDatabasePath), null)
   console.log("V2 admin data regression passed")
 } finally {
   rmSync(directory, { recursive: true, force: true })

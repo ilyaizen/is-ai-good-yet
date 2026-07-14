@@ -19,10 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wire `TextArticleStore` in `sentiment_v2` through configurable `paths.py` instead of a hardcoded default.
 - Count community-analysis model attempts only after deterministic eligibility passes so cap-ineligible rows never consume API budget.
 - Validate V2 generation SHA-256 hashes at build time in the page adapter and keep manifest hashes in sync during status-only exports.
+- Keep the initial V2 admin response lightweight and load full per-story analysis properties only when a ledger row opens.
 
 ### Added
 
 - Add command-specific production preflight diagnostics and block pipeline commands with missing imports, browsers, storage, or API keys.
+- Add a V2 operations dashboard with persisted prefilter, analysis, dimension, token, model, version, hash, and orchestration telemetry.
 - Add a bounded `curl_cffi` article fetch path and optional authenticated residential rendered-HTML service before archive fallback.
 - Implement the public V2 broadcast-terminal dashboard with typed static contracts, bot-feed and HN evidence cards, source-tension diagnostics, dimensional history, persisted `lil-gui` controls, reduced-motion canvas effects, and explicit unavailable states.
 - Add the isolated broad-scope V2 prefilter, immutable global-influence version, orchestration records, cron-safe locking, public pipeline telemetry, manifest hashing, and atomic generation publication with rollback.
@@ -82,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Keep pipeline logs full-width and preserve long lines with horizontal scrolling instead of wrapping them.
 - Normalize overlong V2 article evidence quotes and summaries after strict generation so Groq boundary overages do not discard otherwise valid analyses.
 - Publish V2 export files atomically with the manifest last instead of renaming an image-layer directory, which fails with `EXDEV` on production OverlayFS.
 - Let the isolated V2 pipeline read reconciled article-text files when a scraped article is not yet present in Parquet, and process duplicate `hn_id` rows only once.

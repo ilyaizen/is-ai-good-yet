@@ -48,6 +48,19 @@ type LogViewer = {
   tail: string
 }
 
+interface AdminLoadOptions {
+  includeV1Data?: boolean
+}
+
+const EMPTY_PIPELINE_STATS = {
+  totalUrls: 0,
+  resolved: 0,
+  scraped: 0,
+  relevant: 0,
+  analyzed: 0,
+  failed: 0,
+}
+
 function readLogTail(logPath: string | null, lines = 120): { exists: boolean; tail: string } {
   if (!logPath || !existsSync(logPath)) {
     return {
@@ -70,10 +83,11 @@ function readLogTail(logPath: string | null, lines = 120): { exists: boolean; ta
   }
 }
 
-export const load = (event: RequestEvent) => {
+export const load = (event: RequestEvent, options: AdminLoadOptions = {}) => {
   const commandScope = event.url.pathname.startsWith("/v2/") ? "v2" : "v1"
-  const rows = getPipelineTableData()
-  const stats = getPipelineStats()
+  const includeV1Data = options.includeV1Data ?? true
+  const rows = includeV1Data ? getPipelineTableData() : []
+  const stats = includeV1Data ? getPipelineStats() : EMPTY_PIPELINE_STATS
   const snapshot = getPipelineRunSnapshot()
   const env = getPipelineEnvironmentStatus()
   const storage = getPipelineStoragePaths()

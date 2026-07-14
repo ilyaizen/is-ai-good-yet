@@ -76,7 +76,7 @@ ARTICLE_EVIDENCE_SCHEMA = {
     "items": closed(
         {
             "id": {"type": "string", "minLength": 1},
-            "quote": {"type": "string", "minLength": 1, "maxLength": 240},
+            "quote": {"type": "string", "minLength": 1, "maxLength": 1000},
             "attribution": enum(VALID_ATTRIBUTIONS),
             "supports": {
                 "type": "array", "items": enum(DIMENSIONS), "minItems": 1,
@@ -142,9 +142,16 @@ PREFILTER_SCHEMA = closed(PREFILTER_PROPERTIES)
 def normalize_article_result(result: dict[str, Any]) -> dict[str, Any]:
     if result.get("reject"):
         keys = ("contract_version", "reject", "reason_code", "reason")
-    else:
-        keys = ("contract_version", "reject", "scopes", "dimensions", "evidence", "summary")
-    return {key: result.get(key) for key in keys}
+        return {key: result.get(key) for key in keys}
+
+    keys = ("contract_version", "reject", "scopes", "dimensions", "evidence", "summary")
+    normalized = {key: result.get(key) for key in keys}
+    if isinstance(normalized["summary"], str):
+        normalized["summary"] = " ".join(normalized["summary"].split()[:20])
+    for item in normalized["evidence"] or []:
+        if isinstance(item.get("quote"), str):
+            item["quote"] = item["quote"][:240]
+    return normalized
 
 
 def normalize_comment_result(result: dict[str, Any]) -> dict[str, Any]:

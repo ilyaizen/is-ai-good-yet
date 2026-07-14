@@ -6,7 +6,11 @@ from types import SimpleNamespace
 
 from pipeline.src import export_v2, sentiment_v2
 from pipeline.src.v2_prefilter import classify
-from pipeline.src.v2_schemas import normalize_article_result, normalize_comment_result
+from pipeline.src.v2_schemas import (
+    ARTICLE_SCHEMA,
+    normalize_article_result,
+    normalize_comment_result,
+)
 
 
 def test_candidate_attempt_limit_bounds_deterministic_refill() -> None:
@@ -92,6 +96,23 @@ def test_prefilter_retries_transient_generation_failure() -> None:
 
     assert calls == 2
     assert result is not None
+
+
+def test_article_normalizer_bounds_generated_text_to_immutable_contract() -> None:
+    result = normalize_article_result(
+        {
+            "contract_version": "article-v2.2.0", "reject": False,
+            "scopes": ["research"], "dimensions": {},
+            "evidence": [{"id": "e1", "quote": "x" * 300, "attribution": "author", "supports": ["capability"]}],
+            "summary": "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one",
+            "reason_code": None, "reason": None,
+        }
+    )
+
+    quote_schema = ARTICLE_SCHEMA["properties"]["evidence"]["items"]["properties"]["quote"]
+    assert quote_schema["maxLength"] > 240
+    assert len(result["evidence"][0]["quote"]) == 240
+    assert len(result["summary"].split()) == 20
 
 
 def test_comment_normalizer_repairs_nullable_context_and_long_summary() -> None:

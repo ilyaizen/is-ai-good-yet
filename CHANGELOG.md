@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Normalize overlong V2 article evidence quotes and summaries after strict generation so Groq boundary overages do not discard otherwise valid analyses.
 - Publish V2 export files atomically with the manifest last instead of renaming an image-layer directory, which fails with `EXDEV` on production OverlayFS.
 - Let the isolated V2 pipeline read reconciled article-text files when a scraped article is not yet present in Parquet, and process duplicate `hn_id` rows only once.
 - Launch the installed Nix Chromium wrapper for scraping and make preflight perform a real browser launch, replacing the broken duplicate Playwright Chromium download.

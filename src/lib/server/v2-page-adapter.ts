@@ -1,9 +1,15 @@
 import botFeedJson from "$lib/data/v2/bot-feed.json";
+import botFeedRaw from "$lib/data/v2/bot-feed.json?raw";
 import historyJson from "$lib/data/v2/history.json";
+import historyRaw from "$lib/data/v2/history.json?raw";
 import manifestJson from "$lib/data/v2/manifest.json";
 import pipelineJson from "$lib/data/v2/pipeline-status.json";
+import pipelineRaw from "$lib/data/v2/pipeline-status.json?raw";
 import storiesJson from "$lib/data/v2/stories.json";
+import storiesRaw from "$lib/data/v2/stories.json?raw";
 import verdictJson from "$lib/data/v2/verdict.json";
+import verdictRaw from "$lib/data/v2/verdict.json?raw";
+import { validateManifestHashes } from "$lib/server/v2-generation-integrity";
 import type {
   V2CommunityDimension,
   V2Dimension,
@@ -148,7 +154,7 @@ function mapStory(raw: RawStory): V2StoryCard {
 }
 
 function validateGeneration(): boolean {
-  const files = manifestJson.files as Record<string, { contractVersion: string; recordCount: number }>;
+  const files = manifestJson.files as Record<string, { contractVersion: string; recordCount: number; sha256: string }>;
   const expected = {
     "verdict.json": "verdict-v2.0.0",
     "stories.json": "stories-v2.0.0",
@@ -156,9 +162,17 @@ function validateGeneration(): boolean {
     "bot-feed.json": "bot-feed-v2.0.0",
     "pipeline-status.json": "pipeline-status-v2.0.0"
   } satisfies Record<string, string>;
+  const rawPayloads: Record<string, string> = {
+    "verdict.json": verdictRaw,
+    "stories.json": storiesRaw,
+    "history.json": historyRaw,
+    "bot-feed.json": botFeedRaw,
+    "pipeline-status.json": pipelineRaw
+  };
   return manifestJson.contractVersion === "v2-manifest-1"
     && manifestJson.influenceVersion === verdictJson.influenceVersion
     && Object.entries(expected).every(([filename, contract]) => files[filename]?.contractVersion === contract)
+    && validateManifestHashes(files, rawPayloads)
     && files["stories.json"]?.recordCount === storiesJson.length
     && files["history.json"]?.recordCount === historyJson.length
     && files["bot-feed.json"]?.recordCount === botFeedJson.length;

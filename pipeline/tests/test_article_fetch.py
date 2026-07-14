@@ -26,6 +26,24 @@ def test_ssrf_guard_rejects_private_and_non_http_targets(monkeypatch) -> None:
     assert not is_public_http_url("http://localhost/admin")
 
 
+@pytest.mark.parametrize(
+    "address",
+    [
+        "100.64.0.1",   # CGNAT shared-address range
+        "100.127.255.255",
+        "10.0.0.1",     # RFC 1918 private
+        "172.16.0.1",   # RFC 1918 private
+        "192.168.1.1",  # RFC 1918 private
+        "127.0.0.1",    # loopback
+        "169.254.0.1",  # link-local
+        "0.0.0.0",      # unspecified
+        "224.0.0.1",    # multicast
+    ],
+)
+def test_cgnat_and_other_non_global_addresses_are_rejected(address: str) -> None:
+    assert not is_public_http_url(f"http://{address}/path")
+
+
 def test_html_validation_rejects_wrong_type_and_oversize() -> None:
     wrong_type = validate_html_response(
         url="https://example.com/file.pdf",

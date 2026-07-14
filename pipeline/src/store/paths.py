@@ -35,5 +35,9 @@ def get_articles_dir() -> Path:
     return get_pipeline_data_dir() / "articles"
 
 
+def get_articles_text_dir() -> Path:
+    return get_pipeline_data_dir() / "articles-text"
+
+
 def get_data_path(name: str) -> Path:
     return get_pipeline_data_dir() / name

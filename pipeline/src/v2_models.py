@@ -13,7 +13,10 @@ COMMENT_CONTRACT_VERSION = "comment-v2.2.0"
 PREFILTER_CONTRACT_VERSION = "prefilter-v2.0.0"
 AGGREGATION_VERSION = "community-aggregation-v2.2.0"
 GLOBAL_INFLUENCE_VERSION = "hn-score-0.85_decay-24m_v1"
-PARSER_VERSION = "v2.2.0"
+PARSER_VERSION = "v2.2.1"
+
+ARTICLE_SUMMARY_MAX_WORDS = 50
+COMMENT_SUMMARY_MAX_WORDS = 30
 
 DIMENSIONS = ("capability", "trajectory", "impact")
 VALID_APPLICABILITY = {"explicit", "implicit", "not_addressed"}
@@ -207,8 +210,8 @@ def validate_article_analysis(result: dict[str, Any]) -> tuple[bool, str]:
         if expected != evidence_supports:
             errors.append("evidence supports must match dimension references exactly")
     summary = result.get("summary")
-    if not isinstance(summary, str) or not summary.strip() or len(summary.split()) > 25:
-        errors.append("summary must contain 1-25 words")
+    if not isinstance(summary, str) or not summary.strip() or len(summary.split()) > ARTICLE_SUMMARY_MAX_WORDS:
+        errors.append(f"summary must contain 1-{ARTICLE_SUMMARY_MAX_WORDS} words")
     return not errors, "; ".join(errors)
 
 
@@ -265,8 +268,8 @@ def validate_comment_analysis(result: dict[str, Any], expected_id: int) -> tuple
     errors.extend(f"article_relation: {error}" for error in _validate_relation(result.get("article_relation"), False))
     errors.extend(f"parent_relation: {error}" for error in _validate_relation(result.get("parent_relation"), True))
     summary = result.get("summary")
-    if not isinstance(summary, str) or not summary.strip() or len(summary.split()) > 20:
-        errors.append("summary must contain 1-20 words")
+    if not isinstance(summary, str) or not summary.strip() or len(summary.split()) > COMMENT_SUMMARY_MAX_WORDS:
+        errors.append(f"summary must contain 1-{COMMENT_SUMMARY_MAX_WORDS} words")
     return not errors, "; ".join(errors)
 
 

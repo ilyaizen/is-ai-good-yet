@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Count community-analysis model attempts only after deterministic eligibility passes so cap-ineligible rows never consume API budget.
 - Validate V2 generation SHA-256 hashes at build time in the page adapter and keep manifest hashes in sync during status-only exports.
 - Keep the initial V2 admin response lightweight and load full per-story analysis properties only when a ledger row opens.
+- Keep V2 admin rows and expanded dimensions version-consistent, deduplicate repeated URL records per HN story, and reject incompatible legacy V2 schemas before querying them.
 
 ### Added
 

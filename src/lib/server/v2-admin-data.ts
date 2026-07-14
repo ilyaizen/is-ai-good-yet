@@ -177,19 +177,66 @@ function mapAnalysis(row: AnalysisRow): V2AnalysisRun {
   }
 }
 
-function hasV2Tables(db: Database.Database): boolean {
+const REQUIRED_V2_COLUMNS: Record<string, readonly string[]> = {
+  v2_prefilter_decisions: ["hn_story_id", "eligible", "scopes_json", "reason_code", "reason", "model", "decided_at"],
+  v2_analysis_runs: [
+    "hn_story_id",
+    "source",
+    "status",
+    "analysis_version",
+    "selection_version",
+    "contract_version",
+    "prompt_version",
+    "parser_version",
+    "prompt_hash",
+    "input_hash",
+    "model",
+    "parameters_json",
+    "reason_code",
+    "reason",
+    "result_json",
+    "metrics_json",
+    "analyzed_at",
+  ],
+  v2_dimension_analyses: [
+    "hn_story_id",
+    "source",
+    "analysis_version",
+    "selection_version",
+    "dimension",
+    "applicability",
+    "score",
+    "confidence",
+    "disagreement",
+    "evidence_count",
+    "diagnostics_json",
+  ],
+  v2_comment_analyses_normalized: ["hn_story_id", "status"],
+  v2_comment_selections: ["hn_story_id"],
+  v2_orchestration_runs: [
+    "run_id",
+    "status",
+    "stage",
+    "started_at",
+    "finished_at",
+    "stories_discovered",
+    "articles_processed",
+    "comments_analyzed",
+    "error_code",
+  ],
+}
+
+function hasCompatibleV2Schema(db: Database.Database): boolean {
   const tables = db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'v2_%'").all() as Array<{
     name: string
   }>
   const names = new Set(tables.map((row) => row.name))
-  return [
-    "v2_prefilter_decisions",
-    "v2_analysis_runs",
-    "v2_dimension_analyses",
-    "v2_comment_analyses_normalized",
-    "v2_comment_selections",
-    "v2_orchestration_runs",
-  ].every((name) => names.has(name))
+  return Object.entries(REQUIRED_V2_COLUMNS).every(([table, requiredColumns]) => {
+    if (!names.has(table)) return false
+    const columns = db.prepare(`PRAGMA table_info("${table}")`).all() as Array<{ name: string }>
+    const columnNames = new Set(columns.map((row) => row.name))
+    return requiredColumns.every((column) => columnNames.has(column))
+  })
 }
 
 export function getV2AdminData(databasePath = getPipelineStoragePaths().pipelineDbPath): V2AdminData {
@@ -197,12 +244,17 @@ export function getV2AdminData(databasePath = getPipelineStoragePaths().pipeline
 
   const db = new Database(databasePath, { readonly: true })
   try {
-    if (!hasV2Tables(db)) return emptyData()
+    if (!hasCompatibleV2Schema(db)) return emptyData()
 
     const summaryRow = db
       .prepare(`
         SELECT
-          (SELECT COUNT(*) FROM v2_prefilter_decisions WHERE eligible = 1) AS eligible_stories,
+          (SELECT COUNT(*) FROM (
+            SELECT eligible, ROW_NUMBER() OVER (
+              PARTITION BY hn_story_id ORDER BY decided_at DESC, rowid DESC
+            ) AS recency_rank
+            FROM v2_prefilter_decisions
+          ) WHERE recency_rank = 1 AND eligible = 1) AS eligible_stories,
           (SELECT COUNT(*) FROM v2_analysis_runs WHERE source = 'article' AND status = 'accepted') AS article_accepted,
           (SELECT COUNT(*) FROM v2_analysis_runs WHERE source = 'community' AND status = 'accepted') AS community_accepted,
           (SELECT COUNT(*) FROM v2_comment_analyses_normalized WHERE status = 'accepted') AS comments_accepted,
@@ -249,8 +301,20 @@ export function getV2AdminData(databasePath = getPipelineStoragePaths().pipeline
           (SELECT COUNT(*) FROM v2_comment_selections s WHERE s.hn_story_id = story_ids.hn_story_id) AS selected_comments,
           (SELECT COUNT(*) FROM v2_comment_analyses_normalized c WHERE c.hn_story_id = story_ids.hn_story_id AND c.status = 'accepted') AS accepted_comments
         FROM story_ids
-        LEFT JOIN urls ON urls.hn_id = story_ids.hn_story_id
-        LEFT JOIN v2_prefilter_decisions p ON p.hn_story_id = story_ids.hn_story_id
+        LEFT JOIN urls ON urls.rowid = (
+          SELECT latest_url.rowid
+          FROM urls latest_url
+          WHERE latest_url.hn_id = story_ids.hn_story_id
+          ORDER BY latest_url.id DESC, latest_url.rowid DESC
+          LIMIT 1
+        )
+        LEFT JOIN v2_prefilter_decisions p ON p.rowid = (
+          SELECT latest_prefilter.rowid
+          FROM v2_prefilter_decisions latest_prefilter
+          WHERE latest_prefilter.hn_story_id = story_ids.hn_story_id
+          ORDER BY latest_prefilter.decided_at DESC, latest_prefilter.rowid DESC
+          LIMIT 1
+        )
         ORDER BY COALESCE(urls.hn_timestamp, 0) DESC, story_ids.hn_story_id DESC
         LIMIT 100
       `)
@@ -347,7 +411,7 @@ export function getV2AdminStoryDetails(
 
   const db = new Database(databasePath, { readonly: true })
   try {
-    if (!hasV2Tables(db)) return null
+    if (!hasCompatibleV2Schema(db)) return null
 
     const exists = db
       .prepare(`
@@ -364,6 +428,8 @@ export function getV2AdminStoryDetails(
         SELECT reason_code, reason, model, decided_at
         FROM v2_prefilter_decisions
         WHERE hn_story_id = ?
+        ORDER BY decided_at DESC, rowid DESC
+        LIMIT 1
       `)
       .get(hnStoryId) as
       | { reason_code: string | null; reason: string | null; model: string | null; decided_at: string | null }
@@ -385,11 +451,26 @@ export function getV2AdminStoryDetails(
 
     const dimensions = db
       .prepare(`
-        SELECT source, dimension, applicability, score, confidence,
-               disagreement, evidence_count, diagnostics_json
-        FROM v2_dimension_analyses
-        WHERE hn_story_id = ?
-        ORDER BY source, dimension
+        WITH latest_runs AS (
+          SELECT hn_story_id, source, analysis_version, selection_version
+          FROM (
+            SELECT a.*, ROW_NUMBER() OVER (
+              PARTITION BY a.source ORDER BY a.analyzed_at DESC, a.rowid DESC
+            ) AS recency_rank
+            FROM v2_analysis_runs a
+            WHERE a.hn_story_id = ? AND a.source IN ('article', 'community')
+          )
+          WHERE recency_rank = 1
+        )
+        SELECT d.source, d.dimension, d.applicability, d.score, d.confidence,
+               d.disagreement, d.evidence_count, d.diagnostics_json
+        FROM v2_dimension_analyses d
+        INNER JOIN latest_runs r
+          ON r.hn_story_id = d.hn_story_id
+         AND r.source = d.source
+         AND r.analysis_version = d.analysis_version
+         AND r.selection_version = d.selection_version
+        ORDER BY d.source, d.dimension
       `)
       .all(hnStoryId)
       .map((raw) => {

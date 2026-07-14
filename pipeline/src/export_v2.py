@@ -393,6 +393,26 @@ def write_generation(directory: Path, bot_input: Path) -> dict[str, Any]:
     return {"stories": len(stories), "botFeed": len(bot_feed), "manifest": manifest}
 
 
+def _publish_generation_files(source: Path, output: Path) -> None:
+    """Replace generation files atomically, publishing the manifest last."""
+    output.mkdir(parents=True, exist_ok=True)
+    files = sorted(source.iterdir(), key=lambda path: (path.name == "manifest.json", path.name))
+    if not files or files[-1].name != "manifest.json" or any(not path.is_file() for path in files):
+        raise ValueError("V2 generation must contain flat files and a manifest.json")
+
+    temporary_files: list[Path] = []
+    try:
+        for source_path in files:
+            temporary = output / f".{source_path.name}.{uuid.uuid4().hex}.tmp"
+            temporary_files.append(temporary)
+            shutil.copy2(source_path, temporary)
+            temporary.replace(output / source_path.name)
+            temporary_files.remove(temporary)
+    finally:
+        for temporary in temporary_files:
+            temporary.unlink(missing_ok=True)
+
+
 def publish_atomic(output: Path, bot_input: Path) -> dict[str, Any]:
     init_v2_schema()
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -401,15 +421,16 @@ def publish_atomic(output: Path, bot_input: Path) -> dict[str, Any]:
     result = write_generation(generation, bot_input)
     if backup.exists():
         shutil.rmtree(backup)
+    if output.exists():
+        shutil.copytree(output, backup)
     try:
-        if output.exists():
-            output.rename(backup)
-        generation.rename(output)
+        _publish_generation_files(generation, output)
     except Exception:
-        if not output.exists() and backup.exists():
-            backup.rename(output)
-        shutil.rmtree(generation, ignore_errors=True)
+        if backup.exists():
+            _publish_generation_files(backup, output)
         raise
+    finally:
+        shutil.rmtree(generation, ignore_errors=True)
     result["output"] = str(output)
     result["rollback"] = str(backup) if backup.exists() else None
     return result

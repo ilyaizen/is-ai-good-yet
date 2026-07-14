@@ -82,13 +82,13 @@ The prefilter now uses clear emoji-based logging to distinguish between differen
 
 ### Expected Behavior vs. Problems
 
-| Message Type | Example                                         | Normal? | Action Required |
-| ------------ | ----------------------------------------------- | ------- | --------------- |
-| ✅ Success    | "✅ Recovered 3 objects from partial JSON array" | ✅ Yes   | None            |
-| ℹ️ Info       | "ℹ️ Skipped X - API error or invalid response"   | ✅ Yes   | None            |
-| ℹ️ Info       | "Direct JSON parsing failed"                    | ✅ Yes   | None            |
-| ⚠️ Warning    | "Error updating prefilter status"               | ❌ No    | Check database  |
-| ❌ Error      | "Mistral API error 401"                         | ❌ No    | Check API key   |
+| Message Type | Example                                          | Normal? | Action Required |
+| ------------ | ------------------------------------------------ | ------- | --------------- |
+| ✅ Success   | "✅ Recovered 3 objects from partial JSON array" | ✅ Yes  | None            |
+| ℹ️ Info      | "ℹ️ Skipped X - API error or invalid response"   | ✅ Yes  | None            |
+| ℹ️ Info      | "Direct JSON parsing failed"                     | ✅ Yes  | None            |
+| ⚠️ Warning   | "Error updating prefilter status"                | ❌ No   | Check database  |
+| ❌ Error     | "Mistral API error 401"                          | ❌ No   | Check API key   |
 
 ### Performance Expectations
 
@@ -205,11 +205,13 @@ Sometimes the HN resolver picks the wrong HN post for a URL. This happens when A
 ### Diagnosis
 
 1. **Check if text file exists:**
+
    ```bash
    ls pipeline/data/articles-text/<expected_hn_id>.txt
    ```
 
 2. **Query database for URL:**
+
    ```bash
    cd pipeline
    python -c "import sqlite3; conn = sqlite3.connect('data/pipeline.db'); print(conn.execute('SELECT url, hn_id, hn_title FROM urls WHERE url LIKE \"%keyword%\"').fetchall())"
@@ -235,6 +237,7 @@ python src/fix_hn_id.py 46574276 --url https://antirez.com/news/158
 ```
 
 The utility:
+
 1. Fetches correct metadata from Algolia (title, score, comments, timestamp, author)
 2. Updates or inserts the DB entry with the correct HN ID
 3. Preserves the existing scraped content
@@ -242,6 +245,7 @@ The utility:
 ### Prevention
 
 The resolver uses `score + comments` to pick the "best" HN post. This is usually correct, but can fail when:
+
 - An article is posted multiple times with different contexts
 - A URL is referenced in an unrelated HN discussion
 - The older post has more engagement than the recent one

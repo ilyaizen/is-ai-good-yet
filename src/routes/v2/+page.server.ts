@@ -1,4 +1,4 @@
-import { loadV2PageData } from "$lib/server/v2-page-adapter";
-import type { PageServerLoad } from "./$types";
+import { loadV2PageData } from "$lib/server/v2-page-adapter"
+import type { PageServerLoad } from "./$types"
 
-export const load: PageServerLoad = () => loadV2PageData();
+export const load: PageServerLoad = () => loadV2PageData()

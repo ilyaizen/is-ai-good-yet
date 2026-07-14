@@ -6,15 +6,15 @@ probability sample of readers, HN users, or public opinion.
 
 ## Immutable versions
 
-| Concern | Version |
-| --- | --- |
-| Analysis | `v2.2.0` |
-| Parser | `v2.2.1` |
-| Article contract | `article-v2.2.0` |
-| Article prompt | `article-prompt-v2.2.1` |
-| Selection | `ranked-tree-v2.2.0` |
-| Comment contract | `comment-v2.2.0` |
-| Comment prompt | `comment-prompt-v2.2.1` |
+| Concern               | Version                        |
+| --------------------- | ------------------------------ |
+| Analysis              | `v2.2.0`                       |
+| Parser                | `v2.2.1`                       |
+| Article contract      | `article-v2.2.0`               |
+| Article prompt        | `article-prompt-v2.2.1`        |
+| Selection             | `ranked-tree-v2.2.0`           |
+| Comment contract      | `comment-v2.2.0`               |
+| Comment prompt        | `comment-prompt-v2.2.1`        |
 | Community aggregation | `community-aggregation-v2.2.0` |
 
 ## Dimensions and source combination
@@ -138,4 +138,3 @@ metrics are normative; no cross-dimension consensus label exists.
 Story comment volume can enlarge adaptive sample capacity but never directly changes sentiment,
 confidence after saturation, or global influence. Existing story-score/time-decay remains the global
 engagement signal. `/v2` remains disconnected from generated v2 exports pending separate review.
-

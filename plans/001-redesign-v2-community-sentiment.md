@@ -100,11 +100,11 @@ These decisions are fixed for this plan. Do not reopen or silently reinterpret t
 
 ## Commands and execution gates
 
-| Purpose | Command | Expected on success |
-| --- | --- | --- |
-| Inspect changes | `git diff -- <in-scope files>` | only intended v2/docs changes |
-| Narrow tests | `.venv\\Scripts\\python.exe -m pytest pipeline/tests/test_hn_comments_v2.py pipeline/tests/test_v2_models.py -q` | all selected tests pass |
-| Pipeline tests, only if separately approved | `.venv\\Scripts\\python.exe -m pytest pipeline/tests -q` | pass, except documented DB fixture limitation |
+| Purpose                                     | Command                                                                                                          | Expected on success                           |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Inspect changes                             | `git diff -- <in-scope files>`                                                                                   | only intended v2/docs changes                 |
+| Narrow tests                                | `.venv\\Scripts\\python.exe -m pytest pipeline/tests/test_hn_comments_v2.py pipeline/tests/test_v2_models.py -q` | all selected tests pass                       |
+| Pipeline tests, only if separately approved | `.venv\\Scripts\\python.exe -m pytest pipeline/tests -q`                                                         | pass, except documented DB fixture limitation |
 
 Do not run either pytest command, lint, type-check, or build until the user explicitly approves checks.
 Do not install dependencies. Do not run the pipeline or call Groq/HN as verification unless separately

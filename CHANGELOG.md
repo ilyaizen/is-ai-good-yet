@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
 - Expand V2 article summaries to 50 words and individual HN comment summaries to 30 words.
 - Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
 - Export analyzed articles independently of legacy `articles-text` files.

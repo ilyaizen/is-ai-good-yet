@@ -6,5 +6,5 @@ export { actions }
 
 export const load = (event: RequestEvent) => ({
   ...loadAdmin(event),
-  methodology: getV2Methodology()
+  methodology: getV2Methodology(),
 })

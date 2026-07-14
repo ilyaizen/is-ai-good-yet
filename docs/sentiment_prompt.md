@@ -23,7 +23,7 @@ Articles are truncated to fit within the 8,000 character limit using a **head + 
 
 ### System Prompt
 
-```text
+````text
 Act as a Cynical Principal Engineer analyzing developer discourse about AI coding tools and workflows.
 
 Your task: Extract the author's sentiment about AI coding tools from this article. If the article lacks developer opinion/experience, REJECT it.
@@ -92,15 +92,16 @@ Return valid JSON only:
   "summary": "<max 25 words: blunt verdict>",
   "quotes": ["<relevant quote 1>", "<relevant quote 2>"]
 }
-```
-```
+````
+
+````
 
 ### User Prompt
 
 ```text
 Title: "{title}"
 Content: "{content}"
-```
+````
 
 ## Score Derivation
 

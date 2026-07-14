@@ -25,11 +25,11 @@ The V2 design language is a dark broadcast terminal rather than a collection of 
 
 Reading this as a data-heavy terminal dashboard for technically literate readers, with an experimental broadcast-console language. The hero can be theatrical. The evidence UI cannot be cryptic.
 
-| Dial | Value | Consequence |
-| --- | ---: | --- |
-| Design variance | 7/10 | Asymmetric hero and mixed card spans, but predictable reading order |
-| Motion intensity | 6/10 | Ambient canvas motion, verdict decode, and deliberate state transitions |
-| Visual density | 8/10 | Compact metadata and diagnostics, with progressive disclosure to prevent overload |
+| Dial             | Value | Consequence                                                                       |
+| ---------------- | ----: | --------------------------------------------------------------------------------- |
+| Design variance  |  7/10 | Asymmetric hero and mixed card spans, but predictable reading order               |
+| Motion intensity |  6/10 | Ambient canvas motion, verdict decode, and deliberate state transitions           |
+| Visual density   |  8/10 | Compact metadata and diagnostics, with progressive disclosure to prevent overload |
 
 ### Non-negotiable principles
 
@@ -267,20 +267,20 @@ This is an explicit exception to the site's global theme behavior. It should not
 
 All final values belong in `src/styles/tokens.css` as OKLCH variables. Components consume semantic tokens only.
 
-| Role | Use |
-| --- | --- |
-| `--v2-canvas` | page background, tinted near-black |
-| `--v2-recess` | inset diagnostics and loading skeletons |
-| `--v2-surface-1` | standard cards |
-| `--v2-surface-2` | selected, expanded, or elevated cards |
-| `--v2-text` | primary readable text |
-| `--v2-text-muted` | metadata |
-| `--v2-text-faint` | non-critical labels only |
-| `--v2-phosphor` | brand accent, focus, positive direction |
-| `--v2-amber` | neutral, caution, low adequacy |
-| `--v2-red` | negative direction, failed status |
-| `--v2-cyan` | article source identity only |
-| `--v2-violet` | community source identity only |
+| Role              | Use                                     |
+| ----------------- | --------------------------------------- |
+| `--v2-canvas`     | page background, tinted near-black      |
+| `--v2-recess`     | inset diagnostics and loading skeletons |
+| `--v2-surface-1`  | standard cards                          |
+| `--v2-surface-2`  | selected, expanded, or elevated cards   |
+| `--v2-text`       | primary readable text                   |
+| `--v2-text-muted` | metadata                                |
+| `--v2-text-faint` | non-critical labels only                |
+| `--v2-phosphor`   | brand accent, focus, positive direction |
+| `--v2-amber`      | neutral, caution, low adequacy          |
+| `--v2-red`        | negative direction, failed status       |
+| `--v2-cyan`       | article source identity only            |
+| `--v2-violet`     | community source identity only          |
 
 The design uses multiple semantic colors because the data requires independent source and direction encoding. The brand accent remains phosphor lime. Cyan and violet must be muted and reserved for source comparison, not decorative gradients.
 
@@ -483,40 +483,40 @@ Generate `src/lib/data/v2/pipeline-status.json` from the cron wrapper after ever
 
 ```ts
 interface V2PipelineStatus {
-  contractVersion: "pipeline-status-v2.0.0";
-  generatedAt: string;
+  contractVersion: "pipeline-status-v2.0.0"
+  generatedAt: string
   schedule: {
-    expression: string;
-    timezone: string;
-    human: string;
-    nextRunAt: string;
-    graceMinutes: number;
-  };
+    expression: string
+    timezone: string
+    human: string
+    nextRunAt: string
+    graceMinutes: number
+  }
   currentRun: null | {
-    runId: string;
-    startedAt: string;
-    stage: "discover" | "scrape" | "prefilter" | "article" | "comments" | "export";
-  };
+    runId: string
+    startedAt: string
+    stage: "discover" | "scrape" | "prefilter" | "article" | "comments" | "export"
+  }
   lastRun: {
-    runId: string;
-    status: "succeeded" | "failed" | "partial";
-    startedAt: string;
-    finishedAt: string;
-    durationSeconds: number;
-    storiesDiscovered: number;
-    articlesProcessed: number;
-    commentsAnalyzed: number;
-    errorCode: string | null;
-  } | null;
+    runId: string
+    status: "succeeded" | "failed" | "partial"
+    startedAt: string
+    finishedAt: string
+    durationSeconds: number
+    storiesDiscovered: number
+    articlesProcessed: number
+    commentsAnalyzed: number
+    errorCode: string | null
+  } | null
   coverage: {
-    corpusEligible: number;
-    articleAnalyzed: number;
-    communityAnalyzed: number;
-    botPreviewReady: number;
-    articlePercent: number;
-    communityPercent: number;
-    botPreviewPercent: number;
-  };
+    corpusEligible: number
+    articleAnalyzed: number
+    communityAnalyzed: number
+    botPreviewReady: number
+    articlePercent: number
+    communityPercent: number
+    botPreviewPercent: number
+  }
 }
 ```
 
@@ -583,29 +583,29 @@ Generate `src/lib/data/v2/bot-feed.json`:
 
 ```ts
 interface BotFeedItem {
-  id: string;
-  contractVersion: "bot-feed-v2.0.0";
-  bot: "aipostsbot" | "aimediabot" | "ainewsbot";
-  botPostUrl: string;
-  postedAt: string;
-  canonicalUrl: string;
-  canonicalUrlHash: string;
-  domain: string;
-  title: string;
-  description: string | null;
+  id: string
+  contractVersion: "bot-feed-v2.0.0"
+  bot: "aipostsbot" | "aimediabot" | "ainewsbot"
+  botPostUrl: string
+  postedAt: string
+  canonicalUrl: string
+  canonicalUrlHash: string
+  domain: string
+  title: string
+  description: string | null
   image: {
-    url: string;
-    width: number | null;
-    height: number | null;
-    alt: string;
-  } | null;
-  faviconUrl: string | null;
-  publishedAt: string | null;
-  author: string | null;
-  scopes: V2Scope[];
-  previewStatus: "complete" | "partial" | "failed";
-  duplicateCount: number;
-  matchedHnStoryId: number | null;
+    url: string
+    width: number | null
+    height: number | null
+    alt: string
+  } | null
+  faviconUrl: string | null
+  publishedAt: string | null
+  author: string | null
+  scopes: V2Scope[]
+  previewStatus: "complete" | "partial" | "failed"
+  duplicateCount: number
+  matchedHnStoryId: number | null
 }
 
 type V2Scope =
@@ -618,7 +618,7 @@ type V2Scope =
   | "safety"
   | "governance"
   | "environment"
-  | "general";
+  | "general"
 ```
 
 ### 9.6 Metadata scraping rules
@@ -712,13 +712,13 @@ divergence = abs(article_score - community_score)
 
 Display levels:
 
-| Divergence | Treatment |
-| ---: | --- |
-| unavailable | no comparison, show source missing |
-| `< 0.5` | aligned, quiet connector |
-| `0.5 to < 1.0` | mild tension, visible label |
-| `1.0 to < 2.0` | strong tension, amber connector and `SOURCES DIVERGE` |
-| `>= 2.0` | direct conflict, split treatment and `SOURCE CONFLICT` |
+|     Divergence | Treatment                                              |
+| -------------: | ------------------------------------------------------ |
+|    unavailable | no comparison, show source missing                     |
+|        `< 0.5` | aligned, quiet connector                               |
+| `0.5 to < 1.0` | mild tension, visible label                            |
+| `1.0 to < 2.0` | strong tension, amber connector and `SOURCES DIVERGE`  |
+|       `>= 2.0` | direct conflict, split treatment and `SOURCE CONFLICT` |
 
 If signs differ, show `OPPOSING DIRECTIONS` regardless of magnitude threshold. This is more important than the combined average.
 
@@ -832,27 +832,27 @@ The frontend should define a typed adapter around `pipeline/src/export_v2.py:132
 
 ```ts
 interface V2StoryCard {
-  hnId: number;
-  title: string;
-  url: string;
-  domain: string;
-  hnScore: number;
-  hnComments: number;
-  hnTimestamp: number;
-  scopes: V2Scope[];
-  summary: string;
-  evidence: V2Evidence[];
-  article: V2SourceAnalysis;
-  community: V2CommunityAnalysis | null;
+  hnId: number
+  title: string
+  url: string
+  domain: string
+  hnScore: number
+  hnComments: number
+  hnTimestamp: number
+  scopes: V2Scope[]
+  summary: string
+  evidence: V2Evidence[]
+  article: V2SourceAnalysis
+  community: V2CommunityAnalysis | null
   combined: {
-    dimensions: Record<V2Dimension, V2CombinedDimension>;
-    composite: number | null;
-    addressedDimensions: V2Dimension[];
-  };
-  sourceDivergence: Record<V2Dimension, number | null>;
+    dimensions: Record<V2Dimension, V2CombinedDimension>
+    composite: number | null
+    addressedDimensions: V2Dimension[]
+  }
+  sourceDivergence: Record<V2Dimension, number | null>
 }
 
-type V2Dimension = "capability" | "trajectory" | "impact";
+type V2Dimension = "capability" | "trajectory" | "impact"
 ```
 
 The exporter currently preserves snake_case story fields and nested result objects. Before wiring the route, add one explicit server-side mapping layer that returns stable camelCase page data. Do not let components know SQLite or Python naming conventions.
@@ -1017,24 +1017,24 @@ Bot feed ignores sentiment score thresholds but obeys time window, topic scope, 
 
 ```ts
 interface V2Settings {
-  version: 1;
+  version: 1
   dimensions: {
-    capability: boolean;
-    trajectory: boolean;
-    impact: boolean;
-  };
-  timeWindow: "24h" | "7d" | "30d" | "90d" | "12m" | "all";
-  scoreMin: number;
-  scoreMax: number;
-  confidenceMin: number;
-  conflictsOnly: boolean;
-  density: "compact" | "comfortable" | "expanded";
-  sort: "newest" | "influence" | "divergence" | "polarization";
-  previewImages: boolean;
-  scanlineOpacity: number;
-  vignetteStrength: number;
-  grainOpacity: number;
-  ambientMotion: boolean;
+    capability: boolean
+    trajectory: boolean
+    impact: boolean
+  }
+  timeWindow: "24h" | "7d" | "30d" | "90d" | "12m" | "all"
+  scoreMin: number
+  scoreMax: number
+  confidenceMin: number
+  conflictsOnly: boolean
+  density: "compact" | "comfortable" | "expanded"
+  sort: "newest" | "influence" | "divergence" | "polarization"
+  previewImages: boolean
+  scanlineOpacity: number
+  vignetteStrength: number
+  grainOpacity: number
+  ambientMotion: boolean
 }
 ```
 
@@ -1110,18 +1110,18 @@ Dimension toggles from settings control visible series. The chart's own legend c
 
 The approved V2 scopes are:
 
-| Scope | Definition cue |
-| --- | --- |
-| coding | software development, tools, agents, code generation |
-| research | scientific work, discovery, reasoning, evaluation |
-| education | teaching, learning, assessment, student use |
-| labor | jobs, work design, displacement, productivity |
-| economy | firms, markets, investment, macroeconomic effects |
-| creativity | art, writing, music, design, media |
-| safety | reliability, misuse, alignment, systemic risk |
-| governance | regulation, institutions, policy, rights |
-| environment | energy, water, emissions, climate effects |
-| general | substantive cross-domain or uncategorized AI claims |
+| Scope       | Definition cue                                       |
+| ----------- | ---------------------------------------------------- |
+| coding      | software development, tools, agents, code generation |
+| research    | scientific work, discovery, reasoning, evaluation    |
+| education   | teaching, learning, assessment, student use          |
+| labor       | jobs, work design, displacement, productivity        |
+| economy     | firms, markets, investment, macroeconomic effects    |
+| creativity  | art, writing, music, design, media                   |
+| safety      | reliability, misuse, alignment, systemic risk        |
+| governance  | regulation, institutions, policy, rights             |
+| environment | energy, water, emissions, climate effects            |
+| general     | substantive cross-domain or uncategorized AI claims  |
 
 Rules:
 
@@ -1168,16 +1168,16 @@ Rules:
 
 ### 16.1 Motion inventory
 
-| Motion | Meaning | Behavior |
-| --- | --- | --- |
-| Dotted field shimmer | ambient signal activity | low-frame-rate canvas, hero only |
-| Globe rotation | global AI scope | slow, background, pauses off-screen |
-| Verdict decode | analysis resolving | once on reveal, replayable |
-| Verdict beam | result lock-in | once after decode |
-| Card expansion | hierarchy and state change | short transform and opacity |
-| Settings drawer | control context | directional slide |
-| Pipeline pulse | active run only | one semantic live indicator |
-| Chart transition | filter change | preserve shape continuity |
+| Motion               | Meaning                    | Behavior                            |
+| -------------------- | -------------------------- | ----------------------------------- |
+| Dotted field shimmer | ambient signal activity    | low-frame-rate canvas, hero only    |
+| Globe rotation       | global AI scope            | slow, background, pauses off-screen |
+| Verdict decode       | analysis resolving         | once on reveal, replayable          |
+| Verdict beam         | result lock-in             | once after decode                   |
+| Card expansion       | hierarchy and state change | short transform and opacity         |
+| Settings drawer      | control context            | directional slide                   |
+| Pipeline pulse       | active run only            | one semantic live indicator         |
+| Chart transition     | filter change              | preserve shape continuity           |
 
 No animation exists only because it looks terminal-like.
 
@@ -1342,14 +1342,17 @@ src/lib/data/v2/
 
 ```ts
 interface V2Manifest {
-  contractVersion: "v2-manifest-1";
-  generatedAt: string;
-  influenceVersion: string;
-  files: Record<string, {
-    contractVersion: string;
-    recordCount: number;
-    sha256: string;
-  }>;
+  contractVersion: "v2-manifest-1"
+  generatedAt: string
+  influenceVersion: string
+  files: Record<
+    string,
+    {
+      contractVersion: string
+      recordCount: number
+      sha256: string
+    }
+  >
 }
 ```
 

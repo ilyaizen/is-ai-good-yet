@@ -1,5 +1,5 @@
 [variables]
-NIXPACKS_NODE_VERSION = "22.13.0"
+NIXPACKS_NODE_VERSION = "22.18.0"
 NPM_CONFIG_PRODUCTION = "false"
 PIPELINE_PYTHON = "/opt/pipeline-venv/bin/python"
 PIPELINE_STEALTH_MODE = "standard"

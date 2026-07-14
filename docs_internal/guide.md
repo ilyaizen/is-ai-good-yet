@@ -8,7 +8,7 @@ Setup, usage, conventions, and agent mandates for `is-ai-good-yet`. For system d
 
 - **OS:** Windows 11 (dev), Linux (deploy)
 - **Shell:** PowerShell 7 / bash
-- **Node:** 22.12+ (pinned via `nixpacks.toml`)
+- **Node:** 22.18+ (pinned via `nixpacks.toml`)
 - **Python:** 3.11+ — virtual env at repo root (`.venv`)
 - **Package manager: Vite+ (pnpm)** (`pnpm-lock.yaml` committed; `nixpacks.toml` runs `vp install` + `vp build`)
 
@@ -27,7 +27,7 @@ Setup, usage, conventions, and agent mandates for `is-ai-good-yet`. For system d
 
 ### Frontend
 
-- **Runtime:** Node 22.12
+- **Runtime:** Node 22.18
 - **Framework:** SvelteKit v2 + Svelte 5 (runes)
 - **Styling:** Tailwind CSS v4.1
 - **UI Components:** shadcn-svelte
@@ -196,7 +196,7 @@ Affected components: `verdict-veil.svelte`, `verdict-display.svelte`, `details-s
 - **File names:** `kebab-case`. **Variables/functions:** `camelCase`. **Constants:** `UPPER_SNAKE_CASE`.
 - **Error handling:** wrap async calls in `try/catch`, bubble meaningful messages.
 
-### Formatting (`.prettierrc`)
+### Formatting (`vite.config.ts`)
 
 2-space indent, double quotes, no trailing commas, `printWidth: 120`, formatter: Oxfmt via `vite.config.ts`.
 

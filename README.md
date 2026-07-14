@@ -90,14 +90,14 @@ is-ai-good-yet/
 - **Frontend**: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4 + shadcn-svelte + D3/LayerCake
 - **Pipeline**: Python 3.11+ — Polars, aiohttp, trafilatura, Playwright, Groq LLM API
 - **Visitor counter**: Convex
-- **Runtime**: Node 22.12, Vite+ package manager
+- **Runtime**: Node 22.18, Vite+ package manager
 - **Data**: SQLite (pipeline) → static JSON export (production frontend)
 
 ---
 
 ## Deployment
 
-The repo root is a SvelteKit app deployed via Coolify using `@sveltejs/adapter-node`. `nixpacks.toml` pins Node 22.12, builds with `vp build`, and runs `HOST=0.0.0.0 node build/index.js`.
+The repo root is a SvelteKit app deployed via Coolify using `@sveltejs/adapter-node`. `nixpacks.toml` pins Node 22.18, builds with `vp build`, and runs `HOST=0.0.0.0 node build/index.js`.
 
 The pipeline is source only — its data directory is gitignored. Frontend env vars (Convex/public) are separate from pipeline secrets (LLM API keys).
 
@@ -107,7 +107,7 @@ The pipeline is source only — its data directory is gitignored. Frontend env v
 
 ### Prerequisites
 
-- Node.js 22.12+
+- Node.js 22.18+
 - Python 3.11+ (for the pipeline)
 
 ```bash

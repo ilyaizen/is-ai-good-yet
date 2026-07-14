@@ -7,7 +7,7 @@
 **Is AI "Good" Yet?** — a terminal-themed dashboard that visualizes Hacker News sentiment toward AI. The legacy V1 experience focuses on AI coding tools. V2 broadens the question across capability, trajectory, and societal impact, combining article analysis with visible Hacker News discussion and a separate bot-discovered news feed.
 
 - GitHub repo: `ilyaizen/is-ai-good-yet`
-- Production deploy: repo root via Coolify/nixpacks (Node 22.12), `@sveltejs/adapter-node`
+- Production deploy: repo root via Coolify/nixpacks (Node 22.18), `@sveltejs/adapter-node`
 - Status: V1 remains stable; the isolated V2 pipeline, static export contracts, public `/v2` dashboard, and `/v2/admin` methodology controls are implemented
 
 ## Stack
@@ -16,7 +16,7 @@
 - **Backend pipeline** (`pipeline/`): Python 3.11+ — Polars, aiohttp, trafilatura, Playwright/camoufox scraping, Groq/Mistral/Anthropic LLM APIs
 - **V2 analysis**: isolated broad-scope prefilter + article thesis analysis + deterministic ranked-tree HN comment sampling; versioned methodology lives in `docs/v2-*.md`
 - **Visitor counter** (`convex/`): Convex backend
-- **Package manager: Vite+ (pnpm)/Node 22.12** (pnpm-lock.yaml committed; `nixpacks.toml` uses `vp install` + `vp build`)
+- **Package manager: Vite+ (pnpm)/Node 22.18** (pnpm-lock.yaml committed; `nixpacks.toml` uses `vp install` + `vp build`)
 - **Data storage**: SQLite (`pipeline/data/pipeline.db`) + compressed Parquet article bodies + separate V1/V2 static JSON exports under `src/lib/data/`
 
 ## Project Structure

@@ -57,7 +57,7 @@ is-ai-good-yet/                # repo root = SvelteKit frontend (PRODUCTION)
 ├── scripts/                 # tsx helper scripts
 ├── static/                  # favicon, OG images
 ├── cli.ts                   # Pipeline CLI wrapper
-├── nixpacks.toml            # Coolify deployment config (Node 22.12)
+├── nixpacks.toml            # Coolify deployment config (Node 22.18)
 └── package.json
 ```
 

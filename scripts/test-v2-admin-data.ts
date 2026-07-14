@@ -133,7 +133,7 @@ db.prepare("INSERT INTO v2_prefilter_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?
 )
 db.prepare("INSERT INTO v2_prefilter_decisions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
   42,
-  0,
+  1,
   '["stale-scope"]',
   "OLD_DECISION",
   "Superseded prefilter decision.",

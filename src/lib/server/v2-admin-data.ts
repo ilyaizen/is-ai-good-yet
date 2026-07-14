@@ -249,7 +249,12 @@ export function getV2AdminData(databasePath = getPipelineStoragePaths().pipeline
     const summaryRow = db
       .prepare(`
         SELECT
-          (SELECT COUNT(*) FROM v2_prefilter_decisions WHERE eligible = 1) AS eligible_stories,
+          (SELECT COUNT(*) FROM (
+            SELECT eligible, ROW_NUMBER() OVER (
+              PARTITION BY hn_story_id ORDER BY decided_at DESC, rowid DESC
+            ) AS recency_rank
+            FROM v2_prefilter_decisions
+          ) WHERE recency_rank = 1 AND eligible = 1) AS eligible_stories,
           (SELECT COUNT(*) FROM v2_analysis_runs WHERE source = 'article' AND status = 'accepted') AS article_accepted,
           (SELECT COUNT(*) FROM v2_analysis_runs WHERE source = 'community' AND status = 'accepted') AS community_accepted,
           (SELECT COUNT(*) FROM v2_comment_analyses_normalized WHERE status = 'accepted') AS comments_accepted,

@@ -35,6 +35,37 @@
 
   let { methodology }: { methodology: Methodology } = $props();
 
+  // Prompts are soft-wrapped at ~100 cols in the Python source. Reflow soft wraps
+  // into spaces so they read as normal prose, but keep paragraph breaks and list
+  // items (lines starting with -, *, •, or N.) so structure survives.
+  function reflowPrompt(text: string): string {
+    const isListItem = (line: string) => /^\s*([-*•]|\d+[.)])\s+/.test(line);
+    const out: string[] = [];
+    let para: string[] = [];
+    const flush = () => {
+      if (para.length) {
+        out.push(para.join(" "));
+        para = [];
+      }
+    };
+    for (const raw of text.replace(/\r\n/g, "\n").split("\n")) {
+      const line = raw.trimEnd();
+      if (line.trim() === "") {
+        flush();
+        out.push("");
+        continue;
+      }
+      if (isListItem(line)) {
+        flush();
+        out.push(line.trim());
+        continue;
+      }
+      para.push(line.trim());
+    }
+    flush();
+    return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
   const stages = $derived.by(() => [
     {
       marker: "01",
@@ -77,9 +108,12 @@
       </div>
     </header>
 
-    <div class="grid gap-px bg-terminal-border-subtle lg:grid-cols-4">
-      {#each stages as stage (stage.marker)}
-        <article class="bg-terminal-bg p-5">
+    <div class="method-flow">
+      {#each stages as stage, i (stage.marker)}
+        {#if i > 0}
+          <span class="method-flow__arrow" aria-hidden="true">→</span>
+        {/if}
+        <article class="method-flow__node">
           <div class="flex items-center gap-3">
             <span class="text-xs text-terminal-accent">{stage.marker}</span>
             <h3 class="text-sm font-semibold text-terminal-text">{stage.name}</h3>
@@ -163,7 +197,7 @@
               <span>Article prompt</span>
               <span class="text-xs text-terminal-text-faint">{methodology.versions.articlePrompt}</span>
             </summary>
-            <pre class="max-h-[34rem] overflow-auto border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-xs leading-6 whitespace-pre-wrap text-terminal-text-muted">{methodology.articlePrompt}</pre>
+            <pre class="method-prompt border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm leading-7 whitespace-pre-wrap text-terminal-text-muted">{reflowPrompt(methodology.articlePrompt)}</pre>
           </details>
 
           <details class="terminal-card group">
@@ -171,10 +205,55 @@
               <span>Voting-comment prompt</span>
               <span class="text-xs text-terminal-text-faint">{methodology.versions.commentPrompt}</span>
             </summary>
-            <pre class="max-h-[34rem] overflow-auto border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-xs leading-6 whitespace-pre-wrap text-terminal-text-muted">{methodology.commentPrompt}</pre>
+            <pre class="method-prompt border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm leading-7 whitespace-pre-wrap text-terminal-text-muted">{reflowPrompt(methodology.commentPrompt)}</pre>
           </details>
         </div>
       </section>
     </div>
   </div>
 </section>
+
+<style>
+  .method-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  .method-flow__node {
+    flex: 1 1 0;
+    min-width: 13rem;
+    padding: 1.25rem;
+    border: 1px solid var(--terminal-border-subtle);
+    background: var(--terminal-bg);
+  }
+  .method-flow__arrow {
+    flex: 0 0 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--terminal-accent);
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  /* Below lg (1024px) the pipeline reads top-to-bottom; rotate the connector. */
+  @media (max-width: 1023px) {
+    .method-flow {
+      flex-direction: column;
+      padding: 0.75rem;
+    }
+    .method-flow__node {
+      min-width: 0;
+      width: 100%;
+    }
+    .method-flow__arrow {
+      flex-basis: auto;
+      height: 1.75rem;
+      transform: rotate(90deg);
+    }
+  }
+  .method-prompt {
+    overflow-wrap: anywhere;
+  }
+</style>

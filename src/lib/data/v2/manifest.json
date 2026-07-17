@@ -6,7 +6,7 @@
     "verdict.json": {
       "contractVersion": "verdict-v2.0.0",
       "recordCount": 1,
-      "sha256": "946761d8832131f8bd151241058f4ba2bd19b9bc1d0bf3e019e5414ca56dcf28"
+      "sha256": "46d6709024cef3fdcbabb6d906d84c9ee0b7fd9de80893587d2932ad2be78d28"
     },
     "stories.json": {
       "contractVersion": "stories-v2.0.0",

@@ -19,6 +19,7 @@ from .v2_models import (
     VALID_REJECTION_CODES,
     VALID_SCOPES,
     VALID_STANCE_BASES,
+    VALID_STORY_TYPES,
 )
 
 
@@ -134,6 +135,7 @@ COMMENT_SCHEMA = closed(
 PREFILTER_PROPERTIES = {
     "contract_version": {"type": "string", "enum": [PREFILTER_CONTRACT_VERSION]},
     "eligible": {"type": "boolean"},
+    "story_type": enum(VALID_STORY_TYPES),
     "scopes": {"type": "array", "items": enum(VALID_SCOPES)},
     "reason_code": {"type": "string", "minLength": 1},
     "reason": {"type": "string", "minLength": 1},

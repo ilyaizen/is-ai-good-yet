@@ -5,6 +5,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from pipeline.src import export_v2, sentiment_v2
+from pipeline.src.v2_models import PREFILTER_CONTRACT_VERSION
 from pipeline.src.v2_prefilter import classify
 from pipeline.src.v2_schemas import (
     ARTICLE_SCHEMA,
@@ -81,7 +82,8 @@ def test_prefilter_retries_transient_generation_failure() -> None:
             if calls == 1:
                 raise RuntimeError("json generation failed")
             value = {
-                "contract_version": "prefilter-v2.0.0", "eligible": True,
+                "contract_version": PREFILTER_CONTRACT_VERSION, "eligible": True,
+                "story_type": "research",
                 "scopes": ["research"], "reason_code": "eligible",
                 "reason": "Contains an attributable AI claim.",
             }

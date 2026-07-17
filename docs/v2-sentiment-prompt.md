@@ -10,6 +10,7 @@ probability sample of readers, HN users, or public opinion.
 | --------------------- | ------------------------------ |
 | Analysis              | `v2.2.0`                       |
 | Parser                | `v2.2.1`                       |
+| Prefilter contract    | `prefilter-v2.1.0`             |
 | Article contract      | `article-v2.2.0`               |
 | Article prompt        | `article-prompt-v2.2.1`        |
 | Selection             | `ranked-tree-v2.2.0`           |

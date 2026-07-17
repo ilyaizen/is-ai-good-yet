@@ -2,7 +2,7 @@
   "contractVersion": "verdict-v2.0.0",
   "generatedAt": "2026-07-14T04:37:40.267774+00:00",
   "analysisVersion": "v2.2.0",
-  "prefilterVersion": "prefilter-v2.0.0",
+  "prefilterVersion": "prefilter-v2.1.0",
   "selectionVersion": "ranked-tree-v2.2.0",
   "aggregationVersion": "community-aggregation-v2.2.0",
   "influenceVersion": "hn-score-0.85_decay-24m_v1",

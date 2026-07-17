@@ -7,6 +7,7 @@ import polars as pl
 from pipeline.src import hn_comments_v2, sentiment_v2, v2_prefilter
 from pipeline.src.store import db
 from pipeline.src.store.v2 import init_v2_schema, replace_selection
+from pipeline.src.v2_models import PREFILTER_CONTRACT_VERSION
 
 
 def test_get_article_content_falls_back_to_text_store_for_missing_parquet_url(
@@ -74,11 +75,15 @@ def test_v2_stage_queries_process_each_hn_story_once(tmp_path: Path, monkeypatch
     connection = sqlite3.connect(db_path)
     connection.execute(
         """
-        INSERT INTO v2_prefilter_decisions VALUES (
-            42, 'prefilter-v2.0.0', 'prompt', 'hash', 'input', 1,
-            '["general"]', 'eligible', 'reason', 'model', 'now'
-        )
-        """
+        INSERT INTO v2_prefilter_decisions (
+            hn_story_id, contract_version, prompt_version, prompt_hash, input_hash,
+            eligible, story_type, scopes_json, reason_code, reason, model, decided_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            42, PREFILTER_CONTRACT_VERSION, "prompt", "hash", "input", 1,
+            "analysis", '["general"]', "eligible", "reason", "model", "now",
+        ),
     )
     connection.commit()
     connection.close()

@@ -1,12 +1,17 @@
-import type { RequestEvent } from "@sveltejs/kit"
+import { redirect, type RequestEvent } from "@sveltejs/kit"
 import { getV2AdminData } from "$lib/server/v2-admin-data"
 import { getV2Methodology } from "$lib/server/v2-methodology"
-import { actions, load as loadAdmin } from "../../admin/+page.server"
+import { ADMIN_COOKIE_NAME } from "$lib/server/admin-auth"
+import type { Actions } from "./$types"
 
-export { actions }
-
-export const load = (event: RequestEvent) => ({
-  ...loadAdmin(event, { includeV1Data: false }),
+export const load = () => ({
   v2: getV2AdminData(),
   methodology: getV2Methodology(),
 })
+
+export const actions: Actions = {
+  logout: async (event: RequestEvent) => {
+    event.cookies.delete(ADMIN_COOKIE_NAME, { path: "/" })
+    throw redirect(303, "/v2/admin/login")
+  },
+}

@@ -50,11 +50,8 @@
       const windowFolder = gui.addFolder("WINDOW");
       windowFolder.add(model, "timeWindow", ["24h", "7d", "30d", "90d", "12m", "all"]).name("Time window").onChange(sync);
 
-      const scores = gui.addFolder("SCORES");
-      scores.add(model, "scoreMin", -2, 2, 0.1).name("Minimum score").onChange(sync);
-      scores.add(model, "scoreMax", -2, 2, 0.1).name("Maximum score").onChange(sync);
-      scores.add(model, "confidenceMin", 0, 1, 0.05).name("Minimum confidence").onChange(sync);
-      scores.add(model, "conflictsOnly").name("Source conflicts only").onChange(sync);
+      const filters = gui.addFolder("FILTERS");
+      filters.add(model, "conflictsOnly").name("Source conflicts only").onChange(sync);
 
       const display = gui.addFolder("DISPLAY");
       display.add(model, "density", ["compact", "comfortable", "expanded"]).name("Density").onChange(sync);
@@ -73,9 +70,6 @@
           Object.assign(model.dimensions, defaults.dimensions);
           Object.assign(model, {
             timeWindow: defaults.timeWindow,
-            scoreMin: defaults.scoreMin,
-            scoreMax: defaults.scoreMax,
-            confidenceMin: defaults.confidenceMin,
             conflictsOnly: defaults.conflictsOnly,
             density: defaults.density,
             sort: defaults.sort,

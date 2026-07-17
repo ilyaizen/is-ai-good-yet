@@ -6,13 +6,13 @@
   import DottedGlobe from "../effects/dotted-globe.svelte";
   import DimensionRail from "./v2-dimension-rail.svelte";
 
-  interface Props { verdict: V2Verdict; pipelineState: string; }
-  let { verdict, pipelineState }: Props = $props();
+  interface Props { verdict: V2Verdict; pipelineState: string; thinSample: boolean; }
+  let { verdict, pipelineState, thinSample }: Props = $props();
   let answerNode: HTMLElement;
   let beam = $state(false);
   const answer = $derived(verdict.composite?.verdict.replace("_", " ") ?? "NO DATA");
   const explanation = $derived(verdict.composite
-    ? `${verdict.articleCount} stories resolve to ${verdict.composite.rawScore >= 0 ? "+" : ""}${verdict.composite.rawScore.toFixed(2)} across addressed dimensions.`
+    ? `${verdict.articleCount} analyzed ${verdict.articleCount === 1 ? "story" : "stories"} resolve to ${verdict.composite.rawScore >= 0 ? "+" : ""}${verdict.composite.rawScore.toFixed(2)} across addressed dimensions${thinSample ? ". Thin sample — read as provisional." : "."}`
     : "The V2 analysis contract is wired. No accepted V2 generation has been published yet.");
 
   onMount(() => verdictDecode(answerNode, answer, { delay: 180, onDone: () => beam = true }));
@@ -24,7 +24,8 @@
   <div class="v2-hero__content">
     <div class="v2-hero__command"><span>$ ./assess --scope all-ai --window 12m</span><b>{pipelineState}</b></div>
     <p id="v2-question" class="v2-hero__question">Is AI good yet?</p>
-    <h1 class="v2-hero__answer" class:v2-hero__answer--beam={beam} bind:this={answerNode} aria-label={`Aggregate verdict: ${answer}`}>{answer}</h1>
+    <h1 class="v2-hero__answer" class:v2-hero__answer--beam={beam} class:v2-hero__answer--thin={thinSample} bind:this={answerNode} aria-label={`Aggregate verdict: ${answer}${thinSample ? " (thin sample)" : ""}`}>{answer}</h1>
+    {#if thinSample}<p class="v2-hero__thin" aria-hidden="true">— THIN SAMPLE</p>{/if}
     <p class="v2-hero__summary">{explanation}</p>
     <div class="v2-dimension-rail" aria-label="Aggregate dimension scores">
       <DimensionRail label="CAPABILITY" value={verdict.dimensions.capability} />

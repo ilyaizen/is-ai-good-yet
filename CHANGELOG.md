@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rebuild the public `/v2` surface around a single honest verdict: the hero names the sample size and visibly weakens below a thin-sample floor (8 stories), each story card shows at most three diagnostics per dimension (combined score, one adequacy word, one tension flag) instead of ~15, and ESS/polarization/disagreement/ranking/visibility-diversity numbers are removed from the public card and folded behind admin only.
+- Make the V2 page adapter strict and fail-closed: missing or wrongly-typed required export fields now throw and the route renders an explicit "generation unavailable" state instead of silently coercing broken data to zeroes or placeholder strings. Type-narrow the raw snake_case export shapes and stop inventing community rationales/summaries the pipeline never emitted.
+- Hide the dimensional history section entirely when the data is stale (newest point older than 18 months) or has no addressed points, so fixture noise never plots as a trend.
+- Rewrite the V2 article and comment sentiment prompts to a blunt, skeptical-analyst voice with signal words and decision-example tables, forbid hedging ("seems to", "possibly", "may suggest"), and tighten the article summary to a ≤40-word verdict. Bump analysis to `v2.3.0`, parser to `v2.3.1`, and both prompts to `v2.3.0`; update the normative `docs/v2-*-prompt.md` contracts in lockstep.
+- Decouple `/v2/admin` from the V1 admin: stop embedding the V1 `AdminPage`, link to `/admin` instead, slim the per-story panel to a synthesized view (consolidated provenance line, no default raw-JSON dump), and define a V2-local logout action.
+- Demote the bot-feed section to a conditional render on `recordCount > 0` so an empty primary tier no longer leaves a broken-looking box.
+- Trim the V2 display controls to what the simplified card consumes (dimensions, window, sort, conflicts-only, density, CRT); drop the score-threshold and confidence sliders.
+
+### Removed
+
+- Delete dead and duplicate V2 components (`v2-discussions`, `v2-footer-bar`, `v2-metrics`, `v2-sentiment-chart`, `v2-analysis-details`, the root `v2-verdict-hero` duplicate, `v2-verdict-veil`) and fold `community-diagnostics` into the story card's collapsed share view.
+- Remove the `V2VerdictVeil` leak from the global `+layout.svelte` (it was wired but never triggered on `/v2`).
+
+### Added
+
+- Add shared V2 derivation helpers (`src/lib/v2/derive.ts`) for the adequacy word, tension flag, direction, thin-sample floor, and history-visibility gate, so the hero, card, and admin render one consistent vocabulary.
+- Add a V2 prompt-voice/anti-hedging test (`pipeline/tests/test_v2_prompt_voice.py`) asserting the blunt-analyst persona, signal words, decision examples, and the forbid-list.
+
+### Changed
+
 - Tighten the V2 prefilter to exclude promotional content entirely (Option B): product announcements, benchmark-result posts, demos, changelogs, and tutorials are now definitionally ineligible and never reach article or comment analysis. Add a `story_type` taxonomy to the prefilter contract and bump it to `prefilter-v2.1.0`, reconciling the prior drift between `docs/v2-prefilter-prompt.md` (which claimed v2.2.0) and the code (which was v2.0.0). Skip stories V1 already classified as `utility=noise`. Priority ordering stays `hn_score DESC` since the announcement bias is removed by the new exclusions.
 - Expand V2 article summaries to 50 words and individual HN comment summaries to 30 words.
 - Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.

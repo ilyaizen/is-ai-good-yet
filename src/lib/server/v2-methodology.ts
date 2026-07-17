@@ -50,10 +50,10 @@ function findPipelineSource(): string {
 }
 
 function extractString(source: string, name: string): string {
-  const tripleQuoted = source.match(new RegExp(`${name}\\s*=\\s*f?\"\"\"([\\s\\S]*?)\"\"\"`))
+  const tripleQuoted = source.match(new RegExp(`${name}\\s*=\\s*f?"\""([\\s\\S]*?)"\""`))
   if (tripleQuoted) return tripleQuoted[1]
 
-  const quoted = source.match(new RegExp(`${name}\\s*=\\s*\"([^\"]*)\"`))
+  const quoted = source.match(new RegExp(`${name}\\s*=\\s*"([^"]*)"`))
   if (quoted) return quoted[1]
 
   throw new Error(`Could not read ${name} from the v2 pipeline source.`)
@@ -67,7 +67,7 @@ function extractNumber(source: string, name: string): number {
 
 function extractArgumentDefault(source: string, argument: string): number {
   const escapedArgument = argument.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  const match = source.match(new RegExp(`add_argument\\(\"${escapedArgument}\"[^)]*default=([0-9_]+)`))
+  const match = source.match(new RegExp(`add_argument\\("${escapedArgument}"[^)]*default=([0-9_]+)`))
   if (!match) throw new Error(`Could not read the ${argument} default from the v2 pipeline source.`)
   return Number(match[1].replaceAll("_", ""))
 }

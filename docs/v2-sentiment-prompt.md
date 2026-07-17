@@ -1,6 +1,6 @@
 # V2 sentiment methodology
 
-This is the normative contract for v2.2. V1 prompt, storage, export, data, and route contracts remain
+This is the normative contract for v2.3. V1 prompt, storage, export, data, and route contracts remain
 unchanged. V2 measures **visible expressed Hacker News discussion at collection time**. It is not a
 probability sample of readers, HN users, or public opinion.
 
@@ -8,14 +8,14 @@ probability sample of readers, HN users, or public opinion.
 
 | Concern               | Version                        |
 | --------------------- | ------------------------------ |
-| Analysis              | `v2.2.0`                       |
-| Parser                | `v2.2.1`                       |
+| Analysis              | `v2.3.0`                       |
+| Parser                | `v2.3.1`                       |
 | Prefilter contract    | `prefilter-v2.1.0`             |
 | Article contract      | `article-v2.2.0`               |
-| Article prompt        | `article-prompt-v2.2.1`        |
+| Article prompt        | `article-prompt-v2.3.0`        |
 | Selection             | `ranked-tree-v2.2.0`           |
 | Comment contract      | `comment-v2.2.0`               |
-| Comment prompt        | `comment-prompt-v2.2.1`        |
+| Comment prompt        | `comment-prompt-v2.3.0`        |
 | Community aggregation | `community-aggregation-v2.2.0` |
 
 ## Dimensions and source combination
@@ -31,9 +31,12 @@ Confidence changes influence only; it never changes a source's direction or dist
 
 ## Article thesis and isolated comment annotation
 
-The article contract contains scopes, a short summary, three dimension results, exact evidence,
-attribution, and evidence links. See `v2-article-sentiment-prompt.md`.
-Article summaries are capped at 50 words; individual comment summaries are capped at 30 words.
+Both the article and the comment analyzer adopt a **blunt, skeptical analyst** voice: rationales and
+summaries are verdicts that take a position, and hedging ("seems to", "possibly", "may suggest") is
+forbidden — take a position or mark `not_addressed`. A signal-words section and a decision-examples
+table (spanning coding, research, safety, labor, economy, and governance) anchor classification. See
+`v2-article-sentiment-prompt.md`.
+Article summaries are capped at 40 words; individual comment summaries are capped at 30 words.
 
 Every considered voting comment receives its own model request. No unrelated selected comment may
 appear in that request. Its packet contains:
@@ -50,9 +53,10 @@ context; independently uninterpretable comments are rejected and refilled.
 
 The strict `comment-v2.2.0` accepted result has exactly `contract_version`, `comment_id`, `reject`,
 `ai_dimensions`, `article_relation`, `parent_relation`, and `summary`. Each AI dimension has
-`applicability`, `score`, `confidence`, `stance_basis`, and `rationale`. Allowed stance bases are
-`direct`, `endorsed_article_thesis`, `endorsed_parent_claim`, `rejected_contextual_claim`,
-`inferred_from_sarcasm`, and `none`. `not_addressed` requires null/zero/`none`.
+`applicability`, `score`, `confidence`, `stance_basis`, and a `rationale` that is a verdict (≤30
+words, takes a position). Allowed stance bases are `direct`, `endorsed_article_thesis`,
+`endorsed_parent_claim`, `rejected_contextual_claim`, `inferred_from_sarcasm`, and `none`.
+`not_addressed` requires null/zero/`none`.
 
 Article relation is independently one of `supports`, `challenges`, `qualifies`, `mixed`, `unclear`,
 or `not_applicable`, targeting dimensions or `factual_detail`, `framing`, `method`, and

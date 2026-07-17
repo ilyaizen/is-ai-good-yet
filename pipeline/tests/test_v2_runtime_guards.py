@@ -100,7 +100,7 @@ def test_prefilter_retries_transient_generation_failure() -> None:
     assert result is not None
 
 
-def test_article_normalizer_preserves_up_to_fifty_summary_words() -> None:
+def test_article_normalizer_preserves_up_to_forty_summary_words() -> None:
     result = normalize_article_result(
         {
             "contract_version": "article-v2.2.0", "reject": False,
@@ -114,7 +114,7 @@ def test_article_normalizer_preserves_up_to_fifty_summary_words() -> None:
     quote_schema = ARTICLE_SCHEMA["properties"]["evidence"]["items"]["properties"]["quote"]
     assert quote_schema["maxLength"] > 240
     assert len(result["evidence"][0]["quote"]) == 240
-    assert len(result["summary"].split()) == 50
+    assert len(result["summary"].split()) == 40
 
 
 def test_comment_normalizer_preserves_up_to_thirty_summary_words() -> None:

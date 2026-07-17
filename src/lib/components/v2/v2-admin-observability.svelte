@@ -84,6 +84,7 @@
     </div>
     <div class="v2-admin-hero__actions">
       <a href="/v2">Public dashboard</a>
+      <a href="/admin">V1 admin</a>
       <a href="#v2-methodology-title">Methodology</a>
       <form method="post" action="?/logout">
         <button type="submit">Log out</button>
@@ -167,11 +168,7 @@
                           <div><dt>Prompt</dt><dd>{analysis.promptVersion}</dd></div>
                           <div><dt>Selection</dt><dd>{analysis.selectionVersion || "N/A"}</dd></div>
                           <div><dt>Analyzed</dt><dd>{formatTimestamp(analysis.analyzedAt)}</dd></div>
-                          <div><dt>Tokens</dt><dd>{formatNumber(analysis.metrics.inputTokens)} in · {formatNumber(analysis.metrics.outputTokens)} out</dd></div>
-                          <div><dt>Inference</dt><dd>{formatNumber(Math.round(analysis.metrics.inferenceTimeMs))} ms</dd></div>
-                          <div><dt>Parameters</dt><dd>{pretty(analysis.parameters)}</dd></div>
-                          <div><dt>Prompt hash</dt><dd title={analysis.promptHash}>{analysis.promptHash}</dd></div>
-                          <div><dt>Input hash</dt><dd title={analysis.inputHash}>{analysis.inputHash}</dd></div>
+                          <div><dt>Provenance</dt><dd title={`prompt ${analysis.promptHash} · input ${analysis.inputHash}`}>{analysis.promptHash.slice(0, 10)} · {analysis.inputHash.slice(0, 10)}</dd></div>
                         </dl>
 
                         <div class="v2-admin-dimensions">
@@ -185,7 +182,7 @@
                         </div>
 
                         <details class="v2-admin-json">
-                          <summary>Exact persisted result JSON</summary>
+                          <summary>Raw JSON · tokens, inference, parameters, full result</summary>
                           <pre>{pretty(analysis.result)}</pre>
                         </details>
                       {:else}
@@ -263,13 +260,13 @@
   .v2-admin-story__identity small { color: var(--v2-text-faint); font-size: .7rem; }
   .v2-admin-story__states { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
   .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: 999px; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
-  .v2-admin-status--success { border-color: color-mix(in srgb, #10b981 35%, transparent) !important; color: #6ee7b7 !important; }
-  .v2-admin-status--active { border-color: color-mix(in srgb, #7170ff 45%, transparent) !important; color: #a5b4fc !important; }
-  .v2-admin-status--failed { border-color: color-mix(in srgb, #fb7185 35%, transparent) !important; color: #fda4af !important; }
+  .v2-admin-status--success { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent) !important; color: var(--v2-phosphor) !important; }
+  .v2-admin-status--active { border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent) !important; color: var(--v2-violet) !important; }
+  .v2-admin-status--failed { border-color: color-mix(in oklch, var(--v2-red) 35%, transparent) !important; color: var(--v2-red) !important; }
   .v2-admin-story[open] .v2-admin-story__states i { transform: rotate(180deg); }
   .v2-admin-story__body { padding: 0 1.25rem 1.25rem; }
   .v2-admin-loading, .v2-admin-load-error { margin: 0; padding: 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); color: var(--v2-text-muted); font-size: .75rem; }
-  .v2-admin-load-error { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: #fda4af; }
+  .v2-admin-load-error { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--v2-red); }
   .v2-admin-load-error button { border: 1px solid var(--v2-separator); border-radius: .35rem; padding: .35rem .6rem; color: var(--v2-text-muted); }
   .v2-admin-prefilter { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-separator-quiet); overflow: hidden; }
   .v2-admin-prefilter > div { min-width: 0; padding: .8rem; background: var(--v2-recess); }

@@ -10,7 +10,7 @@ from typing import Any
 ANALYSIS_VERSION = "v2.2.0"
 ARTICLE_CONTRACT_VERSION = "article-v2.2.0"
 COMMENT_CONTRACT_VERSION = "comment-v2.2.0"
-PREFILTER_CONTRACT_VERSION = "prefilter-v2.0.0"
+PREFILTER_CONTRACT_VERSION = "prefilter-v2.1.0"
 AGGREGATION_VERSION = "community-aggregation-v2.2.0"
 GLOBAL_INFLUENCE_VERSION = "hn-score-0.85_decay-24m_v1"
 PARSER_VERSION = "v2.2.1"
@@ -24,6 +24,16 @@ VALID_SCOPES = {
     "coding", "research", "education", "labor", "economy", "creativity",
     "safety", "governance", "environment", "general",
 }
+# story_type taxonomy added in prefilter-v2.1.0. Promotional types are definitionally
+# ineligible (Option B): a vendor's own announcement/demo/changelog/benchmark carries no
+# independent judgment, so it is excluded from analysis entirely (no article, no comments).
+VALID_STORY_TYPES = {
+    "announcement", "benchmark", "demo", "changelog", "tutorial",
+    "opinion", "analysis", "research", "news", "other",
+}
+PROMOTIONAL_STORY_TYPES = {"announcement", "benchmark", "demo", "changelog"}
+# tutorial_without_evaluation was already excluded; a tutorial story_type is ineligible too.
+INELIGIBLE_STORY_TYPES = PROMOTIONAL_STORY_TYPES | {"tutorial"}
 VALID_REJECTION_CODES = {
     "not_ai", "no_ai_judgment", "unusable_content", "insufficient_context",
 }
@@ -45,13 +55,21 @@ VALID_PARENT_RELATIONS = {
 
 
 def validate_prefilter_result(result: dict[str, Any]) -> tuple[bool, str]:
-    """Validate the isolated broad-scope prefilter contract."""
-    required = {"contract_version", "eligible", "scopes", "reason_code", "reason"}
+    """Validate the isolated broad-scope prefilter contract (prefilter-v2.1.0).
+
+    story_type drives eligibility for promotional content: announcement, benchmark, demo,
+    changelog, and tutorial are definitionally ineligible regardless of any capability claim
+    the source makes about itself.
+    """
+    required = {"contract_version", "eligible", "story_type", "scopes", "reason_code", "reason"}
     errors = []
     if set(result) != required:
         errors.append(f"Prefilter result must contain exactly {sorted(required)}")
     if result.get("contract_version") != PREFILTER_CONTRACT_VERSION:
         errors.append(f"Invalid contract_version: {result.get('contract_version')}")
+    story_type = result.get("story_type")
+    if story_type not in VALID_STORY_TYPES:
+        errors.append(f"story_type must be one of {sorted(VALID_STORY_TYPES)}")
     if not isinstance(result.get("eligible"), bool):
         errors.append("eligible must be boolean")
     scopes = result.get("scopes")
@@ -63,6 +81,10 @@ def validate_prefilter_result(result: dict[str, Any]) -> tuple[bool, str]:
         errors.append("eligible content requires at least one scope")
     elif not result.get("eligible") and scopes:
         errors.append("ineligible content requires an empty scopes list")
+    # Option B enforcement: promotional/tutorial story types can never be eligible, even if
+    # the article asserts capability claims about its own product.
+    if story_type in INELIGIBLE_STORY_TYPES and result.get("eligible"):
+        errors.append(f"{story_type} story_type is definitionally ineligible")
     if not isinstance(result.get("reason_code"), str) or not result["reason_code"].strip():
         errors.append("reason_code must be non-empty")
     if not isinstance(result.get("reason"), str) or not result["reason"].strip():

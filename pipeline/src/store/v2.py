@@ -40,6 +40,7 @@ def init_v2_schema() -> None:
                 prompt_hash TEXT NOT NULL,
                 input_hash TEXT NOT NULL,
                 eligible INTEGER NOT NULL,
+                story_type TEXT NOT NULL DEFAULT 'other',
                 scopes_json TEXT NOT NULL,
                 reason_code TEXT NOT NULL,
                 reason TEXT NOT NULL,
@@ -139,6 +140,13 @@ def init_v2_schema() -> None:
         ):
             if name not in selection_columns:
                 conn.execute(f"ALTER TABLE v2_comment_selections ADD COLUMN {name} {definition}")
+        prefilter_columns = {
+            row[1] for row in conn.execute("PRAGMA table_info(v2_prefilter_decisions)")
+        }
+        if "story_type" not in prefilter_columns:
+            conn.execute(
+                "ALTER TABLE v2_prefilter_decisions ADD COLUMN story_type TEXT NOT NULL DEFAULT 'other'"
+            )
         comment_columns = {row[1] for row in conn.execute("PRAGMA table_info(hn_comments)")}
         for name, definition in (
             ("root_rank", "INTEGER"),
@@ -320,13 +328,14 @@ def save_prefilter_decision(decision: dict[str, Any]) -> None:
                 """
                 INSERT INTO v2_prefilter_decisions (
                     hn_story_id, contract_version, prompt_version, prompt_hash, input_hash,
-                    eligible, scopes_json, reason_code, reason, model, decided_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    eligible, story_type, scopes_json, reason_code, reason, model, decided_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(hn_story_id, contract_version) DO UPDATE SET
                     prompt_version = excluded.prompt_version,
                     prompt_hash = excluded.prompt_hash,
                     input_hash = excluded.input_hash,
                     eligible = excluded.eligible,
+                    story_type = excluded.story_type,
                     scopes_json = excluded.scopes_json,
                     reason_code = excluded.reason_code,
                     reason = excluded.reason,
@@ -336,7 +345,7 @@ def save_prefilter_decision(decision: dict[str, Any]) -> None:
                 (
                     decision["hn_story_id"], decision["contract_version"],
                     decision["prompt_version"], decision["prompt_hash"], decision["input_hash"],
-                    int(decision["eligible"]), json.dumps(decision["scopes"]),
+                    int(decision["eligible"]), decision["story_type"], json.dumps(decision["scopes"]),
                     decision["reason_code"], decision["reason"], decision["model"],
                     decision["decided_at"],
                 ),

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Tighten the V2 prefilter to exclude promotional content entirely (Option B): product announcements, benchmark-result posts, demos, changelogs, and tutorials are now definitionally ineligible and never reach article or comment analysis. Add a `story_type` taxonomy to the prefilter contract and bump it to `prefilter-v2.1.0`, reconciling the prior drift between `docs/v2-prefilter-prompt.md` (which claimed v2.2.0) and the code (which was v2.0.0). Skip stories V1 already classified as `utility=noise`. Priority ordering stays `hn_score DESC` since the announcement bias is removed by the new exclusions.
 - Expand V2 article summaries to 50 words and individual HN comment summaries to 30 words.
 - Make compressed Parquet the canonical store for scraped article bodies and stop writing duplicate plain-text copies.
 - Export analyzed articles independently of legacy `articles-text` files.

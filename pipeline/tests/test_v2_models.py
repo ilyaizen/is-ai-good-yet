@@ -95,8 +95,9 @@ def test_v2_prefilter_requires_scopes_only_for_eligible_content() -> None:
     eligible = {
         "contract_version": PREFILTER_CONTRACT_VERSION,
         "eligible": True,
+        "story_type": "analysis",
         "scopes": ["research", "general"],
-        "reason_code": "substantive_ai_claim",
+        "reason_code": "independent_finding",
         "reason": "The source evaluates an AI research system.",
     }
     assert validate_prefilter_result(eligible) == (True, "")
@@ -108,8 +109,41 @@ def test_v2_prefilter_rejects_unknown_scope() -> None:
     result = {
         "contract_version": PREFILTER_CONTRACT_VERSION,
         "eligible": True,
+        "story_type": "opinion",
         "scopes": ["marketing"],
-        "reason_code": "substantive_ai_claim",
+        "reason_code": "independent_finding",
         "reason": "Invalid scope should fail.",
     }
     assert not validate_prefilter_result(result)[0]
+
+
+def test_v2_prefilter_requires_story_type() -> None:
+    result = {
+        "contract_version": PREFILTER_CONTRACT_VERSION,
+        "eligible": True,
+        "scopes": ["general"],
+        "reason_code": "independent_finding",
+        "reason": "Missing story_type field.",
+    }
+    valid, error = validate_prefilter_result(result)
+    assert not valid
+    assert "story_type" in error
+
+
+def test_v2_prefilter_promotional_story_types_are_always_ineligible() -> None:
+    """Option B: a vendor's own announcement/demo/benchmark/changelog can never be eligible,
+    even when it asserts capability claims, and tutorial is ineligible too."""
+    base = {
+        "contract_version": PREFILTER_CONTRACT_VERSION,
+        "eligible": False,
+        "story_type": "announcement",
+        "scopes": [],
+        "reason_code": "promotional_announcement",
+        "reason": "Vendor release announcement.",
+    }
+    assert validate_prefilter_result(base) == (True, "")
+    for story_type in ("announcement", "benchmark", "demo", "changelog", "tutorial"):
+        ineligible = {**base, "story_type": story_type, "eligible": True, "scopes": ["general"]}
+        valid, error = validate_prefilter_result(ineligible)
+        assert not valid
+        assert "definitionally ineligible" in error

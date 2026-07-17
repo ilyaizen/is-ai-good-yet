@@ -43,7 +43,11 @@ export interface V2Dissent {
   opposingInfluenceShare: number
 }
 
-export interface V2CommunityDimension extends V2DimensionValue {
+export interface V2CommunityDimension {
+  applicability: V2Applicability
+  /** Continuous visibility-weighted mean of applicable comments (not integer -2..2). */
+  score: number | null
+  confidence: number
   visibilityWeightedScore: number | null
   diversityBalancedScore: number | null
   rankingSensitivity: number | null
@@ -63,7 +67,8 @@ export interface V2CommunityDimension extends V2DimensionValue {
 
 export interface V2CommunityAnalysis {
   dimensions: Record<V2Dimension, V2CommunityDimension>
-  summary: string
+  /** Aggregate summaries are not always exported; the card favors a dissent excerpt. */
+  summary?: string
   analyzedCommentCount: number
 }
 

@@ -6,7 +6,6 @@
   import AppHeader from "$lib/components/app-header.svelte";
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte";
   import VerdictVeil from "$lib/components/landing/verdict-veil.svelte";
-  import V2VerdictVeil from "$lib/components/v2/v2-verdict-veil.svelte";
   import { TooltipProvider } from "$lib/components/ui/tooltip";
   import { ModeWatcher } from "mode-watcher";
   import { onMount, setContext } from "svelte";
@@ -107,21 +106,12 @@
   <AppHeader mode="animated" visible={scrolledPastVerdict} />
 
   {#if veilVisible}
-    {#if isV2}
-      <V2VerdictVeil
-        onReveal={veilOnReveal ?? (() => {})}
-        articleCount={veilArticleCount}
-        lastUpdateTimestamp={veilLastUpdateTimestamp}
-        resetTrigger={veilResetTrigger}
-      />
-    {:else}
-      <VerdictVeil
-        onReveal={veilOnReveal ?? (() => {})}
-        articleCount={veilArticleCount}
-        lastUpdateTimestamp={veilLastUpdateTimestamp}
-        resetTrigger={veilResetTrigger}
-      />
-    {/if}
+    <VerdictVeil
+      onReveal={veilOnReveal ?? (() => {})}
+      articleCount={veilArticleCount}
+      lastUpdateTimestamp={veilLastUpdateTimestamp}
+      resetTrigger={veilResetTrigger}
+    />
   {/if}
 
   {@render children()}

@@ -242,7 +242,12 @@ function hasCompatibleV2Schema(db: Database.Database): boolean {
 export function getV2AdminData(databasePath = getPipelineStoragePaths().pipelineDbPath): V2AdminData {
   if (!existsSync(databasePath)) return emptyData()
 
-  const db = new Database(databasePath, { readonly: true })
+  let db
+  try {
+    db = new Database(databasePath, { readonly: true })
+  } catch {
+    return emptyData()
+  }
   try {
     if (!hasCompatibleV2Schema(db)) return emptyData()
 
@@ -409,7 +414,12 @@ export function getV2AdminStoryDetails(
 ): V2AdminStoryDetails | null {
   if (!Number.isInteger(hnStoryId) || hnStoryId <= 0 || !existsSync(databasePath)) return null
 
-  const db = new Database(databasePath, { readonly: true })
+  let db
+  try {
+    db = new Database(databasePath, { readonly: true })
+  } catch {
+    return null
+  }
   try {
     if (!hasCompatibleV2Schema(db)) return null
 

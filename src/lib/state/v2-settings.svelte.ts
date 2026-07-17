@@ -8,9 +8,6 @@ export interface V2Settings {
   version: 1
   dimensions: Record<V2Dimension, boolean>
   timeWindow: V2TimeWindow
-  scoreMin: number
-  scoreMax: number
-  confidenceMin: number
   conflictsOnly: boolean
   density: V2Density
   sort: V2Sort
@@ -27,9 +24,6 @@ const DEFAULTS: V2Settings = {
   version: 1,
   dimensions: { capability: true, trajectory: true, impact: true },
   timeWindow: "7d",
-  scoreMin: -2,
-  scoreMax: 2,
-  confidenceMin: 0,
   conflictsOnly: false,
   density: "comfortable",
   sort: "newest",
@@ -64,9 +58,6 @@ export function parseV2Settings(value: unknown): V2Settings {
     timeWindow: timeWindows.includes(raw.timeWindow as V2TimeWindow)
       ? (raw.timeWindow as V2TimeWindow)
       : DEFAULTS.timeWindow,
-    scoreMin: clamp(raw.scoreMin, -2, 2, DEFAULTS.scoreMin),
-    scoreMax: clamp(raw.scoreMax, -2, 2, DEFAULTS.scoreMax),
-    confidenceMin: clamp(raw.confidenceMin, 0, 1, DEFAULTS.confidenceMin),
     conflictsOnly: typeof raw.conflictsOnly === "boolean" ? raw.conflictsOnly : false,
     density: densities.includes(raw.density as V2Density) ? (raw.density as V2Density) : DEFAULTS.density,
     sort: sorts.includes(raw.sort as V2Sort) ? (raw.sort as V2Sort) : DEFAULTS.sort,

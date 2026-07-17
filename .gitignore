@@ -45,3 +45,4 @@ package-lock.json
 /archive
 # /docs_internal
 /.agents
+/.pi-subagents

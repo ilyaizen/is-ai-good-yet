@@ -9,7 +9,7 @@ conditions, and update your row when done.
 | Plan | Title                                                                     | Priority | Effort | Depends on | Status      |
 | ---- | ------------------------------------------------------------------------- | -------- | ------ | ---------- | ----------- |
 | 001  | Redesign the v2 community sentiment methodology and broad-capture prompts | P1       | L      | —          | IN PROGRESS |
-| 002  | Make the V2 admin page use the V2 design system exclusively              | P1       | M      | —          | TODO        |
+| 002  | Make the V2 admin page use the V2 design system exclusively               | P1       | M      | —          | DONE        |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED | REJECTED
 

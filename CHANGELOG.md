@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Delete dead and duplicate V2 components (`v2-discussions`, `v2-footer-bar`, `v2-metrics`, `v2-sentiment-chart`, `v2-analysis-details`, the root `v2-verdict-hero` duplicate, `v2-verdict-veil`) and fold `community-diagnostics` into the story card's collapsed share view.
 - Remove the `V2VerdictVeil` leak from the global `+layout.svelte` (it was wired but never triggered on `/v2`).
 
+### Fixed
+
+- Stop `/v2/admin` from 500-ing when the `better-sqlite3` native binding or pipeline database is unavailable: both V2 admin data loaders now catch the database open and return their existing "unavailable"/`null` states instead of throwing.
+- Remove the out-of-place `rounded-2xl` corners from the admin login button and warning box so the terminal theme stays sharp.
+
 ### Added
 
 - Add shared V2 derivation helpers (`src/lib/v2/derive.ts`) for the adequacy word, tension flag, direction, thin-sample floor, and history-visibility gate, so the hero, card, and admin render one consistent vocabulary.

@@ -19,7 +19,7 @@
     </p>
 
     {#if !data.configured}
-      <div class="mt-6 rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-100">
+      <div class="mt-6 border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-100">
         `PIPELINE_ADMIN_PASSWORD` is missing. Set it before using the admin page.
       </div>
     {/if}
@@ -48,7 +48,7 @@
 
       <button
         type="submit"
-        class="terminal-action rounded-2xl px-5 py-3 disabled:cursor-not-allowed disabled:opacity-60"
+        class="terminal-action px-5 py-3 disabled:cursor-not-allowed disabled:opacity-60"
         disabled={!data.configured}
       >
         Enter

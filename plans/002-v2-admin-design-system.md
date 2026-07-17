@@ -40,7 +40,7 @@ They cohere only because a fragile `.v2-admin { --terminal-bg: var(--v2-surface-
 block in `src/styles/v2.css` remaps ~10 V1 tokens to V2 values. That bridge is
 incomplete (it omits `--terminal-btn-*`, so buttons/inputs still render with V1
 colors) and is exactly the kind of V1/V2 coupling the project rules forbid
-(`AGENTS.md`: *"V2 isolation… never reuse V1 contracts"*). The result reads as
+(`AGENTS.md`: _"V2 isolation… never reuse V1 contracts"_). The result reads as
 two apps stitched together: mismatched container widths, border radii, elevation,
 type voice, and badge/pill styles.
 
@@ -100,7 +100,9 @@ no longer dragged into V2.
   border: 1px solid var(--terminal-border-subtle);
   background: var(--terminal-bg);
 }
-.method-flow__arrow { color: var(--terminal-accent); }
+.method-flow__arrow {
+  color: var(--terminal-accent);
+}
 ```
 
 ### Excerpt B — login is a V1 transplant (the thing to rewrite)
@@ -133,6 +135,7 @@ import { page } from "$app/state";
 let { data }: { data: { configured: boolean; next: string } } = $props();
 let password = $state("");
 ```
+
 …with a `<form method="post" use:enhance>` containing a hidden `next` input, a
 password input bound to `password`, a `page.form?.message` error line, and a
 submit button `disabled={!data.configured}`.
@@ -165,47 +168,96 @@ executor will re-declare the scoped ones in the methodology component's own
 `<style>` (Svelte scopes per-component, so they cannot be shared by class name).
 
 Section card (match `v2-admin-observability.svelte`):
+
 ```css
 .v2-admin-section {
   margin-top: 1.25rem;
   border: 1px solid var(--v2-separator);
-  border-radius: .65rem;
+  border-radius: 0.65rem;
   background: color-mix(in srgb, var(--v2-text) 1.5%, transparent);
   overflow: hidden;
 }
 ```
+
 Section header (match `v2-admin-observability.svelte`):
+
 ```css
 /* kicker label */
-font: 500 .68rem/1.4 ui-monospace, monospace; letter-spacing: .18em; color: var(--v2-text-faint);
+font:
+  500 0.68rem/1.4 ui-monospace,
+  monospace;
+letter-spacing: 0.18em;
+color: var(--v2-text-faint);
 /* h2 */
-font-size: 1.35rem; font-weight: 510; letter-spacing: -.025em; color: var(--v2-text);
+font-size: 1.35rem;
+font-weight: 510;
+letter-spacing: -0.025em;
+color: var(--v2-text);
 ```
+
 V2 card idiom (from global `.v2-bot-card` / `.v2-story-card` in `v2.css`) — use for
 stage nodes and the login card:
+
 ```css
 background: var(--v2-surface-1);
 border-left: 2px solid var(--v2-phosphor);
-box-shadow: inset 0 1px var(--v2-separator-quiet), var(--v2-shadow);
+box-shadow:
+  inset 0 1px var(--v2-separator-quiet),
+  var(--v2-shadow);
 ```
+
 Key-value hairline grid (match `v2-admin-observability.svelte` `.v2-admin-source dl`):
+
 ```css
-dl { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); margin: 0; }
-dl div { padding: .65rem 1rem; border-bottom: 1px solid var(--v2-separator-quiet); }
-dt { color: var(--v2-text-faint); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; }
-dd { margin-top: .25rem; color: var(--v2-text-muted); font: 400 .68rem/1.45 ui-monospace, monospace; }
+dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+dl div {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--v2-separator-quiet);
+}
+dt {
+  color: var(--v2-text-faint);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+dd {
+  margin-top: 0.25rem;
+  color: var(--v2-text-muted);
+  font:
+    400 0.68rem/1.45 ui-monospace,
+    monospace;
+}
 ```
+
 Status pill / badge (match `v2-admin-observability.svelte` `.v2-admin-status`):
+
 ```css
-border: 1px solid var(--v2-separator); border-radius: 999px;
-padding: .22rem .45rem; color: var(--v2-text-muted);
-font: 500 .62rem ui-monospace, monospace; text-transform: uppercase;
+border: 1px solid var(--v2-separator);
+border-radius: 999px;
+padding: 0.22rem 0.45rem;
+color: var(--v2-text-muted);
+font:
+  500 0.62rem ui-monospace,
+  monospace;
+text-transform: uppercase;
 ```
+
 Code/prompt block (match `v2-admin-observability.svelte` `.v2-admin-json pre`):
+
 ```css
-pre { background: var(--v2-recess); color: var(--v2-text-muted);
-      font: .68rem/1.6 ui-monospace, monospace; }
+pre {
+  background: var(--v2-recess);
+  color: var(--v2-text-muted);
+  font:
+    0.68rem/1.6 ui-monospace,
+    monospace;
+}
 ```
+
 Fonts: headings use `var(--v2-font-display)` ("Share Tech Mono") to match the
 observability hero and the public methodology (`v2-methodology-summary.svelte`).
 Body/kickers use `ui-monospace` / `var(--v2-font-data)`. State colors are
@@ -221,17 +273,18 @@ align. Put the methodology `<section>` inside the same shell, or give it
 
 All read-only until the user confirms (repo policy — see top of plan).
 
-| Purpose            | Command                                                       | Expected on success |
-|--------------------|---------------------------------------------------------------|---------------------|
-| Svelte type check  | `vp run check`                                                | exit 0, no errors   |
-| Lint               | `vp lint`                                                     | exit 0              |
-| Grep gate (any)    | `grep -rn "<pattern>" <paths>`                                | no matches          |
+| Purpose           | Command                        | Expected on success |
+| ----------------- | ------------------------------ | ------------------- |
+| Svelte type check | `vp run check`                 | exit 0, no errors   |
+| Lint              | `vp lint`                      | exit 0              |
+| Grep gate (any)   | `grep -rn "<pattern>" <paths>` | no matches          |
 
 (`vp build` is slow and only for deploys — do NOT run it.)
 
 ## Scope
 
 **In scope** (only these three files):
+
 - `src/lib/components/v2/v2-admin-methodology.svelte`
 - `src/routes/v2/admin/login/+page.svelte`
 - `src/styles/v2.css` (remove the `.v2-admin { … }` block only)
@@ -267,7 +320,7 @@ File: `src/lib/components/v2/v2-admin-methodology.svelte`.
      (`999px`, mono `.62rem`, `--v2-separator` border, `--v2-text-muted`).
    - Stage flow `.method-flow__node`: switch to the V2 card idiom —
      `background: var(--v2-surface-1); border-left: 2px solid var(--v2-phosphor);
-     box-shadow: inset 0 1px var(--v2-separator-quiet), var(--v2-shadow);`
+box-shadow: inset 0 1px var(--v2-separator-quiet), var(--v2-shadow);`
      (no `border-radius`, matching the flat V2 card look). Keep the `→` arrows in
      `var(--v2-phosphor)`. Keep the existing responsive flip below 1024px.
    - "Runtime contract" / "Version ledger" `<dl>` rows: replace each
@@ -283,9 +336,11 @@ File: `src/lib/components/v2/v2-admin-methodology.svelte`.
 3. Remove all `terminal-*` class names and all `--terminal-*` CSS references.
 
 **Verify (read-only)**:
+
 ```
 grep -n "terminal-\|--terminal-\|max-w-7xl\|font-semibold\|tracking-\[" src/lib/components/v2/v2-admin-methodology.svelte
 ```
+
 → no matches. (The component still has its `<script>` logic; visually it should now
 match the observability section's card/kicker/type language.)
 
@@ -309,20 +364,22 @@ File: `src/routes/v2/admin/login/+page.svelte`.
    - Hidden `<input name="next" value={data.next} />`.
    - Password `<input name="password" type="password" bind:value={password}>` styled
      with V2 tokens: `border: 1px solid var(--v2-separator); background: var(--v2-recess);
-     color: var(--v2-text);` focus ring `box-shadow: 0 0 0 2px var(--v2-phosphor)`.
+color: var(--v2-text);` focus ring `box-shadow: 0 0 0 2px var(--v2-phosphor)`.
    - The "not configured" warning: border/text in `var(--v2-amber)` (NOT
      `amber-*`/`rose-*`). The form-message error line: `var(--v2-red)` (NOT `rose-*`).
    - Submit button: V2 action style — `background: var(--v2-phosphor);
-     color: var(--v2-canvas);` with a hover darkening (`color-mix`), `disabled`
+color: var(--v2-canvas);` with a hover darkening (`color-mix`), `disabled`
      at `opacity:.5`. Keep `disabled={!data.configured}` and `use:enhance`.
    - Add a small link `← /v2` and `← /v2/admin` affordance in `--v2-text-faint`.
 4. Wrap in `<div class="v2-admin">` (kept as a harmless layout wrapper; its CSS is
    removed in Step 3, which is fine — the card provides its own styling).
 
 **Verify (read-only)**:
+
 ```
 grep -n "admin/login/+page\|amber-\|rose-\|terminal-" src/routes/v2/admin/login/+page.svelte
 ```
+
 → no matches.
 
 ### Step 3: Remove the now-unused token bridge from v2.css
@@ -334,10 +391,12 @@ File: `src/styles/v2.css`.
 2. Leave the surrounding CSS (animations, media queries) untouched.
 
 **Verify (read-only)** — confirm no V1 terminal references remain anywhere in V2 admin:
+
 ```
 grep -rn "terminal-panel\|terminal-card\|terminal-chip\|terminal-input\|terminal-action\|--terminal-" src/routes/v2 src/lib/components/v2/v2-admin-methodology.svelte src/lib/components/v2/v2-admin-observability.svelte
 grep -n "v2-admin {" src/styles/v2.css
 ```
+
 → both return no matches.
 
 ### Step 4: Run the verification gates (ASK THE USER FIRST)
@@ -400,7 +459,7 @@ Stop and report back (do not improvise) if:
   `v2-admin-observability.svelte` into `v2.css` (un-scoped) and have both
   components consume it; that refactor is intentionally deferred here to keep the
   diff small and risk low.
-- The V2 login now duplicates the V1 login's *view* intentionally (V1 stays
+- The V2 login now duplicates the V1 login's _view_ intentionally (V1 stays
   untouched). If the login UX diverges later, keep the two views independent — do
   not re-import one from the other; the server `load`/`actions` may stay shared via
   `+page.server.ts` re-exports.

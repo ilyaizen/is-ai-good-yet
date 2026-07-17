@@ -90,21 +90,21 @@
   ]);
 </script>
 
-<section class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8" aria-labelledby="v2-methodology-title">
-  <div class="terminal-panel overflow-hidden">
-    <header class="border-b border-terminal-border-subtle p-6 sm:p-8">
-      <p class="text-xs uppercase tracking-[0.3em] text-terminal-text-faint">Methodology</p>
-      <div class="mt-2 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+<section class="v2-method" aria-labelledby="v2-methodology-title">
+  <div class="v2-method__card">
+    <header class="v2-method__head">
+      <p class="v2-method__kicker">Methodology</p>
+      <div class="v2-method__head-row">
         <div>
-          <h2 id="v2-methodology-title" class="text-2xl font-semibold tracking-tight text-terminal-text">
+          <h2 id="v2-methodology-title" class="v2-method__title">
             How the verdict is produced
           </h2>
-          <p class="mt-3 max-w-3xl text-sm leading-6 text-terminal-text-muted">
+          <p class="v2-method__lede">
             This view reads its versions, limits, weights, and prompts from the Python pipeline source on the server.
             It describes the code that runs, not a separate editorial summary.
           </p>
         </div>
-        <div class="terminal-chip self-start lg:self-auto">Analysis {methodology.versions.analysis}</div>
+        <span class="v2-method__chip">Analysis {methodology.versions.analysis}</span>
       </div>
     </header>
 
@@ -114,98 +114,62 @@
           <span class="method-flow__arrow" aria-hidden="true">→</span>
         {/if}
         <article class="method-flow__node">
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-terminal-accent">{stage.marker}</span>
-            <h3 class="text-sm font-semibold text-terminal-text">{stage.name}</h3>
+          <div class="method-flow__node-head">
+            <span class="method-flow__marker">{stage.marker}</span>
+            <h3 class="method-flow__name">{stage.name}</h3>
           </div>
-          <p class="mt-3 text-sm leading-6 text-terminal-text-muted">{stage.detail}</p>
+          <p class="method-flow__detail">{stage.detail}</p>
         </article>
       {/each}
     </div>
 
-    <div class="grid gap-6 p-6 sm:p-8 xl:grid-cols-[0.8fr_1.2fr]">
-      <div class="space-y-6">
+    <div class="v2-method__grid">
+      <div class="v2-method__col">
         <section aria-labelledby="method-config-title">
-          <h3 id="method-config-title" class="text-xs uppercase tracking-[0.25em] text-terminal-text-faint">
-            Runtime contract
-          </h3>
-          <dl class="mt-3 grid gap-2 text-sm">
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Model</dt>
-              <dd class="text-right text-terminal-text">{methodology.model}</dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Parameters</dt>
-              <dd class="text-right text-terminal-text">{methodology.modelParameters}</dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Article input</dt>
-              <dd class="text-right text-terminal-text">
-                {methodology.limits.minimumArticleCharacters}–{methodology.limits.articleCharacters.toLocaleString()} chars
-              </dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Comment / context</dt>
-              <dd class="text-right text-terminal-text">
-                {methodology.limits.commentCharacters.toLocaleString()} / {methodology.limits.contextCharacters.toLocaleString()} chars
-              </dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Comment target</dt>
-              <dd class="max-w-[22rem] text-right text-terminal-text">{methodology.selection.target}</dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Author / branch caps</dt>
-              <dd class="max-w-[22rem] text-right text-terminal-text">
-                {methodology.selection.authorCap} per author · {methodology.selection.branchCap}
-              </dd>
-            </div>
-            <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-              <dt class="text-terminal-text-muted">Display scale</dt>
-              <dd class="max-w-[22rem] text-right text-terminal-text">{methodology.aggregation.scoreScale}</dd>
-            </div>
+          <h3 id="method-config-title" class="v2-method__subhead">Runtime contract</h3>
+          <dl class="v2-kv">
+            <div><dt>Model</dt><dd>{methodology.model}</dd></div>
+            <div><dt>Parameters</dt><dd>{methodology.modelParameters}</dd></div>
+            <div><dt>Article input</dt><dd>{methodology.limits.minimumArticleCharacters}–{methodology.limits.articleCharacters.toLocaleString()} chars</dd></div>
+            <div><dt>Comment / context</dt><dd>{methodology.limits.commentCharacters.toLocaleString()} / {methodology.limits.contextCharacters.toLocaleString()} chars</dd></div>
+            <div><dt>Comment target</dt><dd>{methodology.selection.target}</dd></div>
+            <div><dt>Author / branch caps</dt><dd>{methodology.selection.authorCap} per author · {methodology.selection.branchCap}</dd></div>
+            <div><dt>Display scale</dt><dd>{methodology.aggregation.scoreScale}</dd></div>
           </dl>
         </section>
 
         <section aria-labelledby="method-versions-title">
-          <h3 id="method-versions-title" class="text-xs uppercase tracking-[0.25em] text-terminal-text-faint">
-            Version ledger
-          </h3>
-          <dl class="mt-3 grid gap-2 text-sm">
+          <h3 id="method-versions-title" class="v2-method__subhead">Version ledger</h3>
+          <dl class="v2-kv">
             {#each Object.entries(methodology.versions) as [name, version] (name)}
-              <div class="terminal-card flex justify-between gap-4 px-4 py-3">
-                <dt class="capitalize text-terminal-text-muted">{name.replace(/([A-Z])/g, " $1")}</dt>
-                <dd class="text-right text-terminal-text">{version}</dd>
-              </div>
+              <div><dt class="capitalize">{name.replace(/([A-Z])/g, " $1")}</dt><dd>{version}</dd></div>
             {/each}
           </dl>
         </section>
       </div>
 
       <section aria-labelledby="method-prompts-title">
-        <h3 id="method-prompts-title" class="text-xs uppercase tracking-[0.25em] text-terminal-text-faint">
-          Exact model prompts
-        </h3>
-        <p class="mt-3 text-sm leading-6 text-terminal-text-muted">
+        <h3 id="method-prompts-title" class="v2-method__subhead">Exact model prompts</h3>
+        <p class="v2-method__lede">
           Input packets are appended at runtime. The system-level instructions below are shown verbatim after Python
           version placeholders are resolved.
         </p>
 
-        <div class="mt-4 space-y-3">
-          <details class="terminal-card group" open>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm text-terminal-text">
+        <div class="v2-method__prompts">
+          <details class="v2-method__prompt" open>
+            <summary class="v2-method__prompt-head">
               <span>Article prompt</span>
-              <span class="text-xs text-terminal-text-faint">{methodology.versions.articlePrompt}</span>
+              <span class="v2-method__prompt-ver">{methodology.versions.articlePrompt}</span>
             </summary>
-            <pre class="method-prompt border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm leading-7 whitespace-pre-wrap text-terminal-text-muted">{reflowPrompt(methodology.articlePrompt)}</pre>
+            <pre class="v2-method__code">{reflowPrompt(methodology.articlePrompt)}</pre>
           </details>
 
-          <details class="terminal-card group">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm text-terminal-text">
+          <details class="v2-method__prompt">
+            <summary class="v2-method__prompt-head">
               <span>Voting-comment prompt</span>
-              <span class="text-xs text-terminal-text-faint">{methodology.versions.commentPrompt}</span>
+              <span class="v2-method__prompt-ver">{methodology.versions.commentPrompt}</span>
             </summary>
-            <pre class="method-prompt border-t border-terminal-border-subtle bg-terminal-bg-subtle p-4 text-sm leading-7 whitespace-pre-wrap text-terminal-text-muted">{reflowPrompt(methodology.commentPrompt)}</pre>
+            <pre class="v2-method__code">{reflowPrompt(methodology.commentPrompt)}</pre>
           </details>
         </div>
       </section>
@@ -214,6 +178,83 @@
 </section>
 
 <style>
+  .v2-method {
+    max-width: 96rem;
+    margin: 1.25rem auto 0;
+    padding: 0 1rem;
+  }
+  @media (min-width: 640px) {
+    .v2-method {
+      padding: 0 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .v2-method {
+      padding: 0 2rem;
+    }
+  }
+
+  .v2-method__card {
+    border: 1px solid var(--v2-separator);
+    border-radius: 0.65rem;
+    background: color-mix(in srgb, var(--v2-text) 1.5%, transparent);
+    overflow: hidden;
+    color: var(--v2-text);
+  }
+
+  .v2-method__head {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--v2-separator);
+  }
+  @media (min-width: 1024px) {
+    .v2-method__head {
+      padding: 2rem;
+    }
+  }
+  .v2-method__kicker {
+    color: var(--v2-text-faint);
+    font: 500 0.68rem/1.4 ui-monospace, monospace;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .v2-method__head-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    .v2-method__head-row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+  .v2-method__title {
+    font-size: 1.35rem;
+    font-weight: 510;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--v2-text);
+  }
+  .v2-method__lede {
+    max-width: 48rem;
+    margin-top: 0.75rem;
+    color: var(--v2-text-muted);
+    font: 0.85rem/1.65 var(--v2-font-copy);
+  }
+  .v2-method__chip {
+    align-self: flex-start;
+    border: 1px solid var(--v2-separator);
+    border-radius: 999px;
+    padding: 0.22rem 0.55rem;
+    color: var(--v2-text-muted);
+    font: 500 0.62rem ui-monospace, monospace;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Stage flow — V2 card idiom */
   .method-flow {
     display: flex;
     align-items: stretch;
@@ -225,19 +266,38 @@
     flex: 1 1 0;
     min-width: 13rem;
     padding: 1.25rem;
-    border: 1px solid var(--terminal-border-subtle);
-    background: var(--terminal-bg);
+    background: var(--v2-surface-1);
+    border-left: 2px solid var(--v2-phosphor);
+    box-shadow: inset 0 1px var(--v2-separator-quiet), var(--v2-shadow);
+  }
+  .method-flow__node-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .method-flow__marker {
+    color: var(--v2-phosphor);
+    font: 500 0.68rem ui-monospace, monospace;
+  }
+  .method-flow__name {
+    font-size: 0.85rem;
+    font-weight: 510;
+    color: var(--v2-text);
+  }
+  .method-flow__detail {
+    margin-top: 0.75rem;
+    color: var(--v2-text-muted);
+    font: 0.8rem/1.6 var(--v2-font-copy);
   }
   .method-flow__arrow {
     flex: 0 0 2.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--terminal-accent);
+    color: var(--v2-phosphor);
     font-size: 1.15rem;
     line-height: 1;
   }
-  /* Below lg (1024px) the pipeline reads top-to-bottom; rotate the connector. */
   @media (max-width: 1023px) {
     .method-flow {
       flex-direction: column;
@@ -253,7 +313,93 @@
       transform: rotate(90deg);
     }
   }
-  .method-prompt {
+
+  /* Two-column body */
+  .v2-method__grid {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  @media (min-width: 1280px) {
+    .v2-method__grid {
+      grid-template-columns: 0.8fr 1.2fr;
+      padding: 2rem;
+    }
+  }
+  .v2-method__col {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .v2-method__subhead {
+    color: var(--v2-text-faint);
+    font: 500 0.68rem/1.4 ui-monospace, monospace;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Key-value hairline grid (matches observability prefilter idiom) */
+  .v2-kv {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0.75rem 0 0;
+    background: var(--v2-separator-quiet);
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .v2-kv div {
+    padding: 0.65rem 1rem;
+    background: var(--v2-recess);
+  }
+  .v2-kv dt {
+    color: var(--v2-text-faint);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .v2-kv dd {
+    margin: 0.25rem 0 0;
+    color: var(--v2-text-muted);
+    font: 400 0.72rem/1.45 ui-monospace, monospace;
+    overflow-wrap: anywhere;
+  }
+
+  /* Prompts */
+  .v2-method__prompts {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .v2-method__prompt {
+    background: var(--v2-recess);
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .v2-method__prompt-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    color: var(--v2-text);
+    font-size: 0.82rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .v2-method__prompt-ver {
+    color: var(--v2-text-faint);
+    font: 500 0.65rem ui-monospace, monospace;
+  }
+  .v2-method__code {
+    margin: 0;
+    padding: 1rem;
+    border-top: 1px solid var(--v2-separator-quiet);
+    background: var(--v2-recess);
+    color: var(--v2-text-muted);
+    font: 0.68rem/1.6 ui-monospace, monospace;
+    white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
 </style>

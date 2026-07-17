@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hide the dimensional history section entirely when the data is stale (newest point older than 18 months) or has no addressed points, so fixture noise never plots as a trend.
 - Rewrite the V2 article and comment sentiment prompts to a blunt, skeptical-analyst voice with signal words and decision-example tables, forbid hedging ("seems to", "possibly", "may suggest"), and tighten the article summary to a ≤40-word verdict. Bump analysis to `v2.3.0`, parser to `v2.3.1`, and both prompts to `v2.3.0`; update the normative `docs/v2-*-prompt.md` contracts in lockstep.
 - Decouple `/v2/admin` from the V1 admin: stop embedding the V1 `AdminPage`, link to `/admin` instead, slim the per-story panel to a synthesized view (consolidated provenance line, no default raw-JSON dump), and define a V2-local logout action.
+- Unify the `/v2/admin` page on the V2 design system: rewrite the methodology viewer and login in `--v2-*` tokens (mono display headings, V2 card idiom, phosphor accent, `--v2-amber`/`--v2-red` states) and delete the fragile `.v2-admin` V1-token bridge from `v2.css`, so the admin surface no longer mixes V1 and V2 styling.
 - Demote the bot-feed section to a conditional render on `recordCount > 0` so an empty primary tier no longer leaves a broken-looking box.
 - Trim the V2 display controls to what the simplified card consumes (dimensions, window, sort, conflicts-only, density, CRT); drop the score-threshold and confidence sliders.
 

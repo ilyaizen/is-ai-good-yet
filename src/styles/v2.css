@@ -997,20 +997,6 @@ body.v2 p {
   outline: 1px solid var(--v2-phosphor);
 }
 
-.v2-admin {
-  --terminal-bg: var(--v2-surface-1);
-  --terminal-bg-subtle: var(--v2-recess);
-  --terminal-bg-header: var(--v2-surface-2);
-  --terminal-border: var(--v2-separator);
-  --terminal-border-strong: var(--v2-phosphor);
-  --terminal-border-subtle: var(--v2-separator-quiet);
-  --terminal-text: var(--v2-text);
-  --terminal-text-muted: var(--v2-text-muted);
-  --terminal-text-faint: var(--v2-text-faint);
-  --terminal-accent: var(--v2-phosphor);
-  min-height: 100vh;
-}
-
 @keyframes v2-blink {
   50% {
     opacity: 0;

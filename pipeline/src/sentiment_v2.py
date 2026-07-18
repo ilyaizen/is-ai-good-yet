@@ -38,8 +38,8 @@ from .v2_schemas import (
 
 
 MODEL = "openai/gpt-oss-20b"
-ARTICLE_PROMPT_VERSION = "article-prompt-v2.3.0"
-COMMENT_PROMPT_VERSION = "comment-prompt-v2.3.0"
+ARTICLE_PROMPT_VERSION = "article-prompt-v2.4.0"
+COMMENT_PROMPT_VERSION = "comment-prompt-v2.4.0"
 MAX_ARTICLE_CHARS = 10_000
 MAX_COMMENT_CHARS = 1_200
 MAX_CONTEXT_CHARS = 500
@@ -74,16 +74,24 @@ Signal words (require non-neutral classification). NEGATIVE: failed, broken, har
 disappointed, skeptic, waste, useless, regress, worse. POSITIVE: breakthrough, productive, excels,
 outperforms, game-changer, adoption, improves, wins.
 
-Decision examples (score capability / trajectory / impact):
+Decision examples (score capability / trajectory / impact). These are deliberately hard — mixed-signal,
+sarcastic, backhanded, and out-of-distribution (medical, transport, education, environment, creative
+law) — so boundary cases, not easy ones, calibrate you:
 - "Cursor ships refactors 3x faster for our team": +2 / +1 / 0
-- "Study: AI assistance cuts coding-skill mastery 17%": +1 / -1 / -1
-- "Model safeguards block 98% of misuse attempts": +1 / +1 / +1
-- "AI layoffs hit entry-level devs hardest": 0 / 0 / -2
-- "Generative AI will add $4T to the economy by 2030": 0 / +2 / +1
-- "EU AI Act compliance stalls small labs": 0 / -1 / -1
+- "Our radiology model spots tumors humans miss — but only on scans like its training set": +2 / +1 / +1
+- "It writes decent boilerplate; hand it anything novel and it fabricates confidently": 0 / -1 / 0
+- "Sure, the 'revolutionary' copilot ships the same hallucinated API every release": -1 / -2 / 0
+- "Self-driving disengagements fell 40%, mostly in the easy weather they test in": +1 / +1 / -1
+- "AI tutors raised scores for struggling students and bored everyone else": +1 / +1 / 0
+- "They promise AGI next quarter, like they did last quarter and the one before": 0 / -1 / 0
+- "Training-run emissions now rival a small nation's yearly output": 0 / -1 / -2
+- "Copyright rulings let studios train on scraped art with no payment": 0 / 0 / -2
 
 Score scale -2..2: -2 strong negative, -1 negative, 0 expressed balance, 1 positive, 2 strong positive.
-0 is a genuine expressed balance, never a default for missing evidence.
+0 is a genuine expressed balance (real pros and cons, or true neutrality), never a default for missing
+evidence — missing is not_addressed, not 0. Boundary: -1 is skeptical/disappointed, -2 condemns or
+documents harm; +1 is cautious praise, +2 is emphatic endorsement. Sarcasm and buried caveats still
+count: score the intended meaning, not the surface words.
 
 Accepted JSON has exactly: contract_version, reject, scopes, dimensions, evidence, summary. Scopes use
 coding, research, education, labor, economy, creativity, safety, governance, environment, general. Each
@@ -119,14 +127,30 @@ independent.
 
 Signal words (comment voice). POSITIVE/endorse: agree, exactly, spot-on, finally, works great, +1.
 NEGATIVE/reject: disagree, nope, broken, overhyped, useless, vaporware, -1. SARCASM inverts surface
-text ("oh sure, because that worked so well"). QUALIFYING: but, however, only works if, in practice.
+text ("oh sure, because that worked so well"). Effusive praise ("revolutionary", "new era",
+"game-changer") glued to a struggle detail (hours wasted, bugs introduced, retries) is negative
+sarcasm, never endorsement — invert it. QUALIFYING: but, however, only works if, in practice. A
+comment with NO AI subject matter (an unrelated question or tangent) is not borderline: mark every
+dimension not_addressed (score null, stance_basis none) and summarize that it expresses no AI
+stance — do not reject, and never manufacture a verdict for non-AI content.
 
-Decision examples (comment score / stance_basis):
+Decision examples (comment score / stance_basis). These are deliberately hard — sarcastic (both
+directions), mixed-signal, off-topic, and relation-bearing — so every stance_basis is exercised:
 - "Cursor's refactors actually landed for us": +2 / direct
-- "This just regurgitates the docs, useless": -1 / direct
 - "Oh great, another model that hallucinates APIs": -2 / inferred_from_sarcasm
 - "The article's claim holds — I see the same in prod": +1 / endorsed_article_thesis
-- "Parent is right; evals are cherry-picked": -1 / endorsed_parent_claim
+- "Parent is right; those evals are cherry-picked garbage": -1 / endorsed_parent_claim
+- "Article says it's safe, but my incident board says otherwise": -1 / rejected_contextual_claim
+- "Works fine for me, except it silently drops every other request": 0 / direct
+- "Finally, a copilot that doesn't gaslight me about my own codebase": +1 / inferred_from_sarcasm
+- "Neat demo. Wake me when it survives a real codebase.": -1 / inferred_from_sarcasm
+- "Took all afternoon to fix the bugs it introduced. A real productivity revolution.": -1 / inferred_from_sarcasm
+- "Not AI-related tbh, this is just a Postgres tuning tip": null / none
+- "Overhyped, sure, but it genuinely saved me a week": +1 / direct
+
+Boundary: 0 is expressed balance (genuine pros and cons), never a fallback for an unclear comment —
+unclear is not_addressed. Sarcasm runs either direction; invert to the intended meaning.
+rejected_contextual_claim means the comment supplies its own evidence against the article or parent.
 
 Each ai_dimension requires applicability, integer score -2..2 (null only for not_addressed),
 confidence, stance_basis (direct, endorsed_article_thesis, endorsed_parent_claim,
@@ -299,12 +323,22 @@ async def call_model(
     schema_name: str, response_schema: dict[str, Any],
     normalizer: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]] | None:
-    for attempt in range(2):
+    # gpt-oss-20b frequently misses the strict article contract on the first try
+    # (verbatim evidence substrings, bidirectional evidence<->dimension referential
+    # integrity, strict json_schema). The article path has no refill loop, so a
+    # validation failure silently drops the story. Feed the specific error back so
+    # the model self-corrects across up to 3 attempts instead of repeating itself.
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
+    for attempt in range(3):
         started = time.perf_counter()
+        raw = ""
         try:
             response = await client.chat.completions.create(
                 model=MODEL,
-                messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
+                messages=messages,
                 response_format={
                     "type": "json_schema",
                     "json_schema": {
@@ -313,7 +347,8 @@ async def call_model(
                 },
                 **MODEL_PARAMETERS,
             )
-            result = json.loads(response.choices[0].message.content or "{}")
+            raw = response.choices[0].message.content or "{}"
+            result = json.loads(raw)
             if normalizer:
                 result = normalizer(result)
             valid, error = validator(result)
@@ -327,6 +362,15 @@ async def call_model(
             }
         except (APIError, json.JSONDecodeError, ValueError) as error:
             logging.warning("Invalid v2 response (attempt %s): %s", attempt + 1, error)
+            if raw:
+                messages.append({"role": "assistant", "content": raw})
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Your previous response was invalid: "
+                    f"{error}. Re-read the contract and resubmit the complete corrected JSON."
+                ),
+            })
     return None
 
 
@@ -475,7 +519,7 @@ async def run(limit: int | None, reanalyze: bool) -> None:
     init_v2_schema()
     stories = get_story_rows(limit, reanalyze)
     content = get_article_content(stories)
-    client = AsyncGroq(api_key=api_key)
+    client = AsyncGroq(api_key=api_key, timeout=180.0)
     for story in stories:
         text = content.get(story["url"], "")
         article = None

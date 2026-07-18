@@ -76,46 +76,60 @@
 </svelte:head>
 
 <div class="v2-admin-shell mx-auto max-w-[96rem] px-4 pt-8 sm:px-6 lg:px-8">
-  <header class="v2-admin-hero">
-    <div>
-      <div class="v2-admin-kicker"><span></span> V2 CONTROL PLANE</div>
-      <h1>Analysis observatory</h1>
-      <p>Actual V2 state from SQLite. No V1 counters, no generic status theater.</p>
-    </div>
-    <div class="v2-admin-hero__actions">
-      <a href="/v2">Public dashboard</a>
-      <a href="/admin">V1 admin</a>
-      <a href="#v2-methodology-title">Methodology</a>
-      <form method="post" action="?/logout">
-        <button type="submit">Log out</button>
-      </form>
-    </div>
-  </header>
-
-  {#if !data.available}
-    <section class="v2-admin-empty">
-      <strong>V2 tables are unavailable.</strong>
-      <p>The production pipeline database has not exposed the complete V2 schema yet.</p>
-    </section>
-  {:else}
-    <section class="v2-admin-metrics" aria-label="V2 analysis totals">
-      <article><span>Eligible stories</span><strong>{formatNumber(data.summary.eligibleStories)}</strong><small>passed prefilter</small></article>
-      <article><span>Article analyses</span><strong>{formatNumber(data.summary.articleAccepted)}</strong><small>accepted runs</small></article>
-      <article><span>Community analyses</span><strong>{formatNumber(data.summary.communityAccepted)}</strong><small>accepted aggregates</small></article>
-      <article><span>Comment analyses</span><strong>{formatNumber(data.summary.commentsAccepted)}</strong><small>accepted comments</small></article>
-      <article><span>Failed analyses</span><strong>{formatNumber(data.summary.failedAnalyses)}</strong><small>persisted failures</small></article>
-      <article><span>Saved tokens</span><strong>{formatNumber(data.summary.inputTokens + data.summary.outputTokens)}</strong><small>{formatNumber(data.summary.inputTokens)} in · {formatNumber(data.summary.outputTokens)} out</small></article>
-    </section>
-
-    <section class="v2-admin-section" aria-labelledby="v2-story-ledger-title">
-      <div class="v2-admin-section__head">
+  <!-- Observatory card: page header (kicker + hero title + lede + actions) with the
+       KPI strip as its body. Same .v2-card chrome as the methodology card below. -->
+  <section class="v2-card">
+    <header class="v2-card__head">
+      <p class="v2-card__kicker">Observability</p>
+      <div class="v2-card__head-row">
         <div>
-          <span>ANALYSIS LEDGER</span>
-          <h2 id="v2-story-ledger-title">Every persisted V2 property</h2>
-          <p>Lightweight run state up front. Full properties and exact result JSON load only when a story is opened.</p>
+          <h1 class="v2-card__title v2-card__title--hero">Analysis observatory</h1>
+          <p class="v2-card__lede">
+            Live V2 state from the pipeline database — per-story runs, provenance, and orchestration.
+          </p>
         </div>
-        <b>{data.stories.length} stories</b>
+        <nav class="v2-admin-actions">
+          <a href="/v2">Public dashboard</a>
+          <a href="/admin">V1 admin</a>
+          <a href="#v2-methodology-title">Methodology</a>
+          <form method="post" action="?/logout">
+            <button type="submit">Log out</button>
+          </form>
+        </nav>
       </div>
+    </header>
+
+    {#if !data.available}
+      <div class="v2-admin-empty">
+        <strong>V2 tables are unavailable.</strong>
+        <p>The production pipeline database has not exposed the complete V2 schema yet.</p>
+      </div>
+    {:else}
+      <div class="v2-admin-metrics" aria-label="V2 analysis totals">
+        <article><span>Eligible stories</span><strong>{formatNumber(data.summary.eligibleStories)}</strong><small>passed prefilter</small></article>
+        <article><span>Article analyses</span><strong>{formatNumber(data.summary.articleAccepted)}</strong><small>accepted runs</small></article>
+        <article><span>Community analyses</span><strong>{formatNumber(data.summary.communityAccepted)}</strong><small>accepted aggregates</small></article>
+        <article><span>Comment analyses</span><strong>{formatNumber(data.summary.commentsAccepted)}</strong><small>accepted comments</small></article>
+        <article><span>Failed analyses</span><strong>{formatNumber(data.summary.failedAnalyses)}</strong><small>persisted failures</small></article>
+        <article><span>Saved tokens</span><strong>{formatNumber(data.summary.inputTokens + data.summary.outputTokens)}</strong><small>{formatNumber(data.summary.inputTokens)} in · {formatNumber(data.summary.outputTokens)} out</small></article>
+      </div>
+    {/if}
+  </section>
+
+  {#if data.available}
+    <section class="v2-card" aria-labelledby="v2-story-ledger-title">
+      <header class="v2-card__head">
+        <p class="v2-card__kicker">Analysis ledger</p>
+        <div class="v2-card__head-row">
+          <div>
+            <h2 id="v2-story-ledger-title" class="v2-card__title">Every persisted V2 property</h2>
+            <p class="v2-card__lede">
+              Lightweight run state up front. Full properties and exact result JSON load only when a story is opened.
+            </p>
+          </div>
+          <b class="v2-admin-count">{data.stories.length} stories</b>
+        </div>
+      </header>
 
       <div class="v2-admin-story-list">
         {#each data.stories as story (story.hnStoryId)}
@@ -191,6 +205,44 @@
                     </article>
                   {/each}
                 </div>
+
+                {#if details.articleText !== null}
+                  <details class="v2-admin-text">
+                    <summary>Article body · prefilter input <small>{details.articleText.length.toLocaleString()} chars</small></summary>
+                    <pre>{details.articleText}</pre>
+                  </details>
+                {:else}
+                  <p class="v2-admin-missing">Article body text is not stored for this story.</p>
+                {/if}
+
+                {#if details.comments.length}
+                  <div class="v2-admin-comments">
+                    <div class="v2-admin-comments__head">
+                      <span>Selected comments</span>
+                      <b class="v2-admin-count">{details.comments.length} analyzed</b>
+                    </div>
+                    {#each details.comments as comment (comment.hnCommentId)}
+                      <article class="v2-admin-comment">
+                        <header>
+                          <span>{comment.author}</span>
+                          <b class={statusTone(comment.analysisStatus)}>{comment.analysisStatus ?? "not analyzed"}</b>
+                        </header>
+                        <p>{comment.text}</p>
+                        {#if comment.selectionReason}
+                          <small>selected · {comment.selectionReason}</small>
+                        {/if}
+                        {#if Object.keys(comment.analysisResult).length}
+                          <details class="v2-admin-json">
+                            <summary>Raw result</summary>
+                            <pre>{pretty(comment.analysisResult)}</pre>
+                          </details>
+                        {/if}
+                      </article>
+                    {/each}
+                  </div>
+                {:else}
+                  <p class="v2-admin-missing">No comments were selected for this story.</p>
+                {/if}
               {/if}
             </div>
           </details>
@@ -198,14 +250,18 @@
       </div>
     </section>
 
-    <section class="v2-admin-section" aria-labelledby="v2-run-ledger-title">
-      <div class="v2-admin-section__head">
-        <div>
-          <span>ORCHESTRATION</span>
-          <h2 id="v2-run-ledger-title">V2 run ledger</h2>
-          <p>Pipeline-level runs from <code>v2_orchestration_runs</code>, separate from the web runner below.</p>
+    <section class="v2-card" aria-labelledby="v2-run-ledger-title">
+      <header class="v2-card__head">
+        <p class="v2-card__kicker">Orchestration</p>
+        <div class="v2-card__head-row">
+          <div>
+            <h2 id="v2-run-ledger-title" class="v2-card__title">V2 run ledger</h2>
+            <p class="v2-card__lede">
+              Pipeline-level runs from the <code>v2_orchestration_runs</code> table.
+            </p>
+          </div>
         </div>
-      </div>
+      </header>
       <div class="v2-admin-table-wrap">
         <table class="v2-admin-table">
           <thead><tr><th>Run</th><th>Status</th><th>Last stage</th><th>Started</th><th>Finished</th><th>Stories</th><th>Articles</th><th>Comments</th><th>Error</th></tr></thead>
@@ -232,24 +288,26 @@
 
 <style>
   .v2-admin-shell { color: var(--v2-text); font-feature-settings: "cv01", "ss03"; }
-  .v2-admin-hero { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding: 2rem 0 1.5rem; border-bottom: 1px solid var(--v2-separator); }
-  .v2-admin-kicker, .v2-admin-section__head > div > span { color: var(--v2-text-faint); font: 500 .68rem/1.4 ui-monospace, monospace; letter-spacing: .18em; }
-  .v2-admin-kicker span { display: inline-block; width: .45rem; height: .45rem; margin-right: .45rem; border-radius: 50%; background: var(--v2-phosphor); box-shadow: 0 0 12px var(--v2-phosphor); }
-  .v2-admin-hero h1 { margin-top: .65rem; font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 510; line-height: 1; letter-spacing: -.045em; }
-  .v2-admin-hero p, .v2-admin-section__head p { margin-top: .75rem; color: var(--v2-text-muted); font-size: .88rem; }
-  .v2-admin-hero__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
-  .v2-admin-hero__actions a, .v2-admin-hero__actions button { border: 1px solid var(--v2-separator); border-radius: .4rem; background: color-mix(in srgb, var(--v2-text) 3%, transparent); padding: .55rem .8rem; color: var(--v2-text-muted); font-size: .75rem; transition: .15s ease; }
-  .v2-admin-hero__actions a:hover, .v2-admin-hero__actions button:hover { border-color: var(--v2-phosphor); color: var(--v2-text); }
-  .v2-admin-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: 1px solid var(--v2-separator); border-radius: .65rem; margin-top: 1.25rem; overflow: hidden; }
-  .v2-admin-metrics article { min-width: 0; padding: 1rem; border-right: 1px solid var(--v2-separator-quiet); background: color-mix(in srgb, var(--v2-text) 2%, transparent); }
-  .v2-admin-metrics article:last-child { border: 0; }
+  /* Stack the observatory + ledger cards with the same rhythm. */
+  .v2-admin-shell > * + * { margin-top: 1.25rem; }
+
+  /* Hero actions — right slot of the observatory head-row. */
+  .v2-admin-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-self: flex-start; }
+  .v2-admin-actions a,
+  .v2-admin-actions button { border: 1px solid var(--v2-separator); border-radius: .4rem; background: color-mix(in srgb, var(--v2-text) 3%, transparent); padding: .55rem .8rem; color: var(--v2-text-muted); font-size: .75rem; transition: .15s ease; }
+  .v2-admin-actions a:hover,
+  .v2-admin-actions button:hover { border-color: var(--v2-phosphor); color: var(--v2-text); }
+
+  /* KPI strip — full-bleed body of the observatory card (card supplies border/radius). */
+  .v2-admin-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; background: var(--v2-separator-quiet); overflow: hidden; }
+  .v2-admin-metrics article { min-width: 0; padding: 1rem; background: var(--v2-recess); }
   .v2-admin-metrics span, .v2-admin-prefilter span { color: var(--v2-text-faint); font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; }
   .v2-admin-metrics strong { display: block; margin-top: .6rem; font: 510 1.75rem/1 ui-monospace, monospace; }
   .v2-admin-metrics small { display: block; overflow: hidden; margin-top: .45rem; color: var(--v2-text-muted); font-size: .69rem; text-overflow: ellipsis; white-space: nowrap; }
-  .v2-admin-section { margin-top: 1.25rem; border: 1px solid var(--v2-separator); border-radius: .65rem; background: color-mix(in srgb, var(--v2-text) 1.5%, transparent); overflow: hidden; }
-  .v2-admin-section__head { display: flex; justify-content: space-between; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid var(--v2-separator); }
-  .v2-admin-section__head h2 { margin-top: .4rem; font-size: 1.35rem; font-weight: 510; letter-spacing: -.025em; }
-  .v2-admin-section__head b { align-self: start; border: 1px solid var(--v2-separator); border-radius: 999px; padding: .25rem .55rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; }
+
+  /* Count badge — right slot of the ledger head-row. */
+  .v2-admin-count { align-self: flex-start; border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .25rem .55rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; }
+
   .v2-admin-story { border-bottom: 1px solid var(--v2-separator-quiet); }
   .v2-admin-story:last-child { border: 0; }
   .v2-admin-story > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; list-style: none; }
@@ -259,7 +317,7 @@
   .v2-admin-story__identity strong { overflow: hidden; font-size: .9rem; font-weight: 510; text-overflow: ellipsis; white-space: nowrap; }
   .v2-admin-story__identity small { color: var(--v2-text-faint); font-size: .7rem; }
   .v2-admin-story__states { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
-  .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: 999px; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
+  .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-comment header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
   .v2-admin-status--success { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent) !important; color: var(--v2-phosphor) !important; }
   .v2-admin-status--active { border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent) !important; color: var(--v2-violet) !important; }
   .v2-admin-status--failed { border-color: color-mix(in oklch, var(--v2-red) 35%, transparent) !important; color: var(--v2-red) !important; }
@@ -293,14 +351,33 @@
   .v2-admin-json summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
   .v2-admin-json pre { max-height: 30rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .68rem/1.6 ui-monospace, monospace; white-space: pre; }
   .v2-admin-missing { padding: 1rem; color: var(--v2-text-faint); font-size: .75rem; }
+
+  /* Surfaced scraped/analyzed text — article body (prefilter input) + selected comments. */
+  .v2-admin-text { margin-top: .75rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); overflow: hidden; }
+  .v2-admin-text > summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
+  .v2-admin-text > summary small { margin-left: .5rem; color: var(--v2-text-faint); font-size: .62rem; font-weight: 400; }
+  .v2-admin-text > pre { max-height: 32rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .72rem/1.6 var(--v2-font-copy); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .v2-admin-comments { margin-top: .75rem; }
+  .v2-admin-comments__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; }
+  .v2-admin-comments__head span { color: var(--v2-text-faint); font: 500 .66rem ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+  .v2-admin-comment { padding: .75rem 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .4rem; background: var(--v2-recess); }
+  .v2-admin-comment + .v2-admin-comment { margin-top: .5rem; }
+  .v2-admin-comment header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .v2-admin-comment header span { color: var(--v2-phosphor); font: 500 .66rem ui-monospace, monospace; }
+  .v2-admin-comment p { margin: .5rem 0 0; color: var(--v2-text-muted); font: .78rem/1.55 var(--v2-font-copy); overflow-wrap: anywhere; }
+  .v2-admin-comment small { display: block; margin-top: .4rem; color: var(--v2-text-faint); font-size: .64rem; }
+  .v2-admin-comment .v2-admin-json { margin-top: .5rem; border-top: 0; }
+  .v2-admin-comment .v2-admin-json summary { padding: .4rem 0; font-size: .62rem; }
+  .v2-admin-comment .v2-admin-json pre { max-height: 16rem; }
   .v2-admin-table-wrap { overflow-x: auto; }
   .v2-admin-table { width: 100%; min-width: 68rem; border-collapse: collapse; font-size: .72rem; }
   .v2-admin-table th, .v2-admin-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--v2-separator-quiet); text-align: left; white-space: nowrap; }
   .v2-admin-table th { color: var(--v2-text-faint); font: 500 .65rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .1em; }
   .v2-admin-table td { color: var(--v2-text-muted); font-family: ui-monospace, monospace; }
-  .v2-admin-empty { margin-top: 1.25rem; padding: 2rem; border: 1px dashed var(--v2-separator); border-radius: .65rem; }
+  .v2-admin-empty { padding: 2rem; }
+  .v2-admin-empty strong { color: var(--v2-text); }
   .v2-admin-empty p { margin-top: .5rem; color: var(--v2-text-muted); }
-  @media (max-width: 1100px) { .v2-admin-metrics { grid-template-columns: repeat(3, 1fr); } .v2-admin-metrics article:nth-child(3) { border-right: 0; } .v2-admin-metrics article:nth-child(-n+3) { border-bottom: 1px solid var(--v2-separator-quiet); } .v2-admin-prefilter { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 800px) { .v2-admin-hero { align-items: start; flex-direction: column; } .v2-admin-source-grid { grid-template-columns: 1fr; } .v2-admin-story > summary { align-items: start; flex-direction: column; } .v2-admin-story__states { width: 100%; overflow-x: auto; } }
-  @media (max-width: 560px) { .v2-admin-metrics { grid-template-columns: repeat(2, 1fr); } .v2-admin-metrics article { border-bottom: 1px solid var(--v2-separator-quiet); } .v2-admin-metrics article:nth-child(2n) { border-right: 0; } .v2-admin-prefilter { grid-template-columns: 1fr; } .v2-admin-source dl { grid-template-columns: 1fr; } }
+  @media (max-width: 1100px) { .v2-admin-metrics { grid-template-columns: repeat(3, 1fr); } .v2-admin-prefilter { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 800px) { .v2-admin-source-grid { grid-template-columns: 1fr; } .v2-admin-story > summary { align-items: start; flex-direction: column; } .v2-admin-story__states { width: 100%; overflow-x: auto; } }
+  @media (max-width: 560px) { .v2-admin-metrics { grid-template-columns: repeat(2, 1fr); } .v2-admin-prefilter { grid-template-columns: 1fr; } .v2-admin-source dl { grid-template-columns: 1fr; } }
 </style>

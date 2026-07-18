@@ -2,8 +2,6 @@
   import { onMount } from "svelte";
   import type { V2Verdict } from "$lib/types/v2";
   import { verdictDecode } from "$lib/actions/verdict-decode";
-  import DottedGlow from "../effects/dotted-glow.svelte";
-  import DottedGlobe from "../effects/dotted-globe.svelte";
   import DimensionRail from "./v2-dimension-rail.svelte";
 
   interface Props { verdict: V2Verdict; pipelineState: string; thinSample: boolean; }
@@ -18,13 +16,16 @@
   onMount(() => verdictDecode(answerNode, answer, { delay: 180, onDone: () => beam = true }));
 </script>
 
-<section class="v2-hero" aria-labelledby="v2-question">
-  <DottedGlow />
-  <div class="v2-hero__globe"><DottedGlobe /></div>
+<section id="verdict" class="v2-section v2-hero" aria-labelledby="v2-question">
+  <header class="v2-section__header">
+    <div>
+      <p>AGGREGATE VERDICT</p>
+      <h2 id="v2-question">Is AI good yet?</h2>
+    </div>
+    <span>{pipelineState}</span>
+  </header>
   <div class="v2-hero__content">
-    <div class="v2-hero__command"><span>$ ./assess --scope all-ai --window 12m</span><b>{pipelineState}</b></div>
-    <p id="v2-question" class="v2-hero__question">Is AI good yet?</p>
-    <h1 class="v2-hero__answer" class:v2-hero__answer--beam={beam} class:v2-hero__answer--thin={thinSample} bind:this={answerNode} aria-label={`Aggregate verdict: ${answer}${thinSample ? " (thin sample)" : ""}`}>{answer}</h1>
+    <p class="v2-hero__answer" class:v2-hero__answer--beam={beam} class:v2-hero__answer--thin={thinSample} bind:this={answerNode} aria-label={`Aggregate verdict: ${answer}${thinSample ? " (thin sample)" : ""}`}>{answer}</p>
     {#if thinSample}<p class="v2-hero__thin" aria-hidden="true">— THIN SAMPLE</p>{/if}
     <p class="v2-hero__summary">{explanation}</p>
     <div class="v2-dimension-rail" aria-label="Aggregate dimension scores">

@@ -1,5 +1,6 @@
 import Database from "better-sqlite3"
-import { existsSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
+import path from "node:path"
 import { getPipelineStoragePaths } from "$lib/server/pipeline-storage"
 
 export interface V2RunMetrics {
@@ -53,15 +54,27 @@ export interface V2AdminStory {
   acceptedComments: number
 }
 
+export interface V2AdminSelectedComment {
+  hnCommentId: number
+  author: string
+  text: string
+  selectionRank: number
+  selectionReason: string
+  analysisStatus: string | null
+  analysisResult: Record<string, unknown>
+}
+
 export interface V2AdminStoryDetails {
   hnStoryId: number
   prefilterReasonCode: string | null
   prefilterReason: string | null
   prefilterModel: string | null
   decidedAt: string | null
+  articleText: string | null
   article: V2AnalysisRun | null
   community: V2AnalysisRun | null
   dimensions: V2DimensionAnalysis[]
+  comments: V2AdminSelectedComment[]
 }
 
 export interface V2OrchestrationRun {
@@ -507,15 +520,79 @@ export function getV2AdminStoryDetails(
         } satisfies V2DimensionAnalysis
       })
 
+    // Surface the actual scraped/analyzed text (admin-only). The article body
+    // lives only on the pipeline filesystem (not SQLite, not the public export);
+    // comment text lives in hn_comments. Both are local-only artifacts, so the
+    // existsSync guard renders the detail without them when they are absent.
+    const articleTextPath = path.join(getPipelineStoragePaths().articlesTextDir, `${hnStoryId}.txt`)
+    const articleText = existsSync(articleTextPath) ? readFileSync(articleTextPath, "utf8") : null
+
+    const comments = db
+      .prepare(`
+        WITH latest_community AS (
+          SELECT analysis_version, selection_version
+          FROM (
+            SELECT analysis_version, selection_version, ROW_NUMBER() OVER (
+              PARTITION BY source ORDER BY analyzed_at DESC, rowid DESC
+            ) AS recency_rank
+            FROM v2_analysis_runs
+            WHERE hn_story_id = ? AND source = 'community'
+          )
+          WHERE recency_rank = 1
+        )
+        SELECT
+          s.hn_comment_id,
+          c.author,
+          c.text,
+          s.selection_rank,
+          s.selection_reason,
+          ca.status AS analysis_status,
+          ca.result_json AS analysis_result
+        FROM v2_comment_selections s
+        JOIN hn_comments c ON c.hn_comment_id = s.hn_comment_id
+        LEFT JOIN v2_comment_analyses_normalized ca
+          ON ca.hn_story_id = s.hn_story_id
+         AND ca.hn_comment_id = s.hn_comment_id
+         AND ca.analysis_version = (SELECT analysis_version FROM latest_community)
+         AND ca.selection_version = (SELECT selection_version FROM latest_community)
+        WHERE s.hn_story_id = ?
+          AND s.selection_version = (SELECT selection_version FROM latest_community)
+        ORDER BY s.selection_rank
+        LIMIT 200
+      `)
+      .all(hnStoryId, hnStoryId)
+      .map((raw) => {
+        const row = raw as {
+          hn_comment_id: number
+          author: string
+          text: string
+          selection_rank: number
+          selection_reason: string
+          analysis_status: string | null
+          analysis_result: string | null
+        }
+        return {
+          hnCommentId: row.hn_comment_id,
+          author: row.author,
+          text: row.text,
+          selectionRank: row.selection_rank,
+          selectionReason: row.selection_reason,
+          analysisStatus: row.analysis_status,
+          analysisResult: parseObject(row.analysis_result),
+        } satisfies V2AdminSelectedComment
+      })
+
     return {
       hnStoryId,
       prefilterReasonCode: prefilter?.reason_code ?? null,
       prefilterReason: prefilter?.reason ?? null,
       prefilterModel: prefilter?.model ?? null,
       decidedAt: prefilter?.decided_at ?? null,
+      articleText,
       article: analyses.get("article") ?? null,
       community: analyses.get("community") ?? null,
       dimensions,
+      comments,
     }
   } finally {
     db.close()

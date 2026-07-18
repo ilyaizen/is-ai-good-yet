@@ -1,6 +1,6 @@
 """V2 prompt voice and anti-hedging contract.
 
-The v2.3.0 prompts port V1's blunt verdict voice onto the broader capability/trajectory/impact
+The v2.4.0 prompts port V1's blunt verdict voice onto the broader capability/trajectory/impact
 scope. This test guards the normative contract: the prompts must (a) adopt the blunt-analyst
 persona, (b) include signal words and decision examples, and (c) explicitly forbid hedging
 phrases ("seems to", "possibly", "may suggest") so summaries read as verdicts, not descriptions.
@@ -29,11 +29,13 @@ COMMENT_PROMPT = _triple_quoted("COMMENT_PROMPT", SENTIMENT_SRC)
 HEDGING_PHRASES = ("seems to", "possibly", "may suggest")
 
 
-def test_versions_bumped_to_v2_3() -> None:
+def test_pinned_versions() -> None:
+    # Analysis stays v2.3.0: an ANALYSIS_VERSION bump would invalidate every prior run and empty the
+    # dashboard. Only the prompt texts move to v2.4.0.
     assert re.search(r'ANALYSIS_VERSION\s*=\s*"v2\.3\.0"', MODELS_SRC)
     assert re.search(r'PARSER_VERSION\s*=\s*"v2\.3\.1"', MODELS_SRC)
-    assert 'ARTICLE_PROMPT_VERSION = "article-prompt-v2.3.0"' in SENTIMENT_SRC
-    assert 'COMMENT_PROMPT_VERSION = "comment-prompt-v2.3.0"' in SENTIMENT_SRC
+    assert 'ARTICLE_PROMPT_VERSION = "article-prompt-v2.4.0"' in SENTIMENT_SRC
+    assert 'COMMENT_PROMPT_VERSION = "comment-prompt-v2.4.0"' in SENTIMENT_SRC
 
 
 def test_prompts_adopt_blunt_analyst_voice() -> None:

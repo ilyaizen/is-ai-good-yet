@@ -46,3 +46,6 @@ package-lock.json
 # /docs_internal
 /.agents
 /.pi-subagents
+
+# V2 export rollback backup (transient, created by export_v2 atomic publish)
+src/lib/data/.v2-previous/

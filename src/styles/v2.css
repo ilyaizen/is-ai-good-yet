@@ -120,10 +120,6 @@ body.v2 p {
 
 .v2-hero {
   position: relative;
-  min-height: min(720px, calc(100dvh - 68px));
-  overflow: hidden;
-  isolation: isolate;
-  border-bottom: 1px solid var(--v2-separator);
 }
 .v2-dotted-glow,
 .v2-dotted-globe {
@@ -136,37 +132,9 @@ body.v2 p {
   opacity: 0.7;
   mask-image: linear-gradient(90deg, black 0 58%, transparent 88%);
 }
-.v2-hero__globe {
-  position: absolute;
-  z-index: -1;
-  top: 2%;
-  right: -4%;
-  width: min(58%, 760px);
-  height: 94%;
-  opacity: 0.72;
-  mask-image: linear-gradient(90deg, transparent 0, black 28%);
-}
 .v2-hero__content {
   position: relative;
-  width: min(760px, 65%);
-  padding: clamp(5rem, 10vh, 8rem) 0 3.5rem;
-}
-.v2-hero__command {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--v2-text-muted);
-  font-size: 0.78rem;
-}
-.v2-hero__command b {
-  color: var(--v2-phosphor);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-}
-.v2-hero__question {
-  margin: clamp(2.5rem, 6vh, 4.5rem) 0 0.5rem;
-  font: 400 clamp(1.2rem, 2.4vw, 2rem) var(--v2-font-copy);
-  letter-spacing: -0.025em;
+  max-width: min(760px, 65%);
 }
 .v2-hero__answer {
   position: relative;
@@ -255,7 +223,6 @@ body.v2 p {
   grid-template-columns: 180px 1fr;
   align-items: stretch;
   min-height: 84px;
-  margin-top: calc(clamp(3.5rem, 7vw, 7rem) * -1);
   background: var(--v2-surface-1);
   box-shadow:
     inset 0 1px var(--v2-separator-quiet),
@@ -318,6 +285,81 @@ body.v2 p {
   margin: 0;
   color: var(--v2-text);
   font-size: 0.69rem;
+}
+
+/* ── Shared card chrome: methodology + /v2/admin observability ───────────
+   One bordered-card idiom: kicker + title + lede head, with a right slot
+   for a chip (methodology), count badge (ledgers), or actions (observatory
+   hero). Methodology and the admin observability cards both use these so the
+   two surfaces read as the same object. */
+.v2-card {
+  border: 1px solid var(--v2-separator);
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--v2-text) 1.5%, transparent);
+  overflow: hidden;
+  color: var(--v2-text);
+}
+.v2-card__head {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--v2-separator);
+}
+@media (min-width: 1024px) {
+  .v2-card__head {
+    padding: 2rem;
+  }
+}
+.v2-card__kicker {
+  margin: 0;
+  color: var(--v2-text-faint);
+  font:
+    500 0.68rem/1.4 ui-monospace,
+    monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.v2-card__head-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .v2-card__head-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+.v2-card__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 510;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--v2-text);
+}
+.v2-card__title--hero {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.v2-card__lede {
+  max-width: 48rem;
+  margin: 0.75rem 0 0;
+  color: var(--v2-text-muted);
+  font: 0.85rem/1.65 var(--v2-font-copy);
+}
+.v2-card__chip {
+  align-self: flex-start;
+  border: 1px solid var(--v2-separator);
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  color: var(--v2-text-muted);
+  font:
+    500 0.62rem ui-monospace,
+    monospace;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .v2-section {
@@ -1080,32 +1122,8 @@ body.v2 p {
     display: flex;
     align-items: center;
   }
-  .v2-hero {
-    min-height: auto;
-  }
   .v2-hero__content {
     width: 100%;
-    padding: 5rem 0 2rem;
-  }
-  .v2-hero__globe {
-    right: -35%;
-    width: 110%;
-    opacity: 0.28;
-  }
-  .v2-dotted-glow {
-    opacity: 0.42;
-    mask-image: linear-gradient(90deg, black, transparent);
-  }
-  .v2-hero__command {
-    align-items: flex-start;
-    justify-content: space-between;
-    font-size: 0.62rem;
-  }
-  .v2-hero__command span {
-    max-width: 65%;
-  }
-  .v2-hero__question {
-    margin-top: 3.2rem;
   }
   .v2-hero__answer {
     font-size: clamp(3.7rem, 19vw, 6rem);
@@ -1127,7 +1145,6 @@ body.v2 p {
   }
   .v2-pipeline {
     grid-template-columns: 1fr;
-    margin-top: -4.5rem;
   }
   .v2-pipeline__state {
     border-right: 0;

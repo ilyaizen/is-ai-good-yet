@@ -1,32 +1,32 @@
 {
   "contractVersion": "v2-manifest-1",
-  "generatedAt": "2026-07-14T04:37:40.267755+00:00",
+  "generatedAt": "2026-07-18T07:41:54.162383+00:00",
   "influenceVersion": "hn-score-0.85_decay-24m_v1",
   "files": {
     "verdict.json": {
       "contractVersion": "verdict-v2.0.0",
       "recordCount": 1,
-      "sha256": "46d6709024cef3fdcbabb6d906d84c9ee0b7fd9de80893587d2932ad2be78d28"
+      "sha256": "ceb1a6cdff652dd6eae28c63a46e4ed0393d846df5cd59fa6dce300d446ad300"
     },
     "stories.json": {
       "contractVersion": "stories-v2.0.0",
-      "recordCount": 5,
-      "sha256": "3de7b612f6760e324e790dab5cd6d947fefbee01a8dc799e15b62e3a87071e91"
+      "recordCount": 9,
+      "sha256": "56b8f2f60cd5b8bf5717c388cd9cd21e232e59c7758f32494089d412dbc150f9"
     },
     "history.json": {
       "contractVersion": "history-v2.0.0",
-      "recordCount": 5,
-      "sha256": "26acd9483f162f9afbdc541d57744b21d83719a1b9329f3275e655c8e92c0aac"
+      "recordCount": 8,
+      "sha256": "26c457619c6e0042947aaaea71c07cd6c6d1a42ebd386371c0a0e7c9f76d82e7"
     },
     "bot-feed.json": {
       "contractVersion": "bot-feed-v2.0.0",
       "recordCount": 0,
-      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
     },
     "pipeline-status.json": {
       "contractVersion": "pipeline-status-v2.0.0",
       "recordCount": 1,
-      "sha256": "5e4928bb5cc8c7dc4e53cfada280915d99020ef8c272ab1226e813a6a6b66dd9"
+      "sha256": "1a11b7bc90a04791f101a5e1f843f084f033d89d1ba818eb7ec4c64401763763"
     }
   }
 }

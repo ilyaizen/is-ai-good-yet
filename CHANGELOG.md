@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add great-circle arc pulses to the rotating V2 hero globe: faint routes between cities carry a single crisp pulse with a short comet trail. A new pure-geometry module (`globe-arcs.ts`) handles spherical-linear sampling and pair selection — 85% neighbor-weighted (1/chord²) plus 15% long-range, capped at `farMaxChord ≈ 1.2` (~74°) so far hops read as long-range rather than antipodal — and the renderer reuses the globe's orthographic projection. Ships with a `test:globe-arcs` invariant script (`vp run test:globe-arcs`).
 - Add shared V2 derivation helpers (`src/lib/v2/derive.ts`) for the adequacy word, tension flag, direction, thin-sample floor, and history-visibility gate, so the hero, card, and admin render one consistent vocabulary.
 - Add a V2 prompt-voice/anti-hedging test (`pipeline/tests/test_v2_prompt_voice.py`) asserting the blunt-analyst persona, signal words, decision examples, and the forbid-list.
 

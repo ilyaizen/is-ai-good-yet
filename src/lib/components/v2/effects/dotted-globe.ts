@@ -12,6 +12,8 @@
  */
 
 import { prefersReducedMotion } from "./runtime"
+import { chordLength, pickArcPair, sampleArc, toUnitVec } from "./globe-arcs"
+import type { ArcPair, ArcSample, Vec3 } from "./globe-arcs"
 
 export interface GlobeOpts {
   /** Auto-rotation speed in degrees per second on the Y-axis / longitude (default 0.35). */
@@ -48,6 +50,8 @@ export interface GlobeOpts {
   initialRotation?: [number, number]
   /** Nudge the projected globe center down by this many CSS px (default 0). */
   centerOffsetY?: number
+  /** Draw great-circle arcs with traveling pulses between cities (default true). */
+  arcs?: boolean
 }
 
 interface Dot {
@@ -103,6 +107,36 @@ function project(
   const y = cy - R * (cosPhi0 * sinPhi1 - sinPhi0 * cosPhi1 * cosDlng)
 
   return [x, y, cosC]
+}
+
+// ── Arc lifecycle (route fade envelope + pulse position) ────────────────────
+
+interface Arc {
+  from: number
+  to: number
+  samples: ArcSample[]
+  born: number
+  fadeIn: number
+  travel: number
+  fadeOut: number
+  life: number
+}
+
+/** Route alpha over an arc's life: fade in → hold → fade out. Returns 0 outside life. */
+function routeAlpha(arc: Arc, tMs: number): number {
+  const t = tMs - arc.born
+  if (t < 0 || t > arc.life) return 0
+  if (t < arc.fadeIn) return t / arc.fadeIn
+  const fadeStart = arc.life - arc.fadeOut
+  if (t > fadeStart) return (arc.life - t) / arc.fadeOut
+  return 1
+}
+
+/** Pulse position along the route [0..1] during the travel phase, else -1. */
+function pulseT(arc: Arc, tMs: number): number {
+  const t = tMs - arc.born - arc.fadeIn
+  if (t < 0 || t > arc.travel) return -1
+  return t / arc.travel
 }
 
 // ── Graticule generation ────────────────────────────────────────────────────
@@ -275,6 +309,7 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
     flicker = false,
     initialRotation = [0, 0],
     centerOffsetY = 0,
+    arcs: enableArcs = true,
   } = opts
 
   // Canvas setup
@@ -303,6 +338,36 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
   const staticCityIdxs = cities.length
     ? Array.from({ length: Math.min(5, cities.length) }, () => (Math.random() * cities.length) | 0)
     : []
+
+  // ── Arc (route + pulse) setup ───────────────────────────────────────────
+  // Unit vectors precomputed once so neighbor-weighted pair selection is a
+  // tight dot-product loop, not per-spawn trig.
+  const cityVecs: Vec3[] = enableArcs && cities.length >= 2 ? cities.map((c) => toUnitVec(c[0], c[1])) : []
+  const MAX_ARCS = 24
+  const ARC_FADE_IN = 220
+  const ARC_FADE_OUT = 380
+  const arcs: Arc[] = []
+  let nextArc = 0
+
+  function buildArc(pair: ArcPair): Arc {
+    const samples = sampleArc(cities[pair.from], cities[pair.to])
+    // Travel time scales with distance so a long hop takes longer to cross.
+    const norm = Math.min(1, chordLength(cityVecs[pair.from], cityVecs[pair.to]) / 2)
+    const travel = 900 + 1100 * norm
+    return {
+      from: pair.from,
+      to: pair.to,
+      samples,
+      born: 0,
+      fadeIn: ARC_FADE_IN,
+      travel,
+      fadeOut: ARC_FADE_OUT,
+      life: ARC_FADE_IN + travel + ARC_FADE_OUT,
+    }
+  }
+
+  // Static subset shown when motion is reduced (no scheduler ticks, frozen pulse).
+  const staticArcs: Arc[] = cityVecs.length ? Array.from({ length: 4 }, () => buildArc(pickArcPair(cityVecs))) : []
 
   let dpr = Math.min(window.devicePixelRatio || 1, 2)
   let logicalW = 0
@@ -488,6 +553,79 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
       }
       ctx.globalAlpha = 1
     }
+
+    // --- Arcs: faint great-circle routes with a bright pulse + comet trail
+    // zipping from one city to another. Per-segment limb fade tucks the route
+    // behind the globe; the pulse is clipped when its position is far-side. ---
+    if (cityVecs.length) {
+      const reduced = prefersReducedMotion()
+      const arcList = reduced ? staticArcs : arcs
+      const tMsA = performance.now()
+      const rScaleA = Math.max(0.7, Math.min(2.2, R / 300))
+      const pulseR = 2.4 * rScaleA
+      ctx.lineCap = "round"
+      ctx.lineWidth = Math.max(1, 0.8 * rScaleA)
+      ctx.fillStyle = `rgba(${color},1)`
+      // Hoisted out of the per-arc loop: closes over the projection params once
+      // per frame instead of allocating a closure per arc.
+      const drawDot = (s: ArcSample[], frac: number, bright: number, rad: number): void => {
+        if (frac < 0 || frac > 1) return
+        const fi = frac * (s.length - 1)
+        const i0 = Math.floor(fi)
+        const f = fi - i0
+        const sa = s[i0]
+        const sb = s[Math.min(s.length - 1, i0 + 1)]
+        // Unwrap longitude so a segment crossing the ±180° meridian
+        // interpolates the short way (through 180°), not via 0°/Greenwich —
+        // otherwise a dateline-crossing pulse teleports across the globe.
+        // project()'s trig accepts any longitude, so values outside ±180 are fine.
+        let dLng = sb.lng - sa.lng
+        if (dLng > 180) dLng -= 360
+        else if (dLng < -180) dLng += 360
+        const lng = sa.lng + dLng * f
+        const lat = sa.lat + (sb.lat - sa.lat) * f
+        const elev = sa.elev + (sb.elev - sa.elev) * f
+        const [x, y, c] = project(lng, lat, lambda0, phi0, R * (1 + elev), cx, cy)
+        if (c < -0.02) return // far side
+        ctx.globalAlpha = bright * smoothstep(0, 0.2, c)
+        ctx.beginPath()
+        ctx.moveTo(x + rad, y)
+        ctx.arc(x, y, rad, 0, TWO_PI)
+        ctx.fill()
+      }
+      for (const arc of arcList) {
+        const a = reduced ? 0.45 : routeAlpha(arc, tMsA)
+        if (a <= 0) continue
+        const s = arc.samples
+        // Route — per-segment stroke so each segment fades independently at the limb.
+        for (let i = 0; i < s.length - 1; i++) {
+          const p0 = s[i]
+          const p1 = s[i + 1]
+          const [x1, y1, c1] = project(p0.lng, p0.lat, lambda0, phi0, R * (1 + p0.elev), cx, cy)
+          const [x2, y2, c2] = project(p1.lng, p1.lat, lambda0, phi0, R * (1 + p1.elev), cx, cy)
+          // ponytail: limb fade approximates sphere occlusion for the lifted
+          // arc — precise back-of-sphere clipping isn't worth the math here;
+          // the eye reads this as the route tucking behind the globe.
+          const limb = smoothstep(-0.06, 0.12, (c1 + c2) * 0.5)
+          if (limb <= 0.02) continue
+          ctx.strokeStyle = `rgba(${color},${(a * 0.4 * limb).toFixed(3)})`
+          ctx.beginPath()
+          ctx.moveTo(x1, y1)
+          ctx.lineTo(x2, y2)
+          ctx.stroke()
+        }
+        // Pulse + comet trail along the route.
+        const pt = reduced ? 0.5 : pulseT(arc, tMsA)
+        if (pt < 0) continue
+        const env = 0.6 + 0.4 * Math.sin(Math.PI * pt)
+        // Single crisp head + one tight dim streak directly behind for motion.
+        // No leading halo (a big disc ahead of the head read as a second pulse)
+        // and no spread trail (ghosted smear).
+        drawDot(s, pt, env, pulseR)
+        drawDot(s, Math.max(0, pt - 0.04), 0.3 * env, pulseR * 0.6)
+        ctx.globalAlpha = 1
+      }
+    }
   }
 
   // ── Animation loop ──────────────────────────────────────────────────────
@@ -520,6 +658,19 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
           dur: 600 + Math.random() * 700, // ~0.6–1.3s flash
         })
         nextSpawn = ts + 30 + Math.random() * 90 // dense, overlapping flashes
+      }
+      // Arc scheduler: expire finished arcs, spawn new ones (mostly near,
+      // sometimes far). Capped so the globe never gets busy.
+      if (cityVecs.length) {
+        for (let i = arcs.length - 1; i >= 0; i--) {
+          if (ts - arcs[i].born > arcs[i].life) arcs.splice(i, 1)
+        }
+        if (ts >= nextArc && arcs.length < MAX_ARCS) {
+          const arc = buildArc(pickArcPair(cityVecs))
+          arc.born = ts
+          arcs.push(arc)
+          nextArc = ts + 70 + Math.random() * 120
+        }
       }
       draw()
     }
@@ -567,7 +718,9 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
   // ── Load land data ───────────────────────────────────────────────────────
 
   let disposed = false
-  loadLandDots(landResolution).then((d) => {
+  // void: loadLandDots never rejects (fetch/parse errors are caught → []), so
+  // this is intentionally unhandled rather than silently swallowing an error.
+  void loadLandDots(landResolution).then((d) => {
     if (disposed) return
     dots = d
     dotsLoaded = true

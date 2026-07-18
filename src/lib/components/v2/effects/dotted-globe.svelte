@@ -15,7 +15,8 @@
     limbPadding: 0.2,
     flicker: false,
     initialRotation: [-18, 12],
-    cities: WORLD_CITIES
+    cities: WORLD_CITIES,
+    arcs: true
   }));
 </script>
 

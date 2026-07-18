@@ -6,6 +6,7 @@ type PipelineStoragePaths = {
   dataDir: string
   pipelineDbPath: string
   adminDbPath: string
+  articlesTextDir: string
   logDir: string
 }
 
@@ -70,6 +71,7 @@ export function getPipelineStoragePaths(): PipelineStoragePaths {
     dataDir,
     pipelineDbPath: explicitDbPath || path.join(dataDir, "pipeline.db"),
     adminDbPath: process.env.PIPELINE_ADMIN_DB_PATH?.trim() || path.join(dataDir, "admin.db"),
+    articlesTextDir: path.join(dataDir, "articles-text"),
     logDir: process.env.PIPELINE_LOG_DIR?.trim() || path.join(dataDir, "logs"),
   }
 }

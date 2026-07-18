@@ -205,6 +205,44 @@
                     </article>
                   {/each}
                 </div>
+
+                {#if details.articleText !== null}
+                  <details class="v2-admin-text">
+                    <summary>Article body · prefilter input <small>{details.articleText.length.toLocaleString()} chars</small></summary>
+                    <pre>{details.articleText}</pre>
+                  </details>
+                {:else}
+                  <p class="v2-admin-missing">Article body text is not stored for this story.</p>
+                {/if}
+
+                {#if details.comments.length}
+                  <div class="v2-admin-comments">
+                    <div class="v2-admin-comments__head">
+                      <span>Selected comments</span>
+                      <b class="v2-admin-count">{details.comments.length} analyzed</b>
+                    </div>
+                    {#each details.comments as comment (comment.hnCommentId)}
+                      <article class="v2-admin-comment">
+                        <header>
+                          <span>{comment.author}</span>
+                          <b class={statusTone(comment.analysisStatus)}>{comment.analysisStatus ?? "not analyzed"}</b>
+                        </header>
+                        <p>{comment.text}</p>
+                        {#if comment.selectionReason}
+                          <small>selected · {comment.selectionReason}</small>
+                        {/if}
+                        {#if Object.keys(comment.analysisResult).length}
+                          <details class="v2-admin-json">
+                            <summary>Raw result</summary>
+                            <pre>{pretty(comment.analysisResult)}</pre>
+                          </details>
+                        {/if}
+                      </article>
+                    {/each}
+                  </div>
+                {:else}
+                  <p class="v2-admin-missing">No comments were selected for this story.</p>
+                {/if}
               {/if}
             </div>
           </details>
@@ -279,7 +317,7 @@
   .v2-admin-story__identity strong { overflow: hidden; font-size: .9rem; font-weight: 510; text-overflow: ellipsis; white-space: nowrap; }
   .v2-admin-story__identity small { color: var(--v2-text-faint); font-size: .7rem; }
   .v2-admin-story__states { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
-  .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
+  .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-comment header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
   .v2-admin-status--success { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent) !important; color: var(--v2-phosphor) !important; }
   .v2-admin-status--active { border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent) !important; color: var(--v2-violet) !important; }
   .v2-admin-status--failed { border-color: color-mix(in oklch, var(--v2-red) 35%, transparent) !important; color: var(--v2-red) !important; }
@@ -313,6 +351,24 @@
   .v2-admin-json summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
   .v2-admin-json pre { max-height: 30rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .68rem/1.6 ui-monospace, monospace; white-space: pre; }
   .v2-admin-missing { padding: 1rem; color: var(--v2-text-faint); font-size: .75rem; }
+
+  /* Surfaced scraped/analyzed text — article body (prefilter input) + selected comments. */
+  .v2-admin-text { margin-top: .75rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); overflow: hidden; }
+  .v2-admin-text > summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
+  .v2-admin-text > summary small { margin-left: .5rem; color: var(--v2-text-faint); font-size: .62rem; font-weight: 400; }
+  .v2-admin-text > pre { max-height: 32rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .72rem/1.6 var(--v2-font-copy); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .v2-admin-comments { margin-top: .75rem; }
+  .v2-admin-comments__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; }
+  .v2-admin-comments__head span { color: var(--v2-text-faint); font: 500 .66rem ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+  .v2-admin-comment { padding: .75rem 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .4rem; background: var(--v2-recess); }
+  .v2-admin-comment + .v2-admin-comment { margin-top: .5rem; }
+  .v2-admin-comment header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .v2-admin-comment header span { color: var(--v2-phosphor); font: 500 .66rem ui-monospace, monospace; }
+  .v2-admin-comment p { margin: .5rem 0 0; color: var(--v2-text-muted); font: .78rem/1.55 var(--v2-font-copy); overflow-wrap: anywhere; }
+  .v2-admin-comment small { display: block; margin-top: .4rem; color: var(--v2-text-faint); font-size: .64rem; }
+  .v2-admin-comment .v2-admin-json { margin-top: .5rem; border-top: 0; }
+  .v2-admin-comment .v2-admin-json summary { padding: .4rem 0; font-size: .62rem; }
+  .v2-admin-comment .v2-admin-json pre { max-height: 16rem; }
   .v2-admin-table-wrap { overflow-x: auto; }
   .v2-admin-table { width: 100%; min-width: 68rem; border-collapse: collapse; font-size: .72rem; }
   .v2-admin-table th, .v2-admin-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--v2-separator-quiet); text-align: left; white-space: nowrap; }

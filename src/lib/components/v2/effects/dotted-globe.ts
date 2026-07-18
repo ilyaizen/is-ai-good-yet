@@ -711,7 +711,9 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
   // ── Load land data ───────────────────────────────────────────────────────
 
   let disposed = false
-  loadLandDots(landResolution).then((d) => {
+  // void: loadLandDots never rejects (fetch/parse errors are caught → []), so
+  // this is intentionally unhandled rather than silently swallowing an error.
+  void loadLandDots(landResolution).then((d) => {
     if (disposed) return
     dots = d
     dotsLoaded = true

@@ -91,20 +91,20 @@
 </script>
 
 <section class="v2-method" aria-labelledby="v2-methodology-title">
-  <div class="v2-method__card">
-    <header class="v2-method__head">
-      <p class="v2-method__kicker">Methodology</p>
-      <div class="v2-method__head-row">
+  <div class="v2-card">
+    <header class="v2-card__head">
+      <p class="v2-card__kicker">Methodology</p>
+      <div class="v2-card__head-row">
         <div>
-          <h2 id="v2-methodology-title" class="v2-method__title">
+          <h2 id="v2-methodology-title" class="v2-card__title">
             How the verdict is produced
           </h2>
-          <p class="v2-method__lede">
+          <p class="v2-card__lede">
             This view reads its versions, limits, weights, and prompts from the Python pipeline source on the server.
             It describes the code that runs, not a separate editorial summary.
           </p>
         </div>
-        <span class="v2-method__chip">Analysis {methodology.versions.analysis}</span>
+        <span class="v2-card__chip">Analysis {methodology.versions.analysis}</span>
       </div>
     </header>
 
@@ -150,7 +150,7 @@
 
       <section aria-labelledby="method-prompts-title">
         <h3 id="method-prompts-title" class="v2-method__subhead">Exact model prompts</h3>
-        <p class="v2-method__lede">
+        <p class="v2-card__lede">
           Input packets are appended at runtime. The system-level instructions below are shown verbatim after Python
           version placeholders are resolved.
         </p>
@@ -192,66 +192,6 @@
     .v2-method {
       padding: 0 2rem;
     }
-  }
-
-  .v2-method__card {
-    border: 1px solid var(--v2-separator);
-    border-radius: 0.65rem;
-    background: color-mix(in srgb, var(--v2-text) 1.5%, transparent);
-    overflow: hidden;
-    color: var(--v2-text);
-  }
-
-  .v2-method__head {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--v2-separator);
-  }
-  @media (min-width: 1024px) {
-    .v2-method__head {
-      padding: 2rem;
-    }
-  }
-  .v2-method__kicker {
-    color: var(--v2-text-faint);
-    font: 500 0.68rem/1.4 ui-monospace, monospace;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-  .v2-method__head-row {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-  @media (min-width: 1024px) {
-    .v2-method__head-row {
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: space-between;
-    }
-  }
-  .v2-method__title {
-    font-size: 1.35rem;
-    font-weight: 510;
-    line-height: 1.15;
-    letter-spacing: -0.025em;
-    color: var(--v2-text);
-  }
-  .v2-method__lede {
-    max-width: 48rem;
-    margin-top: 0.75rem;
-    color: var(--v2-text-muted);
-    font: 0.85rem/1.65 var(--v2-font-copy);
-  }
-  .v2-method__chip {
-    align-self: flex-start;
-    border: 1px solid var(--v2-separator);
-    border-radius: 999px;
-    padding: 0.22rem 0.55rem;
-    color: var(--v2-text-muted);
-    font: 500 0.62rem ui-monospace, monospace;
-    text-transform: uppercase;
-    white-space: nowrap;
   }
 
   /* Stage flow — V2 card idiom */

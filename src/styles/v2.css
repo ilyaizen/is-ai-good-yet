@@ -287,6 +287,81 @@ body.v2 p {
   font-size: 0.69rem;
 }
 
+/* ── Shared card chrome: methodology + /v2/admin observability ───────────
+   One bordered-card idiom: kicker + title + lede head, with a right slot
+   for a chip (methodology), count badge (ledgers), or actions (observatory
+   hero). Methodology and the admin observability cards both use these so the
+   two surfaces read as the same object. */
+.v2-card {
+  border: 1px solid var(--v2-separator);
+  border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--v2-text) 1.5%, transparent);
+  overflow: hidden;
+  color: var(--v2-text);
+}
+.v2-card__head {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--v2-separator);
+}
+@media (min-width: 1024px) {
+  .v2-card__head {
+    padding: 2rem;
+  }
+}
+.v2-card__kicker {
+  margin: 0;
+  color: var(--v2-text-faint);
+  font:
+    500 0.68rem/1.4 ui-monospace,
+    monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.v2-card__head-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .v2-card__head-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+.v2-card__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 510;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--v2-text);
+}
+.v2-card__title--hero {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.v2-card__lede {
+  max-width: 48rem;
+  margin: 0.75rem 0 0;
+  color: var(--v2-text-muted);
+  font: 0.85rem/1.65 var(--v2-font-copy);
+}
+.v2-card__chip {
+  align-self: flex-start;
+  border: 1px solid var(--v2-separator);
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  color: var(--v2-text-muted);
+  font:
+    500 0.62rem ui-monospace,
+    monospace;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .v2-section {
   scroll-margin-top: 1rem;
 }

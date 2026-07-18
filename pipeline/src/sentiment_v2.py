@@ -499,7 +499,7 @@ async def run(limit: int | None, reanalyze: bool) -> None:
     init_v2_schema()
     stories = get_story_rows(limit, reanalyze)
     content = get_article_content(stories)
-    client = AsyncGroq(api_key=api_key)
+    client = AsyncGroq(api_key=api_key, timeout=180.0)
     for story in stories:
         text = content.get(story["url"], "")
         article = None

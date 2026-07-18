@@ -44,6 +44,11 @@ def init_db():
         classification_json TEXT
     )
     """)
+    # V2 eligibility queries (pending_rows / get_story_rows) correlate on hn_id + scraped_status;
+    # without this index those subqueries are O(n^2) and hang for minutes on a large urls table.
+    cursor.execute(
+        "CREATE INDEX IF NOT EXISTS idx_urls_hn_status ON urls(hn_id, scraped_status)"
+    )
     conn.commit()
     conn.close()
 

@@ -1,6 +1,6 @@
 # V2 article sentiment and thesis prompt
 
-Versions: contract `article-v2.2.0`, prompt `article-prompt-v2.3.0`, analysis `v2.3.0`, parser
+Versions: contract `article-v2.2.0`, prompt `article-prompt-v2.4.0`, analysis `v2.3.0`, parser
 `v2.3.1`. Article text is untrusted and is head/tail truncated to 10,000 characters with an
 explicit omission marker when required.
 
@@ -16,8 +16,8 @@ Never invent a score from thin evidence — `not_addressed` (null score, zero co
 honest answer when a dimension is absent.
 
 A signal-words section anchors non-neutral classification (e.g. _failed/broken/harms_ negative,
-_breakthrough/excels/outperforms_ positive), and a decision-examples table calibrates the model
-across coding, research, safety, labor, economy, and governance scopes.
+_breakthrough/excels/outperforms_ positive), and a decision-examples table — deliberately fuzzy, sarcastic, mixed-signal, and out-of-distribution — calibrates the model
+across coding, medical, transport, education, environment, and creative law scopes.
 
 Accepted JSON has exactly: `contract_version`, `reject`, `scopes`, `dimensions`, `evidence`, and
 `summary`. Scopes use coding, research, education, labor, economy, creativity, safety, governance,

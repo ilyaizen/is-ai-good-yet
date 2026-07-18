@@ -575,7 +575,14 @@ export function createWireframeGlobe(container: HTMLElement, opts: GlobeOpts = {
         const f = fi - i0
         const sa = s[i0]
         const sb = s[Math.min(s.length - 1, i0 + 1)]
-        const lng = sa.lng + (sb.lng - sa.lng) * f
+        // Unwrap longitude so a segment crossing the ±180° meridian
+        // interpolates the short way (through 180°), not via 0°/Greenwich —
+        // otherwise a dateline-crossing pulse teleports across the globe.
+        // project()'s trig accepts any longitude, so values outside ±180 are fine.
+        let dLng = sb.lng - sa.lng
+        if (dLng > 180) dLng -= 360
+        else if (dLng < -180) dLng += 360
+        const lng = sa.lng + dLng * f
         const lat = sa.lat + (sb.lat - sa.lat) * f
         const elev = sa.elev + (sb.elev - sa.elev) * f
         const [x, y, c] = project(lng, lat, lambda0, phi0, R * (1 + elev), cx, cy)

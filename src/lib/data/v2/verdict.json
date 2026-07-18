@@ -1,7 +1,7 @@
 {
   "contractVersion": "verdict-v2.0.0",
-  "generatedAt": "2026-07-14T04:37:40.267774+00:00",
-  "analysisVersion": "v2.2.0",
+  "generatedAt": "2026-07-18T07:41:54.162383+00:00",
+  "analysisVersion": "v2.3.0",
   "prefilterVersion": "prefilter-v2.1.0",
   "selectionVersion": "ranked-tree-v2.2.0",
   "aggregationVersion": "community-aggregation-v2.2.0",
@@ -11,33 +11,33 @@
     "community": 0.6
   },
   "windowMonths": 12,
-  "articleCount": 1,
+  "articleCount": 4,
   "dimensions": {
     "capability": {
-      "rawScore": 0.5594,
-      "score": 64.0,
-      "verdict": "YES",
-      "confidence": 0.866,
-      "articleCount": 1
+      "rawScore": -0.2618,
+      "score": 43.5,
+      "verdict": "NO",
+      "confidence": 0.6736,
+      "articleCount": 4
     },
     "trajectory": {
-      "rawScore": -0.8122,
-      "score": 29.7,
+      "rawScore": -0.6463,
+      "score": 33.8,
       "verdict": "NO",
-      "confidence": 0.8599,
-      "articleCount": 1
+      "confidence": 0.5295,
+      "articleCount": 4
     },
     "impact": {
-      "rawScore": -0.8465,
-      "score": 28.8,
+      "rawScore": -1.0105,
+      "score": 24.7,
       "verdict": "NO",
-      "confidence": 0.8951,
-      "articleCount": 1
+      "confidence": 0.9051,
+      "articleCount": 4
     }
   },
   "composite": {
-    "rawScore": -0.3664,
-    "score": 40.8,
+    "rawScore": -0.6395,
+    "score": 34.0,
     "verdict": "NO",
     "addressedDimensions": [
       "capability",

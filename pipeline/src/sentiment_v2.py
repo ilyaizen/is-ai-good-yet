@@ -323,12 +323,22 @@ async def call_model(
     schema_name: str, response_schema: dict[str, Any],
     normalizer: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]] | None:
-    for attempt in range(2):
+    # gpt-oss-20b frequently misses the strict article contract on the first try
+    # (verbatim evidence substrings, bidirectional evidence<->dimension referential
+    # integrity, strict json_schema). The article path has no refill loop, so a
+    # validation failure silently drops the story. Feed the specific error back so
+    # the model self-corrects across up to 3 attempts instead of repeating itself.
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
+    for attempt in range(3):
         started = time.perf_counter()
+        raw = ""
         try:
             response = await client.chat.completions.create(
                 model=MODEL,
-                messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
+                messages=messages,
                 response_format={
                     "type": "json_schema",
                     "json_schema": {
@@ -337,7 +347,8 @@ async def call_model(
                 },
                 **MODEL_PARAMETERS,
             )
-            result = json.loads(response.choices[0].message.content or "{}")
+            raw = response.choices[0].message.content or "{}"
+            result = json.loads(raw)
             if normalizer:
                 result = normalizer(result)
             valid, error = validator(result)
@@ -351,6 +362,15 @@ async def call_model(
             }
         except (APIError, json.JSONDecodeError, ValueError) as error:
             logging.warning("Invalid v2 response (attempt %s): %s", attempt + 1, error)
+            if raw:
+                messages.append({"role": "assistant", "content": raw})
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Your previous response was invalid: "
+                    f"{error}. Re-read the contract and resubmit the complete corrected JSON."
+                ),
+            })
     return None
 
 

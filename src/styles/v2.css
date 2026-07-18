@@ -120,10 +120,6 @@ body.v2 p {
 
 .v2-hero {
   position: relative;
-  min-height: min(720px, calc(100dvh - 68px));
-  overflow: hidden;
-  isolation: isolate;
-  border-bottom: 1px solid var(--v2-separator);
 }
 .v2-dotted-glow,
 .v2-dotted-globe {
@@ -136,37 +132,9 @@ body.v2 p {
   opacity: 0.7;
   mask-image: linear-gradient(90deg, black 0 58%, transparent 88%);
 }
-.v2-hero__globe {
-  position: absolute;
-  z-index: -1;
-  top: 2%;
-  right: -4%;
-  width: min(58%, 760px);
-  height: 94%;
-  opacity: 0.72;
-  mask-image: linear-gradient(90deg, transparent 0, black 28%);
-}
 .v2-hero__content {
   position: relative;
-  width: min(760px, 65%);
-  padding: clamp(5rem, 10vh, 8rem) 0 3.5rem;
-}
-.v2-hero__command {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--v2-text-muted);
-  font-size: 0.78rem;
-}
-.v2-hero__command b {
-  color: var(--v2-phosphor);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-}
-.v2-hero__question {
-  margin: clamp(2.5rem, 6vh, 4.5rem) 0 0.5rem;
-  font: 400 clamp(1.2rem, 2.4vw, 2rem) var(--v2-font-copy);
-  letter-spacing: -0.025em;
+  max-width: min(760px, 65%);
 }
 .v2-hero__answer {
   position: relative;
@@ -255,7 +223,6 @@ body.v2 p {
   grid-template-columns: 180px 1fr;
   align-items: stretch;
   min-height: 84px;
-  margin-top: calc(clamp(3.5rem, 7vw, 7rem) * -1);
   background: var(--v2-surface-1);
   box-shadow:
     inset 0 1px var(--v2-separator-quiet),
@@ -1080,32 +1047,8 @@ body.v2 p {
     display: flex;
     align-items: center;
   }
-  .v2-hero {
-    min-height: auto;
-  }
   .v2-hero__content {
     width: 100%;
-    padding: 5rem 0 2rem;
-  }
-  .v2-hero__globe {
-    right: -35%;
-    width: 110%;
-    opacity: 0.28;
-  }
-  .v2-dotted-glow {
-    opacity: 0.42;
-    mask-image: linear-gradient(90deg, black, transparent);
-  }
-  .v2-hero__command {
-    align-items: flex-start;
-    justify-content: space-between;
-    font-size: 0.62rem;
-  }
-  .v2-hero__command span {
-    max-width: 65%;
-  }
-  .v2-hero__question {
-    margin-top: 3.2rem;
   }
   .v2-hero__answer {
     font-size: clamp(3.7rem, 19vw, 6rem);
@@ -1127,7 +1070,6 @@ body.v2 p {
   }
   .v2-pipeline {
     grid-template-columns: 1fr;
-    margin-top: -4.5rem;
   }
   .v2-pipeline__state {
     border-right: 0;

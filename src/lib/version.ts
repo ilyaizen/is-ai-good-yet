@@ -3,4 +3,4 @@
  * This file is auto-updated by the version bumper script during export.
  */
 
-export const VERSION = "0.1.3"
+export const VERSION = "0.1.15"

@@ -79,236 +79,236 @@
   },
   {
     "month": "2023-05",
-    "score": 50.05,
+    "score": 49.43,
     "verdict": "NOT_YET",
-    "articleCount": 32
+    "articleCount": 33
   },
   {
     "month": "2023-06",
-    "score": 50.24,
+    "score": 49.64,
     "verdict": "NOT_YET",
-    "articleCount": 35
+    "articleCount": 36
   },
   {
     "month": "2023-07",
-    "score": 51.16,
+    "score": 50.62,
     "verdict": "NOT_YET",
-    "articleCount": 44
+    "articleCount": 45
   },
   {
     "month": "2023-08",
-    "score": 54.34,
+    "score": 53.85,
     "verdict": "NOT_YET",
-    "articleCount": 53
+    "articleCount": 54
   },
   {
     "month": "2023-09",
-    "score": 55.13,
-    "verdict": "YES",
-    "articleCount": 62
+    "score": 54.65,
+    "verdict": "NOT_YET",
+    "articleCount": 63
   },
   {
     "month": "2023-10",
-    "score": 55.63,
+    "score": 55.2,
     "verdict": "YES",
-    "articleCount": 72
+    "articleCount": 73
   },
   {
     "month": "2023-11",
-    "score": 57.4,
+    "score": 56.99,
     "verdict": "YES",
-    "articleCount": 80
+    "articleCount": 81
   },
   {
     "month": "2023-12",
-    "score": 60.82,
+    "score": 60.43,
     "verdict": "YES",
-    "articleCount": 88
+    "articleCount": 89
   },
   {
     "month": "2024-01",
-    "score": 57.61,
+    "score": 57.29,
     "verdict": "YES",
-    "articleCount": 97
+    "articleCount": 98
   },
   {
     "month": "2024-02",
-    "score": 57.46,
+    "score": 57.17,
     "verdict": "YES",
-    "articleCount": 106
+    "articleCount": 107
   },
   {
     "month": "2024-03",
-    "score": 58.97,
+    "score": 58.68,
     "verdict": "YES",
-    "articleCount": 115
+    "articleCount": 116
   },
   {
     "month": "2024-04",
-    "score": 60.14,
+    "score": 59.88,
     "verdict": "YES",
-    "articleCount": 131
+    "articleCount": 132
   },
   {
     "month": "2024-05",
-    "score": 59.1,
+    "score": 58.86,
     "verdict": "YES",
-    "articleCount": 144
+    "articleCount": 145
   },
   {
     "month": "2024-06",
-    "score": 58.21,
+    "score": 57.99,
     "verdict": "YES",
-    "articleCount": 157
+    "articleCount": 158
   },
   {
     "month": "2024-07",
-    "score": 56.68,
+    "score": 56.47,
     "verdict": "YES",
-    "articleCount": 164
+    "articleCount": 165
   },
   {
     "month": "2024-08",
-    "score": 58.53,
+    "score": 58.32,
     "verdict": "YES",
-    "articleCount": 174
+    "articleCount": 175
   },
   {
     "month": "2024-09",
-    "score": 59.32,
+    "score": 58.94,
     "verdict": "YES",
-    "articleCount": 179
+    "articleCount": 181
   },
   {
     "month": "2024-10",
-    "score": 59.15,
+    "score": 58.78,
     "verdict": "YES",
-    "articleCount": 191
+    "articleCount": 193
   },
   {
     "month": "2024-11",
-    "score": 59.42,
+    "score": 59.08,
     "verdict": "YES",
-    "articleCount": 200
+    "articleCount": 202
   },
   {
     "month": "2024-12",
-    "score": 59.43,
+    "score": 59.12,
     "verdict": "YES",
-    "articleCount": 225
+    "articleCount": 227
   },
   {
     "month": "2025-01",
-    "score": 62.09,
+    "score": 61.8,
     "verdict": "YES",
-    "articleCount": 265
+    "articleCount": 267
   },
   {
     "month": "2025-02",
-    "score": 58.55,
+    "score": 58.31,
     "verdict": "YES",
-    "articleCount": 316
+    "articleCount": 318
   },
   {
     "month": "2025-03",
-    "score": 57.68,
+    "score": 57.47,
     "verdict": "YES",
-    "articleCount": 361
+    "articleCount": 363
   },
   {
     "month": "2025-04",
-    "score": 55.92,
+    "score": 55.74,
     "verdict": "YES",
-    "articleCount": 415
+    "articleCount": 417
   },
   {
     "month": "2025-05",
-    "score": 54.94,
+    "score": 54.79,
     "verdict": "NOT_YET",
-    "articleCount": 474
+    "articleCount": 476
   },
   {
     "month": "2025-06",
-    "score": 56.76,
+    "score": 56.62,
     "verdict": "YES",
-    "articleCount": 538
+    "articleCount": 540
   },
   {
     "month": "2025-07",
-    "score": 56.91,
+    "score": 56.79,
     "verdict": "YES",
-    "articleCount": 612
+    "articleCount": 614
   },
   {
     "month": "2025-08",
-    "score": 57.46,
+    "score": 57.35,
     "verdict": "YES",
-    "articleCount": 692
+    "articleCount": 694
   },
   {
     "month": "2025-09",
-    "score": 58.05,
+    "score": 57.95,
     "verdict": "YES",
-    "articleCount": 765
+    "articleCount": 767
   },
   {
     "month": "2025-10",
-    "score": 58.09,
+    "score": 57.99,
     "verdict": "YES",
-    "articleCount": 828
+    "articleCount": 830
   },
   {
     "month": "2025-11",
-    "score": 57.47,
+    "score": 57.27,
     "verdict": "YES",
-    "articleCount": 877
+    "articleCount": 878
   },
   {
     "month": "2025-12",
-    "score": 57.17,
+    "score": 57.16,
     "verdict": "YES",
-    "articleCount": 945
+    "articleCount": 946
   },
   {
     "month": "2026-01",
-    "score": 57.95,
+    "score": 57.94,
     "verdict": "YES",
     "articleCount": 1010
   },
   {
     "month": "2026-02",
-    "score": 58.41,
+    "score": 58.38,
     "verdict": "YES",
-    "articleCount": 1037
+    "articleCount": 1036
   },
   {
     "month": "2026-03",
-    "score": 59.13,
+    "score": 59.1,
     "verdict": "YES",
-    "articleCount": 1070
+    "articleCount": 1069
   },
   {
     "month": "2026-04",
-    "score": 59.19,
+    "score": 59.16,
     "verdict": "YES",
-    "articleCount": 1099
+    "articleCount": 1098
   },
   {
     "month": "2026-05",
-    "score": 59.79,
+    "score": 59.98,
     "verdict": "YES",
-    "articleCount": 1124
+    "articleCount": 1122
   },
   {
     "month": "2026-06",
-    "score": 60.25,
+    "score": 60.07,
     "verdict": "YES",
-    "articleCount": 1148
+    "articleCount": 1125
   },
   {
     "month": "2026-07",
-    "score": 59.52,
+    "score": 59.62,
     "verdict": "YES",
-    "articleCount": 1163
+    "articleCount": 1135
   }
 ]

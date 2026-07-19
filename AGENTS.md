@@ -1,6 +1,6 @@
 # AGENTS.md
 
-> Guidance for AI coding agents (Pi, Claude Code, Codex, Cursor, OpenCode, KiloCode, etc.) working on `is-ai-good-yet`.
+> For AI coding agents (Hermes-Agent, Pi, OpenCode, KiloCode, Claude Code, Cursor, etc.)
 
 ## Project
 
@@ -8,11 +8,11 @@
 
 - GitHub repo: `ilyaizen/is-ai-good-yet`
 - Production deploy: repo root via Coolify/nixpacks (Node 22.18), `@sveltejs/adapter-node`
-- Status: V1 remains stable; the isolated V2 pipeline, static export contracts, public `/v2` dashboard, and `/v2/admin` methodology controls are implemented
+- Status: V1 is the live production experience; V2 pipeline, static export contracts, and the `/v2` dashboard + `/v2/admin` methodology controls are implemented but remain **pre-production** — the `/v2` route prefix is a staging/preview path and will not be the public URL when V2 goes live
 
 ## Stack
 
-- **Frontend** (repo root, _not_ a nested `frontend/` or `is-ai-good-yet/` dir): SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4.1 + shadcn-svelte + D3/LayerCake
+- **Frontend** (repo root, _not_ a nested `frontend/` or `is-ai-good-yet/` dir): SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS v4.3 + shadcn-svelte + D3/LayerCake
 - **Backend pipeline** (`pipeline/`): Python 3.11+ — Polars, aiohttp, trafilatura, Playwright/camoufox scraping, Groq/Mistral/Anthropic LLM APIs
 - **V2 analysis**: isolated broad-scope prefilter + article thesis analysis + deterministic ranked-tree HN comment sampling; versioned methodology lives in `docs/v2-*.md`
 - **Visitor counter** (`convex/`): Convex backend

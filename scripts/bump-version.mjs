@@ -95,4 +95,4 @@ async function bumpVersion() {
 }
 
 // Run if executed directly
-bumpVersion()
+void bumpVersion()

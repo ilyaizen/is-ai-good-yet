@@ -3,6 +3,7 @@
   import { createWireframeGlobe } from "./dotted-globe";
   import { WORLD_CITIES } from "./world-cities";
 
+  // eslint-disable-next-line no-unassigned-vars -- assigned via bind:this
   let host: HTMLDivElement;
   onMount(() => createWireframeGlobe(host, {
     rotationSpeed: 1.8,

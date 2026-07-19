@@ -109,7 +109,7 @@ export function getPipelineTableData(): UrlEntry[] {
     const db = getDb()
     const stmt = db.prepare("SELECT * FROM urls ORDER BY hn_timestamp DESC")
     return stmt.all() as UrlEntry[]
-  } catch (error) {
+  } catch {
     // Return empty array if database is not available (e.g., during build)
     return []
   }
@@ -267,7 +267,7 @@ export function getPipelineStats(): PipelineStats {
       analyzed: result.analyzed || 0,
       failed: result.failed || 0,
     }
-  } catch (error) {
+  } catch {
     // Return empty stats if database is not available (e.g., during build)
     return {
       totalUrls: 0,
@@ -666,21 +666,6 @@ function calculateInfluenceScore(hnScore: number, timestampSeconds: number): num
   const powerLaw = Math.pow(hnScore, 0.85)
   const decayFactor = getDecayFactor(timestampSeconds)
   return powerLaw * decayFactor
-}
-
-/**
- * Calculate the weighted contribution of an article to the verdict.
- * Formula: contribution = sentiment_score × influence_score
- * This is the same calculation shown in the Articles table.
- *
- * @param hnScore - HN upvotes
- * @param timestampSeconds - Unix timestamp
- * @param sentimentScore - Sentiment from -2.0 to +2.0
- * @returns Weighted contribution (can be negative for negative sentiment)
- */
-function calculateWeightedContribution(hnScore: number, timestampSeconds: number, sentimentScore: number): number {
-  const influence = calculateInfluenceScore(hnScore, timestampSeconds)
-  return sentimentScore * influence
 }
 
 export type VerdictScore = {

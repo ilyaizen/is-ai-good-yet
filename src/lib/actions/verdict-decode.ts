@@ -14,7 +14,7 @@ export function verdictDecode(node: HTMLElement, finalText: string, options: Dec
     return () => undefined
   }
 
-  const chars = [...finalText]
+  const chars = Array.from(finalText)
   const duration = options.duration ?? 900
   let frame = 0
   let timer = 0

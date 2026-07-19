@@ -27,7 +27,8 @@ export const actions: Actions = {
   default: async (event: RequestEvent) => {
     const form = await event.request.formData()
     const next = sanitizeAdminNextPath(form.get("next"))
-    const password = String(form.get("password") ?? "").trim()
+    const passwordEntry = form.get("password")
+    const password = (typeof passwordEntry === "string" ? passwordEntry : "").trim()
 
     if (!adminAccessConfigured()) {
       return fail(503, {

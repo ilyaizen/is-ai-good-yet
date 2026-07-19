@@ -127,7 +127,7 @@
       <div class="v2-method__col">
         <section aria-labelledby="method-config-title">
           <h3 id="method-config-title" class="v2-method__subhead">Runtime contract</h3>
-          <dl class="v2-kv">
+          <dl class="v2-grid v2-grid--framed v2-kv">
             <div><dt>Model</dt><dd>{methodology.model}</dd></div>
             <div><dt>Parameters</dt><dd>{methodology.modelParameters}</dd></div>
             <div><dt>Article input</dt><dd>{methodology.limits.minimumArticleCharacters}–{methodology.limits.articleCharacters.toLocaleString()} chars</dd></div>
@@ -140,7 +140,7 @@
 
         <section aria-labelledby="method-versions-title">
           <h3 id="method-versions-title" class="v2-method__subhead">Version ledger</h3>
-          <dl class="v2-kv">
+          <dl class="v2-grid v2-grid--framed v2-kv">
             {#each Object.entries(methodology.versions) as [name, version] (name)}
               <div><dt class="capitalize">{name.replace(/([A-Z])/g, " $1")}</dt><dd>{version}</dd></div>
             {/each}
@@ -275,34 +275,6 @@
     font: 500 0.68rem/1.4 ui-monospace, monospace;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-  }
-
-  /* Key-value hairline grid (matches observability prefilter idiom) */
-  .v2-kv {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin: 0.75rem 0 0;
-    background: var(--v2-separator-quiet);
-    border: 1px solid var(--v2-separator-quiet);
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-  .v2-kv div {
-    padding: 0.65rem 1rem;
-    background: var(--v2-recess);
-  }
-  .v2-kv dt {
-    color: var(--v2-text-faint);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .v2-kv dd {
-    margin: 0.25rem 0 0;
-    color: var(--v2-text-muted);
-    font: 400 0.72rem/1.45 ui-monospace, monospace;
-    overflow-wrap: anywhere;
   }
 
   /* Prompts */

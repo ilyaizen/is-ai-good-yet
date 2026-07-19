@@ -89,10 +89,11 @@
     return String(n);
   }
 
+  // Maps a persisted status to a shared .v2-status tone class (see v2.css).
   function statusTone(status: string | null | undefined): string {
-    if (status === "accepted" || status === "succeeded") return "v2-admin-status--success";
-    if (status === "running" || status === "partial") return "v2-admin-status--active";
-    if (status === "failed" || status === "rejected") return "v2-admin-status--failed";
+    if (status === "accepted" || status === "succeeded") return "v2-status--ok";
+    if (status === "running" || status === "partial") return "v2-status--live";
+    if (status === "failed" || status === "rejected") return "v2-status--bad";
     return "";
   }
 
@@ -119,9 +120,14 @@
   <title>V2 operations · Is AI Good Yet?</title>
 </svelte:head>
 
+<!--
+  Three .v2-card sections in priority order: observatory (health at a glance),
+  orchestration (run ledger), then the story ledger (deep dive). The shell bar
+  (nav + logout) lives in +layout.svelte, not in the hero card.
+-->
 <div class="v2-admin-shell mx-auto max-w-[96rem] px-4 pt-8 sm:px-6 lg:px-8">
-  <!-- Observatory card: page header (kicker + hero title + lede + actions) with the
-       KPI strip as its body. Same .v2-card chrome as the methodology card below. -->
+  <!-- Observatory card: page header (kicker + hero title + lede) with the
+       KPI strip as its body. Same .v2-card chrome as the methodology card. -->
   <section class="v2-card">
     <header class="v2-card__head">
       <p class="v2-card__kicker">Observability</p>
@@ -132,14 +138,9 @@
             Live V2 state from the pipeline database — per-story runs, provenance, and orchestration.
           </p>
         </div>
-        <nav class="v2-admin-actions">
-          <a href="/v2">Public dashboard</a>
-          <a href="/admin">V1 admin</a>
-          <a href="#v2-methodology-title">Methodology</a>
-          <form method="post" action="?/logout">
-            <button type="submit">Log out</button>
-          </form>
-        </nav>
+        <span class="v2-card__chip {data.available ? 'v2-status--ok' : 'v2-status--bad'}">
+          {data.available ? "DB live" : "DB unavailable"}
+        </span>
       </div>
     </header>
 
@@ -149,7 +150,7 @@
         <p>The production pipeline database has not exposed the complete V2 schema yet.</p>
       </div>
     {:else}
-      <div class="v2-admin-metrics" aria-label="V2 analysis totals">
+      <div class="v2-grid v2-admin-metrics" aria-label="V2 analysis totals">
         <article><span>Eligible stories</span><strong>{formatNumber(data.summary.eligibleStories)}</strong><small>passed prefilter</small></article>
         <article><span>Article analyses</span><strong>{formatNumber(data.summary.articleAccepted)}</strong><small>accepted runs</small></article>
         <article><span>Community analyses</span><strong>{formatNumber(data.summary.communityAccepted)}</strong><small>accepted aggregates</small></article>
@@ -161,7 +162,45 @@
   </section>
 
   {#if data.available}
-    <section class="v2-card" aria-labelledby="v2-story-ledger-title">
+    <section class="v2-card v2-admin-runs" aria-labelledby="v2-run-ledger-title">
+      <header class="v2-card__head">
+        <p class="v2-card__kicker">Orchestration</p>
+        <div class="v2-card__head-row">
+          <div>
+            <h2 id="v2-run-ledger-title" class="v2-card__title">V2 run ledger</h2>
+            <p class="v2-card__lede">
+              Pipeline-level runs from the <code>v2_orchestration_runs</code> table.
+            </p>
+          </div>
+        </div>
+      </header>
+      <div class="v2-admin-table-wrap">
+        <table class="v2-admin-table">
+          <thead><tr><th>Run</th><th>Status</th><th>Last stage</th><th>Started</th><th>Finished</th><th class="v2-admin-num">Duration</th><th class="v2-admin-num">Stories</th><th class="v2-admin-num">Articles</th><th class="v2-admin-num">Comments</th><th>Error</th></tr></thead>
+          <tbody>
+            {#each data.orchestrationRuns as run (run.runId)}
+              {@const durationSec = run.startedAt && run.finishedAt
+                ? (new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000
+                : null}
+              <tr>
+                <td title={run.runId}>{run.runId.slice(0, 10)}</td>
+                <td><span class="v2-status {statusTone(run.status)}">{run.status}</span></td>
+                <td>{run.stage}</td>
+                <td>{formatTimestamp(run.startedAt)}</td>
+                <td>{formatTimestamp(run.finishedAt)}</td>
+                <td class="v2-admin-num">{formatSeconds(durationSec)}</td>
+                <td class="v2-admin-num">{run.storiesDiscovered}</td>
+                <td class="v2-admin-num">{run.articlesProcessed}</td>
+                <td class="v2-admin-num">{run.commentsAnalyzed}</td>
+                <td>{run.errorCode ?? "—"}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="v2-card v2-admin-stories" aria-labelledby="v2-story-ledger-title">
       <header class="v2-card__head">
         <p class="v2-card__kicker">Analysis ledger</p>
         <div class="v2-card__head-row">
@@ -204,11 +243,11 @@
                     </time>
                   {/if}
                   {#if story.eligible === null}
-                    <span class="v2-admin-elig">Not checked</span>
+                    <span class="v2-status">Not checked</span>
                   {:else if story.eligible}
-                    <span class="v2-admin-elig v2-admin-status--success">Eligible</span>
+                    <span class="v2-status v2-status--ok">Eligible</span>
                   {:else}
-                    <span class="v2-admin-elig v2-admin-status--failed">Rejected</span>
+                    <span class="v2-status v2-status--bad">Rejected</span>
                   {/if}
                 </div>
                 <strong>
@@ -228,8 +267,8 @@
                 </small>
               </div>
               <div class="v2-admin-story__states">
-                <span class={statusTone(story.articleStatus)}>ARTICLE {story.articleStatus ?? "missing"}</span>
-                <span class={statusTone(story.communityStatus)}>COMMUNITY {story.communityStatus ?? "missing"}</span>
+                <span class="v2-status {statusTone(story.articleStatus)}">ARTICLE {story.articleStatus ?? "missing"}</span>
+                <span class="v2-status {statusTone(story.communityStatus)}">COMMUNITY {story.communityStatus ?? "missing"}</span>
                 <i aria-hidden="true" class="v2-admin-story__chevron">⌄</i>
               </div>
             </summary>
@@ -244,7 +283,7 @@
                 </div>
               {:else if storyDetails[story.hnStoryId]}
                 {@const details = storyDetails[story.hnStoryId]}
-                <div class="v2-admin-prefilter">
+                <div class="v2-grid v2-grid--framed v2-admin-prefilter">
                   <div><span>Eligibility</span><strong>{story.eligible === null ? "Not checked" : story.eligible ? "Eligible" : "Rejected"}</strong></div>
                   <div><span>Reason code</span><strong>{details.prefilterReasonCode ?? "—"}</strong></div>
                   <div><span>Prefilter model</span><strong>{details.prefilterModel ?? "—"}</strong></div>
@@ -258,11 +297,11 @@
                     <article class="v2-admin-source">
                       <header>
                         <div><span>{String(source).toUpperCase()}</span><strong>{resultSummary(run as V2AnalysisRun | null)}</strong></div>
-                        <b class={statusTone((run as V2AnalysisRun | null)?.status)}>{(run as V2AnalysisRun | null)?.status ?? "missing"}</b>
+                        <b class="v2-status {statusTone((run as V2AnalysisRun | null)?.status)}">{(run as V2AnalysisRun | null)?.status ?? "missing"}</b>
                       </header>
                       {#if run}
                         {@const analysis = run as V2AnalysisRun}
-                        <dl>
+                        <dl class="v2-grid v2-kv">
                           <div><dt>Model</dt><dd>{analysis.model}</dd></div>
                           <div><dt>Analysis / parser</dt><dd>{analysis.analysisVersion} / {analysis.parserVersion}</dd></div>
                           <div><dt>Contract</dt><dd>{analysis.contractVersion}</dd></div>
@@ -272,7 +311,7 @@
                           <div><dt>Provenance</dt><dd title={`prompt ${analysis.promptHash} · input ${analysis.inputHash}`}>{analysis.promptHash.slice(0, 10)} · {analysis.inputHash.slice(0, 10)}</dd></div>
                         </dl>
 
-                        <div class="v2-admin-metric-strip" aria-label={`${source} run metrics`}>
+                        <div class="v2-grid v2-admin-metric-strip" aria-label={`${source} run metrics`}>
                           <div class="v2-admin-metric">
                             <span>Input tokens</span>
                             <strong>{formatTokens(analysis.metrics.inputTokens)}</strong>
@@ -310,7 +349,7 @@
                           {/each}
                         </div>
 
-                        <details class="v2-admin-json">
+                        <details class="v2-code v2-code--flat v2-admin-json">
                           <summary>Raw JSON · tokens, inference, parameters, full result</summary>
                           <pre>{pretty(analysis.result)}</pre>
                         </details>
@@ -322,7 +361,7 @@
                 </div>
 
                 {#if details.articleText !== null}
-                  <details class="v2-admin-text">
+                  <details class="v2-code v2-admin-text">
                     <summary>Article body · prefilter input <small>{details.articleText.length.toLocaleString()} chars</small></summary>
                     <pre>{details.articleText}</pre>
                   </details>
@@ -340,14 +379,14 @@
                       <article class="v2-admin-comment">
                         <header>
                           <span>{comment.author}</span>
-                          <b class={statusTone(comment.analysisStatus)}>{comment.analysisStatus ?? "not analyzed"}</b>
+                          <b class="v2-status {statusTone(comment.analysisStatus)}">{comment.analysisStatus ?? "not analyzed"}</b>
                         </header>
                         <p>{comment.text}</p>
                         {#if comment.selectionReason}
                           <small>selected · {comment.selectionReason}</small>
                         {/if}
                         {#if Object.keys(comment.analysisResult).length}
-                          <details class="v2-admin-json">
+                          <details class="v2-code v2-code--flat v2-admin-json">
                             <summary>Raw result</summary>
                             <pre>{pretty(comment.analysisResult)}</pre>
                           </details>
@@ -364,168 +403,539 @@
         {/each}
       </div>
     </section>
-
-    <section class="v2-card" aria-labelledby="v2-run-ledger-title">
-      <header class="v2-card__head">
-        <p class="v2-card__kicker">Orchestration</p>
-        <div class="v2-card__head-row">
-          <div>
-            <h2 id="v2-run-ledger-title" class="v2-card__title">V2 run ledger</h2>
-            <p class="v2-card__lede">
-              Pipeline-level runs from the <code>v2_orchestration_runs</code> table.
-            </p>
-          </div>
-        </div>
-      </header>
-      <div class="v2-admin-table-wrap">
-        <table class="v2-admin-table">
-          <thead><tr><th>Run</th><th>Status</th><th>Last stage</th><th>Started</th><th>Finished</th><th class="v2-admin-num">Duration</th><th class="v2-admin-num">Stories</th><th class="v2-admin-num">Articles</th><th class="v2-admin-num">Comments</th><th>Error</th></tr></thead>
-          <tbody>
-            {#each data.orchestrationRuns as run (run.runId)}
-              {@const durationSec = run.startedAt && run.finishedAt
-                ? (new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000
-                : null}
-              <tr>
-                <td title={run.runId}>{run.runId.slice(0, 10)}</td>
-                <td><span class={statusTone(run.status)}>{run.status}</span></td>
-                <td>{run.stage}</td>
-                <td>{formatTimestamp(run.startedAt)}</td>
-                <td>{formatTimestamp(run.finishedAt)}</td>
-                <td class="v2-admin-num">{formatSeconds(durationSec)}</td>
-                <td class="v2-admin-num">{run.storiesDiscovered}</td>
-                <td class="v2-admin-num">{run.articlesProcessed}</td>
-                <td class="v2-admin-num">{run.commentsAnalyzed}</td>
-                <td>{run.errorCode ?? "—"}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
-    </section>
   {/if}
 </div>
 
 <style>
-  .v2-admin-shell { color: var(--v2-text); font-feature-settings: "cv01", "ss03"; }
-  /* Stack the observatory + ledger cards with the same rhythm. */
-  .v2-admin-shell > * + * { margin-top: 1.25rem; }
+  .v2-admin-shell {
+    display: flex;
+    flex-direction: column;
+    color: var(--v2-text);
+    font-feature-settings: "cv01", "ss03";
+  }
+  /* Stack the cards with the same rhythm. */
+  .v2-admin-shell > * + * {
+    margin-top: 1.25rem;
+  }
+  /* Priority order: observatory (0) → orchestration → story ledger (deep dive last). */
+  .v2-admin-runs {
+    order: 1;
+  }
+  .v2-admin-stories {
+    order: 2;
+  }
 
-  /* Hero actions — right slot of the observatory head-row. */
-  .v2-admin-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-self: flex-start; }
-  .v2-admin-actions a,
-  .v2-admin-actions button { border: 1px solid var(--v2-separator); border-radius: .4rem; background: color-mix(in srgb, var(--v2-text) 3%, transparent); padding: .55rem .8rem; color: var(--v2-text-muted); font-size: .75rem; transition: .15s ease; }
-  .v2-admin-actions a:hover,
-  .v2-admin-actions button:hover { border-color: var(--v2-phosphor); color: var(--v2-text); }
-
-  /* KPI strip — full-bleed body of the observatory card (card supplies border/radius). */
-  .v2-admin-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; background: var(--v2-separator-quiet); overflow: hidden; }
-  .v2-admin-metrics article { min-width: 0; padding: 1rem; background: var(--v2-recess); }
-  .v2-admin-metrics span, .v2-admin-prefilter span { color: var(--v2-text-faint); font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; }
-  .v2-admin-metrics strong { display: block; margin-top: .6rem; font: 510 1.75rem/1 ui-monospace, monospace; }
-  .v2-admin-metrics small { display: block; overflow: hidden; margin-top: .45rem; color: var(--v2-text-muted); font-size: .69rem; text-overflow: ellipsis; white-space: nowrap; }
+  /* KPI strip — content layer over .v2-grid (the grid mechanism lives there). */
+  .v2-admin-metrics {
+    --v2-grid-cols: 6;
+  }
+  .v2-admin-metrics article {
+    padding: 1rem;
+  }
+  .v2-admin-metrics span {
+    color: var(--v2-text-faint);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .v2-admin-metrics strong {
+    display: block;
+    margin-top: 0.6rem;
+    font:
+      510 1.75rem/1 ui-monospace,
+      monospace;
+  }
+  .v2-admin-metrics small {
+    display: block;
+    overflow: hidden;
+    margin-top: 0.45rem;
+    color: var(--v2-text-muted);
+    font-size: 0.69rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   /* Count badge — right slot of the ledger head-row. */
-  .v2-admin-count { align-self: flex-start; border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .25rem .55rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; }
+  .v2-admin-count {
+    align-self: flex-start;
+    border: 1px solid var(--v2-separator);
+    border-radius: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    color: var(--v2-text-muted);
+    font:
+      500 0.68rem ui-monospace,
+      monospace;
+  }
 
   /* Ledger actions = count + expand/collapse-all, grouped at the right edge. */
-  .v2-admin-ledger-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; align-self: flex-start; }
-  .v2-admin-toggle-all { border: 1px solid var(--v2-separator); border-radius: .3rem; background: color-mix(in srgb, var(--v2-text) 3%, transparent); padding: .3rem .65rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; cursor: pointer; transition: .15s ease; }
-  .v2-admin-toggle-all:hover { border-color: var(--v2-phosphor); color: var(--v2-text); }
-  .v2-admin-toggle-all[aria-pressed="true"] { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent); color: var(--v2-phosphor); }
+  .v2-admin-ledger-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+  }
+  .v2-admin-toggle-all {
+    border: 1px solid var(--v2-separator);
+    border-radius: 0.3rem;
+    background: color-mix(in srgb, var(--v2-text) 3%, transparent);
+    padding: 0.3rem 0.65rem;
+    color: var(--v2-text-muted);
+    font:
+      500 0.68rem ui-monospace,
+      monospace;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+  .v2-admin-toggle-all:hover {
+    border-color: var(--v2-phosphor);
+    color: var(--v2-text);
+  }
+  .v2-admin-toggle-all[aria-pressed="true"] {
+    border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent);
+    color: var(--v2-phosphor);
+  }
 
-  .v2-admin-story { border-bottom: 1px solid var(--v2-separator-quiet); }
-  .v2-admin-story:last-child { border: 0; }
-  .v2-admin-story > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; list-style: none; }
-  .v2-admin-story > summary:hover { background: color-mix(in srgb, var(--v2-text) 2.5%, transparent); }
-  .v2-admin-story__identity { display: grid; min-width: 0; gap: .3rem; }
+  .v2-admin-story {
+    border-bottom: 1px solid var(--v2-separator-quiet);
+  }
+  .v2-admin-story:last-child {
+    border: 0;
+  }
+  .v2-admin-story > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .v2-admin-story > summary::-webkit-details-marker {
+    display: none;
+  }
+  .v2-admin-story > summary:hover {
+    background: color-mix(in srgb, var(--v2-text) 2.5%, transparent);
+  }
+  .v2-admin-story__identity {
+    display: grid;
+    min-width: 0;
+    gap: 0.3rem;
+  }
   /* Kicker line: HN id · date · eligibility badge */
-  .v2-admin-story__kicker { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
-  .v2-admin-story__kicker > span:first-child { color: var(--v2-phosphor); font: 500 .65rem ui-monospace, monospace; }
-  .v2-admin-story__kicker time { color: var(--v2-text-faint); font: 500 .65rem ui-monospace, monospace; }
-  .v2-admin-elig { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .15rem .4rem; color: var(--v2-text-muted); font: 500 .6rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
-  .v2-admin-story__identity strong { overflow: hidden; font-size: .9rem; font-weight: 510; text-overflow: ellipsis; white-space: nowrap; }
-  .v2-admin-story__identity strong a { color: inherit; text-decoration: none; }
-  .v2-admin-story__identity strong a:hover { color: var(--v2-phosphor); }
-  .v2-admin-story__identity small { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .55rem; color: var(--v2-text-faint); font-size: .7rem; }
+  .v2-admin-story__kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .v2-admin-story__kicker > span:first-child {
+    color: var(--v2-phosphor);
+    font:
+      500 0.65rem ui-monospace,
+      monospace;
+  }
+  .v2-admin-story__kicker time {
+    color: var(--v2-text-faint);
+    font:
+      500 0.65rem ui-monospace,
+      monospace;
+  }
+  .v2-admin-story__identity strong {
+    overflow: hidden;
+    font-size: 0.9rem;
+    font-weight: 510;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .v2-admin-story__identity strong a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .v2-admin-story__identity strong a:hover {
+    color: var(--v2-phosphor);
+  }
+  .v2-admin-story__identity small {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.55rem;
+    color: var(--v2-text-faint);
+    font-size: 0.7rem;
+  }
   /* Scope chips in summary */
-  .v2-admin-scopes { display: inline-flex; flex-wrap: wrap; gap: .25rem; }
-  .v2-admin-scope { padding: .1rem .4rem; background: var(--v2-recess); border: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: 500 .58rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .06em; }
-  .v2-admin-story__states { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
-  .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-comment header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
-  .v2-admin-status--success { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent) !important; color: var(--v2-phosphor) !important; }
-  .v2-admin-status--active { border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent) !important; color: var(--v2-violet) !important; }
-  .v2-admin-status--failed { border-color: color-mix(in oklch, var(--v2-red) 35%, transparent) !important; color: var(--v2-red) !important; }
-  .v2-admin-story__chevron { color: var(--v2-text-faint); transition: transform .15s ease; line-height: 1; }
-  .v2-admin-story[open] .v2-admin-story__chevron { transform: rotate(180deg); }
+  .v2-admin-scopes {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .v2-admin-scope {
+    padding: 0.1rem 0.4rem;
+    background: var(--v2-recess);
+    border: 1px solid var(--v2-separator-quiet);
+    color: var(--v2-text-muted);
+    font:
+      500 0.58rem ui-monospace,
+      monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .v2-admin-story__states {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+  }
+  .v2-admin-story__chevron {
+    color: var(--v2-text-faint);
+    transition: transform 0.15s ease;
+    line-height: 1;
+  }
+  .v2-admin-story[open] .v2-admin-story__chevron {
+    transform: rotate(180deg);
+  }
 
-  /* Run metric strip — badges for token/duration, replacing the JSON-only view. */
-  .v2-admin-metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 0; border-top: 1px solid var(--v2-separator-quiet); background: var(--v2-separator-quiet); }
-  .v2-admin-metric { min-width: 0; padding: .65rem 1rem; background: var(--v2-recess); }
-  .v2-admin-metric span { color: var(--v2-text-faint); font: 500 .6rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
-  .v2-admin-metric strong { display: block; margin-top: .3rem; color: var(--v2-phosphor); font: 510 .82rem ui-monospace, monospace; }
+  /* Prefilter grid — content layer over .v2-grid. */
+  .v2-admin-prefilter {
+    --v2-grid-cols: 5;
+  }
+  .v2-admin-prefilter > div {
+    padding: 0.8rem;
+  }
+  .v2-admin-prefilter span {
+    color: var(--v2-text-faint);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .v2-admin-prefilter strong {
+    display: block;
+    overflow: hidden;
+    margin-top: 0.35rem;
+    font:
+      500 0.72rem ui-monospace,
+      monospace;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .v2-admin-prefilter > p {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 0.8rem;
+    color: var(--v2-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.55;
+  }
+
+  /* Metric strip — content layer over .v2-grid; border-top separates it from the dl above. */
+  .v2-admin-metric-strip {
+    --v2-grid-cols: 4;
+    border-top: 1px solid var(--v2-separator-quiet);
+  }
+  .v2-admin-metric {
+    padding: 0.65rem 1rem;
+  }
+  .v2-admin-metric span {
+    color: var(--v2-text-faint);
+    font:
+      500 0.6rem ui-monospace,
+      monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .v2-admin-metric strong {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--v2-phosphor);
+    font:
+      510 0.82rem ui-monospace,
+      monospace;
+  }
 
   /* Confidence bar inside dimension section */
-  .v2-admin-conf-bar { height: .25rem; margin-top: .5rem; background: var(--v2-separator-quiet); border-radius: 1rem; overflow: hidden; }
-  .v2-admin-conf-bar span { display: block; height: 100%; background: color-mix(in oklch, var(--v2-phosphor) 70%, transparent); }
+  .v2-admin-conf-bar {
+    height: 0.25rem;
+    margin-top: 0.5rem;
+    background: var(--v2-separator-quiet);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .v2-admin-conf-bar span {
+    display: block;
+    height: 100%;
+    background: color-mix(in oklch, var(--v2-phosphor) 70%, transparent);
+  }
 
   /* Numeric table cells */
-  .v2-admin-table .v2-admin-num { text-align: right; }
-  .v2-admin-story__body { padding: 0 1.25rem 1.25rem; }
-  .v2-admin-loading, .v2-admin-load-error { margin: 0; padding: 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); color: var(--v2-text-muted); font-size: .75rem; }
-  .v2-admin-load-error { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--v2-red); }
-  .v2-admin-load-error button { border: 1px solid var(--v2-separator); border-radius: .35rem; padding: .35rem .6rem; color: var(--v2-text-muted); }
-  .v2-admin-prefilter { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-separator-quiet); overflow: hidden; }
-  .v2-admin-prefilter > div { min-width: 0; padding: .8rem; background: var(--v2-recess); }
-  .v2-admin-prefilter strong { display: block; overflow: hidden; margin-top: .35rem; font: 500 .72rem ui-monospace, monospace; text-overflow: ellipsis; white-space: nowrap; }
-  .v2-admin-prefilter > p { grid-column: 1 / -1; margin: 0; padding: .8rem; background: var(--v2-recess); color: var(--v2-text-muted); font-size: .75rem; line-height: 1.55; }
-  .v2-admin-source-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: .75rem; }
-  .v2-admin-source { min-width: 0; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); overflow: hidden; }
-  .v2-admin-source > header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--v2-separator-quiet); }
-  .v2-admin-source > header > div { display: grid; gap: .35rem; }
-  .v2-admin-source > header span { color: var(--v2-phosphor); font: 500 .65rem ui-monospace, monospace; letter-spacing: .15em; }
-  .v2-admin-source > header strong { color: var(--v2-text-muted); font-size: .76rem; font-weight: 400; line-height: 1.5; }
-  .v2-admin-source dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
-  .v2-admin-source dl div { min-width: 0; padding: .65rem 1rem; border-bottom: 1px solid var(--v2-separator-quiet); }
-  .v2-admin-source dt { color: var(--v2-text-faint); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; }
-  .v2-admin-source dd { overflow: hidden; margin-top: .25rem; color: var(--v2-text-muted); font: 400 .68rem/1.45 ui-monospace, monospace; text-overflow: ellipsis; white-space: nowrap; }
-  .v2-admin-dimensions { display: grid; gap: .5rem; padding: .75rem; }
-  .v2-admin-dimensions section { padding: .75rem; border: 1px solid var(--v2-separator-quiet); border-radius: .4rem; }
-  .v2-admin-dimensions section > div { display: flex; justify-content: space-between; }
-  .v2-admin-dimensions span { text-transform: uppercase; font: 500 .66rem ui-monospace, monospace; }
-  .v2-admin-dimensions strong { color: var(--v2-phosphor); font: 500 .78rem ui-monospace, monospace; }
-  .v2-admin-dimensions small { display: block; margin-top: .35rem; color: var(--v2-text-faint); font-size: .66rem; }
-  .v2-admin-dimensions p { margin-top: .55rem; color: var(--v2-text-muted); font-size: .72rem; line-height: 1.5; }
-  .v2-admin-json { border-top: 1px solid var(--v2-separator-quiet); }
-  .v2-admin-json summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
-  .v2-admin-json pre { max-height: 30rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .68rem/1.6 ui-monospace, monospace; white-space: pre; }
-  .v2-admin-missing { padding: 1rem; color: var(--v2-text-faint); font-size: .75rem; }
+  .v2-admin-table .v2-admin-num {
+    text-align: right;
+  }
+  .v2-admin-story__body {
+    padding: 0 1.25rem 1.25rem;
+  }
+  .v2-admin-loading,
+  .v2-admin-load-error {
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.5rem;
+    background: var(--v2-recess);
+    color: var(--v2-text-muted);
+    font-size: 0.75rem;
+  }
+  .v2-admin-load-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--v2-red);
+  }
+  .v2-admin-load-error button {
+    border: 1px solid var(--v2-separator);
+    border-radius: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    color: var(--v2-text-muted);
+  }
+  .v2-admin-source-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .v2-admin-source {
+    min-width: 0;
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.5rem;
+    background: var(--v2-recess);
+    overflow: hidden;
+  }
+  .v2-admin-source > header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--v2-separator-quiet);
+  }
+  .v2-admin-source > header > div {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .v2-admin-source > header span {
+    color: var(--v2-phosphor);
+    font:
+      500 0.65rem ui-monospace,
+      monospace;
+    letter-spacing: 0.15em;
+  }
+  .v2-admin-source > header strong {
+    color: var(--v2-text-muted);
+    font-size: 0.76rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .v2-admin-dimensions {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  .v2-admin-dimensions section {
+    padding: 0.75rem;
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.4rem;
+  }
+  .v2-admin-dimensions section > div {
+    display: flex;
+    justify-content: space-between;
+  }
+  .v2-admin-dimensions span {
+    text-transform: uppercase;
+    font:
+      500 0.66rem ui-monospace,
+      monospace;
+  }
+  .v2-admin-dimensions strong {
+    color: var(--v2-phosphor);
+    font:
+      500 0.78rem ui-monospace,
+      monospace;
+  }
+  .v2-admin-dimensions small {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--v2-text-faint);
+    font-size: 0.66rem;
+  }
+  .v2-admin-dimensions p {
+    margin-top: 0.55rem;
+    color: var(--v2-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
 
-  /* Surfaced scraped/analyzed text — article body (prefilter input) + selected comments. */
-  .v2-admin-text { margin-top: .75rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); overflow: hidden; }
-  .v2-admin-text > summary { padding: .8rem 1rem; color: var(--v2-text-muted); cursor: pointer; font: 500 .68rem ui-monospace, monospace; }
-  .v2-admin-text > summary small { margin-left: .5rem; color: var(--v2-text-faint); font-size: .62rem; font-weight: 400; }
-  .v2-admin-text > pre { max-height: 32rem; overflow: auto; margin: 0; padding: 1rem; border-top: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: .72rem/1.6 var(--v2-font-copy); white-space: pre-wrap; overflow-wrap: anywhere; }
-  .v2-admin-comments { margin-top: .75rem; }
-  .v2-admin-comments__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; }
-  .v2-admin-comments__head span { color: var(--v2-text-faint); font: 500 .66rem ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
-  .v2-admin-comment { padding: .75rem 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .4rem; background: var(--v2-recess); }
-  .v2-admin-comment + .v2-admin-comment { margin-top: .5rem; }
-  .v2-admin-comment header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .v2-admin-comment header span { color: var(--v2-phosphor); font: 500 .66rem ui-monospace, monospace; }
-  .v2-admin-comment p { margin: .5rem 0 0; color: var(--v2-text-muted); font: .78rem/1.55 var(--v2-font-copy); overflow-wrap: anywhere; }
-  .v2-admin-comment small { display: block; margin-top: .4rem; color: var(--v2-text-faint); font-size: .64rem; }
-  .v2-admin-comment .v2-admin-json { margin-top: .5rem; border-top: 0; }
-  .v2-admin-comment .v2-admin-json summary { padding: .4rem 0; font-size: .62rem; }
-  .v2-admin-comment .v2-admin-json pre { max-height: 16rem; }
-  .v2-admin-table-wrap { overflow-x: auto; }
-  .v2-admin-table { width: 100%; min-width: 68rem; border-collapse: collapse; font-size: .72rem; }
-  .v2-admin-table th, .v2-admin-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--v2-separator-quiet); text-align: left; white-space: nowrap; }
-  .v2-admin-table th { color: var(--v2-text-faint); font: 500 .65rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .1em; }
-  .v2-admin-table td { color: var(--v2-text-muted); font-family: ui-monospace, monospace; }
-  .v2-admin-empty { padding: 2rem; }
-  .v2-admin-empty strong { color: var(--v2-text); }
-  .v2-admin-empty p { margin-top: .5rem; color: var(--v2-text-muted); }
-  @media (max-width: 1100px) { .v2-admin-metrics { grid-template-columns: repeat(3, 1fr); } .v2-admin-prefilter { grid-template-columns: repeat(2, 1fr); } .v2-admin-metric-strip { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 800px) { .v2-admin-source-grid { grid-template-columns: 1fr; } .v2-admin-story > summary { align-items: start; flex-direction: column; } .v2-admin-story__states { width: 100%; overflow-x: auto; } }
-  @media (max-width: 560px) { .v2-admin-metrics { grid-template-columns: repeat(2, 1fr); } .v2-admin-prefilter { grid-template-columns: 1fr; } .v2-admin-source dl { grid-template-columns: 1fr; } .v2-admin-metric-strip { grid-template-columns: 1fr; } }
+  /* Raw JSON: keep horizontal scroll (long lines), shrink inside comments. */
+  .v2-admin-json > pre {
+    white-space: pre;
+  }
+  .v2-admin-comment .v2-admin-json {
+    margin-top: 0.5rem;
+  }
+  .v2-admin-comment .v2-admin-json summary {
+    padding: 0.4rem 0;
+    font-size: 0.62rem;
+  }
+  .v2-admin-comment .v2-admin-json pre {
+    max-height: 16rem;
+    font-size: 0.62rem;
+  }
+
+  /* Article body: readable prose font, not mono. */
+  .v2-admin-text > summary small {
+    margin-left: 0.5rem;
+    color: var(--v2-text-faint);
+    font-size: 0.62rem;
+    font-weight: 400;
+  }
+  .v2-admin-text > pre {
+    font-family: var(--v2-font-copy);
+    font-size: 0.72rem;
+  }
+
+  .v2-admin-missing {
+    padding: 1rem;
+    color: var(--v2-text-faint);
+    font-size: 0.75rem;
+  }
+
+  /* Surfaced scraped/analyzed text — selected comments. */
+  .v2-admin-comments {
+    margin-top: 0.75rem;
+  }
+  .v2-admin-comments__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .v2-admin-comments__head span {
+    color: var(--v2-text-faint);
+    font:
+      500 0.66rem ui-monospace,
+      monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .v2-admin-comment {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--v2-separator-quiet);
+    border-radius: 0.4rem;
+    background: var(--v2-recess);
+  }
+  .v2-admin-comment + .v2-admin-comment {
+    margin-top: 0.5rem;
+  }
+  .v2-admin-comment header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .v2-admin-comment header span {
+    color: var(--v2-phosphor);
+    font:
+      500 0.66rem ui-monospace,
+      monospace;
+  }
+  .v2-admin-comment p {
+    margin: 0.5rem 0 0;
+    color: var(--v2-text-muted);
+    font:
+      0.78rem/1.55 var(--v2-font-copy);
+    overflow-wrap: anywhere;
+  }
+  .v2-admin-comment small {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--v2-text-faint);
+    font-size: 0.64rem;
+  }
+
+  .v2-admin-table-wrap {
+    overflow-x: auto;
+  }
+  .v2-admin-table {
+    width: 100%;
+    min-width: 68rem;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+  }
+  .v2-admin-table th,
+  .v2-admin-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--v2-separator-quiet);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .v2-admin-table th {
+    color: var(--v2-text-faint);
+    font:
+      500 0.65rem ui-monospace,
+      monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .v2-admin-table td {
+    color: var(--v2-text-muted);
+    font-family: ui-monospace, monospace;
+  }
+
+  .v2-admin-empty {
+    padding: 2rem;
+  }
+  .v2-admin-empty strong {
+    color: var(--v2-text);
+  }
+  .v2-admin-empty p {
+    margin-top: 0.5rem;
+    color: var(--v2-text-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .v2-admin-metrics {
+      --v2-grid-cols: 3;
+    }
+    .v2-admin-prefilter {
+      --v2-grid-cols: 2;
+    }
+    .v2-admin-metric-strip {
+      --v2-grid-cols: 2;
+    }
+  }
+  @media (max-width: 800px) {
+    .v2-admin-source-grid {
+      grid-template-columns: 1fr;
+    }
+    .v2-admin-story > summary {
+      align-items: start;
+      flex-direction: column;
+    }
+    .v2-admin-story__states {
+      width: 100%;
+      overflow-x: auto;
+    }
+  }
+  @media (max-width: 560px) {
+    .v2-admin-metrics {
+      --v2-grid-cols: 2;
+    }
+    .v2-admin-prefilter {
+      --v2-grid-cols: 1;
+    }
+    .v2-admin-source dl {
+      --v2-grid-cols: 1;
+    }
+    .v2-admin-metric-strip {
+      --v2-grid-cols: 1;
+    }
+  }
 </style>

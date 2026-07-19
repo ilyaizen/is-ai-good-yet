@@ -1,0 +1,22 @@
+# Normalize line endings to LF everywhere.
+# Prevents CRLF churn between Windows dev and Linux deploy.
+* text=auto eol=lf
+
+# Binary files — git must not touch line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.svg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.db binary
+*.sqlite binary
+*.parquet binary
+*.gz binary
+*.zip binary
+*.tar binary

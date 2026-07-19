@@ -9,6 +9,7 @@ export const load = () => ({
   methodology: getV2Methodology(),
 })
 
+// The shell bar's `?/logout` form (in +layout.svelte) resolves to this action.
 export const actions: Actions = {
   logout: async (event: RequestEvent) => {
     event.cookies.delete(ADMIN_COOKIE_NAME, { path: "/" })

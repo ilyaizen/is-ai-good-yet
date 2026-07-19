@@ -49,3 +49,7 @@ package-lock.json
 
 # V2 export rollback backup (transient, created by export_v2 atomic publish)
 src/lib/data/.v2-previous/
+
+# Local scraping/browser-driver artifacts and ad-hoc test screenshots
+/downloaded_files/
+/stealth_test.png

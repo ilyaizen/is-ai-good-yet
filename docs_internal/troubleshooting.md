@@ -251,3 +251,40 @@ The resolver uses `score + comments` to pick the "best" HN post. This is usually
 - The older post has more engagement than the recent one
 
 Consider running `--update-recent` periodically to catch metadata drift for recent articles.
+
+---
+
+## Ripgrep on Windows (MINGW64)
+
+### Problem
+
+`ripgrep` (rg) installed via Chocolatey into a MINGW64/Git Bash shell **cannot resolve
+MSYS-style absolute paths** (`/d/GitHub/...` or `/c/Users/...`) as file arguments:
+
+```
+$ rg PATTERN /d/GitHub/is-ai-good-yet/some/file.py
+rg: /d/GitHub/is-ai-good-yet/some/file.py: The system cannot find the path specified. (os error 3)
+```
+
+This affects the Hermes `search_files` tool, which passes the raw working-directory
+path (`D:\GitHub\...`) as the search root. After MSYS path conversion, rg receives a
+path it cannot stat.
+
+### Workaround
+
+Use `grep -rn` via the `terminal()` tool instead of `search_files()`. Or pass a
+Windows-style path (`D:/GitHub/...`) directly. Relative paths from the project root
+also work:
+
+```bash
+cd /d/GitHub/is-ai-good-yet
+rg PATTERN pipeline/src/some_file.py   # relative — works
+rg PATTERN D:/GitHub/is-ai-good-yet/pipeline/src/some_file.py  # Windows-style — works
+rg PATTERN /d/GitHub/is-ai-good-yet/pipeline/src/some_file.py   # MSYS-style — FAILS
+```
+
+### Root Cause
+
+The Chocolatey rg binary is a native Windows build. MINGW64 translates paths like
+`/d/...` before passing them to the process, but the translation produces a path the
+native binary cannot resolve. A pure MSYS-compiled rg would not have this issue.

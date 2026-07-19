@@ -6,11 +6,17 @@ Setup, usage, conventions, and agent mandates for `is-ai-good-yet`. For system d
 
 ## 1. Environment
 
-- **OS:** Windows 11 (dev), Linux (deploy)
-- **Shell:** PowerShell 7 / bash
-- **Node:** 22.18+ (pinned via `nixpacks.toml`)
-- **Python:** 3.11+ — virtual env at repo root (`.venv`)
+The project runs on two platforms — all code, dependencies, and configs must work on both.
+
+| Platform | Role        | OS             | Shell              | Python venv path                | Node                  |
+| -------- | ----------- | -------------- | ------------------ | ------------------------------- | --------------------- |
+| Local    | Development | Windows 11     | Git Bash (MINGW64) | `.venv\Scripts\activate`        | 22.18+ (system / nvm) |
+| Hetzner  | Production  | Ubuntu (NixOS) | bash               | `/opt/pipeline-venv/bin/python` | 22.18+ (nixpacks)     |
+
 - **Package manager: Vite+ (pnpm)** (`pnpm-lock.yaml` committed; `nixpacks.toml` runs `vp install` + `vp build`)
+- **Windows shell:** Git Bash (MINGW64) — use POSIX syntax (`ls`, `$HOME`, `&&`, single-quoted strings). PowerShell builtins (`Get-ChildItem`, `$env:FOO`) do NOT work inside Hermes terminal calls.
+- **Windows Python venv:** `.venv\Scripts\activate` (backslashes, `Scripts` not `bin`). On Linux: `.venv/bin/activate`.
+- **Line endings:** `.gitattributes` normalizes to LF. `core.autocrlf = true` on Windows is fine — git converts on checkout/checkin.
 
 ## 2. Tech Stack
 
@@ -47,9 +53,9 @@ vp install
 
 # 3. Python venv at repo root
 python -m venv .venv
-# Windows PowerShell:
-.\.venv\Scripts\Activate.ps1
-# Linux/Mac:
+# Windows (Git Bash):
+source .venv/Scripts/activate
+# Linux (Hetzler / nixpacks / system):
 source .venv/bin/activate
 
 # 4. Pipeline deps (run from pipeline/)

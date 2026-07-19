@@ -55,15 +55,16 @@ def test_v2_stage_queries_process_each_hn_story_once(tmp_path: Path, monkeypatch
             hn_comments INTEGER,
             hn_title TEXT,
             hn_timestamp INTEGER,
-            scraped_status TEXT
+            scraped_status TEXT,
+            classification_json TEXT
         )
         """
     )
     connection.executemany(
-        "INSERT INTO urls VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO urls VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
-            (1, "https://example.com/older", 42, 100, 10, "Story", 1, "success"),
-            (2, "https://example.com/canonical", 42, 100, 20, "Story", 2, "success"),
+            (1, "https://example.com/older", 42, 100, 10, "Story", 1, "success", None),
+            (2, "https://example.com/canonical", 42, 100, 20, "Story", 2, "success", None),
         ],
     )
     connection.commit()

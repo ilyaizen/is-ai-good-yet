@@ -2256,15 +2256,29 @@
   {
     "week": "2026-W28",
     "weekStart": "2026-07-06",
-    "verdictScore": 63.7,
+    "verdictScore": 63.49,
     "verdict": "YES",
-    "articleCount": 586,
+    "articleCount": 588,
     "rawSentiment": 0,
     "positiveCount": 282,
+    "neutralCount": 115,
+    "negativeCount": 191,
+    "positiveContribution": 39805.42,
+    "negativeContribution": -22894.43,
+    "neutralContribution": -5168.46
+  },
+  {
+    "week": "2026-W29",
+    "weekStart": "2026-07-13",
+    "verdictScore": 61.81,
+    "verdict": "YES",
+    "articleCount": 581,
+    "rawSentiment": 0,
+    "positiveCount": 278,
     "neutralCount": 114,
-    "negativeCount": 190,
-    "positiveContribution": 39794.6,
-    "negativeContribution": -22674.79,
-    "neutralContribution": -5112.37
+    "negativeCount": 189,
+    "positiveContribution": 38419.33,
+    "negativeContribution": -23739.85,
+    "neutralContribution": -5130.63
   }
 ]

@@ -50450,6 +50450,49 @@
       }
     }
   },
+  "48859701": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person experience and critical evaluation of AI coding assistant habits"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1689,
+        "output_tokens": 40,
+        "total_tokens": 1729,
+        "inference_time_ms": 213.2,
+        "tokens_per_second": 187.6,
+        "prompt_chars": 2813,
+        "timestamp": "2026-07-19T03:29:36.544560+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "LLMs create bad patterns and degrade code quality, making maintenance harder rather than easier.",
+        "quotes": [
+          "The code worked! The tests passed and I wasn’t the one who’d have to touch it again. That’s the laziness here.",
+          "LLMs are sponges that soak up everything you do and repeat it back to you. So make sure it’s good."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-19T03:29:47.742720+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1522,
+        "output_tokens": 188,
+        "total_tokens": 1710,
+        "inference_time_ms": 513.4,
+        "tokens_per_second": 366.2,
+        "prompt_chars": 2809,
+        "timestamp": "2026-07-19T03:29:47.742720+00:00"
+      }
+    }
+  },
   "48841446": {
     "prefilter": {
       "response": {
@@ -50491,6 +50534,179 @@
         "tokens_per_second": 645.2,
         "prompt_chars": 1862,
         "timestamp": "2026-07-12T20:01:13.964496+00:00"
+      }
+    }
+  },
+  "48947776": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with Claude Code's misfeature and critiques Anthropic's changelog process"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1927,
+        "output_tokens": 47,
+        "total_tokens": 1974,
+        "inference_time_ms": 233.8,
+        "tokens_per_second": 201.1,
+        "prompt_chars": 3971,
+        "timestamp": "2026-07-19T03:29:38.496225+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "Claude’s misfeature erodes trust, revealing hidden defaults and fragile auto‑updates—an unsafe shortcut that could repeat.",
+        "quotes": [
+          "\"Surprising features in Claude Code can in theory (and in practice) be shipped by Anthropic on a daily cadence\"",
+          "\"Within a couple of days a fix was shipped, but where does that leave user trust in this product?\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-19T03:29:49.995935+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2732,
+        "output_tokens": 213,
+        "total_tokens": 2945,
+        "inference_time_ms": 414.1,
+        "tokens_per_second": 514.4,
+        "prompt_chars": 7966,
+        "timestamp": "2026-07-19T03:29:49.995935+00:00"
+      }
+    }
+  },
+  "48894874": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and opinion on designing APIs for agents, contrasting human and agent needs."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1966,
+        "output_tokens": 46,
+        "total_tokens": 2012,
+        "inference_time_ms": 226.5,
+        "tokens_per_second": 203.1,
+        "prompt_chars": 4013,
+        "timestamp": "2026-07-19T03:29:40.895491+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "The article offers a balanced view of agent‑centric API design, praising clarity and flexibility while criticizing monolithic, human‑centric frameworks.",
+        "quotes": [
+          "Good APIs for agents ... Explicitness is cheap now, and bringing specificity to expected behavior reduces bugs.",
+          "Mastra has a lot of good scheduling, and workflows as well; most of their agent is built from pluggable types you can implement yourself.",
+          "It’s like they took Next.js and made it an agent framework: great for 2016."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-19T03:29:52.011247+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2705,
+        "output_tokens": 237,
+        "total_tokens": 2942,
+        "inference_time_ms": 439.5,
+        "tokens_per_second": 539.3,
+        "prompt_chars": 7965,
+        "timestamp": "2026-07-19T03:29:52.011247+00:00"
+      }
+    }
+  },
+  "48882716": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with GPT-5.6 migration, discussing costs, performance, and lessons learned."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1951,
+        "output_tokens": 50,
+        "total_tokens": 2001,
+        "inference_time_ms": 303.3,
+        "tokens_per_second": 164.9,
+        "prompt_chars": 3973,
+        "timestamp": "2026-07-19T03:29:36.961564+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "GPT‑5.6 cuts time and cost, but migrating costs engineering effort and introduces cache pitfalls.",
+        "quotes": [
+          "Completed builds took less than half the wall‑clock time, cost 27% less, and scored at or above our incumbent.",
+          "Roughly a third of the raw failures in the first run came from harness assumptions rather than model behavior, and those failures were unevenly distributed."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-19T03:29:48.253626+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2673,
+        "output_tokens": 202,
+        "total_tokens": 2875,
+        "inference_time_ms": 410.8,
+        "tokens_per_second": 491.7,
+        "prompt_chars": 7972,
+        "timestamp": "2026-07-19T03:29:48.253626+00:00"
+      }
+    }
+  },
+  "48889637": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion about AI in software, citing specific examples and projects"
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1867,
+        "output_tokens": 45,
+        "total_tokens": 1912,
+        "inference_time_ms": 1140.3,
+        "tokens_per_second": 39.5,
+        "prompt_chars": 3970,
+        "timestamp": "2026-07-19T03:29:35.831178+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding tools are portrayed as unreliable, hallucinating, and ultimately harmful, with no real productivity gains.",
+        "quotes": [
+          "Anthropic’s campaign to end software engineering is counter‑productive for everyone involved.",
+          "Instead of better tools we buy tokens. Instead of learning skills we paste a SKILL.md ."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-07-19T03:29:46.363418+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2583,
+        "output_tokens": 182,
+        "total_tokens": 2765,
+        "inference_time_ms": 556.1,
+        "tokens_per_second": 327.3,
+        "prompt_chars": 7973,
+        "timestamp": "2026-07-19T03:29:46.363418+00:00"
       }
     }
   }

@@ -148,7 +148,12 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 
 Operational documentation for agents and maintainers. Index + details:
 
-- [`docs_internal/README.md`](./docs_internal/README.md) — index, project overview, pipeline phase status
+- [`docs_internal/README.md`](./docs_internal/README.md) — index, operational reference
 - [`docs_internal/architecture.md`](./docs_internal/architecture.md) — system design, data flow, pipeline phases, verdict scoring
 - [`docs_internal/guide.md`](./docs_internal/guide.md) — setup, usage, dev conventions, agent mandates
+- [`docs_internal/pipeline-admin-plan.md`](./docs_internal/pipeline-admin-plan.md) — admin control surface: lock architecture, DB schema, scheduling
+- [`docs_internal/pipeline-production-reliability.md`](./docs_internal/pipeline-production-reliability.md) — production preflight, storage alignment, residential HTML fallback
 - [`docs_internal/troubleshooting.md`](./docs_internal/troubleshooting.md) — common issues and solutions
+- [`docs_internal/v2-design-specification.md`](./docs_internal/v2-design-specification.md) — V2 design specification, methodology, comment sampling
+- [`plans/`](./plans/) — active implementation plans (001–003) and V1 archive
+- [`tests/`](./tests/) — frontend smoke tests (globe arcs, pipeline config, admin data, integrity)

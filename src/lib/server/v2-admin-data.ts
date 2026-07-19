@@ -66,6 +66,12 @@ export interface V2AdminSelectedComment {
 
 export interface V2AdminStoryDetails {
   hnStoryId: number
+  title: string
+  url: string
+  domain: string | null
+  hnScore: number
+  hnComments: number
+  hnTimestamp: number
   prefilterReasonCode: string | null
   prefilterReason: string | null
   prefilterModel: string | null
@@ -162,6 +168,20 @@ function parseStrings(value: string | null | undefined): string[] {
 
 function finiteNumber(value: unknown): number {
   return typeof value === "number" && Number.isFinite(value) ? value : 0
+}
+
+/**
+ * Best-effort hostname extraction for a URL. Stored URLs may be malformed or
+ * missing a scheme; return null if no clean hostname can be parsed.
+ */
+function safeDomain(url: string): string | null {
+  try {
+    const withScheme = /^https?:\/\//i.test(url) ? url : `https://${url}`
+    const parsed = new URL(withScheme)
+    return parsed.hostname || null
+  } catch {
+    return null
+  }
 }
 
 function mapAnalysis(row: AnalysisRow): V2AnalysisRun {
@@ -458,6 +478,28 @@ export function getV2AdminStoryDetails(
       | { reason_code: string | null; reason: string | null; model: string | null; decided_at: string | null }
       | undefined
 
+    // Fetch list-level metadata so the expanded detail can render the same
+    // identity, link, and date as the summary row without a round-trip.
+    const meta = db
+      .prepare(`
+        SELECT hn_title, url, hn_score, hn_comments, hn_timestamp
+        FROM urls
+        WHERE hn_id = ?
+        ORDER BY id DESC, rowid DESC
+        LIMIT 1
+      `)
+      .get(hnStoryId) as
+      | {
+          hn_title: string | null
+          url: string | null
+          hn_score: number | null
+          hn_comments: number | null
+          hn_timestamp: number | null
+        }
+      | undefined
+
+    const domain = meta?.url ? safeDomain(meta.url) : null
+
     const analysisRows = db
       .prepare(`
         SELECT * FROM (
@@ -584,6 +626,12 @@ export function getV2AdminStoryDetails(
 
     return {
       hnStoryId,
+      title: meta?.hn_title ?? `HN story #${hnStoryId}`,
+      url: meta?.url ?? `https://news.ycombinator.com/item?id=${hnStoryId}`,
+      domain,
+      hnScore: meta?.hn_score ?? 0,
+      hnComments: meta?.hn_comments ?? 0,
+      hnTimestamp: meta?.hn_timestamp ?? 0,
       prefilterReasonCode: prefilter?.reason_code ?? null,
       prefilterReason: prefilter?.reason ?? null,
       prefilterModel: prefilter?.model ?? null,

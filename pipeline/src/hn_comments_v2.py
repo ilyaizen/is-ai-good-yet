@@ -19,7 +19,7 @@ from .v2_models import PREFILTER_CONTRACT_VERSION, SelectedComment, raw_visibili
 
 
 HN_API = "https://hacker-news.firebaseio.com/v0"
-SELECTION_VERSION = "ranked-tree-v2.2.0"
+SELECTION_VERSION = "ranked-tree-v2.4.0"
 AUTHOR_CAP = 2
 TAG_RE = re.compile(r"<[^>]+>")
 

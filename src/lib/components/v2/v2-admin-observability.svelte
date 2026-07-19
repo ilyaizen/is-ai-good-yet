@@ -10,6 +10,17 @@
   let storyDetails = $state<Record<number, V2AdminStoryDetails>>({});
   let storyLoading = $state<Record<number, boolean>>({});
   let storyErrors = $state<Record<number, string>>({});
+  // Refs to each <details> element so expand-all / collapse-all can flip them
+  // without relying on a shared boolean (native details keeps its own state).
+  let storyRows = $state<Array<HTMLDetailsElement>>([]);
+  let allOpen = $state(false);
+
+  function setAllStoriesOpen(open: boolean): void {
+    for (const el of storyRows) {
+      if (el.open !== open) el.open = open;
+    }
+    allOpen = open;
+  }
 
   async function loadStoryDetails(storyId: number): Promise<void> {
     if (storyDetails[storyId] || storyLoading[storyId]) return;
@@ -43,6 +54,39 @@
       timeStyle: "short",
       timeZone: "UTC"
     });
+  }
+
+  function formatHnTimestamp(seconds: number): string {
+    if (!seconds) return "—";
+    return new Date(seconds * 1000).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit"
+    });
+  }
+
+  function formatDuration(ms: number | null | undefined): string {
+    if (ms === null || ms === undefined || !Number.isFinite(ms) || ms <= 0) return "—";
+    if (ms < 1000) return `${Math.round(ms)} ms`;
+    const seconds = ms / 1000;
+    if (seconds < 60) return `${seconds.toFixed(1)} s`;
+    const minutes = Math.floor(seconds / 60);
+    const rem = Math.round(seconds - minutes * 60);
+    return `${minutes}m ${rem}s`;
+  }
+
+  function formatSeconds(totalSeconds: number | null | undefined): string {
+    if (totalSeconds === null || totalSeconds === undefined || !Number.isFinite(totalSeconds) || totalSeconds <= 0) return "—";
+    if (totalSeconds < 60) return `${totalSeconds.toFixed(1)} s`;
+    const minutes = Math.floor(totalSeconds / 60);
+    const rem = Math.round(totalSeconds - minutes * 60);
+    return `${minutes}m ${rem}s`;
+  }
+
+  function formatTokens(n: number): string {
+    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`;
+    if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
+    return String(n);
   }
 
   function statusTone(status: string | null | undefined): string {
@@ -127,23 +171,66 @@
               Lightweight run state up front. Full properties and exact result JSON load only when a story is opened.
             </p>
           </div>
-          <b class="v2-admin-count">{data.stories.length} stories</b>
+          <div class="v2-admin-ledger-actions">
+            <b class="v2-admin-count">{data.stories.length} stories</b>
+            {#if data.stories.length}
+              <button
+                type="button"
+                class="v2-admin-toggle-all"
+                onclick={() => setAllStoriesOpen(!allOpen)}
+                aria-pressed={allOpen}
+              >
+                {allOpen ? "Collapse all" : "Expand all"}
+              </button>
+            {/if}
+          </div>
         </div>
       </header>
 
       <div class="v2-admin-story-list">
-        {#each data.stories as story (story.hnStoryId)}
-          <details class="v2-admin-story" ontoggle={(event) => handleStoryToggle(event, story.hnStoryId)}>
+        {#each data.stories as story, i (story.hnStoryId)}
+          <details
+            class="v2-admin-story"
+            bind:this={storyRows[i]}
+            ontoggle={(event) => handleStoryToggle(event, story.hnStoryId)}
+          >
             <summary>
               <div class="v2-admin-story__identity">
-                <span>HN {story.hnStoryId}</span>
-                <strong>{story.title}</strong>
-                <small>{story.hnScore} points · {story.hnComments} comments · {story.scopes.join(" · ") || "no scopes"}</small>
+                <div class="v2-admin-story__kicker">
+                  <span>HN {story.hnStoryId}</span>
+                  {#if story.hnTimestamp}
+                    <time datetime={new Date(story.hnTimestamp * 1000).toISOString()}>
+                      {formatHnTimestamp(story.hnTimestamp)}
+                    </time>
+                  {/if}
+                  {#if story.eligible === null}
+                    <span class="v2-admin-elig">Not checked</span>
+                  {:else if story.eligible}
+                    <span class="v2-admin-elig v2-admin-status--success">Eligible</span>
+                  {:else}
+                    <span class="v2-admin-elig v2-admin-status--failed">Rejected</span>
+                  {/if}
+                </div>
+                <strong>
+                  <a href={story.url} target="_blank" rel="noopener noreferrer" title={story.url}>
+                    {story.title}
+                  </a>
+                </strong>
+                <small>
+                  {story.hnScore} pts · {story.hnComments} comments
+                  {#if story.scopes.length}
+                    <span class="v2-admin-scopes">
+                      {#each story.scopes as scope (scope)}
+                        <span class="v2-admin-scope">{scope}</span>
+                      {/each}
+                    </span>
+                  {/if}
+                </small>
               </div>
               <div class="v2-admin-story__states">
                 <span class={statusTone(story.articleStatus)}>ARTICLE {story.articleStatus ?? "missing"}</span>
                 <span class={statusTone(story.communityStatus)}>COMMUNITY {story.communityStatus ?? "missing"}</span>
-                <i aria-hidden="true">⌄</i>
+                <i aria-hidden="true" class="v2-admin-story__chevron">⌄</i>
               </div>
             </summary>
 
@@ -185,11 +272,39 @@
                           <div><dt>Provenance</dt><dd title={`prompt ${analysis.promptHash} · input ${analysis.inputHash}`}>{analysis.promptHash.slice(0, 10)} · {analysis.inputHash.slice(0, 10)}</dd></div>
                         </dl>
 
+                        <div class="v2-admin-metric-strip" aria-label={`${source} run metrics`}>
+                          <div class="v2-admin-metric">
+                            <span>Input tokens</span>
+                            <strong>{formatTokens(analysis.metrics.inputTokens)}</strong>
+                          </div>
+                          <div class="v2-admin-metric">
+                            <span>Output tokens</span>
+                            <strong>{formatTokens(analysis.metrics.outputTokens)}</strong>
+                          </div>
+                          <div class="v2-admin-metric">
+                            <span>Inference</span>
+                            <strong>{formatDuration(analysis.metrics.inferenceTimeMs)}</strong>
+                          </div>
+                          <div class="v2-admin-metric">
+                            <span>Total tokens</span>
+                            <strong>{formatTokens(analysis.metrics.inputTokens + analysis.metrics.outputTokens)}</strong>
+                          </div>
+                        </div>
+
                         <div class="v2-admin-dimensions">
                           {#each dimensionsForSource(details.dimensions, String(source)) as dimension (`${dimension.source}-${dimension.dimension}`)}
                             <section>
                               <div><span>{dimension.dimension}</span><strong>{score(dimension.score)}</strong></div>
-                              <small>{dimension.applicability} · confidence {dimension.confidence.toFixed(2)} · {dimension.evidenceCount} evidence</small>
+                              <small>
+                                {dimension.applicability} · confidence {(dimension.confidence * 100).toFixed(0)}% · {dimension.evidenceCount} evidence
+                              </small>
+                              <div
+                                class="v2-admin-conf-bar"
+                                role="img"
+                                aria-label={`confidence ${Math.round(dimension.confidence * 100)}%`}
+                              >
+                                <span style={`width: ${Math.max(4, Math.min(100, Math.round(dimension.confidence * 100)))}%`}></span>
+                              </div>
                               <p>{dimension.rationale || "No rationale persisted."}</p>
                             </section>
                           {/each}
@@ -264,18 +379,22 @@
       </header>
       <div class="v2-admin-table-wrap">
         <table class="v2-admin-table">
-          <thead><tr><th>Run</th><th>Status</th><th>Last stage</th><th>Started</th><th>Finished</th><th>Stories</th><th>Articles</th><th>Comments</th><th>Error</th></tr></thead>
+          <thead><tr><th>Run</th><th>Status</th><th>Last stage</th><th>Started</th><th>Finished</th><th class="v2-admin-num">Duration</th><th class="v2-admin-num">Stories</th><th class="v2-admin-num">Articles</th><th class="v2-admin-num">Comments</th><th>Error</th></tr></thead>
           <tbody>
             {#each data.orchestrationRuns as run (run.runId)}
+              {@const durationSec = run.startedAt && run.finishedAt
+                ? (new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000
+                : null}
               <tr>
                 <td title={run.runId}>{run.runId.slice(0, 10)}</td>
                 <td><span class={statusTone(run.status)}>{run.status}</span></td>
                 <td>{run.stage}</td>
                 <td>{formatTimestamp(run.startedAt)}</td>
                 <td>{formatTimestamp(run.finishedAt)}</td>
-                <td>{run.storiesDiscovered}</td>
-                <td>{run.articlesProcessed}</td>
-                <td>{run.commentsAnalyzed}</td>
+                <td class="v2-admin-num">{formatSeconds(durationSec)}</td>
+                <td class="v2-admin-num">{run.storiesDiscovered}</td>
+                <td class="v2-admin-num">{run.articlesProcessed}</td>
+                <td class="v2-admin-num">{run.commentsAnalyzed}</td>
                 <td>{run.errorCode ?? "—"}</td>
               </tr>
             {/each}
@@ -308,20 +427,49 @@
   /* Count badge — right slot of the ledger head-row. */
   .v2-admin-count { align-self: flex-start; border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .25rem .55rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; }
 
+  /* Ledger actions = count + expand/collapse-all, grouped at the right edge. */
+  .v2-admin-ledger-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; align-self: flex-start; }
+  .v2-admin-toggle-all { border: 1px solid var(--v2-separator); border-radius: .3rem; background: color-mix(in srgb, var(--v2-text) 3%, transparent); padding: .3rem .65rem; color: var(--v2-text-muted); font: 500 .68rem ui-monospace, monospace; cursor: pointer; transition: .15s ease; }
+  .v2-admin-toggle-all:hover { border-color: var(--v2-phosphor); color: var(--v2-text); }
+  .v2-admin-toggle-all[aria-pressed="true"] { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent); color: var(--v2-phosphor); }
+
   .v2-admin-story { border-bottom: 1px solid var(--v2-separator-quiet); }
   .v2-admin-story:last-child { border: 0; }
   .v2-admin-story > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; list-style: none; }
   .v2-admin-story > summary:hover { background: color-mix(in srgb, var(--v2-text) 2.5%, transparent); }
-  .v2-admin-story__identity { display: grid; min-width: 0; gap: .25rem; }
-  .v2-admin-story__identity > span { color: var(--v2-phosphor); font: 500 .65rem ui-monospace, monospace; }
+  .v2-admin-story__identity { display: grid; min-width: 0; gap: .3rem; }
+  /* Kicker line: HN id · date · eligibility badge */
+  .v2-admin-story__kicker { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+  .v2-admin-story__kicker > span:first-child { color: var(--v2-phosphor); font: 500 .65rem ui-monospace, monospace; }
+  .v2-admin-story__kicker time { color: var(--v2-text-faint); font: 500 .65rem ui-monospace, monospace; }
+  .v2-admin-elig { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .15rem .4rem; color: var(--v2-text-muted); font: 500 .6rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
   .v2-admin-story__identity strong { overflow: hidden; font-size: .9rem; font-weight: 510; text-overflow: ellipsis; white-space: nowrap; }
-  .v2-admin-story__identity small { color: var(--v2-text-faint); font-size: .7rem; }
+  .v2-admin-story__identity strong a { color: inherit; text-decoration: none; }
+  .v2-admin-story__identity strong a:hover { color: var(--v2-phosphor); }
+  .v2-admin-story__identity small { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .55rem; color: var(--v2-text-faint); font-size: .7rem; }
+  /* Scope chips in summary */
+  .v2-admin-scopes { display: inline-flex; flex-wrap: wrap; gap: .25rem; }
+  .v2-admin-scope { padding: .1rem .4rem; background: var(--v2-recess); border: 1px solid var(--v2-separator-quiet); color: var(--v2-text-muted); font: 500 .58rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .06em; }
   .v2-admin-story__states { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
   .v2-admin-story__states span, .v2-admin-source header b, .v2-admin-comment header b, .v2-admin-table span { border: 1px solid var(--v2-separator); border-radius: .3rem; padding: .22rem .45rem; color: var(--v2-text-muted); font: 500 .62rem ui-monospace, monospace; text-transform: uppercase; }
   .v2-admin-status--success { border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent) !important; color: var(--v2-phosphor) !important; }
   .v2-admin-status--active { border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent) !important; color: var(--v2-violet) !important; }
   .v2-admin-status--failed { border-color: color-mix(in oklch, var(--v2-red) 35%, transparent) !important; color: var(--v2-red) !important; }
-  .v2-admin-story[open] .v2-admin-story__states i { transform: rotate(180deg); }
+  .v2-admin-story__chevron { color: var(--v2-text-faint); transition: transform .15s ease; line-height: 1; }
+  .v2-admin-story[open] .v2-admin-story__chevron { transform: rotate(180deg); }
+
+  /* Run metric strip — badges for token/duration, replacing the JSON-only view. */
+  .v2-admin-metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 0; border-top: 1px solid var(--v2-separator-quiet); background: var(--v2-separator-quiet); }
+  .v2-admin-metric { min-width: 0; padding: .65rem 1rem; background: var(--v2-recess); }
+  .v2-admin-metric span { color: var(--v2-text-faint); font: 500 .6rem ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
+  .v2-admin-metric strong { display: block; margin-top: .3rem; color: var(--v2-phosphor); font: 510 .82rem ui-monospace, monospace; }
+
+  /* Confidence bar inside dimension section */
+  .v2-admin-conf-bar { height: .25rem; margin-top: .5rem; background: var(--v2-separator-quiet); border-radius: 1rem; overflow: hidden; }
+  .v2-admin-conf-bar span { display: block; height: 100%; background: color-mix(in oklch, var(--v2-phosphor) 70%, transparent); }
+
+  /* Numeric table cells */
+  .v2-admin-table .v2-admin-num { text-align: right; }
   .v2-admin-story__body { padding: 0 1.25rem 1.25rem; }
   .v2-admin-loading, .v2-admin-load-error { margin: 0; padding: 1rem; border: 1px solid var(--v2-separator-quiet); border-radius: .5rem; background: var(--v2-recess); color: var(--v2-text-muted); font-size: .75rem; }
   .v2-admin-load-error { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--v2-red); }
@@ -377,7 +525,7 @@
   .v2-admin-empty { padding: 2rem; }
   .v2-admin-empty strong { color: var(--v2-text); }
   .v2-admin-empty p { margin-top: .5rem; color: var(--v2-text-muted); }
-  @media (max-width: 1100px) { .v2-admin-metrics { grid-template-columns: repeat(3, 1fr); } .v2-admin-prefilter { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 1100px) { .v2-admin-metrics { grid-template-columns: repeat(3, 1fr); } .v2-admin-prefilter { grid-template-columns: repeat(2, 1fr); } .v2-admin-metric-strip { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 800px) { .v2-admin-source-grid { grid-template-columns: 1fr; } .v2-admin-story > summary { align-items: start; flex-direction: column; } .v2-admin-story__states { width: 100%; overflow-x: auto; } }
-  @media (max-width: 560px) { .v2-admin-metrics { grid-template-columns: repeat(2, 1fr); } .v2-admin-prefilter { grid-template-columns: 1fr; } .v2-admin-source dl { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .v2-admin-metrics { grid-template-columns: repeat(2, 1fr); } .v2-admin-prefilter { grid-template-columns: 1fr; } .v2-admin-source dl { grid-template-columns: 1fr; } .v2-admin-metric-strip { grid-template-columns: 1fr; } }
 </style>

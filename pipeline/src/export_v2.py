@@ -33,11 +33,11 @@ COMMUNITY_WEIGHT = 0.6
 VERDICT_MONTHS = 12
 MANIFEST_VERSION = "v2-manifest-1"
 FILE_CONTRACTS = {
-    "verdict.json": "verdict-v2.0.0",
-    "stories.json": "stories-v2.0.0",
-    "history.json": "history-v2.0.0",
-    "bot-feed.json": "bot-feed-v2.0.0",
-    "pipeline-status.json": "pipeline-status-v2.0.0",
+    "verdict.json": "verdict-v2.4.0",
+    "stories.json": "stories-v2.4.0",
+    "history.json": "history-v2.4.0",
+    "bot-feed.json": "bot-feed-v2.4.0",
+    "pipeline-status.json": "pipeline-status-v2.4.0",
 }
 
 
@@ -219,7 +219,7 @@ def aggregate(stories: list[dict[str, Any]], now: float | None = None) -> dict[s
     }
     composite = composite_score(scores)
     return {
-        "contractVersion": "verdict-v2.0.0",
+        "contractVersion": FILE_CONTRACTS["verdict.json"],
         "generatedAt": generated_at,
         "analysisVersion": ANALYSIS_VERSION,
         "prefilterVersion": PREFILTER_CONTRACT_VERSION,
@@ -280,7 +280,7 @@ def load_bot_feed(path: Path) -> list[dict[str, Any]]:
     allowed = {"aipostsbot", "aimediabot", "ainewsbot"}
     result = []
     for item in data:
-        if item.get("contractVersion") != "bot-feed-v2.0.0" or item.get("bot") not in allowed:
+        if item.get("contractVersion") != FILE_CONTRACTS["bot-feed.json"] or item.get("bot") not in allowed:
             raise ValueError("Invalid bot feed record")
         result.append(item)
     return result
@@ -328,7 +328,7 @@ def pipeline_status(bot_feed: list[dict[str, Any]]) -> dict[str, Any]:
     else:
         duration = 0
     return {
-        "contractVersion": "pipeline-status-v2.0.0",
+        "contractVersion": FILE_CONTRACTS["pipeline-status.json"],
         "generatedAt": now.isoformat(),
         "schedule": {
             "expression": "0 */6 * * *", "timezone": "UTC", "human": "every 6 hours",

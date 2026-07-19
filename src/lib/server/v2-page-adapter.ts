@@ -383,11 +383,11 @@ function mapStory(raw: unknown, index: number): V2StoryCard {
 function validateGeneration(): boolean {
   const files = manifestJson.files as Record<string, { contractVersion: string; recordCount: number; sha256: string }>
   const expected = {
-    "verdict.json": "verdict-v2.0.0",
-    "stories.json": "stories-v2.0.0",
-    "history.json": "history-v2.0.0",
-    "bot-feed.json": "bot-feed-v2.0.0",
-    "pipeline-status.json": "pipeline-status-v2.0.0",
+    "verdict.json": "verdict-v2.4.0",
+    "stories.json": "stories-v2.4.0",
+    "history.json": "history-v2.4.0",
+    "bot-feed.json": "bot-feed-v2.4.0",
+    "pipeline-status.json": "pipeline-status-v2.4.0",
   } satisfies Record<string, string>
   const rawPayloads: Record<string, string> = {
     "verdict.json": verdictRaw,

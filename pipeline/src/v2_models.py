@@ -7,13 +7,13 @@ from dataclasses import dataclass
 from typing import Any
 
 
-ANALYSIS_VERSION = "v2.3.0"
-ARTICLE_CONTRACT_VERSION = "article-v2.2.0"
-COMMENT_CONTRACT_VERSION = "comment-v2.2.0"
-PREFILTER_CONTRACT_VERSION = "prefilter-v2.1.0"
-AGGREGATION_VERSION = "community-aggregation-v2.2.0"
+ANALYSIS_VERSION = "v2.4.0"
+ARTICLE_CONTRACT_VERSION = "article-v2.4.0"
+COMMENT_CONTRACT_VERSION = "comment-v2.4.0"
+PREFILTER_CONTRACT_VERSION = "prefilter-v2.4.0"
+AGGREGATION_VERSION = "community-aggregation-v2.4.0"
 GLOBAL_INFLUENCE_VERSION = "hn-score-0.85_decay-24m_v1"
-PARSER_VERSION = "v2.3.1"
+PARSER_VERSION = "v2.4.0"
 
 ARTICLE_SUMMARY_MAX_WORDS = 40
 COMMENT_SUMMARY_MAX_WORDS = 30

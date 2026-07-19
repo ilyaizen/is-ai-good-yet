@@ -101,7 +101,7 @@ export interface V2StoryCard {
 
 export interface BotFeedItem {
   id: string
-  contractVersion: "bot-feed-v2.0.0"
+  contractVersion: "bot-feed-v2.4.0"
   bot: "aipostsbot" | "aimediabot" | "ainewsbot"
   botPostUrl: string
   postedAt: string
@@ -121,7 +121,7 @@ export interface BotFeedItem {
 }
 
 export interface V2PipelineStatus {
-  contractVersion: "pipeline-status-v2.0.0"
+  contractVersion: "pipeline-status-v2.4.0"
   generatedAt: string
   schedule: {
     expression: string
@@ -166,7 +166,7 @@ export interface V2AggregateDimension {
 }
 
 export interface V2Verdict {
-  contractVersion: "verdict-v2.0.0"
+  contractVersion: "verdict-v2.4.0"
   generatedAt: string
   influenceVersion: string
   windowMonths: number

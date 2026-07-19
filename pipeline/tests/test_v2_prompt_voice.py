@@ -13,8 +13,12 @@ import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SENTIMENT_SRC = (REPO_ROOT / "pipeline" / "src" / "sentiment_v2.py").read_text(encoding="utf-8")
-MODELS_SRC = (REPO_ROOT / "pipeline" / "src" / "v2_models.py").read_text(encoding="utf-8")
+SENTIMENT_SRC = (REPO_ROOT / "pipeline" / "src" / "sentiment_v2.py").read_text(
+    encoding="utf-8"
+)
+MODELS_SRC = (REPO_ROOT / "pipeline" / "src" / "v2_models.py").read_text(
+    encoding="utf-8"
+)
 
 
 def _triple_quoted(name: str, source: str) -> str:
@@ -30,10 +34,19 @@ HEDGING_PHRASES = ("seems to", "possibly", "may suggest")
 
 
 def test_pinned_versions() -> None:
-    # Analysis stays v2.3.0: an ANALYSIS_VERSION bump would invalidate every prior run and empty the
-    # dashboard. Only the prompt texts move to v2.4.0.
-    assert re.search(r'ANALYSIS_VERSION\s*=\s*"v2\.3\.0"', MODELS_SRC)
-    assert re.search(r'PARSER_VERSION\s*=\s*"v2\.3\.1"', MODELS_SRC)
+    # All version strings align at v2.4.0 per plan 003. The prior runs in the
+    # dashboard are invalidated by the bump; the next export cycle rebuilds them.
+    # Prompts were already at v2.4.0; analysis/parser/contracts now match.
+    assert re.search(r'ANALYSIS_VERSION\s*=\s*"v2\.4\.0"', MODELS_SRC)
+    assert re.search(r'PARSER_VERSION\s*=\s*"v2\.4\.0"', MODELS_SRC)
+    assert re.search(r'ARTICLE_CONTRACT_VERSION\s*=\s*"article-v2\.4\.0"', MODELS_SRC)
+    assert re.search(r'COMMENT_CONTRACT_VERSION\s*=\s*"comment-v2\.4\.0"', MODELS_SRC)
+    assert re.search(
+        r'PREFILTER_CONTRACT_VERSION\s*=\s*"prefilter-v2\.4\.0"', MODELS_SRC
+    )
+    assert re.search(
+        r'AGGREGATION_VERSION\s*=\s*"community-aggregation-v2\.4\.0"', MODELS_SRC
+    )
     assert 'ARTICLE_PROMPT_VERSION = "article-prompt-v2.4.0"' in SENTIMENT_SRC
     assert 'COMMENT_PROMPT_VERSION = "comment-prompt-v2.4.0"' in SENTIMENT_SRC
 
@@ -52,16 +65,20 @@ def test_prompts_include_signal_words_and_decision_examples() -> None:
 
 def test_comment_prompt_forbids_hedging_rationales() -> None:
     """A known fixture: the comment prompt must reject hedging in favor of a position."""
-    forbidden_present = [phrase for phrase in HEDGING_PHRASES if phrase in COMMENT_PROMPT]
-    assert forbidden_present == list(HEDGING_PHRASES), (
-        "comment prompt must name the hedging phrases it forbids"
-    )
+    forbidden_present = [
+        phrase for phrase in HEDGING_PHRASES if phrase in COMMENT_PROMPT
+    ]
+    assert forbidden_present == list(
+        HEDGING_PHRASES
+    ), "comment prompt must name the hedging phrases it forbids"
     assert re.search(r"forbid hedging", COMMENT_PROMPT, re.IGNORECASE)
 
 
 def test_article_summary_must_be_a_verdict_not_a_description() -> None:
     assert "discusses" in ARTICLE_PROMPT or "covers" in ARTICLE_PROMPT
-    assert re.search(r"reject any summary that only describes", ARTICLE_PROMPT, re.IGNORECASE)
+    assert re.search(
+        r"reject any summary that only describes", ARTICLE_PROMPT, re.IGNORECASE
+    )
 
 
 def test_article_summary_cap_is_40_words() -> None:

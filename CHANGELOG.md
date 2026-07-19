@@ -9,8 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `/v2/admin` story ledger now surfaces HN story date, eligibility badge, and per-scope chips in the summary row; story titles link to the source URL. New "Expand all / Collapse all" control at the ledger header. Per-source metric strip (input/output/total tokens, inference duration) replaces the JSON-only surface for run metrics. Dimension sections render a confidence bar; the orchestration table gains a Duration column.
+- `V2AdminStoryDetails` now carries `title`, `url`, `domain`, `hnScore`, `hnComments`, `hnTimestamp` so the expanded detail can render the same identity as the summary row without a round-trip.
+
 ### Changed
 
+- Align every V2 version string at `v2.4.0`: `ANALYSIS_VERSION` `v2.3.0` → `v2.4.0`, `PARSER_VERSION` `v2.3.1` → `v2.4.0`, `ARTICLE_CONTRACT_VERSION` `article-v2.2.0` → `article-v2.4.0`, `COMMENT_CONTRACT_VERSION` `comment-v2.2.0` → `comment-v2.4.0`, `PREFILTER_CONTRACT_VERSION` `prefilter-v2.1.0` → `prefilter-v2.4.0`, `AGGREGATION_VERSION` `community-aggregation-v2.2.0` → `community-aggregation-v2.4.0`, `SELECTION_VERSION` `ranked-tree-v2.2.0` → `ranked-tree-v2.4.0`, prefilter `PROMPT_VERSION` `v2-prefilter-prompt-v2.1.0` → `v2-prefilter-prompt-v2.4.0`. Static file contracts (`verdict/stories/history/bot-feed/pipeline-status`) move from `*-v2.0.0` → `*-v2.4.0` in lockstep across `pipeline/src/export_v2.py`, `src/lib/types/v2.ts`, and `src/lib/server/v2-page-adapter.ts`. `MANIFEST_VERSION` (`v2-manifest-1`) and `GLOBAL_INFLUENCE_VERSION` (`hn-score-0.85_decay-24m_v1`) are unchanged — neither carries a `v2.X` token. **Heads-up:** the analysis/contract bumps invalidate prior DB rows matched by version; the next pipeline export cycle rebuilds them.
+- De-duplicate three inline `contractVersion` literals in `pipeline/src/export_v2.py` that duplicated `FILE_CONTRACTS` entries — they now reference `FILE_CONTRACTS[...]` so future bumps touch one place, not four.
+- Update `pipeline/tests/test_v2_prompt_voice.py::test_pinned_versions` to assert the v2.4.0 alignment across all version constants (previously pinned analysis at `v2.3.0` to prevent exactly this kind of bump).
 - Rebuild the public `/v2` surface around a single honest verdict: the hero names the sample size and visibly weakens below a thin-sample floor (8 stories), each story card shows at most three diagnostics per dimension (combined score, one adequacy word, one tension flag) instead of ~15, and ESS/polarization/disagreement/ranking/visibility-diversity numbers are removed from the public card and folded behind admin only.
 - Make the V2 page adapter strict and fail-closed: missing or wrongly-typed required export fields now throw and the route renders an explicit "generation unavailable" state instead of silently coercing broken data to zeroes or placeholder strings. Type-narrow the raw snake_case export shapes and stop inventing community rationales/summaries the pipeline never emitted.
 - Hide the dimensional history section entirely when the data is stale (newest point older than 18 months) or has no addressed points, so fixture noise never plots as a trend.

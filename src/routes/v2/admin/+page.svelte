@@ -6,7 +6,5 @@
   let { data }: { data: PageData } = $props();
 </script>
 
-<div class="v2-admin">
-  <V2AdminObservability data={data.v2} />
-  <V2AdminMethodology methodology={data.methodology} />
-</div>
+<V2AdminObservability data={data.v2} />
+<V2AdminMethodology methodology={data.methodology} />

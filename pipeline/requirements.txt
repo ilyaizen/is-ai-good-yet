@@ -35,4 +35,5 @@ python-dotenv
 pytest
 pytest-asyncio
 
-sloppylint[rich]
+# Linting
+sloppylint[rich]  # AI slop detector (does NOT include black/ruff — install separately if needed)

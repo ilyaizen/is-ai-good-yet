@@ -50,7 +50,7 @@ function findPipelineSource(): string {
 }
 
 function extractString(source: string, name: string): string {
-  const tripleQuoted = source.match(new RegExp(`${name}\\s*=\\s*f?"\""([\\s\\S]*?)"\""`))
+  const tripleQuoted = source.match(new RegExp(`${name}\\s*=\\s*f?"""([\\s\\S]*?)"""`))
   if (tripleQuoted) return tripleQuoted[1]
 
   const quoted = source.match(new RegExp(`${name}\\s*=\\s*"([^"]*)"`))

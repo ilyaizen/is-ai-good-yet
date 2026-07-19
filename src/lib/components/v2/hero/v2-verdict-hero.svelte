@@ -6,6 +6,7 @@
 
   interface Props { verdict: V2Verdict; pipelineState: string; thinSample: boolean; }
   let { verdict, pipelineState, thinSample }: Props = $props();
+  // eslint-disable-next-line no-unassigned-vars -- assigned via bind:this
   let answerNode: HTMLElement;
   let beam = $state(false);
   const answer = $derived(verdict.composite?.verdict.replace("_", " ") ?? "NO DATA");

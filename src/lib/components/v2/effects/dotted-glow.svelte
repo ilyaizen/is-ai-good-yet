@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { createDottedGlow } from "./dotted-glow";
 
+  // eslint-disable-next-line no-unassigned-vars -- assigned via bind:this
   let host: HTMLDivElement;
   onMount(() => createDottedGlow(host, {
     gap: 16,

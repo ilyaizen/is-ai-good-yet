@@ -89,7 +89,7 @@ Pipeline (Python)                    Frontend (SvelteKit)
           │  python -m src.export          │
           ▼                                │
 ┌─────────────────────────────────────┐    │
-│  src/lib/data/       │    │
+│  src/lib/data/                      │    │
 │  ├── articles.json   (889KB)        │◄───┤ Imported by
 │  ├── verdict.json    (568B)         │    │ static-data.ts
 │  ├── historical.json (4.8KB)        │    │

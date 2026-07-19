@@ -87,6 +87,21 @@ db.exec(`
     refill_status TEXT,
     selected_at TEXT
   );
+  CREATE TABLE hn_comments (
+    hn_comment_id INTEGER PRIMARY KEY,
+    hn_story_id INTEGER NOT NULL,
+    parent_id INTEGER NOT NULL,
+    root_id INTEGER NOT NULL,
+    author TEXT NOT NULL,
+    text TEXT NOT NULL,
+    depth INTEGER NOT NULL,
+    display_order INTEGER NOT NULL DEFAULT 0,
+    root_rank INTEGER,
+    sibling_rank INTEGER,
+    ancestry_json TEXT,
+    created_at INTEGER,
+    fetched_at TEXT NOT NULL
+  );
   CREATE TABLE v2_orchestration_runs (
     run_id TEXT,
     status TEXT,
@@ -255,6 +270,21 @@ db.prepare("INSERT INTO v2_comment_selections VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,
   "accepted",
   "2026-07-14T02:30:00Z"
 )
+db.prepare("INSERT INTO hn_comments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
+  99,
+  42,
+  0,
+  0,
+  "skeptical_dev",
+  "LLMs still hallucinate API contracts.",
+  0,
+  0,
+  null,
+  null,
+  null,
+  1_700_000_000,
+  "2026-07-14T02:00:00Z"
+)
 db.prepare("INSERT INTO v2_orchestration_runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)").run(
   "run-1",
   "partial",
@@ -304,6 +334,13 @@ try {
   assert.equal(details.dimensions.length, 1)
   assert.equal(details.dimensions[0].dimension, "capability")
   assert.equal(details.dimensions[0].rationale, "Strong capability evidence.")
+
+  // The refactored detail view surfaces the analyzed comment text (joined from
+  // hn_comments) for the admin-only surface.
+  assert.equal(details.comments.length, 1)
+  assert.equal(details.comments[0].hnCommentId, 99)
+  assert.equal(details.comments[0].author, "skeptical_dev")
+  assert.equal(details.comments[0].text, "LLMs still hallucinate API contracts.")
 
   const incompatibleDatabasePath = path.join(directory, "pipeline-without-diagnostics.db")
   copyFileSync(databasePath, incompatibleDatabasePath)

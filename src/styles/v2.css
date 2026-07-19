@@ -413,6 +413,114 @@ body.v2 p {
   font: 0.83rem/1.6 var(--v2-font-copy);
 }
 
+/* ── Shared admin primitives: hairline grid, key-value grid, code block, status ─
+   One definition for each pattern every admin card reuses, so observability and
+   methodology stop re-inventing them. Compose, e.g.
+   <dl class="v2-grid v2-grid--framed v2-kv">  (column count via --v2-grid-cols). */
+
+/* Hairline grid: recessed cells split by 1px separator-quiet gaps. Column count
+   via the --v2-grid-cols property. --framed adds border + radius for standalone
+   grids; bare .v2-grid relies on its parent card to clip the edges. */
+.v2-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--v2-grid-cols, 3), minmax(0, 1fr));
+  gap: 1px;
+  background: var(--v2-separator-quiet);
+  overflow: hidden;
+}
+.v2-grid > * {
+  min-width: 0;
+  background: var(--v2-recess);
+}
+.v2-grid--framed {
+  border: 1px solid var(--v2-separator-quiet);
+  border-radius: 0.5rem;
+}
+
+/* Key-value grid: dt label / dd monospace value. Layered on .v2-grid. */
+.v2-kv {
+  --v2-grid-cols: 2;
+  margin: 0.75rem 0 0;
+}
+.v2-kv > div {
+  padding: 0.65rem 1rem;
+}
+.v2-kv dt {
+  color: var(--v2-text-faint);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.v2-kv dd {
+  margin: 0.25rem 0 0;
+  color: var(--v2-text-muted);
+  font:
+    400 0.72rem/1.45 ui-monospace,
+    monospace;
+  overflow-wrap: anywhere;
+}
+
+/* Collapsible raw/code block. Framed by default (article text); --flat drops
+   the frame for a disclosure that lives inside another card (raw JSON). */
+.v2-code {
+  border: 1px solid var(--v2-separator-quiet);
+  border-radius: 0.5rem;
+  background: var(--v2-recess);
+  overflow: hidden;
+}
+.v2-code--flat {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.v2-code > summary {
+  padding: 0.8rem 1rem;
+  color: var(--v2-text-muted);
+  font:
+    500 0.68rem ui-monospace,
+    monospace;
+  cursor: pointer;
+}
+.v2-code > pre {
+  max-height: 32rem;
+  margin: 0;
+  padding: 1rem;
+  border-top: 1px solid var(--v2-separator-quiet);
+  overflow: auto;
+  color: var(--v2-text-muted);
+  font:
+    0.68rem/1.6 ui-monospace,
+    monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Status pill + semantic tones. Replaces the per-component status classes. */
+.v2-status {
+  display: inline-block;
+  border: 1px solid var(--v2-separator);
+  border-radius: 0.3rem;
+  padding: 0.22rem 0.45rem;
+  color: var(--v2-text-muted);
+  font:
+    500 0.62rem ui-monospace,
+    monospace;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.v2-status--ok {
+  border-color: color-mix(in oklch, var(--v2-phosphor) 35%, transparent);
+  color: var(--v2-phosphor);
+}
+.v2-status--live {
+  border-color: color-mix(in oklch, var(--v2-violet) 45%, transparent);
+  color: var(--v2-violet);
+}
+.v2-status--bad {
+  border-color: color-mix(in oklch, var(--v2-red) 35%, transparent);
+  color: var(--v2-red);
+}
+
 .v2-route[data-density="compact"] .v2-bot-card__body,
 .v2-route[data-density="compact"] .v2-story-card__header {
   padding: 1rem;

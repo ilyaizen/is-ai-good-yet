@@ -17,7 +17,9 @@
   }
 
   let { open, settings, root, onClose, onChange }: Props = $props();
+  // eslint-disable-next-line no-unassigned-vars -- assigned via bind:this
   let host: HTMLDivElement;
+  // eslint-disable-next-line no-unassigned-vars -- assigned via bind:this
   let panel: HTMLElement;
   let disposeGui: () => void = () => undefined;
   let previousFocus: HTMLElement | null = null;

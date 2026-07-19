@@ -2,10 +2,10 @@
 
 One-off tooling and diagnostics. Run via `vp run <script-name>`.
 
-| Script | Purpose |
-| --- | --- |
-| `bump-version.mjs` | Version bumper — updates version across package.json, svelte config, data files |
-| `diagnose-schema-migration.ts` | Diagnoses v3→v4 schema migration impact on article classification |
+| Script                         | Purpose                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| `bump-version.mjs`             | Version bumper — updates version across package.json, svelte config, data files |
+| `diagnose-schema-migration.ts` | Diagnoses v3→v4 schema migration impact on article classification               |
 
 ## History
 

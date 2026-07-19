@@ -32,15 +32,6 @@ type RunRow = {
   error: string | null
 }
 
-type LockRow = {
-  id: number
-  run_id: number | null
-  command: string
-  pid: number | null
-  acquired_at: string
-  stale: boolean
-}
-
 type LogViewer = {
   run: RunRow | null
   path: string | null

@@ -188,6 +188,17 @@ class CatchUpPipeline:
                 )
             )
 
+        # Phase 3.6: Materialize Text Files
+        # Derive data/articles-text/*.txt from the canonical Parquet store.
+        # Idempotent (missing-only) so it also self-heals any prior gap; cheap to run.
+        phases.append(
+            PhaseConfig(
+                name="Materialize Text Files",
+                phase_id="3.6",
+                module="src.materialize_text",
+            )
+        )
+
         # Phase 4: Content Prefilter (optional)
         if not self.skip_analyze:
             prefilter_args = []

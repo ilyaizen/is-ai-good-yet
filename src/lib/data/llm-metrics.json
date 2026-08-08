@@ -50880,5 +50880,177 @@
         "timestamp": "2026-07-27T23:26:15.783929+00:00"
       }
     }
+  },
+  "49214468": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience and empirical findings about managing AI coding costs at scale."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1784,
+        "output_tokens": 43,
+        "total_tokens": 1827,
+        "inference_time_ms": 210.8,
+        "tokens_per_second": 204.0,
+        "prompt_chars": 3976,
+        "timestamp": "2026-08-08T18:22:44.797931+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Databricks shows AI coding boosts output, but cost‑control tools turn the benefit into sustainable productivity gains.",
+        "quotes": [
+          "AI coding tools deliver immense value...measurably improved every velocity metric we track",
+          "At Databricks, relatively simple tuning of our harness and caching settings led to an almost 50% reduction in the number of generated tokens and associated costs, with no observed quality degradation"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-08-08T18:22:59.217641+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2358,
+        "output_tokens": 223,
+        "total_tokens": 2581,
+        "inference_time_ms": 706.2,
+        "tokens_per_second": 315.8,
+        "prompt_chars": 7974,
+        "timestamp": "2026-08-08T18:22:59.217641+00:00"
+      }
+    }
+  },
+  "49166230": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion on AI programming, with clear findings and critique."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1919,
+        "output_tokens": 44,
+        "total_tokens": 1963,
+        "inference_time_ms": 288.8,
+        "tokens_per_second": 152.4,
+        "prompt_chars": 3970,
+        "timestamp": "2026-08-08T18:22:51.620398+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "Claude helps research but hallucinations and double‑check burden make it a mixed‑bag tool.",
+        "quotes": [
+          "I found it useful to speed up research in areas I wasn’t familiar with.",
+          "I need to stress the need to double check everything."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-08-08T18:23:03.836029+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2636,
+        "output_tokens": 176,
+        "total_tokens": 2812,
+        "inference_time_ms": 406.5,
+        "tokens_per_second": 433.0,
+        "prompt_chars": 7977,
+        "timestamp": "2026-08-08T18:23:03.836029+00:00"
+      }
+    }
+  },
+  "49153374": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "Author shares personal experience with LLM-generated code and manual editing process."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1899,
+        "output_tokens": 42,
+        "total_tokens": 1941,
+        "inference_time_ms": 311.6,
+        "tokens_per_second": 134.8,
+        "prompt_chars": 3978,
+        "timestamp": "2026-08-08T18:22:42.736305+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Manual retyping of LLM code keeps control and deep understanding, but at the cost of speed—a net-positive, but uncertain future.",
+        "quotes": [
+          "\"I have these instructions in all the agents files in my personal projects: I want to understand every line of code that goes into this project. Never create, edit, move, rename, or delete project files unless I explicitly ask you to do so.\"",
+          "\"I value comprehension over productivity. I plan to continue using this workflow for as long as I can.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-08-08T18:22:55.542904+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1902,
+        "output_tokens": 308,
+        "total_tokens": 2210,
+        "inference_time_ms": 716.9,
+        "tokens_per_second": 429.6,
+        "prompt_chars": 4668,
+        "timestamp": "2026-08-08T18:22:55.542904+00:00"
+      }
+    }
+  },
+  "49198069": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.8,
+        "reasoning": "Author shares personal experience and opinion on AI in software development, comparing it to cooking."
+      },
+      "metrics": {
+        "model": "llama-3.1-8b-instant",
+        "input_tokens": 1871,
+        "output_tokens": 45,
+        "total_tokens": 1916,
+        "inference_time_ms": 435.5,
+        "tokens_per_second": 103.3,
+        "prompt_chars": 3954,
+        "timestamp": "2026-08-08T18:22:43.690312+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI speeds coding but still needs human judgment; it’s a tool, not a replacement chef.",
+        "quotes": [
+          "AI can make you faster. It automates the repetitive stuff, spits out a starting point, explains code, helps you poke at ideas.",
+          "What it can’t do is replace your judgment. It can’t define quality for you, can’t decide which tradeoffs are acceptable."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-08-08T18:22:57.064854+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1875,
+        "output_tokens": 196,
+        "total_tokens": 2071,
+        "inference_time_ms": 605.3,
+        "tokens_per_second": 323.8,
+        "prompt_chars": 4656,
+        "timestamp": "2026-08-08T18:22:57.064854+00:00"
+      }
+    }
   }
 }

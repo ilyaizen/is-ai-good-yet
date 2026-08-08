@@ -2294,5 +2294,19 @@
     "positiveContribution": 38207.27,
     "negativeContribution": -22701.5,
     "neutralContribution": -4786.45
+  },
+  {
+    "week": "2026-W32",
+    "weekStart": "2026-08-03",
+    "verdictScore": 62.8,
+    "verdict": "YES",
+    "articleCount": 537,
+    "rawSentiment": 0,
+    "positiveCount": 264,
+    "neutralCount": 105,
+    "negativeCount": 168,
+    "positiveContribution": 36083.67,
+    "negativeContribution": -21373.99,
+    "neutralContribution": -4761.38
   }
 ]

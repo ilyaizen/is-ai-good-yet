@@ -90,12 +90,12 @@ Pipeline (Python)                    Frontend (SvelteKit)
           ▼                                │
 ┌─────────────────────────────────────┐    │
 │  src/lib/data/                      │    │
-│  ├── articles.json   (889KB)        │◄───┤ Imported by
-│  ├── verdict.json    (568B)         │    │ static-data.ts
-│  ├── historical.json (4.8KB)        │    │
-│  ├── weekly.json     (50KB)         │    │
+│  ├── articles.json   (990KB)        │◄───┤ Imported by
+│  ├── verdict.json    (656B)         │    │ static-data.ts
+│  ├── historical.json (5.1KB)        │    │
+│  ├── weekly.json     (56KB)         │    │
 │  ├── themes.json     (9.5KB)        │    │
-│  └── llm-metrics.json (1.6MB)       │    │
+│  └── llm-metrics.json (1.8MB)       │    │
 └─────────────────────────────────────┘    │
                                            │
                                            ▼
@@ -137,12 +137,12 @@ Pipeline (Python)                    Frontend (SvelteKit)
 
 | File               | Contents                                                                           | Size   |
 | :----------------- | :--------------------------------------------------------------------------------- | :----- |
-| `articles.json`    | All AI_DISCOURSE articles with quotes, summary, topic, sentiment scores, influence | ~889KB |
-| `verdict.json`     | Current verdict (12-month window) + permanent record (all-time) + counts           | ~568B  |
-| `historical.json`  | Monthly verdict snapshots for history chart                                        | ~4.8KB |
-| `weekly.json`      | Weekly rolling window snapshots with contribution breakdown                        | ~50KB  |
+| `articles.json`    | All AI_DISCOURSE articles with quotes, summary, topic, sentiment scores, influence | ~990KB |
+| `verdict.json`     | Current verdict (12-month window) + permanent record (all-time) + counts           | ~656B  |
+| `historical.json`  | Monthly verdict snapshots for history chart                                        | ~5.1KB |
+| `weekly.json`      | Weekly rolling window snapshots with contribution breakdown                        | ~56KB  |
 | `themes.json`      | Synthesized themes grouped by sentiment                                            | ~9.5KB |
-| `llm-metrics.json` | LLM response data with speed metrics (keyed by hn_id)                              | ~1.6MB |
+| `llm-metrics.json` | LLM response data with speed metrics (keyed by hn_id)                              | ~1.8MB |
 
 ### Admin Route
 

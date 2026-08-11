@@ -85,7 +85,7 @@ The pipeline runs in phases. The canonical interface is the **Vite+ `pipeline:*`
 
 ### Quick update — Catch-Up Pipeline (recommended)
 
-Runs the full sequence (ingest → scrape → analyze) for recent articles:
+Runs the recent-article sequence (discovery → resolution → scraping → text materialization → analysis → export):
 
 ```bash
 vp run pipeline:catch-up            # default (5 pages)
@@ -106,6 +106,7 @@ python -m src.catch_up --skip-scrape # reuse existing content
 | Histre backfill     | `python -m src.backfill_histre --start 1 --end 10`                                             | `--resume` resumes from last state     |
 | HN resolution       | `python -m src.hn_resolver`                                                                    | resolves HN metadata via Algolia       |
 | Scraping            | `python -m src.scraper -v --lean --stealth-mode=seleniumbase --no-headful-switch -b 100 -c 16` | see scraper flags below                |
+| Text materialization | `python -m src.materialize_text`                                                               | derives missing `articles-text/*.txt` from Parquet; `--all` refreshes, `--dry-run` reports only |
 | Legacy text cleanup | `python src/clean_articles.py`                                                                 | recovery use only                      |
 | Legacy text uptake  | `python src/uptake_ground_truth.py`                                                            | destructively rebuilds Parquet         |
 | Consistency check   | `python src/check_consistency.py`                                                              | `--fix` resets phantom articles        |
@@ -113,6 +114,8 @@ python -m src.catch_up --skip-scrape # reuse existing content
 | Sentiment analysis  | `python -m src.sentiment_analyzer -v`                                                          | `--limit 10`, `--reset`, `--reanalyze` |
 | Theme synthesis     | `python -m src.summary_summarizer -v`                                                          | requires `ANTHROPIC_API_KEY`           |
 | Export              | `vp run pipeline:export`                                                                       | writes `src/lib/data/*.json`           |
+
+The catch-up pipeline runs [text materialization](../pipeline/src/materialize_text.py) automatically after scraping. It is idempotent by default: only missing text files are written from the canonical Parquet store.
 
 ### Scraper CLI flags
 

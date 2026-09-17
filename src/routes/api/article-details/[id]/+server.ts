@@ -2,7 +2,7 @@ import { json, error } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 import { getStaticArticleById } from "$lib/static-data"
 import { getUrlWithAnalysis } from "$lib/server/db"
-import { getArticleText } from "$lib/server/article-text"
+import { getAuthorizedArticleText } from "$lib/server/article-access"
 import { isValidAdminCookie, ADMIN_COOKIE_NAME } from "$lib/server/admin-auth"
 import type { ArticleDetails, ArticleDetailsResponse } from "$lib/types/article-details"
 
@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ params, cookies }) => {
   // SECURITY: full scraped article bodies (copyright third-party content) are
   // admin-only. Public callers receive metadata + analysis only.
   const isAdmin = isValidAdminCookie(cookies.get(ADMIN_COOKIE_NAME))
-  const articleText = isAdmin ? getArticleText(hnId) : null
+  const articleText = getAuthorizedArticleText(hnId, isAdmin)
 
   const dbArticle = getUrlWithAnalysis(hnId)
   if (dbArticle) {

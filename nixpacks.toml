@@ -8,16 +8,19 @@ PIPELINE_STEALTH_MODE = "standard"
 nixPkgs = ["...", "python311", "python311Packages.pip", "chromium"]
 nixLibs = ["...", "stdenv.cc.cc.lib"]
 
+# The vite.plus installer moved vp from /root/.vite-plus/bin to
+# /root/.local/share/vite-plus/bin and ships an env file for activation;
+# resolve vp via PATH instead of a hardcoded binary location.
 [phases.install]
 cmds = [
   "curl -fsSL https://vite.plus | bash",
-  "/root/.vite-plus/bin/vp install --frozen-lockfile",
+  ". /root/.config/vite-plus/env && vp install --frozen-lockfile",
   "python3 -m venv /opt/pipeline-venv",
   "/opt/pipeline-venv/bin/pip install --no-cache-dir -r pipeline/requirements.txt",
 ]
 
 [phases.build]
-cmds = ["/root/.vite-plus/bin/vp build"]
+cmds = [". /root/.config/vite-plus/env && vp build"]
 
 [start]
 cmd = "HOST=0.0.0.0 node build/index.js"

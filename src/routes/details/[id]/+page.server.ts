@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { getStaticArticleById } from "$lib/static-data"
 import { getUrlWithAnalysis } from "$lib/server/db"
-import { getArticleText } from "$lib/server/article-text"
+import { getAuthorizedArticleText } from "$lib/server/article-access"
 
 export interface AnalysisPromptsSuccess {
   prefilter: {
@@ -70,7 +70,7 @@ export const load: PageServerLoad = async ({
   // Try live DB article first (covers all 24k URLs in the pipeline)
   const dbArticle = getUrlWithAnalysis(hnId)
   if (dbArticle) {
-    const articleText = getArticleText(hnId)
+    const articleText = getAuthorizedArticleText(hnId, false)
 
     // Parse content_filter_json if present
     let contentFilter: ContentFilterResult | null = null
@@ -118,7 +118,7 @@ export const load: PageServerLoad = async ({
   }
 
   // Even for static articles, try the scraped text store
-  const articleText = getArticleText(hnId)
+  const articleText = getAuthorizedArticleText(hnId, false)
 
   return {
     article: {

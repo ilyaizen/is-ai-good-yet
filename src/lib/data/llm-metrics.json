@@ -51052,5 +51052,263 @@
         "timestamp": "2026-08-08T18:22:57.064854+00:00"
       }
     }
+  },
+  "49550375": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience using an LLM to port the game."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2031,
+        "output_tokens": 175,
+        "total_tokens": 2206,
+        "inference_time_ms": 427.3,
+        "tokens_per_second": 409.5,
+        "prompt_chars": 3980,
+        "timestamp": "2026-09-10T03:07:13.742695+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Claude helped but required heavy human oversight; it accelerated work yet produced errors needing correction.",
+        "quotes": [
+          "\"The file formats and the assembly reading were the AI’s work, and so were the decisions about how to carry thirty‑year‑old code across, and it went faster than I could follow.\"",
+          "\"Some of it was wrong, and I didn’t notice for weeks.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:32.900748+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2758,
+        "output_tokens": 237,
+        "total_tokens": 2995,
+        "inference_time_ms": 767.7,
+        "tokens_per_second": 308.7,
+        "prompt_chars": 7976,
+        "timestamp": "2026-09-10T03:07:32.900748+00:00"
+      }
+    }
+  },
+  "49622561": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience and clear findings about AI tool effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1803,
+        "output_tokens": 221,
+        "total_tokens": 2024,
+        "inference_time_ms": 474.6,
+        "tokens_per_second": 465.7,
+        "prompt_chars": 3980,
+        "timestamp": "2026-09-10T03:07:20.345428+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI agents streamline routine quantum experiments, saving time, but still struggle with noisy data—useful now, improving with future versions.",
+        "quotes": [
+          "GPT‑5.6 Sol could often complete routine measurement workflows autonomously, saving her significant amounts of time",
+          "GPT‑5.6 Sol had more difficulty when experimental signals were weak or noisy, needing guidance"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:37.203803+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1969,
+        "output_tokens": 194,
+        "total_tokens": 2163,
+        "inference_time_ms": 462.2,
+        "tokens_per_second": 419.7,
+        "prompt_chars": 5681,
+        "timestamp": "2026-09-10T03:07:37.203803+00:00"
+      }
+    }
+  },
+  "49571465": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience and opinion on AI coding tool usage."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1901,
+        "output_tokens": 191,
+        "total_tokens": 2092,
+        "inference_time_ms": 585.9,
+        "tokens_per_second": 326.0,
+        "prompt_chars": 3963,
+        "timestamp": "2026-09-10T03:07:16.479874+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Routing cheaper models cuts token costs 90% but adds latency and limits reasoning—worth trying, but not a silver bullet.",
+        "quotes": [
+          "\"Mean bulk‑read savings were around a whopping 90%.\"",
+          "\"Latency adds up. Each delegation is a network round‑trip: Claude Code to the Portal backend to the worker model and back. Responses typically take 10–30 seconds.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:34.950013+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2525,
+        "output_tokens": 224,
+        "total_tokens": 2749,
+        "inference_time_ms": 505.2,
+        "tokens_per_second": 443.4,
+        "prompt_chars": 7973,
+        "timestamp": "2026-09-10T03:07:34.950013+00:00"
+      }
+    }
+  },
+  "49557206": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Research with clear findings on AI coding tool choices, not a product announcement."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1870,
+        "output_tokens": 193,
+        "total_tokens": 2063,
+        "inference_time_ms": 552.4,
+        "tokens_per_second": 349.4,
+        "prompt_chars": 3968,
+        "timestamp": "2026-09-10T03:07:15.776904+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Large empirical study reveals varied AI agent preferences, no clear win; useful data but not a game‑changer.",
+        "quotes": [
+          "All three agents pick the same tool in only 42% of the cells",
+          "With the exact same ask on 4 repositories in 4 different programming languages, we got 4 different email provider winners"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:34.337746+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2582,
+        "output_tokens": 170,
+        "total_tokens": 2752,
+        "inference_time_ms": 594.8,
+        "tokens_per_second": 285.8,
+        "prompt_chars": 7962,
+        "timestamp": "2026-09-10T03:07:34.337746+00:00"
+      }
+    }
+  },
+  "49605246": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First-person research with empirical findings on AI coding tool effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1900,
+        "output_tokens": 194,
+        "total_tokens": 2094,
+        "inference_time_ms": 517.9,
+        "tokens_per_second": 374.6,
+        "prompt_chars": 3999,
+        "timestamp": "2026-09-10T03:07:17.761756+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Testing techniques add little value; agent skills are flaky and often counterproductive.",
+        "quotes": [
+          "I got a much more boring negative result, except for the part where the skills codex suggested might be useful seemed to be counterproductive.",
+          "The Hegel skill sortof sucks right now."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:36.623689+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2550,
+        "output_tokens": 181,
+        "total_tokens": 2731,
+        "inference_time_ms": 429.7,
+        "tokens_per_second": 421.3,
+        "prompt_chars": 7976,
+        "timestamp": "2026-09-10T03:07:36.623689+00:00"
+      }
+    }
+  },
+  "49560260": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person study with empirical findings on AI coding tool effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1822,
+        "output_tokens": 146,
+        "total_tokens": 1968,
+        "inference_time_ms": 393.7,
+        "tokens_per_second": 370.9,
+        "prompt_chars": 3974,
+        "timestamp": "2026-09-10T03:07:21.403377+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "evaluation",
+        "summary": "Study shows grep sometimes outperforms LSP, but LSP gains precision; authors recommend careful evaluation of tools within the agent harness.",
+        "quotes": [
+          "All three models chose the semantic tool only 0% to 6% of the time when both tools were available.",
+          "The study found a clear precision gain from LSP-backed navigation in noisy code, and a small response-format change removed most follow-up reads."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-09-10T03:07:37.921211+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2439,
+        "output_tokens": 242,
+        "total_tokens": 2681,
+        "inference_time_ms": 609.6,
+        "tokens_per_second": 397.0,
+        "prompt_chars": 7974,
+        "timestamp": "2026-09-10T03:07:37.921211+00:00"
+      }
+    }
   }
 }

@@ -2308,5 +2308,33 @@
     "positiveContribution": 36083.67,
     "negativeContribution": -21373.99,
     "neutralContribution": -4761.38
+  },
+  {
+    "week": "2026-W36",
+    "weekStart": "2026-08-31",
+    "verdictScore": 64.02,
+    "verdict": "YES",
+    "articleCount": 460,
+    "rawSentiment": 0,
+    "positiveCount": 230,
+    "neutralCount": 95,
+    "negativeCount": 135,
+    "positiveContribution": 31618.65,
+    "negativeContribution": -17768.52,
+    "neutralContribution": -4309.9
+  },
+  {
+    "week": "2026-W37",
+    "weekStart": "2026-09-07",
+    "verdictScore": 64.07,
+    "verdict": "YES",
+    "articleCount": 449,
+    "rawSentiment": 0,
+    "positiveCount": 223,
+    "neutralCount": 93,
+    "negativeCount": 133,
+    "positiveContribution": 30874.32,
+    "negativeContribution": -17313.82,
+    "neutralContribution": -4244.03
   }
 ]

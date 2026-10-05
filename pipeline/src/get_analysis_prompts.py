@@ -385,7 +385,7 @@ def generate_prompts(article_id: int) -> dict:
 
     return {
         "prefilter": {
-            "model": "llama-3.1-8b-instant",
+            "model": "openai/gpt-oss-20b",
             "prompt": prefilter_prompt,
             "truncation_limit": PREFILTER_MAX_LENGTH,
             "actual_length": len(prefilter_content),

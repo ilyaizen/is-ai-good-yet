@@ -63,7 +63,7 @@ if sys.platform == "win32":
 console = Console()
 
 # Groq API Configuration
-GROQ_MODEL = "llama-3.1-8b-instant"
+GROQ_MODEL = "openai/gpt-oss-20b"
 
 # Maximum characters to send to the LLM (truncation limit)
 MAX_CONTENT_LENGTH = 4000

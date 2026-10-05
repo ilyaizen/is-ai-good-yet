@@ -634,7 +634,10 @@ async def classify_content_with_groq_streaming(
             model=GROQ_MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.6,
-            max_completion_tokens=256,
+            # gpt-oss-20b is a reasoning model: hidden reasoning draws from this
+            # budget before the JSON content, so 256 truncated borderline items
+            # (~250/580 failed "Failed to parse JSON" on the 2026-10-05 backfill).
+            max_completion_tokens=1024,
             top_p=0.95,
             stream=True,
         )

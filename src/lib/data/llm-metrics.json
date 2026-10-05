@@ -1350,6 +1350,49 @@
       }
     }
   },
+  "44030417": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person developer experience and lessons about AI coding."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1908,
+        "output_tokens": 144,
+        "total_tokens": 2052,
+        "inference_time_ms": 392.0,
+        "tokens_per_second": 367.4,
+        "prompt_chars": 3956,
+        "timestamp": "2026-10-05T14:11:45.304718+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI drastically cuts prototyping time but still needs human design, making it a helpful but not complete replacement.",
+        "quotes": [
+          "\"I had something running on my wrist in a single evening… AI speeds up the feedback loop.\"",
+          "Getting something real gives you a way to learn what might actually be useful."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:30.993190+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2576,
+        "output_tokens": 141,
+        "total_tokens": 2717,
+        "inference_time_ms": 411.0,
+        "tokens_per_second": 343.0,
+        "prompt_chars": 7979,
+        "timestamp": "2026-10-05T14:27:30.993190+00:00"
+      }
+    }
+  },
   "45658019": {
     "prefilter": {
       "response": {
@@ -2003,6 +2046,49 @@
         "tokens_per_second": 387.2,
         "prompt_chars": 7980,
         "timestamp": "2026-01-11T13:10:37.253556+00:00"
+      }
+    }
+  },
+  "46043354": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person team experience with measurable results."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1870,
+        "output_tokens": 178,
+        "total_tokens": 2048,
+        "inference_time_ms": 506.8,
+        "tokens_per_second": 351.2,
+        "prompt_chars": 3960,
+        "timestamp": "2026-10-05T14:10:49.922420+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Switching to Voyage-3.5 Lite delivers 2× faster RAG, 3× cheaper storage, and comparable or better retrieval—clear win for high‑scale digital personas.",
+        "quotes": [
+          "'This optimization resulted in retrieval latency being slashed by 50% (2x faster)'",
+          "'It cuts storage and latency substantially while maintaining, and often improving, retrieval quality'"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:19.444118+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2528,
+        "output_tokens": 280,
+        "total_tokens": 2808,
+        "inference_time_ms": 2962.3,
+        "tokens_per_second": 94.5,
+        "prompt_chars": 7971,
+        "timestamp": "2026-10-05T14:27:19.444118+00:00"
       }
     }
   },
@@ -2878,6 +2964,48 @@
         "tokens_per_second": 194.6,
         "prompt_chars": 7978,
         "timestamp": "2026-01-09T15:46:47.546028+00:00"
+      }
+    }
+  },
+  "46138465": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experiment with training, results, personal insights."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1995,
+        "output_tokens": 145,
+        "total_tokens": 2140,
+        "inference_time_ms": 873.9,
+        "tokens_per_second": 165.9,
+        "prompt_chars": 3972,
+        "timestamp": "2026-10-05T14:08:45.544888+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "Qwen2.5-Coder hits 86% diagram accuracy with tiny data—promising but still buggy, needs RL polishing.",
+        "quotes": [
+          "\"We have 139 diagrams with syntax errors and 857 diagrams successfully rendered. That gives us 86% accuracy, not bad for such a really small amount of training data.\", \"I have successfully taught Qwen2.5-Coder how to generate Pintora diagrams instead of spitting out random Mermaid/PlantUML diagrams.\nBut how well has it learned?\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:13.813443+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2849,
+        "output_tokens": 224,
+        "total_tokens": 3073,
+        "inference_time_ms": 595.5,
+        "tokens_per_second": 376.1,
+        "prompt_chars": 7968,
+        "timestamp": "2026-10-05T14:27:13.813443+00:00"
       }
     }
   },
@@ -3832,6 +3960,49 @@
         "tokens_per_second": 421.8,
         "prompt_chars": 5005,
         "timestamp": "2026-01-11T13:11:17.929805+00:00"
+      }
+    }
+  },
+  "46149740": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person narrative with personal experience, evaluation, and opinion about AI tool effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1963,
+        "output_tokens": 233,
+        "total_tokens": 2196,
+        "inference_time_ms": 542.1,
+        "tokens_per_second": 429.8,
+        "prompt_chars": 3973,
+        "timestamp": "2026-10-05T14:08:03.907770+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI policy models need constant human‑policy loops; they’re not plug‑and‑play but can work if teams collaborate closely.",
+        "quotes": [
+          "The policy and Engineering Teams Need to be in Direct, Frequent Communication.",
+          "Experts have historically not needed to look at the data… but it is the only way to achieve high accuracy."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:05.869114+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2606,
+        "output_tokens": 170,
+        "total_tokens": 2776,
+        "inference_time_ms": 645.1,
+        "tokens_per_second": 263.5,
+        "prompt_chars": 7972,
+        "timestamp": "2026-10-05T14:27:05.869114+00:00"
       }
     }
   },
@@ -6556,6 +6727,49 @@
       }
     }
   },
+  "45477394": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience and opinion on AI coding workflow."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1815,
+        "output_tokens": 111,
+        "total_tokens": 1926,
+        "inference_time_ms": 308.2,
+        "tokens_per_second": 360.2,
+        "prompt_chars": 3750,
+        "timestamp": "2026-10-05T14:09:32.205018+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI-powered whiteboarding turns planning into a productive, design‑driven workflow that reduces bugs and speeds development.",
+        "quotes": [
+          "Whiteboarding with AI has fundamentally changed my workflow. I spend less time typing code and more time thinking through problems, design, and architecture.",
+          "The result is better code than asking one model to design and implement simultaneously. The plan becomes your spec and documentation, costs less overall, and produces fewer bugs."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:20.604440+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1649,
+        "output_tokens": 204,
+        "total_tokens": 1853,
+        "inference_time_ms": 540.8,
+        "tokens_per_second": 377.2,
+        "prompt_chars": 3750,
+        "timestamp": "2026-10-05T14:27:20.604440+00:00"
+      }
+    }
+  },
   "46072838": {
     "prefilter": {
       "response": {
@@ -7039,6 +7253,49 @@
         "tokens_per_second": 306.7,
         "prompt_chars": 7977,
         "timestamp": "2026-01-11T12:28:59.154673+00:00"
+      }
+    }
+  },
+  "45352901": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person team experience and lessons on AI agent context engineering."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1863,
+        "output_tokens": 118,
+        "total_tokens": 1981,
+        "inference_time_ms": 396.5,
+        "tokens_per_second": 297.6,
+        "prompt_chars": 3981,
+        "timestamp": "2026-10-05T14:06:45.003339+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Context engineering boosts speed but is labor‑intensive; it’s useful now but still experimental.",
+        "quotes": [
+          "\"This allows us to ship improvements in hours instead of weeks, and kept our product orthogonal to the underlying models\"",
+          "\"I found myself imagining what it would take for a State Space Model (SSM) to work effectively in an agentic setting\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:26:56.852054+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2474,
+        "output_tokens": 180,
+        "total_tokens": 2654,
+        "inference_time_ms": 503.6,
+        "tokens_per_second": 357.4,
+        "prompt_chars": 7970,
+        "timestamp": "2026-10-05T14:26:56.852054+00:00"
       }
     }
   },
@@ -8137,6 +8394,49 @@
         "tokens_per_second": 195.6,
         "prompt_chars": 7978,
         "timestamp": "2026-01-09T15:38:13.969525+00:00"
+      }
+    }
+  },
+  "44639776": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Research study with clear findings on AI coding tool effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1723,
+        "output_tokens": 150,
+        "total_tokens": 1873,
+        "inference_time_ms": 392.5,
+        "tokens_per_second": 382.2,
+        "prompt_chars": 3673,
+        "timestamp": "2026-10-05T14:09:45.218331+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI tools slowed experienced devs 19%, but authors see potential for future gains.",
+        "quotes": [
+          "AI-assisted developers took 19% longer to complete tasks than those without AI.",
+          "Improvements in prompting techniques, agent scaffolding, or domain‑specific fine tuning could unlock real productivity gains."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:21.082151+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1557,
+        "output_tokens": 186,
+        "total_tokens": 1743,
+        "inference_time_ms": 382.4,
+        "tokens_per_second": 486.5,
+        "prompt_chars": 3673,
+        "timestamp": "2026-10-05T14:27:21.082151+00:00"
       }
     }
   },
@@ -9581,6 +9881,49 @@
       }
     }
   },
+  "45487247": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person project description with experimental findings on AI coding."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1769,
+        "output_tokens": 137,
+        "total_tokens": 1906,
+        "inference_time_ms": 382.8,
+        "tokens_per_second": 357.9,
+        "prompt_chars": 3590,
+        "timestamp": "2026-10-05T14:12:22.420026+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Hybrid AI agent architecture outperforms single-model setups, proving that orchestrating reasoning and coding LLMs boosts efficiency and reliability for complex 3D generation tasks.",
+        "quotes": [
+          "Hybrid model achieved faster convergence than single-model setups.",
+          "Pairing a powerful reasoning LLM with a specialized coder LLM was significantly more efficient (fewer iterations) and reliable than using a single SOTA model for everything."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:38.303484+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1602,
+        "output_tokens": 262,
+        "total_tokens": 1864,
+        "inference_time_ms": 501.8,
+        "tokens_per_second": 522.1,
+        "prompt_chars": 3576,
+        "timestamp": "2026-10-05T14:27:38.303484+00:00"
+      }
+    }
+  },
   "45032715": {
     "prefilter": {
       "response": {
@@ -9710,6 +10053,48 @@
         "tokens_per_second": 208.1,
         "prompt_chars": 2621,
         "timestamp": "2026-01-11T12:31:46.923447+00:00"
+      }
+    }
+  },
+  "45971559": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person review of Copilot with personal experience and critique of its performance."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1910,
+        "output_tokens": 122,
+        "total_tokens": 2032,
+        "inference_time_ms": 395.7,
+        "tokens_per_second": 308.3,
+        "prompt_chars": 3983,
+        "timestamp": "2026-10-05T14:11:22.858870+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Copilot is painfully slow, inaccurate, and frustrating—no real productivity boost yet.",
+        "quotes": [
+          "\"Copilot got things wrong, made stuff up, and spoke to me like I was a child.\", \"Copilot Vision scans what's on your screen and tries to assist you with voice prompts…excruciatingly slow to respond."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:28.332123+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2609,
+        "output_tokens": 172,
+        "total_tokens": 2781,
+        "inference_time_ms": 1000.2,
+        "tokens_per_second": 172.0,
+        "prompt_chars": 7971,
+        "timestamp": "2026-10-05T14:27:28.332123+00:00"
       }
     }
   },
@@ -11033,6 +11418,48 @@
       }
     }
   },
+  "46150868": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person developer experience and opinion on AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1910,
+        "output_tokens": 177,
+        "total_tokens": 2087,
+        "inference_time_ms": 480.7,
+        "tokens_per_second": 368.2,
+        "prompt_chars": 3982,
+        "timestamp": "2026-10-05T14:10:06.770778+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI speeds coding but reading becomes harder; tool mitigates via in‑IDE review, balancing efficiency with quality.",
+        "quotes": [
+          "\"I just tend to 'shorten' this verification phase, telling myself 'it works, the tests pass, the team will catch anything major.'\",\"CodeRabbit would flag the issues and I'd fix them but not before my teammates had seen my AI-generated code with obvious problems that I didn't bother to review properly.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:23.724135+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2226,
+        "output_tokens": 161,
+        "total_tokens": 2387,
+        "inference_time_ms": 417.6,
+        "tokens_per_second": 385.5,
+        "prompt_chars": 6324,
+        "timestamp": "2026-10-05T14:27:23.724135+00:00"
+      }
+    }
+  },
   "45879602": {
     "prefilter": {
       "response": {
@@ -12088,6 +12515,92 @@
       }
     }
   },
+  "45457779": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person narrative with personal experience and opinion about AI agents."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2002,
+        "output_tokens": 137,
+        "total_tokens": 2139,
+        "inference_time_ms": 352.2,
+        "tokens_per_second": 389.0,
+        "prompt_chars": 3978,
+        "timestamp": "2026-10-05T14:07:17.384234+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Agents now self‑document and share progress, boosting workflow efficiency.",
+        "quotes": [
+          "I built a quick MCP server for social media updates, and forked Jesse's journal MCP server.",
+          "After spending about 48 hours thinking more about this ... we should give the agents an entire social media industry to participate in."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:03.192866+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2827,
+        "output_tokens": 167,
+        "total_tokens": 2994,
+        "inference_time_ms": 1144.0,
+        "tokens_per_second": 146.0,
+        "prompt_chars": 7973,
+        "timestamp": "2026-10-05T14:27:03.192866+00:00"
+      }
+    }
+  },
+  "44294876": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and opinion about AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1897,
+        "output_tokens": 117,
+        "total_tokens": 2014,
+        "inference_time_ms": 466.3,
+        "tokens_per_second": 250.9,
+        "prompt_chars": 3992,
+        "timestamp": "2026-10-05T14:09:47.623907+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "AI helps with small functions and refactoring but struggles with context, reliability, and consistency—beneficial but not a silver‑bullet.",
+        "quotes": [
+          "\"I do find that AI writes small functions very well, and I use it for that a lot.\"",
+          "\"But ultimately, if you need reliable, reproducible, testable behavior, AI alone is the wrong tool.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:21.847692+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2589,
+        "output_tokens": 171,
+        "total_tokens": 2760,
+        "inference_time_ms": 637.2,
+        "tokens_per_second": 268.3,
+        "prompt_chars": 7977,
+        "timestamp": "2026-10-05T14:27:21.847692+00:00"
+      }
+    }
+  },
   "45983700": {
     "prefilter": {
       "response": {
@@ -12879,6 +13392,49 @@
       }
     }
   },
+  "44705018": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person opinion and personal example on AI HUDs."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1912,
+        "output_tokens": 166,
+        "total_tokens": 2078,
+        "inference_time_ms": 507.4,
+        "tokens_per_second": 327.2,
+        "prompt_chars": 3988,
+        "timestamp": "2026-10-05T14:07:49.383062+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "HUDs extend human senses, but copilot still useful for routine tasks – a balanced view on AI UI design.",
+        "quotes": [
+          "\"Weiser offered a different option: design the cockpit so that the human pilot is naturally aware of their surroundings.\"",
+          "\"I have a HUD! I have new senses, I can see how my program runs.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:05.074643+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1780,
+        "output_tokens": 208,
+        "total_tokens": 1988,
+        "inference_time_ms": 458.8,
+        "tokens_per_second": 453.3,
+        "prompt_chars": 4130,
+        "timestamp": "2026-10-05T14:27:05.074643+00:00"
+      }
+    }
+  },
   "45773347": {
     "prefilter": {
       "response": {
@@ -13270,6 +13826,50 @@
         "tokens_per_second": 336.8,
         "prompt_chars": 7981,
         "timestamp": "2026-01-11T13:12:01.654189+00:00"
+      }
+    }
+  },
+  "45346721": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person project narrative, personal experience, and AI tool usage."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2086,
+        "output_tokens": 240,
+        "total_tokens": 2326,
+        "inference_time_ms": 469.5,
+        "tokens_per_second": 511.2,
+        "prompt_chars": 3977,
+        "timestamp": "2026-10-05T14:08:13.272902+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "productivity",
+        "summary": "AI helped speed setup, but debugging firecracker and kernel issues made it a mixed experience.",
+        "quotes": [
+          "\"I was hoping that with AI tools, I could do it in just a weekend\"",
+          "\"The AI is equally confused. I spend about an hour stuck on this\"",
+          "\"It worked out the SSH protocol with no issues at all, and it's especially good at making cute interactive terminal output\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:09.160604+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 3035,
+        "output_tokens": 147,
+        "total_tokens": 3182,
+        "inference_time_ms": 1198.0,
+        "tokens_per_second": 122.7,
+        "prompt_chars": 7980,
+        "timestamp": "2026-10-05T14:27:09.160604+00:00"
       }
     }
   },
@@ -15015,6 +15615,49 @@
       }
     }
   },
+  "46024884": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience, opinions, and research findings about AI coding discussed."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1924,
+        "output_tokens": 123,
+        "total_tokens": 2047,
+        "inference_time_ms": 328.8,
+        "tokens_per_second": 374.1,
+        "prompt_chars": 4006,
+        "timestamp": "2026-10-05T14:12:26.235641+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "AI boosts speed but inflates review bottlenecks and trust issues—beneficial yet problematic for senior engineers.",
+        "quotes": [
+          "\"Using AI to increase velocity means that more code is being thrown over the wall, and someone has to review it.\"",
+          "\"We are actually starting to see that code review is becoming the new bottleneck....\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:43.763460+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2584,
+        "output_tokens": 225,
+        "total_tokens": 2809,
+        "inference_time_ms": 567.6,
+        "tokens_per_second": 396.4,
+        "prompt_chars": 7978,
+        "timestamp": "2026-10-05T14:27:43.763460+00:00"
+      }
+    }
+  },
   "44311363": {
     "prefilter": {
       "response": {
@@ -15983,6 +16626,48 @@
         "tokens_per_second": 95.4,
         "prompt_chars": 7981,
         "timestamp": "2026-01-09T16:03:40.849447+00:00"
+      }
+    }
+  },
+  "44456347": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and substantive opinion on AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1837,
+        "output_tokens": 186,
+        "total_tokens": 2023,
+        "inference_time_ms": 446.3,
+        "tokens_per_second": 416.8,
+        "prompt_chars": 3981,
+        "timestamp": "2026-10-05T14:11:49.081192+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "A structured, human‑checkpoint workflow turns noisy LLMs into reliable helpers, cutting effort but still limited by context and control issues.",
+        "quotes": [
+          "\"What previously took me 2-3 weeks, now takes 2-3 days.\", \"Treating LLMs as programmable computers rather than conversational partners... turns AI-assisted coding into an engineering discipline.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:32.113274+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2469,
+        "output_tokens": 193,
+        "total_tokens": 2662,
+        "inference_time_ms": 790.5,
+        "tokens_per_second": 244.1,
+        "prompt_chars": 7977,
+        "timestamp": "2026-10-05T14:27:32.113274+00:00"
       }
     }
   },
@@ -21886,6 +22571,49 @@
       }
     }
   },
+  "43006689": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience and opinion on using Cursor AI, not a product announcement or tutorial."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1331,
+        "output_tokens": 200,
+        "total_tokens": 1531,
+        "inference_time_ms": 416.4,
+        "tokens_per_second": 480.3,
+        "prompt_chars": 1143,
+        "timestamp": "2026-10-05T14:08:29.201819+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Cursor’s current usage patterns waste effort; proper prompt engineering can turn it into a useful tool, but misusing it leads to toil.",
+        "quotes": [
+          "You're using Cursor as a replacement for Google Search.",
+          "Treating Cursor as if it is an IDE, instead of it being an autonomous agent."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:11.119258+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1163,
+        "output_tokens": 156,
+        "total_tokens": 1319,
+        "inference_time_ms": 501.0,
+        "tokens_per_second": 311.4,
+        "prompt_chars": 1137,
+        "timestamp": "2026-10-05T14:27:11.119258+00:00"
+      }
+    }
+  },
   "42537332": {
     "prefilter": {
       "response": {
@@ -23365,6 +24093,49 @@
         "tokens_per_second": 343.3,
         "prompt_chars": 4749,
         "timestamp": "2026-01-11T13:24:15.951672+00:00"
+      }
+    }
+  },
+  "42485106": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience with Copilot and substantive opinion on AI impact."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1914,
+        "output_tokens": 132,
+        "total_tokens": 2046,
+        "inference_time_ms": 437.6,
+        "tokens_per_second": 301.6,
+        "prompt_chars": 3999,
+        "timestamp": "2026-10-05T14:07:20.507261+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "A thoughtful look at how developers and systems adapt to LMs, but no clear win or loss in current practice.",
+        "quotes": [
+          "I often notice how my behavior changes in subtle ways to adapt to the tool.",
+          "Code autocomplete naturally lends itself to \"docstring-first programming\" – you're more likely to get a helpful snippet if the model has some description first."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:03.933657+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2539,
+        "output_tokens": 236,
+        "total_tokens": 2775,
+        "inference_time_ms": 610.6,
+        "tokens_per_second": 386.5,
+        "prompt_chars": 7967,
+        "timestamp": "2026-10-05T14:27:03.933657+00:00"
       }
     }
   },
@@ -26793,6 +27564,50 @@
       }
     }
   },
+  "43332669": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and personal opinion on using LLMs for coding."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1911,
+        "output_tokens": 152,
+        "total_tokens": 2063,
+        "inference_time_ms": 354.5,
+        "tokens_per_second": 428.7,
+        "prompt_chars": 3980,
+        "timestamp": "2026-10-05T14:06:56.731393+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "LLMs boost productivity but demand human oversight and careful prompt tuning.",
+        "quotes": [
+          "I’ve been getting great results out of LLMs for code for over two years now.",
+          "LLMs are no replacement for human intuition and experience.",
+          "My new colophon page took me just under half an hour from conception to finished, deployed feature."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:26:57.412366+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2570,
+        "output_tokens": 128,
+        "total_tokens": 2698,
+        "inference_time_ms": 440.4,
+        "tokens_per_second": 290.7,
+        "prompt_chars": 7973,
+        "timestamp": "2026-10-05T14:26:57.412366+00:00"
+      }
+    }
+  },
   "43492064": {
     "prefilter": {
       "response": {
@@ -28067,6 +28882,49 @@
         "tokens_per_second": 319.6,
         "prompt_chars": 2042,
         "timestamp": "2026-01-09T15:29:20.495654+00:00"
+      }
+    }
+  },
+  "43971678": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Contains empirical research with clear productivity findings about ML code completion."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1874,
+        "output_tokens": 151,
+        "total_tokens": 2025,
+        "inference_time_ms": 400.2,
+        "tokens_per_second": 377.3,
+        "prompt_chars": 3986,
+        "timestamp": "2026-10-05T14:11:59.306063+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "Hybrid ML‑SE completion cuts iteration time 6%, boosts acceptance, proving productivity gains with caveats.",
+        "quotes": [
+          "\"we see a 6% reduction in coding iteration time\"",
+          "\"The acceptance rate for single-line completions improved by 1.9x\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:33.574131+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2495,
+        "output_tokens": 123,
+        "total_tokens": 2618,
+        "inference_time_ms": 1020.4,
+        "tokens_per_second": 120.5,
+        "prompt_chars": 7975,
+        "timestamp": "2026-10-05T14:27:33.574131+00:00"
       }
     }
   },
@@ -29936,6 +30794,49 @@
       }
     }
   },
+  "44735613": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.85,
+        "reasoning": "First-person opinion and workflow advice about AI coding context."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1858,
+        "output_tokens": 190,
+        "total_tokens": 2048,
+        "inference_time_ms": 454.0,
+        "tokens_per_second": 418.5,
+        "prompt_chars": 3822,
+        "timestamp": "2026-10-05T14:08:14.988819+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Balanced view on AI context trade‑offs, neither fully praising nor condemning the tool.",
+        "quotes": [
+          "\"I think about it in terms of spectrum of human to AI context.\"",
+          "You decide depending on your situation when the context is important for you to understand vs when you trust the AI to just handle it."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:10.494093+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1690,
+        "output_tokens": 182,
+        "total_tokens": 1872,
+        "inference_time_ms": 411.1,
+        "tokens_per_second": 442.7,
+        "prompt_chars": 3816,
+        "timestamp": "2026-10-05T14:27:10.494093+00:00"
+      }
+    }
+  },
   "44913587": {
     "prefilter": {
       "response": {
@@ -30104,6 +31005,49 @@
         "tokens_per_second": 165.3,
         "prompt_chars": 7977,
         "timestamp": "2026-01-11T13:04:33.532779+00:00"
+      }
+    }
+  },
+  "45489761": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person internship experience, clear findings on SMT automation, personal reflections qualify as discourse."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1917,
+        "output_tokens": 178,
+        "total_tokens": 2095,
+        "inference_time_ms": 505.2,
+        "tokens_per_second": 352.4,
+        "prompt_chars": 3979,
+        "timestamp": "2026-10-05T14:07:36.276863+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "SMT tactics cut Lean proof work dramatically, though building the bridge is still labor‑intensive.",
+        "quotes": [
+          "\"our tactic saved me over 6,800 lines of code and 320 hours of work\"",
+          "\"It points towards a world, where a verification of real world systems could take days instead of years\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:04.498675+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2574,
+        "output_tokens": 159,
+        "total_tokens": 2733,
+        "inference_time_ms": 439.9,
+        "tokens_per_second": 361.5,
+        "prompt_chars": 7974,
+        "timestamp": "2026-10-05T14:27:04.498675+00:00"
       }
     }
   },
@@ -30712,6 +31656,49 @@
         "tokens_per_second": 418.3,
         "prompt_chars": 7976,
         "timestamp": "2026-01-11T13:10:06.261915+00:00"
+      }
+    }
+  },
+  "45517905": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Author describes building a tool with AI, sharing personal experience and evaluation."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1934,
+        "output_tokens": 170,
+        "total_tokens": 2104,
+        "inference_time_ms": 398.1,
+        "tokens_per_second": 427.1,
+        "prompt_chars": 3975,
+        "timestamp": "2026-10-05T14:11:10.835008+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Author’s AI‑powered validator surfaces all errors, explains fixes, and outperforms existing tools, proving useful for real‑world SQL debugging.",
+        "quotes": [
+          "I built one here, with AI assistance to make the explanations and fixes actually useful.",
+          "Existing SQL validators ... Report only the first error, offers a “fixed” query, but it's still invalid."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:26.110309+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2440,
+        "output_tokens": 193,
+        "total_tokens": 2633,
+        "inference_time_ms": 730.9,
+        "tokens_per_second": 264.1,
+        "prompt_chars": 6979,
+        "timestamp": "2026-10-05T14:27:26.110309+00:00"
       }
     }
   },
@@ -33791,6 +34778,49 @@
         "tokens_per_second": 290.2,
         "prompt_chars": 7977,
         "timestamp": "2026-01-11T13:05:48.289317+00:00"
+      }
+    }
+  },
+  "40662984": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Personal experience, results, and subjective evaluation of fine‑tuning process."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2025,
+        "output_tokens": 182,
+        "total_tokens": 2207,
+        "inference_time_ms": 599.2,
+        "tokens_per_second": 303.7,
+        "prompt_chars": 3966,
+        "timestamp": "2026-10-05T14:12:09.356387+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "evaluation",
+        "summary": "Fine‑tuned LoRA model outperforms larger baselines; author praises data pipeline and tooling, sees clear benefit.",
+        "quotes": [
+          "The fine tuned 3B parameters model beat the base model it was trained on by a big margin and even beat the 7B Mistral model.",
+          "LoRA, instead adds a small number of trainable parameters to the model while keeping the original model parameters frozen."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:36.081551+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2711,
+        "output_tokens": 187,
+        "total_tokens": 2898,
+        "inference_time_ms": 1028.0,
+        "tokens_per_second": 181.9,
+        "prompt_chars": 7974,
+        "timestamp": "2026-10-05T14:27:36.081551+00:00"
       }
     }
   },
@@ -39232,6 +40262,49 @@
       }
     }
   },
+  "36353675": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience, personal opinion, and empirical testing of Copilot's accessibility bugs."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1900,
+        "output_tokens": 114,
+        "total_tokens": 2014,
+        "inference_time_ms": 355.0,
+        "tokens_per_second": 321.2,
+        "prompt_chars": 3973,
+        "timestamp": "2026-10-05T14:09:22.063999+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "uncertain",
+        "topic": "quality",
+        "summary": "Copilot frequently introduces accessibility bugs, posing a real risk without proper vetting.",
+        "quotes": [
+          "\"The danger here is that developers accept code suggestions, assuming that they're good.\"",
+          "\"I shouldn't accept code suggestions from GitHub Copilot if you don't understand them.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:16.355412+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2703,
+        "output_tokens": 148,
+        "total_tokens": 2851,
+        "inference_time_ms": 1170.3,
+        "tokens_per_second": 126.5,
+        "prompt_chars": 7972,
+        "timestamp": "2026-10-05T14:27:16.355412+00:00"
+      }
+    }
+  },
   "39679170": {
     "prefilter": {
       "response": {
@@ -39404,6 +40477,92 @@
         "tokens_per_second": 226.4,
         "prompt_chars": 7978,
         "timestamp": "2026-01-11T12:33:15.103358+00:00"
+      }
+    }
+  },
+  "38784039": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.9,
+        "reasoning": "First‑person opinions and personal testing of GPTs/plugins qualify as developer discourse."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1932,
+        "output_tokens": 216,
+        "total_tokens": 2148,
+        "inference_time_ms": 704.7,
+        "tokens_per_second": 306.5,
+        "prompt_chars": 3986,
+        "timestamp": "2026-10-05T14:12:32.897344+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Custom GPTs work but plugins flop; mixed verdict on productivity, some success, many caveats.",
+        "quotes": [
+          "\"most of the plugins were not actually useful and I would bet they saw little adoption\"",
+          "\"I can already envision the torrent of GPTs tuned to provide affiliate marketing links\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:37.655122+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2697,
+        "output_tokens": 159,
+        "total_tokens": 2856,
+        "inference_time_ms": 664.7,
+        "tokens_per_second": 239.2,
+        "prompt_chars": 7976,
+        "timestamp": "2026-10-05T14:27:37.655122+00:00"
+      }
+    }
+  },
+  "41603653": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.99,
+        "reasoning": "First-person experience and personal opinion on AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1897,
+        "output_tokens": 130,
+        "total_tokens": 2027,
+        "inference_time_ms": 676.2,
+        "tokens_per_second": 192.3,
+        "prompt_chars": 3900,
+        "timestamp": "2026-10-05T14:10:03.477209+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI dramatically boosts prototyping speed, acting as a tireless, fast intern that can be pushed endlessly to churn out code.",
+        "quotes": [
+          "I feel like the speed at which I can prototype things in the past 12 months has gone up by an order of magnitude.",
+          "I call it my weird intern, because it really does feel like you've got this intern who is screamingly fast, and they never get tired, and they never get upset."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:22.889626+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1730,
+        "output_tokens": 194,
+        "total_tokens": 1924,
+        "inference_time_ms": 403.4,
+        "tokens_per_second": 480.9,
+        "prompt_chars": 3884,
+        "timestamp": "2026-10-05T14:27:22.889626+00:00"
       }
     }
   },
@@ -42157,6 +43316,49 @@
         "tokens_per_second": 514.4,
         "prompt_chars": 1959,
         "timestamp": "2026-01-23T07:53:27.460757+00:00"
+      }
+    }
+  },
+  "46471001": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience with an AI expert system on a C64."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1949,
+        "output_tokens": 207,
+        "total_tokens": 2156,
+        "inference_time_ms": 475.1,
+        "tokens_per_second": 435.7,
+        "prompt_chars": 3982,
+        "timestamp": "2026-10-05T14:07:15.773499+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "pessimistic",
+        "topic": "productivity",
+        "summary": "XPER is a nostalgic toy that fails to deliver real productivity or useful AI power.",
+        "quotes": [
+          "Ultimately, this wound up being far more \"toy\" than \"productivity,\" much to my disappointment.",
+          "As a toy, it's fine. For anything serious, it can't keep up even with its contemporaries."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:27:01.942160+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2616,
+        "output_tokens": 207,
+        "total_tokens": 2823,
+        "inference_time_ms": 752.3,
+        "tokens_per_second": 275.2,
+        "prompt_chars": 7971,
+        "timestamp": "2026-10-05T14:27:01.942160+00:00"
       }
     }
   },
@@ -51139,6 +52341,49 @@
       }
     }
   },
+  "49572875": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.85,
+        "reasoning": "Contains empirical findings on AI code review effectiveness."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1828,
+        "output_tokens": 204,
+        "total_tokens": 2032,
+        "inference_time_ms": 520.4,
+        "tokens_per_second": 392.0,
+        "prompt_chars": 3969,
+        "timestamp": "2026-10-05T14:05:24.101652+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Astra improves bug detection, especially in cross-file reviews, but cost and context handling limit widespread use.",
+        "quotes": [
+          "Astra caught approximately 4% more labeled bugs through actionable findings than GPT-5.6 Sol",
+          "Astra’s larger advantage appears in the harder cross-file subset"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:05:37.389213+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2431,
+        "output_tokens": 225,
+        "total_tokens": 2656,
+        "inference_time_ms": 514.8,
+        "tokens_per_second": 437.1,
+        "prompt_chars": 7975,
+        "timestamp": "2026-10-05T14:05:37.389213+00:00"
+      }
+    }
+  },
   "49571465": {
     "prefilter": {
       "response": {
@@ -51308,6 +52553,92 @@
         "tokens_per_second": 397.0,
         "prompt_chars": 7974,
         "timestamp": "2026-09-10T03:07:37.921211+00:00"
+      }
+    }
+  },
+  "49945933": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person experience and critique of AI memory plugins, plus personal recommendation of a tool."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1885,
+        "output_tokens": 233,
+        "total_tokens": 2118,
+        "inference_time_ms": 688.5,
+        "tokens_per_second": 338.4,
+        "prompt_chars": 3964,
+        "timestamp": "2026-10-05T14:05:13.759482+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Memory plugins are flawed; document‑based memory like Operator improves agent workflows.",
+        "quotes": [
+          "‘All of these memory plugins suffer from the same broad set of problems…’",
+          "‘Operator Memory provides document‑based memory…’"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:05:34.907027+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2304,
+        "output_tokens": 216,
+        "total_tokens": 2520,
+        "inference_time_ms": 720.4,
+        "tokens_per_second": 299.8,
+        "prompt_chars": 6831,
+        "timestamp": "2026-10-05T14:05:34.907027+00:00"
+      }
+    }
+  },
+  "49934511": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person opinion on agentic coding, personal experience, critique—qualifies as developer discourse."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1945,
+        "output_tokens": 160,
+        "total_tokens": 2105,
+        "inference_time_ms": 388.6,
+        "tokens_per_second": 411.7,
+        "prompt_chars": 3972,
+        "timestamp": "2026-10-05T14:05:21.896262+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "toil",
+        "trajectory": "uncertain",
+        "topic": "workflow",
+        "summary": "Agentic coding is seen as a net detriment, causing skill erosion, team alienation, and reduced code quality.",
+        "quotes": [
+          "Agentic coding has dramatically increased the distance between engineers and the product of their work.",
+          "Deskilling AI erodes existing skills, impedes learning, and doesn’t offer any meaningful skill progression."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-10-05T14:05:36.776596+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2628,
+        "output_tokens": 227,
+        "total_tokens": 2855,
+        "inference_time_ms": 528.2,
+        "tokens_per_second": 429.7,
+        "prompt_chars": 8000,
+        "timestamp": "2026-10-05T14:05:36.776596+00:00"
       }
     }
   }

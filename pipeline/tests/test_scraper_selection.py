@@ -125,6 +125,28 @@ class ScrapeSelectionTests(unittest.TestCase):
         rows = self._select(min_score=0, min_comments=0)
         self.assertEqual([r[1] for r in rows], ["https://low.example/a"])
 
+    def test_retry_count_cap_excludes_livelocked_items(self):
+        """A cert-broken item inside the window (retry_count>=cap) must stop being
+        re-selected by every batch — without the cap the drain loop never ends."""
+        self._insert("https://livelock.example/a", scraped_status="failed",
+                     failure_category="blocked", hn_id=1,
+                     hn_timestamp=self.now - 86400)
+        self.conn.execute(
+            "UPDATE urls SET retry_count = 5 WHERE url = 'https://livelock.example/a'")
+        self.conn.commit()
+        rows = self._select(retry_failed=True, window_days=30, max_retry_count=3)
+        self.assertEqual(rows, [])
+
+    def test_retry_count_cap_keeps_fresh_failures(self):
+        self._insert("https://once-failed.example/a", scraped_status="failed",
+                     failure_category="blocked", hn_id=1,
+                     hn_timestamp=self.now - 86400)
+        self.conn.execute(
+            "UPDATE urls SET retry_count = 1 WHERE url = 'https://once-failed.example/a'")
+        self.conn.commit()
+        rows = self._select(retry_failed=True, window_days=30, max_retry_count=3)
+        self.assertEqual([r[1] for r in rows], ["https://once-failed.example/a"])
+
 
 if __name__ == "__main__":
     unittest.main()

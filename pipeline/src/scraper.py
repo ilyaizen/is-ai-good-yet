@@ -896,6 +896,7 @@ async def main(
     min_timestamp: int = 0,
     min_score: int = 0,
     min_comments: int = 0,
+    max_retry_count: int = 0,
     exclude_terminal_failures: bool = True,
 ):
     stealth_mode = os.getenv("PIPELINE_STEALTH_MODE", stealth_mode).strip() or stealth_mode
@@ -977,7 +978,8 @@ async def main(
     console.print(f"  • Order: {order_mode}")
     console.print(f"  • Retry Failed: {retry_failed}")
     if retry_failed and retry_window_days:
-        console.print(f"  • Retry Window: last {retry_window_days} days (terminal failures excluded: {exclude_terminal_failures})")
+        cap = f", retry_count<{max_retry_count}" if max_retry_count else ""
+        console.print(f"  • Retry Window: last {retry_window_days} days (terminal failures excluded: {exclude_terminal_failures}{cap})")
     if min_timestamp:
         console.print(f"  • Min Timestamp: {min_timestamp}")
     if min_score or min_comments:
@@ -1138,6 +1140,7 @@ async def main(
                     min_timestamp=min_timestamp,
                     min_score=min_score,
                     min_comments=min_comments,
+                    max_retry_count=max_retry_count if retry_failed else 0,
                     exclude_failure_categories=(
                         ("archive_failed", "empty_content") if exclude_terminal_failures else None
                     ),
@@ -1227,6 +1230,9 @@ if __name__ == "__main__":
     parser.add_argument("--use-proxy", action="store_true", help="Enable proxy rotation (requires .env config)")
     parser.add_argument("--headful", action="store_true", help="Run browser in headful mode (visible)")
     parser.add_argument("--max-retries", type=int, default=1, help="Maximum retry attempts per URL (default: 1)")
+    parser.add_argument("--max-retry-count", type=int, default=0,
+                        help="With --retry-failed: skip items with retry_count >= N, so unfixable items "
+                             "inside the retry window can't livelock the drain loop (0 = uncapped)")
     parser.add_argument("--interactive", "-i", action="store_true",
                        help="Enable interactive mode for CAPTCHA solving (implies --headful)")
     parser.add_argument("--stealth-mode", type=str, default="seleniumbase", choices=["standard", "seleniumbase"],
@@ -1261,7 +1267,8 @@ if __name__ == "__main__":
             args.max_retries, args.interactive, args.stealth_mode, args.no_headful_switch,
             args.lean, args.use_selenium, args.oldest_first,
             args.retry_window_days, args.min_timestamp,
-            args.min_score, args.min_comments, not args.include_terminal_failures
+            args.min_score, args.min_comments, args.max_retry_count,
+            not args.include_terminal_failures
         ))
     except KeyboardInterrupt:
         pass

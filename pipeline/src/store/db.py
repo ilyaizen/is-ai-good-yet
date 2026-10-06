@@ -492,6 +492,7 @@ def get_urls_to_scrape(
     min_timestamp: Optional[int] = None,
     min_score: int = 0,
     min_comments: int = 0,
+    max_retry_count: int = 0,
     exclude_failure_categories: Optional[Tuple[str, ...]] = ("archive_failed", "empty_content"),
 ) -> List[Tuple]:
     """
@@ -535,6 +536,12 @@ def get_urls_to_scrape(
             if window_days:
                 extra_clauses.append("hn_timestamp >= ?")
                 params.append(int(time.time()) - int(window_days) * 86400)
+            # Per-item cap: without it, an unfixable item inside the window
+            # (cert-broken, NXDOMAIN, bot-walled-but-not-category-tagged) is
+            # re-selected by EVERY batch and the drain loop never terminates.
+            if max_retry_count:
+                extra_clauses.append("retry_count < ?")
+                params.append(int(max_retry_count))
             if exclude_failure_categories:
                 placeholders = ",".join("?" for _ in exclude_failure_categories)
                 extra_clauses.append(

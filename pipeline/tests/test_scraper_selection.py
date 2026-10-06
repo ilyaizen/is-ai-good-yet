@@ -70,6 +70,15 @@ class ScrapeSelectionTests(unittest.TestCase):
         self.assertEqual({r[1] for r in rows},
                          {"https://fresh.example/a", "https://failed.example/b"})
 
+    def test_retry_failed_excludes_skipped(self):
+        """'skipped' is terminal (irrelevant domain): re-selecting it re-queues
+        the item every batch forever — 150 re-skips/30min observed live."""
+        self._insert("https://fresh.example/a", hn_id=1)
+        self._insert("https://github.com/x/y", scraped_status="skipped",
+                     failure_category="skipped", hn_id=2)
+        rows = self._select(retry_failed=True)
+        self.assertEqual([r[1] for r in rows], ["https://fresh.example/a"])
+
     def test_window_days_bounds_retries(self):
         """retry_window_days excludes failures older than the window."""
         self._insert("https://old-fail.example/a", scraped_status="failed",

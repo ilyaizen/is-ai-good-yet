@@ -521,14 +521,22 @@ def get_urls_to_scrape(
 
         # Determine filtering logic
         if retry_failed:
-            # Get everything that isn't success
-            status_filter = "(scraped_status IS NULL OR scraped_status != 'success')"
+            # Retry fresh + failed rows within the per-item cap. 'skipped' stays
+            # out: it's terminal by definition (irrelevant domain) and re-selecting
+            # it would re-queue the item every batch forever.
+            status_filter = (
+                "(scraped_status IS NULL OR scraped_status = 'pending' "
+                "OR (scraped_status = 'failed' AND retry_count < ?))"
+            )
         else:
             # Only fresh items
             status_filter = "(scraped_status IS NULL OR scraped_status = 'pending')"
 
         extra_clauses = []
         params: list = []
+        # The status_filter's placeholder resolves before any extra_sql ones.
+        if retry_failed:
+            params.append(int(max_retry_count) if max_retry_count else 10 ** 9)
         # Newest-first + a multi-thousand pending pool means older windows never
         # surface on their own; bound the retry pool by time instead of retrying
         # the entire legacy backlog (10k+ rows of permanent paywall failures).
@@ -536,12 +544,6 @@ def get_urls_to_scrape(
             if window_days:
                 extra_clauses.append("hn_timestamp >= ?")
                 params.append(int(time.time()) - int(window_days) * 86400)
-            # Per-item cap: without it, an unfixable item inside the window
-            # (cert-broken, NXDOMAIN, bot-walled-but-not-category-tagged) is
-            # re-selected by EVERY batch and the drain loop never terminates.
-            if max_retry_count:
-                extra_clauses.append("retry_count < ?")
-                params.append(int(max_retry_count))
             if exclude_failure_categories:
                 placeholders = ",".join("?" for _ in exclude_failure_categories)
                 extra_clauses.append(

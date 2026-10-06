@@ -1,30 +1,30 @@
 {
   "current": {
     "verdict": "YES",
-    "score": 63.1,
-    "rawSentiment": 0.1968,
-    "totalArticles": 456,
-    "positiveCount": 232,
-    "negativeCount": 136,
-    "neutralCount": 88,
-    "positiveContribution": 25301.39,
-    "negativeContribution": -14793.32,
-    "neutralContribution": -3454.81,
+    "score": 62.77,
+    "rawSentiment": 0.1773,
+    "totalArticles": 496,
+    "positiveCount": 251,
+    "negativeCount": 147,
+    "neutralCount": 98,
+    "positiveContribution": 26685.09,
+    "negativeContribution": -15829.42,
+    "neutralContribution": -3960.03,
     "windowMonths": 12,
-    "exportedAt": "2026-10-06T12:05:47.423532"
+    "exportedAt": "2026-10-06T23:45:08.379597"
   },
   "permanent": {
-    "score": 60.1,
+    "score": 60.06,
     "verdict": "YES",
-    "totalArticles": 1257,
-    "positiveCount": 607,
-    "negativeCount": 416,
-    "neutralCount": 234
+    "totalArticles": 1300,
+    "positiveCount": 629,
+    "negativeCount": 427,
+    "neutralCount": 244
   },
   "pipeline": {
-    "totalUrls": 34113,
-    "scraped": 12307,
-    "relevant": 1308,
-    "analyzed": 2867
+    "totalUrls": 34357,
+    "scraped": 12747,
+    "relevant": 1347,
+    "analyzed": 2929
   }
 }

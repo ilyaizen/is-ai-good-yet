@@ -84,7 +84,12 @@ def _is_non_global_address(address: str) -> bool:
     return ip.is_multicast or not ip.is_global
 
 
-def is_public_http_url(url: str | None) -> bool:
+def is_public_http_url(url: str | None) -> bool | None:
+    """True = verified public; False = definitively unsafe (private/resolver says
+    NXDOMAIN); None = temporarily unverifiable (transient DNS failure). Callers
+    treat None as falsy (fail-closed) but should not permanently blacklist the
+    item the way a hard False warrants.
+    """
     if not url:
         return False
     try:
@@ -100,7 +105,16 @@ def is_public_http_url(url: str | None) -> bool:
             pass
         try:
             addresses = socket.getaddrinfo(hostname, parsed.port or 443, type=socket.SOCK_STREAM)
-        except socket.gaierror:
+        except socket.gaierror as e:
+            # Transient resolver failures (EAI_AGAIN/EAI_FAIL) must not read as
+            # "unsafe": a scrape-time DNS blip would permanently burn the item as
+            # unsafe_url even though the host resolves fine seconds later.
+            temp_fail_errnos = {
+                getattr(socket, "EAI_AGAIN", -3),
+                getattr(socket, "EAI_FAIL", -4),
+            }
+            if e.errno in temp_fail_errnos:
+                return None
             return False
         return bool(addresses) and all(
             not _is_non_global_address(str(item[4][0])) for item in addresses

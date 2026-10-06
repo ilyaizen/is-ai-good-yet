@@ -488,6 +488,11 @@ def get_urls_to_scrape(
     retry_failed: bool = False,
     randomize: bool = True,
     newest_first: bool = True,
+    window_days: Optional[int] = None,
+    min_timestamp: Optional[int] = None,
+    min_score: int = 0,
+    min_comments: int = 0,
+    exclude_failure_categories: Optional[Tuple[str, ...]] = ("archive_failed", "empty_content"),
 ) -> List[Tuple]:
     """
     Retrieves a batch of URLs that need to be scraped.
@@ -495,9 +500,18 @@ def get_urls_to_scrape(
     If retry_failed is True, includes URLs that previously failed.
     If randomize is True (default), shuffles the results to avoid predictable patterns.
     If newest_first is True (default), orders by HN ID DESC (newer articles first).
+    window_days: when retry_failed, only retry failures whose hn_timestamp is
+        within the last N days (0/None = no bound — legacy pull-everything mode).
+    min_timestamp: hard lower bound (unix seconds) on hn_timestamp, any mode.
+    min_score/min_comments: coverage gates (default 0/0 = no gate). Items below
+        the gate stay pending and are scraped once they cross it — scraping them
+        now wastes hours on rows the analyzers would park anyway.
+    exclude_failure_categories: failure categories treated as terminal (paywalls,
+        bot walls) and skipped in retry-failed mode; None/empty = retry everything.
     Returns list of tuples: (url_id, url, hn_id, hn_score, hn_comments, hn_timestamp)
     """
     import random as rand
+    import time
 
     conn = None
     try:
@@ -512,6 +526,32 @@ def get_urls_to_scrape(
             # Only fresh items
             status_filter = "(scraped_status IS NULL OR scraped_status = 'pending')"
 
+        extra_clauses = []
+        params: list = []
+        # Newest-first + a multi-thousand pending pool means older windows never
+        # surface on their own; bound the retry pool by time instead of retrying
+        # the entire legacy backlog (10k+ rows of permanent paywall failures).
+        if retry_failed:
+            if window_days:
+                extra_clauses.append("hn_timestamp >= ?")
+                params.append(int(time.time()) - int(window_days) * 86400)
+            if exclude_failure_categories:
+                placeholders = ",".join("?" for _ in exclude_failure_categories)
+                extra_clauses.append(
+                    f"(failure_category IS NULL OR failure_category NOT IN ({placeholders}))"
+                )
+                params.extend(exclude_failure_categories)
+        if min_timestamp:
+            extra_clauses.append("hn_timestamp >= ?")
+            params.append(int(min_timestamp))
+        if min_score:
+            extra_clauses.append("hn_score >= ?")
+            params.append(int(min_score))
+        if min_comments:
+            extra_clauses.append("hn_comments >= ?")
+            params.append(int(min_comments))
+        extra_sql = (" AND " + " AND ".join(extra_clauses)) if extra_clauses else ""
+
         # Base query - fetch more than needed for better randomization
         fetch_limit = batch_size * 3 if randomize else batch_size
         query = f"""
@@ -519,6 +559,7 @@ def get_urls_to_scrape(
             FROM urls
             WHERE {status_filter}
             AND hn_id IS NOT NULL
+            {extra_sql}
         """
 
         # Order by HN ID DESC (newest first) or by score (oldest/highest score first)
@@ -536,7 +577,7 @@ def get_urls_to_scrape(
 
         query += f" LIMIT {fetch_limit}"
 
-        cursor.execute(query)
+        cursor.execute(query, params)
         results = cursor.fetchall()
 
         # Log the ordering being used

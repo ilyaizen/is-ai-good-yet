@@ -238,6 +238,7 @@ async function configureScraperArgs(): Promise<string[] | null> {
       { value: "--stealth-mode=seleniumbase", label: "SeleniumBase Stealth", hint: "Best Cloudflare bypass" },
       { value: "--prioritize-opinion", label: "Prioritize Opinions" },
       { value: "--use-proxy", label: "Use Proxy" },
+      { value: "--include-terminal-failures", label: "Include Terminal Failures", hint: "Retry archive_failed/empty_content too" },
     ],
     initialValues: ["--lean", "--stealth-mode=seleniumbase", "--no-headful-switch"] as string[],
   })
@@ -259,6 +260,24 @@ async function configureScraperArgs(): Promise<string[] | null> {
   const maxRetries = await text({ message: "Max retries per URL:", defaultValue: "2", placeholder: "2" })
   if (isCancel(maxRetries)) throw new Error("Operation cancelled")
   if (maxRetries && String(maxRetries).trim()) args.push("--max-retries", String(maxRetries))
+
+  if (flags.includes("--retry-failed")) {
+    const retryWindow = await text({
+      message: "Retry window (days back, 0 = all failures):",
+      defaultValue: "0",
+      placeholder: "0",
+    })
+    if (isCancel(retryWindow)) throw new Error("Operation cancelled")
+    if (retryWindow && String(retryWindow).trim() !== "0") args.push("--retry-window-days", String(retryWindow))
+
+    const minTs = await text({
+      message: "Min HN timestamp (unix seconds, 0 = no bound):",
+      defaultValue: "0",
+      placeholder: "0",
+    })
+    if (isCancel(minTs)) throw new Error("Operation cancelled")
+    if (minTs && String(minTs).trim() !== "0") args.push("--min-timestamp", String(minTs))
+  }
 
   return args
 }

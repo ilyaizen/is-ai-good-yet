@@ -568,8 +568,13 @@ def update_sentiment_result(
             conn.close()
 
 
-def update_content_category(url: str, category: str):
-    """Update content_category for a URL (used when analyzer rejects as non-AI-coding)."""
+def update_content_category(url: str, category: str, rejection: Optional[dict] = None):
+    """Update content_category for a URL (used when analyzer rejects as non-AI-coding).
+
+    When rejection is provided, the verdict is persisted into classification_json
+    as sentiment_rejected (reason + confidence), so rejections are auditable in
+    the DB instead of living only in console output.
+    """
     conn = None
     try:
         conn = get_db_connection()
@@ -582,6 +587,24 @@ def update_content_category(url: str, category: str):
             """,
             (category, url),
         )
+        if rejection is not None:
+            cursor.execute(
+                "SELECT classification_json FROM urls WHERE url = ?", (url,)
+            )
+            row = cursor.fetchone()
+            existing = {}
+            if row and row[0]:
+                try:
+                    parsed = json.loads(row[0])
+                    if isinstance(parsed, dict):
+                        existing = parsed
+                except (json.JSONDecodeError, TypeError):
+                    existing = {}
+            existing["sentiment_rejected"] = rejection
+            cursor.execute(
+                "UPDATE urls SET classification_json = ? WHERE url = ?",
+                (json.dumps(existing), url),
+            )
         conn.commit()
     except Exception as e:
         logging.error(f"Error updating content_category for {url}: {e}")
@@ -789,9 +812,10 @@ async def analyze_sentiment_with_groq(
             if retry_count < MAX_RETRIES:
                 # Check if it's a max tokens issue
                 if "max completion tokens" in error_str.lower():
-                    new_max_tokens = (
-                        3072  # Increase significantly for token limit issues
-                    )
+                    # Escalate FROM the current budget: the default is already
+                    # 8192, so a hardcoded smaller bump would run the retry
+                    # backwards and guarantee a repeat truncation.
+                    new_max_tokens = max_tokens * 2
                     logging.warning(
                         f"Max tokens hit, retrying with {new_max_tokens} tokens (attempt {retry_count + 2}/{MAX_RETRIES + 1})"
                     )
@@ -877,7 +901,12 @@ async def process_batch(
 
         if result and result.get("is_rejected"):
             # Rejected - article lacks developer opinion/experience, reclassify to AI_OTHER
-            update_content_category(url, "AI_OTHER")
+            rejection = {
+                "reason": result.get("reason", "Not developer discourse"),
+                "confidence": result.get("confidence"),
+                "rejected_at": datetime.now(timezone.utc).isoformat(),
+            }
+            update_content_category(url, "AI_OTHER", rejection=rejection)
             reason = result.get("reason", "Not developer discourse")[:50]
             console.print(
                 f"  [magenta][~] Rejected[/magenta] → AI_OTHER - {reason}..."

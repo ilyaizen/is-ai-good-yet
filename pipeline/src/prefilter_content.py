@@ -601,6 +601,8 @@ async def classify_content_with_groq_streaming(
     text: str,
     cost_monitor: CostMonitor,
     verbose: bool = False,
+    _retry_count: int = 0,
+    max_completion_tokens: int = 1024,
 ) -> Optional[Dict[str, Any]]:
     """
     Classify article content using Groq API with streaming output.
@@ -637,7 +639,7 @@ async def classify_content_with_groq_streaming(
             # gpt-oss-20b is a reasoning model: hidden reasoning draws from this
             # budget before the JSON content, so 256 truncated borderline items
             # (~250/580 failed "Failed to parse JSON" on the 2026-10-05 backfill).
-            max_completion_tokens=1024,
+            max_completion_tokens=max_completion_tokens,
             top_p=0.95,
             stream=True,
         )
@@ -721,8 +723,21 @@ async def classify_content_with_groq_streaming(
             }
 
         except json.JSONDecodeError:
-            logging.error(f"Failed to parse JSON: {content[:200]}...")
+            # Reasoning-truncation: a starved completion leaves no valid JSON.
+            # Escalate the budget once instead of waiting for the next run.
             cost_monitor.add_call(input_tokens, output_tokens, False)
+            if _retry_count == 0:
+                escalated = max_completion_tokens * 4
+                logging.warning(
+                    f"Failed to parse JSON (completion budget starved) — retrying with {escalated} tokens"
+                )
+                await asyncio.sleep(2)
+                return await classify_content_with_groq_streaming(
+                    client, title, text, cost_monitor, verbose,
+                    _retry_count=_retry_count + 1,
+                    max_completion_tokens=escalated,
+                )
+            logging.error(f"Failed to parse JSON after budget escalation: {content[:200]}...")
             return None
 
     except Exception as e:

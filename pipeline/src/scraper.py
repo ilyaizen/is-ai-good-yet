@@ -276,8 +276,12 @@ class UnifiedScraper:
 
     async def scrape_url(self, url: str) -> Tuple[Optional[dict], Optional[str], Optional[str]]:
         """Scrape one public URL through HTTP, browser, residential, then archive fallbacks."""
-        if not is_public_http_url(url):
+        url_safety = is_public_http_url(url)
+        if url_safety is False:
             return None, None, "unsafe_url"
+        if url_safety is None:
+            # Transient DNS failure: retryable, distinct from a definitively unsafe URL
+            return None, None, "unsafe_url_transient"
 
         force_archive = any(domain in url for domain in FORCE_ARCHIVE_DOMAINS)
         content = None
@@ -825,6 +829,9 @@ async def process_batch(
                         failure_category = "archive_failed"
                     elif "blocked" in error or "403" in error or "429" in error:
                         failure_category = "blocked"
+                    elif "unsafe_url_transient" in error:
+                        # Transient DNS blip: retryable category, never excluded from retry
+                        failure_category = "unsafe_url_transient"
                     elif "unsafe_url" in error:
                         failure_category = "unsafe_url"
                     elif "too_large" in error:
@@ -884,7 +891,12 @@ async def main(
     no_headful_switch: bool = False,
     lean_mode: bool = False,
     use_selenium: bool = False,
-    oldest_first: bool = False
+    oldest_first: bool = False,
+    retry_window_days: int = 0,
+    min_timestamp: int = 0,
+    min_score: int = 0,
+    min_comments: int = 0,
+    exclude_terminal_failures: bool = True,
 ):
     stealth_mode = os.getenv("PIPELINE_STEALTH_MODE", stealth_mode).strip() or stealth_mode
 
@@ -964,6 +976,12 @@ async def main(
     console.print(f"  • Max Retries: {max_retries}")
     console.print(f"  • Order: {order_mode}")
     console.print(f"  • Retry Failed: {retry_failed}")
+    if retry_failed and retry_window_days:
+        console.print(f"  • Retry Window: last {retry_window_days} days (terminal failures excluded: {exclude_terminal_failures})")
+    if min_timestamp:
+        console.print(f"  • Min Timestamp: {min_timestamp}")
+    if min_score or min_comments:
+        console.print(f"  • Coverage Gate: score>={min_score}, comments>={min_comments}")
     console.print(f"  • Prioritize Opinion: {prioritize_opinion}")
     console.print(f"  • Headful: {headful}")
     console.print(f"  • Stealth Mode: {stealth_mode}")
@@ -1115,7 +1133,14 @@ async def main(
                     batch_size=batch_size,
                     prioritize_opinion=prioritize_opinion,
                     retry_failed=retry_failed,
-                    newest_first=not oldest_first
+                    newest_first=not oldest_first,
+                    window_days=retry_window_days if retry_failed else None,
+                    min_timestamp=min_timestamp,
+                    min_score=min_score,
+                    min_comments=min_comments,
+                    exclude_failure_categories=(
+                        ("archive_failed", "empty_content") if exclude_terminal_failures else None
+                    ),
                 )
 
                 if not urls_to_process:
@@ -1213,7 +1238,17 @@ if __name__ == "__main__":
     parser.add_argument("--use-selenium", action="store_true",
                        help="Enable Selenium as final archive fallback (heavy, use sparingly)")
     parser.add_argument("--oldest-first", action="store_true",
-                       help="Process oldest articles first by HN score (default: newest first by HN ID)")
+                        help="Process oldest articles first by HN score (default: newest first by HN ID)")
+    parser.add_argument("--retry-window-days", type=int, default=0,
+                        help="With --retry-failed: only retry failures from the last N days (0 = no window)")
+    parser.add_argument("--min-timestamp", type=int, default=0,
+                        help="Only scrape items with hn_timestamp >= this unix time (0 = no bound)")
+    parser.add_argument("--min-score", type=int, default=0,
+                        help="Only scrape items with hn_score >= N (0 = no gate; below-gate items stay pending)")
+    parser.add_argument("--min-comments", type=int, default=0,
+                        help="Only scrape items with hn_comments >= N (0 = no gate)")
+    parser.add_argument("--include-terminal-failures", action="store_true",
+                        help="With --retry-failed: also retry archive_failed/empty_content (default: excluded)")
 
     args = parser.parse_args()
 
@@ -1224,7 +1259,9 @@ if __name__ == "__main__":
             args.verbose, args.quiet, args.batch_size, args.concurrency, args.rate_limit,
             args.info, prioritize, args.retry_failed, args.use_proxy, args.headful,
             args.max_retries, args.interactive, args.stealth_mode, args.no_headful_switch,
-            args.lean, args.use_selenium, args.oldest_first
+            args.lean, args.use_selenium, args.oldest_first,
+            args.retry_window_days, args.min_timestamp,
+            args.min_score, args.min_comments, not args.include_terminal_failures
         ))
     except KeyboardInterrupt:
         pass

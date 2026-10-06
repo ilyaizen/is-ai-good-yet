@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Catch-up Phase 2 (`hn_resolver --update-recent`) silently replaced new-URL ingestion with a metadata refresh — an `elif` chain made the default "ingest new Histre links" path unreachable whenever the flag was set (which catch-up always sets). `--update-recent` is now additive: new URLs always ingest, recent-resolved URLs additionally refresh. This stranded 731 new Histre links on the 2026-10-05 run alone and left an 18-day hole (Sep 10–27) with zero ingested stories. Selection logic extracted into `select_urls_to_process()` with regression tests in `pipeline/tests/test_hn_resolver_modes.py`.
+
 ### Added
 
 - `/v2/admin` story ledger now surfaces HN story date, eligibility badge, and per-scope chips in the summary row; story titles link to the source URL. New "Expand all / Collapse all" control at the ledger header. Per-source metric strip (input/output/total tokens, inference duration) replaces the JSON-only surface for run metrics. Dimension sections render a confidence bar; the orchestration table gains a Duration column.

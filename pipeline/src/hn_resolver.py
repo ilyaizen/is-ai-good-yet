@@ -102,6 +102,77 @@ async def process_url(session: aiohttp.ClientSession, url: str, progress: Progre
 
     return result
 
+def select_urls_to_process(
+    all_urls: List[str],
+    *,
+    force: bool = False,
+    retry_failed: bool = False,
+    fix_missing: bool = False,
+    update_recent: bool = False,
+    recent_days: int = 30,
+) -> Tuple[List[str], str]:
+    """
+    Compute the URL work list for the requested mode.
+
+    Returns (to_process, console_summary). Store lookups go through the
+    module-level helpers so tests can monkeypatch them.
+
+    Modes keep the historical precedence force > retry_failed > fix_missing.
+    --update-recent is ADDITIVE to default ingestion: new URLs always process,
+    plus refresh metadata for already-resolved recent URLs. It must never
+    suppress ingestion — catch-up always passes this flag, and an earlier
+    elif chain made this mode replace ingestion entirely, silently stranding
+    every new Histre link (731 URLs on the 2026-10-05 run alone).
+    """
+    if force:
+        return (
+            list(all_urls),
+            f"[bold red]Force Mode Enabled:[/bold red] Reprocessing all {len(all_urls)} URLs.",
+        )
+
+    if retry_failed:
+        # Get URLs that are already in DB but have no HN ID (failed/no match)
+        failed_urls = get_failed_urls()
+        # Intersect with all_urls to ensure we only process what's in the input file
+        retry_urls = [u for u in all_urls if u in failed_urls]
+
+        # Also include URLs that are in input but NOT in DB at all (new ones)
+        existing_urls_all = get_existing_urls()
+        new_urls = [u for u in all_urls if u not in existing_urls_all]
+
+        # Combine them (using set to avoid dupes)
+        combined = list(set(retry_urls + new_urls))
+        return (
+            combined,
+            f"[bold orange]Retry Mode Enabled:[/bold orange] Retrying {len(failed_urls)} failed URLs + {len(new_urls)} new URLs.",
+        )
+
+    if fix_missing:
+        missing_urls = get_urls_missing_author()
+        targets = [u for u in all_urls if u in missing_urls]
+        return (
+            targets,
+            f"[bold magenta]Fix Missing Mode:[/bold magenta] Reprocessing {len(targets)} URLs with missing metadata (authors).",
+        )
+
+    existing_urls = get_existing_urls()
+    new_urls = [u for u in all_urls if u not in existing_urls]
+
+    if update_recent:
+        recent_urls = get_recent_resolved_urls(days=recent_days)
+        new_set = set(new_urls)
+        refresh_urls = [u for u in all_urls if u in recent_urls and u not in new_set]
+        return (
+            new_urls + refresh_urls,
+            f"[bold cyan]Update Recent Mode:[/bold cyan] Ingesting {len(new_urls)} new URLs + refreshing {len(refresh_urls)} recent URLs (last {recent_days} days).",
+        )
+
+    return (
+        new_urls,
+        f"Total URLs: {len(all_urls)}. Existing: {len(existing_urls)}. [bold yellow]To process: {len(new_urls)}[/bold yellow]",
+    )
+
+
 async def resolve_hn_links(input_file: str, verbose: bool = False, force: bool = False, retry_failed: bool = False, fix_missing: bool = False, update_recent: bool = False, recent_days: int = 30, limit: int = 0, batch_size: int = 50, rate_limit: float = 5.0):
     """
     Reads URLs from the input JSON and resolves their Hacker News metadata via Algolia.
@@ -138,37 +209,15 @@ async def resolve_hn_links(input_file: str, verbose: bool = False, force: bool =
     # Simple normalization
     all_urls = [u.strip() for u in all_urls if u.strip()]
 
-    if force:
-        to_process = all_urls
-        console.print(f"[bold red]Force Mode Enabled:[/bold red] Reprocessing all {len(all_urls)} URLs.")
-    elif retry_failed:
-        # Get URLs that are already in DB but have no HN ID (failed/no match)
-        failed_urls = get_failed_urls()
-        # Intersect with all_urls to ensure we only process what's in the input file
-        to_process = [u for u in all_urls if u in failed_urls]
-
-        # Also include URLs that are in input but NOT in DB at all (new ones)
-        existing_urls_all = get_existing_urls()
-        new_urls = [u for u in all_urls if u not in existing_urls_all]
-
-        # Combine them (using set to avoid dupes)
-        to_process = list(set(to_process + new_urls))
-
-        console.print(f"[bold orange]Retry Mode Enabled:[/bold orange] Retrying {len(failed_urls)} failed URLs + {len(new_urls)} new URLs.")
-    elif fix_missing:
-        missing_urls = get_urls_missing_author()
-        to_process = [u for u in all_urls if u in missing_urls]
-        console.print(f"[bold magenta]Fix Missing Mode:[/bold magenta] Reprocessing {len(to_process)} URLs with missing metadata (authors).")
-    elif update_recent:
-        # Refresh metadata for articles within the recency window
-        recent_urls = get_recent_resolved_urls(days=recent_days)
-        to_process = [u for u in all_urls if u in recent_urls]
-        console.print(f"[bold cyan]Update Recent Mode:[/bold cyan] Refreshing {len(to_process)} URLs from the last {recent_days} days.")
-    else:
-        existing_urls = get_existing_urls()
-        to_process = [u for u in all_urls if u not in existing_urls]
-
-        console.print(f"Total URLs: {len(all_urls)}. Existing: {len(existing_urls)}. [bold yellow]To process: {len(to_process)}[/bold yellow]")
+    to_process, mode_summary = select_urls_to_process(
+        all_urls,
+        force=force,
+        retry_failed=retry_failed,
+        fix_missing=fix_missing,
+        update_recent=update_recent,
+        recent_days=recent_days,
+    )
+    console.print(mode_summary)
 
     if limit > 0:
         to_process = to_process[:limit]

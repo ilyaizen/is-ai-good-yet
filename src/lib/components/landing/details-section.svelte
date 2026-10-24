@@ -209,14 +209,6 @@
             {@render quoteItem(quote)}
           {/each}
         </Marquee>
-
-        <!-- Fade edges -->
-        <div
-          class="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-terminal-background via-terminal-background/50 to-transparent z-10"
-        ></div>
-        <div
-          class="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-terminal-background via-terminal-background/50 to-transparent z-10"
-        ></div>
       </div>
     </div>
 
@@ -422,6 +414,11 @@
 </div>
 
 <style>
+  .mask-fade-sides {
+    mask-image: linear-gradient(to right, transparent, black 3rem, black calc(100% - 3rem), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 3rem, black calc(100% - 3rem), transparent);
+  }
+
   .theme-group {
     opacity: 0;
     animation: fade-in-up 0.5s ease-out forwards;

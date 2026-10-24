@@ -130,10 +130,44 @@ Full command reference: see [`docs_internal/cli.md`](./docs_internal/cli.md) and
 
 ## Git Workflow
 
-- **NEVER commit directly to `main`** — all changes via PRs
+- **NEVER commit or push directly to `main`** — all changes via PRs
+- **MANDATORY Human-in-the-Loop (HITL) Checkpoint**: Before squash-merging any PR to `main`, present the PR URL to the user and obtain explicit confirmation (`✅`). Auto-merging without human approval is strictly prohibited.
 - Work on feature branches: `feature/`, `fix/`, `refactor/`, `docs/`
 - Open PRs targeting `main`
 - Update [`CHANGELOG.md`](./CHANGELOG.md) under `[Unreleased]` for notable changes (Keep a Changelog: Added, Changed, Deprecated, Removed, Fixed, Security, Breaking Changes)
+
+### Production Shipping & Deployment Workflow (Human-in-the-Loop)
+
+Deployments to production auto-trigger on push/merge to `main` via Coolify Nixpacks build on the Hetzner VPS. Because `main` is production, agents must **ALWAYS require explicit human confirmation** before squash-merging.
+
+#### 1. Automated Script Workflow
+
+From your feature/fix branch with changes:
+```bash
+./scripts/ship.sh "fix: your concise commit message"
+```
+
+The script will:
+1. Run `pnpm svelte-check --tsconfig ./tsconfig.json --threshold error`
+2. Stage and commit changes (if uncommitted)
+3. Push the branch to origin
+4. Open a Pull Request targeting `main` (if not already opened)
+5. **PAUSE FOR HUMAN-IN-THE-LOOP CHECKPOINT**: Prompts `[y/N]` before proceeding
+6. On confirmation: squash-merges PR to `main` and deletes the remote branch
+7. Checks out local `main` and pulls latest
+8. Executes `./scripts/monitor-deploy.sh` to poll Coolify DB (`application_deployment_queues`) on Hetzner until status is `finished`, checks container health, and verifies `https://is-ai-good-yet.com` returns 200.
+
+#### 2. Manual / Agent Protocol
+
+When running without `ship.sh`, agents must follow this exact sequence:
+1. **Branch & Check**: `git checkout -b fix/<name>` && `pnpm svelte-check --tsconfig ./tsconfig.json --threshold error`
+2. **Commit & Push**: `git commit -m "..."` && `git push -u origin fix/<name>`
+3. **Open PR**: `gh pr create --title "..." --body "..." --base main`
+4. **MANDATORY HUMAN-IN-THE-LOOP CHECKPOINT**: Show PR link to the user and request confirmation. **DO NOT MERGE** until the user explicitly responds with approval (e.g. `✅`).
+5. **Squash Merge**: `gh pr merge <PR_NUMBER> --squash --delete-branch`
+6. **Local Sync**: `git checkout main && git pull origin main`
+7. **Monitor Deploy**: `./scripts/monitor-deploy.sh $(git rev-parse HEAD)`
+
 
 ## Hard Rules
 

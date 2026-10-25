@@ -1,7 +1,6 @@
 <script lang="ts">
   import "../app.css";
   import { injectSpeedInsights } from "@vercel/speed-insights/sveltekit";
-  import { injectAnalytics } from "@vercel/analytics/sveltekit";
   import favicon from "$lib/assets/favicon.svg";
   import AppHeader from "$lib/components/app-header.svelte";
   import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte";
@@ -65,7 +64,6 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     injectSpeedInsights();
-    injectAnalytics();
 
     return () => {
       window.clearTimeout(loaderTimer);

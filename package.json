@@ -103,7 +103,6 @@
     "@number-flow/svelte": "^0.4.1",
     "@tanstack/table-core": "^8.21.3",
     "@types/d3-scale": "^4.0.9",
-    "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "better-sqlite3": "^12.11.1",
     "bits-ui": "^2.18.1",

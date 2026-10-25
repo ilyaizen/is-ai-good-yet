@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Vercel Speed Insights and its `@vercel/speed-insights` dependency — a leftover from the #37 analytics migration to self-hosted Rybbit; it injected `/_vercel/speed-insights/script.js` on every page.
+
 ### Fixed
 
 - Load the self-hosted Rybbit tracker from its canonical `/api/script.js` endpoint so analytics no longer depends on the temporary legacy-path proxy route.

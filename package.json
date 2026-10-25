@@ -27,6 +27,7 @@
     "lint": "vp lint",
     "format": "vp fmt",
     "diagnose:schema-migration": "tsx scripts/diagnose-schema-migration.ts",
+    "test:analytics-script": "tsx tests/test-analytics-script.ts",
     "test:globe-arcs": "tsx tests/test-globe-arcs.ts",
     "test:pipeline-command-config": "tsx tests/test-pipeline-command-config.ts",
     "test:pipeline-runner": "tsx tests/test-pipeline-runner-runtime.ts",

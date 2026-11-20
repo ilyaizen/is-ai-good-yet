@@ -202,6 +202,17 @@
     --table-header-bg: var(--muted);
     --table-row-hover: var(--muted);
     --table-pagination-bg: var(--muted);
+
+    /* v1.2 phosphor ramp (NEW) — monochrome green display derived from the lime hue.
+       Dark theme carries the design; light theme falls back to existing surfaces. */
+    --phosphor-bright: oklch(0.55 0.16 141.5);
+    --phosphor-beam: var(--palette-lime-light);
+    --phosphor-text: var(--palette-gray-800);
+    --phosphor-muted: var(--palette-gray-700);
+    --phosphor-faint: var(--palette-gray-500);
+    --phosphor-border: var(--terminal-border);
+    --phosphor-glow: var(--terminal-accent-glow);
+    --phosphor-screen: var(--palette-gray-50);
   }
 
   /* =========================================================
@@ -312,6 +323,17 @@
 
     /* Table */
     --table-row-hover: oklch(0.2632 0.0026 196.9418);
+
+    /* v1.2 phosphor ramp (NEW) — hue locked to --palette-lime-dark (140.85);
+       values are the WCAG-checked ramp from the v1.2 direction memo. */
+    --phosphor-bright: oklch(0.86 0.2 140.85);
+    --phosphor-beam: var(--palette-lime-dark);
+    --phosphor-text: oklch(0.9 0.06 140.85);
+    --phosphor-muted: oklch(0.62 0.09 140.85);
+    --phosphor-faint: oklch(0.45 0.07 140.85);
+    --phosphor-border: oklch(0.68 0.18 140.85 / 0.35);
+    --phosphor-glow: oklch(0.68 0.18 140.85 / 0.3);
+    --phosphor-screen: oklch(0.07 0.012 140.85);
   }
 }
 

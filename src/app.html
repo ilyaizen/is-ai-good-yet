@@ -4,6 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Is AI “Good” Yet?</title>
+    <script>
+      // v1.2 FX pre-paint bootstrap: apply the persisted effects-off state
+      // before first paint so returning visitors never see the boot/flicker.
+      try {
+        if (localStorage.getItem("v12.fx") === "off") {
+          document.documentElement.classList.add("fx-off");
+        }
+      } catch (e) {}
+    </script>
     <script src="https://analytics.is-ai-good-yet.com/api/script.js?siteId=903a72fbf2be" defer></script>
     %sveltekit.head%
   </head>

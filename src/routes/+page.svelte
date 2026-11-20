@@ -3,7 +3,7 @@
   import VerdictDisplay from "$lib/components/landing/verdict-display.svelte";
   import ArticlesTable from "$lib/components/landing/articles-table.svelte";
   import AppFooter from "$lib/components/app-footer.svelte";
-  import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte";
+  import BootLoader from "$lib/components/landing/boot-loader.svelte";
   import DetailsSection from "$lib/components/landing/details-section.svelte";
   import { useVeil } from "$lib/composables/use-veil.svelte";
 
@@ -13,9 +13,9 @@
     get articleCount() {
       return data.permanentRecord.totalArticles;
     },
-    get lastUpdateTimestamp() {
-      return data.lastCatchUpTimestamp;
-    }
+    get verdict() {
+      return data.verdictScore.verdict;
+    },
   });
 </script>
 
@@ -27,8 +27,8 @@
   />
 </svelte:head>
 
-<!-- Comprehensive Loader - shows during initial data fetch -->
-<ComprehensiveLoader visible={veil.isLoading} />
+<!-- Boot loader - shows during initial data fetch -->
+<BootLoader visible={veil.isLoading} />
 
 {#if veil.revealed}
   <main class="main-content">

@@ -8,8 +8,8 @@ type VeilControl = {
     visible: boolean
     onReveal: () => void
     articleCount: number
-    lastUpdateTimestamp: number | null
     resetTrigger: number
+    verdict: string | null
   }) => void
 }
 
@@ -23,7 +23,7 @@ type LayoutScrollState = {
  * Manages the reveal/replay lifecycle, localStorage persistence,
  * and sync with the layout-level veil control + scroll-driven header visibility.
  */
-export function useVeil(params: { articleCount: number; lastUpdateTimestamp: number | null }) {
+export function useVeil(params: { articleCount: number; verdict?: string | null }) {
   const layoutScrollState = getContext<LayoutScrollState>("layoutScrollState")
   const veilControl = getContext<VeilControl>("veilControl")
 
@@ -80,8 +80,8 @@ export function useVeil(params: { articleCount: number; lastUpdateTimestamp: num
         visible: !revealed,
         onReveal: handleReveal,
         articleCount: params.articleCount,
-        lastUpdateTimestamp: params.lastUpdateTimestamp,
         resetTrigger: veilResetTrigger,
+        verdict: params.verdict ?? null,
       })
     }
   })

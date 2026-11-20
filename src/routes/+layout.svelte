@@ -2,13 +2,14 @@
   import "../app.css";
   import favicon from "$lib/assets/favicon.svg";
   import AppHeader from "$lib/components/app-header.svelte";
-  import ComprehensiveLoader from "$lib/components/landing/comprehensive-loader.svelte";
-  import VerdictVeil from "$lib/components/landing/verdict-veil.svelte";
+  import BootLoader from "$lib/components/landing/boot-loader.svelte";
+  import BootVeil from "$lib/components/landing/boot-veil.svelte";
   import { TooltipProvider } from "$lib/components/ui/tooltip";
   import { ModeWatcher } from "mode-watcher";
   import { onMount, setContext } from "svelte";
   import { page } from "$app/state";
   import Scanlines from "$lib/components/scanlines.svelte";
+  import { v12Effects } from "$lib/state/v12-effects.svelte";
 
   let { children } = $props();
 
@@ -20,21 +21,19 @@
   let veilVisible = $state(false);
   let veilOnReveal: (() => void) | null = $state(null);
   let veilArticleCount = $state(0);
-  let veilLastUpdateTimestamp = $state<number | null>(null);
-  let veilResetTrigger = $state(0);
+  let veilVerdict = $state<string | null>(null);
 
   function setVeilState(params: {
     visible: boolean;
     onReveal: () => void;
     articleCount: number;
-    lastUpdateTimestamp: number | null;
     resetTrigger: number;
+    verdict: string | null;
   }) {
     veilVisible = params.visible;
     veilOnReveal = params.onReveal;
     veilArticleCount = params.articleCount;
-    veilLastUpdateTimestamp = params.lastUpdateTimestamp;
-    veilResetTrigger = params.resetTrigger;
+    veilVerdict = params.verdict;
   }
 
   setContext("layoutScrollState", {
@@ -49,10 +48,15 @@
 
   $effect(() => {
     document.body.classList.toggle("v2", isV2);
-    return () => document.body.classList.remove("v2");
+    document.body.classList.toggle("v12", !isV2);
+    return () => {
+      document.body.classList.remove("v2");
+      document.body.classList.remove("v12");
+    };
   });
 
   onMount(() => {
+    v12Effects.init();
     const loaderTimer = window.setTimeout(() => {
       showLoader = false;
     }, 500);
@@ -98,15 +102,14 @@
 <ModeWatcher defaultMode="dark" />
 
 <TooltipProvider>
-  <ComprehensiveLoader visible={showLoader && !isV2} />
+  <BootLoader visible={showLoader && !isV2} />
   <AppHeader mode="animated" visible={scrolledPastVerdict} />
 
   {#if veilVisible}
-    <VerdictVeil
+    <BootVeil
       onReveal={veilOnReveal ?? (() => {})}
       articleCount={veilArticleCount}
-      lastUpdateTimestamp={veilLastUpdateTimestamp}
-      resetTrigger={veilResetTrigger}
+      verdict={veilVerdict}
     />
   {/if}
 

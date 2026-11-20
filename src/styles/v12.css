@@ -1,0 +1,60 @@
+/* v1.2 Phosphor Boot — document-level layer.
+   Component-scoped styles live in their .svelte files; this file only holds
+   the ambient CRT layer (body.v12) and its FX/reduced-motion gates. */
+
+@layer components {
+  /* Vignette: inset box-shadow, deliberately not a gradient. */
+  body.v12::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: inset 0 0 18vmax oklch(0 0 0 / 0.55);
+    opacity: 0.35;
+  }
+
+  /* Phosphor flicker: an 8s steps() blip at ~1.8% tint. Must stay subtle. */
+  body.v12::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background: oklch(0.68 0.18 140.85 / 0.018);
+    animation: v12-flicker 8s steps(1) infinite;
+  }
+
+  @keyframes v12-flicker {
+    0%,
+    92% {
+      opacity: 0;
+    }
+    93% {
+      opacity: 1;
+    }
+    94% {
+      opacity: 0;
+    }
+    96% {
+      opacity: 1;
+    }
+    97%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* FX off: ambient dies entirely. */
+  html.fx-off body.v12::before,
+  html.fx-off body.v12::after {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.v12::before {
+      animation: none;
+      opacity: 0.012;
+    }
+  }
+}

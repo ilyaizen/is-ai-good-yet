@@ -1,115 +1,69 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-  import VerdictDisplay from "$lib/components/landing/verdict-display.svelte";
-  import ArticlesTable from "$lib/components/landing/articles-table.svelte";
-  import AppFooter from "$lib/components/app-footer.svelte";
-  import BootLoader from "$lib/components/landing/boot-loader.svelte";
-  import DetailsSection from "$lib/components/landing/details-section.svelte";
-  import { useVeil } from "$lib/composables/use-veil.svelte";
+  import type { PageData } from "./$types"
+  import BootVeil from "$lib/components/landing/boot-veil.svelte"
+  import PhosphorScope from "$lib/components/landing/phosphor-scope.svelte"
+  import { unlockSound } from "$lib/audio/v12-sound"
+  import { useVeil } from "$lib/composables/use-veil.svelte"
+  import { v12Effects } from "$lib/state/v12-effects.svelte"
 
-  let { data }: { data: PageData } = $props();
+  let { data }: { data: PageData } = $props()
 
-  const veil = useVeil({
-    get articleCount() {
-      return data.permanentRecord.totalArticles;
-    },
-    get verdict() {
-      return data.verdictScore.verdict;
-    },
-  });
+  let dialogOpen = $state(false)
+  const stamp = $derived(data.lastCatchUpTimestamp)
+  const exportedAt = $derived(stamp !== null && Number.isFinite(stamp) ? new Date(stamp * 1000).toISOString() : null)
+
+  const veil = useVeil()
+
+  function onWindowKeydown(event: KeyboardEvent): void {
+    if (
+      veil.showIntro ||
+      !v12Effects.fx ||
+      dialogOpen ||
+      event.defaultPrevented ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.metaKey ||
+      event.repeat ||
+      event.key.toLowerCase() !== "r"
+    ) {
+      return
+    }
+    if (event.target instanceof HTMLElement && event.target.closest("input, textarea, select, [contenteditable], dialog")) {
+      return
+    }
+    event.preventDefault()
+    if (v12Effects.sound) {
+      unlockSound(() => veil.handleReplay())
+      return
+    }
+    veil.handleReplay()
+  }
 </script>
 
 <svelte:head>
   <title>Is AI &ldquo;Good&rdquo; Yet?</title>
   <meta
     name="description"
-    content="a survey tracking developer sentiment on AI-assisted coding through hacker news posts."
+    content="A survey tracking developer sentiment on AI-assisted coding through Hacker News posts."
   />
 </svelte:head>
 
-<!-- Boot loader - shows during initial data fetch -->
-<BootLoader visible={veil.isLoading} />
+<svelte:window onkeydown={onWindowKeydown} />
 
-{#if veil.revealed}
-  <main class="main-content">
-    <!-- Hero Section: Full-Viewport Verdict Display -->
-    <section id="home" class="verdict-hero">
-      <div class="verdict-hero__container">
-        <VerdictDisplay
-          verdict={data.verdictScore.verdict}
-          score={data.verdictScore.finalScore}
-          weeklySnapshots={data.weeklySnapshots}
-          verdictScore={data.verdictScore}
-          onReplay={veil.handleReplayScrollToTop}
-        />
-      </div>
-    </section>
-
-    <!-- Content Section: Articles, Details & Footer -->
-    <section id="articles" class="content-section" class:content-section--visible={veil.contentVisible}>
-      <div id="articles-table" class="scroll-mt-24">
-        <ArticlesTable articles={data.topArticles} />
-      </div>
-
-      <div id="details" class="scroll-mt-24">
-        <DetailsSection visible={veil.contentVisible} />
-      </div>
-
-      <AppFooter />
-    </section>
-  </main>
+{#if !veil.isLoading && veil.showIntro}
+  {#key veil.replayKey}
+    <BootVeil onReveal={veil.handleReveal} onComplete={veil.handleComplete} />
+  {/key}
 {/if}
 
-<style>
-  .main-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .verdict-hero {
-    min-height: 100vh;
-    min-height: 100dvh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-    box-sizing: border-box;
-  }
-
-  .verdict-hero__container {
-    width: 100%;
-    max-width: 48rem;
-  }
-
-  .content-section {
-    padding-top: 2rem;
-    max-width: 56rem;
-    margin: 0 auto;
-    width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity 500ms var(--ease-swift),
-      transform 500ms var(--ease-swift);
-  }
-
-  .content-section--visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @media (max-width: 768px) {
-    .verdict-hero {
-      min-height: calc(100vh - 4rem);
-      padding: 1rem;
-    }
-
-    .content-section {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-    }
-  }
-</style>
+<div inert={veil.showIntro || undefined}>
+  <PhosphorScope
+    {data}
+    {exportedAt}
+    onReplay={veil.handleReplay}
+    replayDisabled={veil.showIntro || dialogOpen}
+    onDialogChange={(open) => {
+      dialogOpen = open
+    }}
+  />
+</div>

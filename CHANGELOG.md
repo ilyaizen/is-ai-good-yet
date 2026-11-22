@@ -9,7 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Promote **Phosphor Scope** (`phosphor-scope.svelte`, `phosphor-data.ts`, `phosphor-fx-bar.svelte`, `phosphor-story-dialog.svelte`) to the production `/` landing page using real V1 static exports (`verdict.json`, `weekly.json`, `articles.json`), dominant weekly rolling history with visible `45`/`55` thresholds, `NOT YET` band, a continuous trace joining adjacent recorded snapshots (no visual gaps over missing weeks), and week inspection directly on the chart (pointer scrub plus a keyboard-accessible ARIA slider), newest-first Hacker News evidence stream with `YYYY-MM-DD` dates and band-consistent sentiment scores (`+1.5` / `±0.2` / `−1.5`), story inspect dialog (`/api/article-details/:id`), and collapsed Methodology details.
+- Odometer digit roll (`ph-flow-number.svelte`) on the current verdict score and the weekly readout — masked 0-9 columns with stepped right-to-left stagger, falling back to plain text under FX off / reduced motion.
+- Semantic sentiment color coding across Phosphor Scope, token-defined only (`src/styles/tokens.css`): positive stays phosphor green, medium/neutral (`NOT YET`, `~ neu`, `45–55` band) moves to an amber cast of the warning palette, and negative (`NO`, `− neg`, `<45`) to a chroma-trimmed destructive red — applied to the current verdict accent/glow, weekly readout, chart threshold dashes + zone tags + `NOT YET` band, story sentiment badges, and inspect-dialog sentiment, in both dark and light themes.
+- Phosphor intro veil (`boot-veil.svelte`) with auto-typed `> is ai "good" yet?` prompt in white with the quoted "good" landing in phosphor green, pre-paint flash guard (`v12-veil-pending` in `src/app.html`), synthesized mechanical/terminal keystroke WebAudio cues (`cueKeystroke` in `src/lib/audio/v12-sound.ts`), and autoplay-safe `[ show the answer ]` / `[ replay with sound ]` + header `REPLAY` (`R`) flow.
+
+### Changed
+
+- Tighten V1.2 phosphor tokens (`src/styles/tokens.css`, `src/styles/v12.css`) and layout integration (`src/routes/+layout.svelte`, `src/lib/state/v12-effects.svelte.ts`) so `FX:ON/OFF`, live `prefers-reduced-motion`, and session-only `SOUND:ON/OFF` govern the entire `/` experience cleanly.
+- Update `tests/test-analytics-script.ts` to match the canonical Rybbit `script.js?siteId=903a72fbf2be` URL introduced in `#40`.
+
 ### Removed
+
+- Remove obsolete Telemetry Deck and dev-only preview components, styles, tokens, and sound cues (`deck-*`, `verdict-display.svelte`, `articles-table.svelte`, `history-preview.svelte`, `sentiment-overview-preview.svelte`, `terminal-dir-*`, `terminal-comparison-gallery.svelte`, `?variant=` preview routing, `CH-00`, `LINK NOMINAL`, `NEG FLUX`, countdowns, and Geiger audio).
 
 - Vercel Speed Insights and its `@vercel/speed-insights` dependency — a leftover from the #37 analytics migration to self-hosted Rybbit; it injected `/_vercel/speed-insights/script.js` on every page.
 

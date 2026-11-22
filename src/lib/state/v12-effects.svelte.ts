@@ -3,13 +3,14 @@
  *
  * - `fx` persists in localStorage ("v12.fx") and is applied pre-paint by the
  *   inline bootstrap in app.html (adds `fx-off` to <html> before first paint),
- *   so a returning effects-off visitor never sees the boot, flicker, or glow.
+ *   so a returning effects-off visitor never sees the intro, flicker, or glow.
  * - `sound` is deliberately session-only: OFF on every load (autoplay policy),
- *   and the AudioContext is only creatable from a real user gesture — the
- *   SOUND control's click handler calls the audio engine's unlock().
+ *   and the AudioContext is only creatable from a real user gesture.
  * - `prefers-reduced-motion` is tracked live and always respected, independent
  *   of the FX switch.
  */
+import { browser } from "$app/environment"
+
 const FX_KEY = "v12.fx"
 
 class V12Effects {
@@ -18,20 +19,24 @@ class V12Effects {
   reducedMotion = $state(false)
   private initialized = false
 
-  /** Typewriters, staggers, sheet slide, scope beam. */
+  /** Typewriters, dialog slide, intro collapse. */
   get motionOK(): boolean {
     return this.fx && !this.reducedMotion
   }
 
-  /** Scanlines flicker, vignette, caret blink, verdict glow. */
+  /** Scanlines, flicker, vignette, caret blink, verdict glow. */
   get ambientOK(): boolean {
     return this.fx && !this.reducedMotion
   }
 
   init(): void {
-    if (typeof window === "undefined" || this.initialized) return
+    if (!browser || this.initialized) return
     this.initialized = true
-    this.fx = localStorage.getItem(FX_KEY) !== "off"
+    try {
+      this.fx = localStorage.getItem(FX_KEY) !== "off"
+    } catch {
+      this.fx = true
+    }
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
     this.reducedMotion = media.matches
     this.applyDocumentClass()
@@ -48,7 +53,12 @@ class V12Effects {
       // Private mode: fall back to session-only state.
     }
     this.applyDocumentClass()
-    if (!on) this.sound = false
+    if (!on) {
+      this.sound = false
+      if (browser) {
+        document.documentElement.classList.remove("v12-veil-pending")
+      }
+    }
   }
 
   setSound(on: boolean): void {
@@ -56,7 +66,7 @@ class V12Effects {
   }
 
   private applyDocumentClass(): void {
-    if (typeof document === "undefined") return
+    if (!browser) return
     document.documentElement.classList.toggle("fx-off", !this.fx)
   }
 }

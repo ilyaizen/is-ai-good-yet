@@ -6,10 +6,13 @@
     <title>Is AI “Good” Yet?</title>
     <script>
       // v1.2 FX pre-paint bootstrap: apply the persisted effects-off state
-      // before first paint so returning visitors never see the boot/flicker.
+      // before first paint and guard unrevealed first-visit landing paints
+      // until the Phosphor intro veil mounts.
       try {
         if (localStorage.getItem("v12.fx") === "off") {
-          document.documentElement.classList.add("fx-off");
+          document.documentElement.classList.add("fx-off")
+        } else if (location.pathname === "/" && localStorage.getItem("isAiGoodYetRevealed") !== "true") {
+          document.documentElement.classList.add("v12-veil-pending")
         }
       } catch (e) {}
     </script>

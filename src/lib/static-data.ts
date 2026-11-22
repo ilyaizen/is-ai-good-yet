@@ -26,6 +26,7 @@ type ExportedVerdict = {
     windowMonths: number
     exportedAt: string
   }
+  pipeline?: { totalUrls: number }
   permanent: {
     score: number
     verdict: "YES" | "NO" | "NOT_YET"
@@ -190,7 +191,7 @@ export function getStaticTopArticles(limit: number = 10000): InfluentialArticle[
  */
 export function getStaticPipelineStats() {
   return {
-    totalUrls: articles.length,
+    totalUrls: verdict.pipeline?.totalUrls ?? null,
     resolved: articles.length,
     scraped: articles.length,
     relevant: articles.length,

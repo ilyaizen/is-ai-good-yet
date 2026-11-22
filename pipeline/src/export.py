@@ -97,10 +97,10 @@ def parse_classification_json(json_str: str | None) -> dict[str, Any]:
         return {}
 
 
-def export_articles(cursor) -> list[dict]:
+def export_articles(cursor) -> tuple[list[dict], set[int]]:
     """
-    Export all verdict-included articles with analysis data.
-    Matches the frontend's getTopArticles() filtering.
+    Export one analysis per verdict-eligible HN story.
+    Prefer the newest eligible row by story timestamp, then the lowest URL row ID.
     """
     query = """
         SELECT
@@ -116,7 +116,8 @@ def export_articles(cursor) -> list[dict]:
             content_category,
             url
         FROM urls
-        WHERE sentiment_score IS NOT NULL
+        WHERE hn_id IS NOT NULL
+          AND sentiment_score IS NOT NULL
           AND scraped_status = 'success'
           AND content_category = 'AI_DISCOURSE'
           AND hn_score IS NOT NULL
@@ -132,15 +133,20 @@ def export_articles(cursor) -> list[dict]:
             -- No classification JSON yet
             classification_json IS NULL
           )
-        ORDER BY hn_timestamp DESC
+        ORDER BY hn_timestamp DESC, hn_id DESC, id ASC
     """
     cursor.execute(query)
-    rows = cursor.fetchall()
 
     articles = []
+    seen_hn_ids = set()
+    exported_url_ids = set()
 
-    for row in rows:
+    for row in cursor:
         url_id, hn_id, hn_title, hn_score, hn_comments, hn_timestamp, hn_author, sentiment_score, classification_json, content_category, url = row
+        if hn_id in seen_hn_ids:
+            continue
+        seen_hn_ids.add(hn_id)
+        exported_url_ids.add(url_id)
 
         classification = parse_classification_json(classification_json)
         influence_score = round(calculate_influence_score(hn_score, hn_timestamp), 2)
@@ -164,7 +170,7 @@ def export_articles(cursor) -> list[dict]:
         }
         articles.append(article)
 
-    return articles
+    return articles, exported_url_ids
 
 
 def calculate_verdict_score(articles: list[dict]) -> dict:
@@ -449,7 +455,7 @@ def calculate_weekly_snapshots(articles: list[dict]) -> list[dict]:
     return snapshots
 
 
-def export_llm_metrics(cursor, exported_hn_ids: set[int]) -> dict:
+def export_llm_metrics(cursor, exported_url_ids: set[int]) -> dict:
     """
     Export LLM analysis metrics for all exported articles.
 
@@ -461,6 +467,7 @@ def export_llm_metrics(cursor, exported_hn_ids: set[int]) -> dict:
     """
     query = """
         SELECT
+            id,
             hn_id,
             classification_json,
             content_filter_json,
@@ -476,10 +483,10 @@ def export_llm_metrics(cursor, exported_hn_ids: set[int]) -> dict:
     metrics_by_hn_id = {}
 
     for row in rows:
-        hn_id, classification_json, content_filter_json, groq_metrics_json = row
+        url_id, hn_id, classification_json, content_filter_json, groq_metrics_json = row
 
-        # Only include metrics for articles that were exported
-        if hn_id not in exported_hn_ids:
+        # Keep the metrics from the same URL row as the exported analysis.
+        if url_id not in exported_url_ids:
             continue
 
         entry = {}
@@ -575,7 +582,7 @@ def export_data(output_path: Path, verbose: bool = False) -> dict:
         # Export articles
         if verbose:
             logger.info("Exporting articles...")
-        articles = export_articles(cursor)
+        articles, exported_url_ids = export_articles(cursor)
 
         articles_path = output_path / "articles.json"
         with open(articles_path, "w", encoding="utf-8") as f:
@@ -631,8 +638,7 @@ def export_data(output_path: Path, verbose: bool = False) -> dict:
         # Export LLM metrics (prefilter + sentiment responses with speed metrics)
         if verbose:
             logger.info("Exporting LLM metrics...")
-        exported_hn_ids = {article["hn_id"] for article in articles}
-        llm_metrics = export_llm_metrics(cursor, exported_hn_ids)
+        llm_metrics = export_llm_metrics(cursor, exported_url_ids)
 
         llm_metrics_path = output_path / "llm-metrics.json"
         with open(llm_metrics_path, "w", encoding="utf-8") as f:

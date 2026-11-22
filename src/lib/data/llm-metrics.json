@@ -53551,41 +53551,42 @@
       "response": {
         "category": "AI_DISCOURSE",
         "confidence": 0.95,
-        "reasoning": "Includes personal CTO experience and survey findings about AI coding impact."
+        "reasoning": "Contains developer personal experience and survey findings on AI coding use."
       },
       "metrics": {
         "model": "openai/gpt-oss-20b",
         "input_tokens": 1900,
-        "output_tokens": 154,
-        "total_tokens": 2054,
-        "inference_time_ms": 332.5,
-        "tokens_per_second": 463.2,
+        "output_tokens": 161,
+        "total_tokens": 2061,
+        "inference_time_ms": 549.6,
+        "tokens_per_second": 292.9,
         "prompt_chars": 3973,
-        "timestamp": "2026-10-06T20:40:47.889076+00:00"
+        "timestamp": "2026-10-06T20:40:47.448259+00:00"
       }
     },
     "sentiment": {
       "response": {
-        "utility": "toil",
-        "trajectory": "uncertain",
+        "utility": "hazard",
+        "trajectory": "pessimistic",
         "topic": "quality",
-        "summary": "AI tools boost speed but foster addiction, burnout, and verification debt, outweighing gains for many developers.",
+        "summary": "AI tools add addictive work‑loops, burn‑out and hallucination‑driven debugging, turning development into a safety hazard.",
         "quotes": [
-          "‘AI coding can turn software development into an always‑on feedback loop…’",
-          "‘The result? Output that appears convincing while creating difficult debugging work.’"
+          "“Agentic coding is addictive. When the agent gets things right, you get a dopamine hit. When it fails, you get an adrenaline rush.”",
+          "“Heavy use of AI, reported 74% of developers, made it more likely they’d earn a raise or promotion. However, 51% also said they were more likely to burn out.”",
+          "“Trust in AI accuracy has fallen from 40% in previous years to just 29% this year.”"
         ],
         "model": "openai/gpt-oss-20b",
-        "analyzed_at": "2026-10-06T20:44:29.757540+00:00"
+        "analyzed_at": "2026-10-06T20:44:27.117808+00:00"
       },
       "metrics": {
         "model": "openai/gpt-oss-20b",
         "input_tokens": 2037,
-        "output_tokens": 157,
-        "total_tokens": 2194,
-        "inference_time_ms": 430.0,
-        "tokens_per_second": 365.1,
+        "output_tokens": 288,
+        "total_tokens": 2325,
+        "inference_time_ms": 732.4,
+        "tokens_per_second": 393.3,
         "prompt_chars": 5324,
-        "timestamp": "2026-10-06T20:44:29.757540+00:00"
+        "timestamp": "2026-10-06T20:44:27.117808+00:00"
       }
     }
   },

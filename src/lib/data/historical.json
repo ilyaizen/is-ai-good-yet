@@ -313,26 +313,26 @@
   },
   {
     "month": "2026-08",
-    "score": 59.89,
+    "score": 59.9,
     "verdict": "YES",
-    "articleCount": 1246
+    "articleCount": 1245
   },
   {
     "month": "2026-09",
     "score": 60.06,
     "verdict": "YES",
-    "articleCount": 1293
+    "articleCount": 1292
   },
   {
     "month": "2026-10",
-    "score": 60.79,
+    "score": 60.8,
     "verdict": "YES",
-    "articleCount": 1334
+    "articleCount": 1333
   },
   {
     "month": "2026-11",
-    "score": 61.08,
+    "score": 61.09,
     "verdict": "YES",
-    "articleCount": 1374
+    "articleCount": 1373
   }
 ]

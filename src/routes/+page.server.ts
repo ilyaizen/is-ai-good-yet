@@ -74,7 +74,7 @@ export const load: PageServerLoad = async () => {
       },
       topArticles: [],
       pipelineStats: {
-        totalUrls: 0,
+        totalUrls: null,
         resolved: 0,
         scraped: 0,
         relevant: 0,

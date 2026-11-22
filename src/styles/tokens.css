@@ -202,6 +202,26 @@
     --table-header-bg: var(--muted);
     --table-row-hover: var(--muted);
     --table-pagination-bg: var(--muted);
+
+    /* v1.2 phosphor ramp (NEW) — monochrome green display derived from the lime hue.
+       Dark theme carries the design; light theme falls back to existing surfaces. */
+    --phosphor-bright: oklch(0.55 0.16 141.5);
+    --phosphor-beam: var(--palette-lime-light);
+    --phosphor-text: var(--palette-gray-800);
+    --phosphor-muted: var(--palette-gray-700);
+    --phosphor-faint: var(--palette-gray-500);
+    --phosphor-border: var(--terminal-border);
+    --phosphor-glow: var(--terminal-accent-glow);
+    --phosphor-screen: var(--palette-gray-50);
+    --phosphor-scanline: oklch(0 0 0 / 0.06);
+    --phosphor-vignette: oklch(0 0 0 / 0.14);
+    --phosphor-flicker: oklch(0.5 0.16 141.5 / 0.015);
+
+    /* Sentiment casts for the verdict scale — amber is an amber-shifted warning hue
+       (105 -> 85), red a chroma-trimmed destructive. L levels match the lime ramp so
+       all three tones carry equal weight in light mode. */
+    --phosphor-amber: oklch(0.5 0.11 85);
+    --phosphor-red: oklch(0.45 0.16 26);
   }
 
   /* =========================================================
@@ -312,28 +332,54 @@
 
     /* Table */
     --table-row-hover: oklch(0.2632 0.0026 196.9418);
-  }
-}
 
-/* v2 broadcast-terminal semantics. Scoped so v1 keeps its existing theme. */
-body.v2 {
-  --v2-canvas: oklch(0.105 0.012 145);
-  --v2-recess: oklch(0.085 0.01 145);
-  --v2-surface-1: oklch(0.155 0.014 145);
-  --v2-surface-2: oklch(0.195 0.018 145);
-  --v2-text: oklch(0.94 0.014 130);
-  --v2-text-muted: oklch(0.7 0.018 145);
-  --v2-text-faint: oklch(0.52 0.018 145);
-  --v2-phosphor: oklch(0.86 0.2 125);
-  --v2-amber: oklch(0.78 0.16 75);
-  --v2-red: oklch(0.67 0.22 27);
-  --v2-cyan: oklch(0.77 0.12 210);
-  --v2-violet: oklch(0.72 0.13 300);
-  --v2-separator: oklch(0.72 0.03 145 / 0.16);
-  --v2-separator-quiet: oklch(0.72 0.03 145 / 0.08);
-  --v2-focus: oklch(0.88 0.2 125);
-  --v2-shadow: 0 18px 48px oklch(0.04 0.02 145 / 0.55);
-  --v2-font-display: "Share Tech Mono", "IBM Plex Mono", ui-monospace, monospace;
-  --v2-font-data: "IBM Plex Mono", ui-monospace, monospace;
-  --v2-font-copy: "Armata", system-ui, sans-serif;
+    /* v1.2 phosphor ramp (NEW) — hue locked to --palette-lime-dark (140.85);
+       values are the WCAG-checked ramp from the v1.2 direction memo. */
+    --phosphor-bright: oklch(0.86 0.2 140.85);
+    --phosphor-beam: var(--palette-lime-dark);
+    --phosphor-text: oklch(0.9 0.06 140.85);
+    --phosphor-muted: oklch(0.62 0.09 140.85);
+    --phosphor-faint: oklch(0.45 0.07 140.85);
+    --phosphor-border: oklch(0.68 0.18 140.85 / 0.35);
+    --phosphor-glow: oklch(0.68 0.18 140.85 / 0.3);
+    --phosphor-screen: oklch(0.07 0.012 140.85);
+    --phosphor-scanline: oklch(0 0 0 / 0.38);
+    --phosphor-vignette: oklch(0 0 0 / 0.55);
+    --phosphor-flicker: oklch(0.68 0.18 140.85 / 0.018);
+
+    /* Sentiment casts: amber shifted from the warning hue (105 -> 85); red near
+       --palette-destructive-dark with trimmed chroma to sit on the phosphor screen. */
+    --phosphor-amber: oklch(0.78 0.13 85);
+    --phosphor-red: oklch(0.64 0.19 24);
+  }
+
+  /* V1.2 Phosphor Scope — strictly derived from phosphor tokens above. */
+  body.v12,
+  .dir-phosphor {
+    --td-ground: var(--phosphor-screen);
+    --td-surface: color-mix(in oklch, var(--phosphor-beam) 5%, var(--phosphor-screen));
+    --td-raised: color-mix(in oklch, var(--phosphor-beam) 10%, var(--phosphor-screen));
+    --td-ink: var(--phosphor-text);
+    --td-ink-bright: var(--phosphor-bright);
+    --td-muted: var(--phosphor-muted);
+    --td-faint: color-mix(in oklch, var(--phosphor-muted) 74%, var(--phosphor-screen));
+    --td-accent: var(--phosphor-bright);
+    --td-rule: var(--phosphor-border);
+    --td-rule-soft: color-mix(in oklch, var(--phosphor-beam) 16%, transparent);
+    --td-hover: color-mix(in oklch, var(--phosphor-beam) 11%, transparent);
+    --td-glow: var(--phosphor-glow);
+    --td-scrim: color-mix(in oklch, var(--phosphor-screen) 78%, transparent);
+    --td-scanline: var(--phosphor-scanline);
+    --td-pos: var(--phosphor-bright);
+    --td-neu: var(--phosphor-amber);
+    --td-neg: var(--phosphor-red);
+    /* Tone derivatives: -soft for threshold lines, badge borders, and glow;
+       -wash for zone fills. */
+    --td-pos-soft: color-mix(in oklch, var(--td-pos) 30%, transparent);
+    --td-pos-wash: color-mix(in oklch, var(--td-pos) 9%, transparent);
+    --td-neu-soft: color-mix(in oklch, var(--td-neu) 30%, transparent);
+    --td-neu-wash: color-mix(in oklch, var(--td-neu) 9%, transparent);
+    --td-neg-soft: color-mix(in oklch, var(--td-neg) 30%, transparent);
+    --td-neg-wash: color-mix(in oklch, var(--td-neg) 9%, transparent);
+  }
 }

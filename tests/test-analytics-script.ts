@@ -10,10 +10,9 @@ assert.equal(trackerTags.length, 1, "Load the self-hosted tracker exactly once")
 const [trackerTag = ""] = trackerTags
 assert.match(
   trackerTag,
-  /\bsrc=["']https:\/\/analytics\.is-ai-good-yet\.com\/api\/script\.js["']/,
-  "Use the canonical Rybbit API path without the legacy proxy route"
+  /\bsrc=["']https:\/\/analytics\.is-ai-good-yet\.com\/api\/script\.js\?siteId=903a72fbf2be["']/,
+  "Use the canonical Rybbit API path with the registered site identifier"
 )
-assert.match(trackerTag, /\bdata-site-id=["']1["']/, "Keep the registered production site ID")
 assert.match(trackerTag, /\sdefer(?:\s|>)/, "Keep tracker loading deferred")
 
 console.log("analytics script tests passed")

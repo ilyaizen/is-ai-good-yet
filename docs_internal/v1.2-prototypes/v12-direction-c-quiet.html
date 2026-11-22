@@ -1,0 +1,1366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Is AI &ldquo;Good&rdquo; Yet? &mdash; v1.2 &middot; Quiet Terminal (prototype)</title>
+<style>
+/* =========================================================================
+   TOKENS — maps 1:1 to src/styles/tokens.css
+   Real names + values copied from the repo (dark theme, `.dark` block).
+   Also: --ease-swift from src/app.css, --crt-scanline-opacity from
+   src/styles/crt-effect.css. Anything prefixed --q-* is NEW (this direction).
+   ========================================================================= */
+:root {
+  /* ---- palette (tokens.css :root) ---- */
+  --palette-lime-dark: oklch(0.68 0.18 140.85);        /* THE accent. Rationed: it only marks what HN liked. */
+  --palette-lime-light: oklch(0.5 0.16 141.5);         /* light mode only — unused here */
+  --palette-warning-dark: oklch(0.8 0.14 105);         /* deliberately unused in this direction */
+  --palette-destructive-dark: oklch(0.63 0.23 20.65);  /* deliberately unused: "against" is set in ink, not red */
+  --palette-gray-300: oklch(0.7 0.01 250);
+  --palette-gray-400: oklch(0.6 0.01 250);
+  --palette-gray-500: oklch(0.5 0.01 250);
+  --palette-gray-600: oklch(0.4 0.01 250);
+  --palette-gray-700: oklch(0.35 0.01 250);
+  --palette-gray-800: oklch(0.15 0.008 250);
+  --palette-gray-900: oklch(0.13 0.008 250);
+  --palette-gray-950: oklch(0.09 0.005 250);
+
+  /* ---- terminal tokens (tokens.css .dark) ---- */
+  --terminal-bg: var(--palette-gray-900);
+  --terminal-bg-subtle: var(--palette-gray-950);
+  --terminal-bg-header: var(--palette-gray-800);
+  --terminal-bg-footer: oklch(0.12 0.008 250);
+  --terminal-text: oklch(0.95 0.005 250);
+  --terminal-text-muted: var(--palette-gray-300);
+  --terminal-text-faint: var(--palette-gray-500);
+  --terminal-accent: var(--palette-lime-dark);
+  --terminal-border-subtle: oklch(0.68 0.18 130.85 / 0.2);
+  --terminal-cursor: var(--palette-lime-dark);
+  --color-primary: var(--palette-lime-dark);
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace; /* production face; prototype can't load webfonts */
+  --radius: 0.4rem;                                      /* this direction uses 0 — see memo */
+  --container-width: 80rem;
+
+  /* ---- src/app.css ---- */
+  --ease-swift: cubic-bezier(0, 0.7, 0.1, 1);
+  /* ---- src/styles/crt-effect.css ---- */
+  --crt-scanline-opacity: 0.04;
+
+  /* ---- NEW: Quiet Terminal semantic layer (derived only from the tokens above) ---- */
+  --q-ground: var(--terminal-bg-subtle);          /* NEW page ground (near-black) */
+  --q-panel: var(--terminal-bg);                  /* NEW row hover, sheet */
+  --q-raised: var(--terminal-bg-header);          /* NEW controls, skeleton */
+  --q-ink: var(--terminal-text);                  /* NEW primary text + "against" */
+  --q-ink-2: var(--terminal-text-muted);          /* NEW secondary text */
+  --q-ink-3: var(--palette-gray-400);             /* NEW smallest legible tier (AA on ground) */
+  --q-rule: oklch(0.95 0.005 250 / 0.09);         /* NEW hairline */
+  --q-rule-2: oklch(0.95 0.005 250 / 0.2);        /* NEW section rule */
+  --q-for: var(--terminal-accent);                /* NEW sentiment: for (the only chroma on the page) */
+  --q-shrug: var(--palette-gray-500);             /* NEW sentiment: shrug (marks, not text) */
+  --q-against: var(--terminal-text);              /* NEW sentiment: against (ink) */
+  --q-scrim: oklch(0.09 0.005 250 / 0.72);        /* NEW sheet scrim (flat, no blur) */
+  --q-scanline: oklch(1 0 0 / 0.02);              /* NEW = --crt-scanline-opacity * 0.5, white lines on near-black */
+  --q-font: ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace; /* NEW */
+  /* NEW type scale: one enormous size, everything else small and exact */
+  --q-fs-micro: 11px;
+  --q-fs-small: 12.5px;
+  --q-fs-body: 14px;
+  --q-fs-lead: 16.5px;
+  --q-fs-h2: 22px;
+  --q-fs-figure: clamp(26px, 2.6vw, 36px);
+  --q-fs-readout: clamp(44px, 5.2vw, 76px);
+  --q-fs-pct: clamp(30px, 4.6vw, 70px);
+  --q-fs-verdict: clamp(88px, 15.6vw, 238px);
+  /* NEW motion */
+  --q-dur-1: 160ms;
+  --q-dur-2: 420ms;
+  --q-dur-3: 560ms;
+  --q-stagger: 70ms;
+  /* NEW layout */
+  --q-wrap: 1328px;
+  --q-gutter: 56px;
+  --q-header-h: 48px;
+}
+
+/* ---------------------------------------------------------------- base */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--q-ground); -webkit-text-size-adjust: 100%; }
+.fx-on { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--q-ground);
+  color: var(--q-ink);
+  font: 400 var(--q-fs-body)/1.55 var(--q-font);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--q-for); color: var(--q-ground); }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--q-ink); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { max-width: var(--q-wrap); margin: 0 auto; padding: 0 var(--q-gutter); }
+.micro { font-size: var(--q-fs-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--q-ink-3); font-weight: 500; }
+.t-for { color: var(--q-for); }
+.t-shrug { color: var(--q-ink-3); }
+.t-against { color: var(--q-against); }
+
+.skip { position: absolute; left: 12px; top: -40px; z-index: 100; background: var(--q-ink); color: var(--q-ground); padding: 6px 10px; }
+.skip:focus { top: 8px; }
+
+/* Brand scanlines: static, not rolling. Dies with FX off. */
+.scanlines {
+  position: fixed; inset: 0; z-index: 85; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, var(--q-scanline) 2px 3px);
+  transition: opacity var(--q-dur-2) var(--ease-swift);
+}
+.fx-off .scanlines { opacity: 0; }
+
+/* Line-draw primitive: the only "travel" this direction allows besides 1px. */
+.draw { display: block; transform-origin: left center; }
+
+/* ------------------------------------------------------- entrance system */
+.js.fx-on [data-enter] { opacity: 0; transform: translateY(1px); }
+.js.fx-on [data-enter].in {
+  opacity: 1; transform: none;
+  transition: opacity var(--q-dur-2) var(--ease-swift) var(--d, 0ms), transform var(--q-dur-2) var(--ease-swift) var(--d, 0ms);
+}
+.js.fx-on [data-enter] .draw { transform: scaleX(0); }
+.js.fx-on [data-enter].in .draw {
+  transform: scaleX(1);
+  transition: transform var(--q-dur-3) var(--ease-swift) calc(var(--d, 0ms) + var(--dd, 0ms));
+}
+/* verdict word: one typographic character stagger (opacity + 1px), nothing else */
+.js.fx-on .verdict[data-enter] { opacity: 1; transform: none; }
+.js.fx-on .verdict:not(.in) .ch { opacity: 0; transform: translateY(1px); }
+.js.fx-on .verdict.in .ch {
+  transition: opacity 380ms var(--ease-swift) calc(var(--d, 0ms) + var(--i) * 60ms), transform 380ms var(--ease-swift) calc(var(--d, 0ms) + var(--i) * 60ms);
+}
+
+/* FX OFF: no travel, no fades, no delays. Colour feedback on controls stays (it is not theatre). */
+.fx-off *, .fx-off *::before, .fx-off *::after { transition-delay: 0s !important; transition-duration: 0s !important; animation: none !important; }
+
+/* ----------------------------------------------------------------- veil
+   verdict-veil + comprehensive-loader fused: the load log IS the veil. */
+.veil {
+  position: fixed; inset: 0; z-index: 90; background: var(--q-ground);
+  display: flex; flex-direction: column; cursor: pointer;
+}
+.veil[hidden] { display: none; }
+.veil-inner { width: 100%; padding-top: calc(var(--q-header-h) + 18vh); }
+.veil-q {
+  margin: 0; font-size: clamp(40px, 6.2vw, 92px); font-weight: 700; line-height: 1;
+  letter-spacing: -0.05em; word-spacing: -0.25em; opacity: 0;
+}
+.veil-rule { position: relative; height: 1px; margin: 28px 0 22px; background: var(--q-rule); }
+.veil-rule .draw { height: 1px; background: var(--q-ink); transform: scaleX(0); }
+.veil-log { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-width: 520px; font-size: var(--q-fs-small); color: var(--q-ink-3); }
+.veil-log li { display: grid; grid-template-columns: 4ch 1fr 4ch 6ch; gap: 12px; opacity: 0; transform: translateY(1px); }
+.veil-log li span:nth-child(3), .veil-log li span:nth-child(4) { text-align: right; }
+.veil-log .ok { color: var(--q-ink-2); }
+.veil-foot { display: flex; justify-content: space-between; max-width: 520px; margin-top: 18px; font-size: var(--q-fs-small); }
+.veil-ready { color: var(--q-ink); opacity: 0; }
+.veil-skip { color: var(--q-ink-3); }
+.veil.is-on .veil-q { opacity: 1; transition: opacity 140ms linear; }
+.veil.is-on .veil-rule .draw { transform: scaleX(1); transition: transform 500ms var(--ease-swift) 80ms; }
+.veil.is-on .veil-log li { opacity: 1; transform: none; transition: opacity 160ms var(--ease-swift) calc(120ms + var(--i) * 70ms), transform 160ms var(--ease-swift) calc(120ms + var(--i) * 70ms); }
+.veil.is-ready .veil-ready { opacity: 1; transition: opacity 80ms linear; }
+.veil.is-lift { transform: translateY(-100%); transition: transform 460ms var(--ease-swift); }
+
+/* --------------------------------------------------------------- header */
+.top { position: sticky; top: 0; z-index: 40; background: var(--q-ground); border-bottom: 1px solid var(--q-rule); }
+.top-row { height: var(--q-header-h); display: flex; align-items: center; gap: 28px; font-size: var(--q-fs-small); }
+.brand { text-decoration: none; font-weight: 700; color: var(--q-ink); letter-spacing: -0.01em; }
+.brand span { color: var(--q-ink-3); font-weight: 400; }
+.nav { display: flex; gap: 22px; }
+.nav a, .ul {
+  position: relative; text-decoration: none; color: var(--q-ink-2);
+  transition: color var(--q-dur-1) var(--ease-swift);
+}
+.nav a::after, .ul::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: left; transition: transform var(--q-dur-2) var(--ease-swift);
+}
+.nav a:hover, .nav a:focus-visible, .ul:hover, .ul:focus-visible { color: var(--q-ink); }
+.nav a:hover::after, .nav a:focus-visible::after, .ul:hover::after, .ul:focus-visible::after { transform: scaleX(1); }
+.run { margin-left: auto; color: var(--q-ink-3); white-space: nowrap; }
+.run b { color: var(--q-ink-2); font-weight: 500; }
+
+/* ----------------------------------------------------------------- hero */
+.hero { padding: 64px 0 44px; }
+.hero-top { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+.hero-q { grid-column: 1 / 8; margin: 0; font-size: 20px; font-weight: 500; color: var(--q-ink-2); letter-spacing: -0.01em; }
+.hero-q .quote { color: var(--q-ink); }
+.rule-defs { grid-column: 9 / 13; margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; font-size: var(--q-fs-micro); color: var(--q-ink-3); letter-spacing: 0.04em; }
+.rule-defs dt { color: var(--q-ink-2); text-transform: uppercase; letter-spacing: 0.12em; }
+.rule-defs dd { margin: 0; }
+.flag { min-height: 20px; margin-top: 10px; font-size: var(--q-fs-small); color: var(--q-ink-3); visibility: hidden; }
+.flag.on { visibility: visible; }
+.flag button { color: var(--q-ink); }
+.verdict {
+  margin: 6px 0 52px -0.055em; font-size: var(--q-fs-verdict); font-weight: 800; line-height: 0.84;
+  letter-spacing: -0.065em; display: flex; flex-wrap: wrap; column-gap: 0.26em; color: var(--q-ink);
+  transition: color var(--q-dur-2) var(--ease-swift);
+}
+.verdict .w { display: inline-flex; white-space: nowrap; }
+.verdict .ch { display: inline-block; }
+.verdict.is-yes { color: var(--q-for); }
+
+.breakdown { position: relative; display: grid; transition: none; }
+.bd-col { min-width: 0; padding-right: 18px; }
+.bd-rule { height: 3px; margin-right: 4px; }
+.bd-rule.draw { background: currentColor; }
+.bd-col[data-k="f"] { color: var(--q-for); }
+.bd-col[data-k="s"] { color: var(--q-shrug); }
+.bd-col[data-k="a"] { color: var(--q-against); }
+.bd-head { display: flex; align-items: baseline; gap: 8px; margin-top: 14px; font-size: var(--q-fs-micro); text-transform: uppercase; letter-spacing: 0.12em; color: var(--q-ink-2); white-space: nowrap; }
+.bd-head .sg { font-size: 13px; letter-spacing: 0; }
+.bd-col[data-k="f"] .sg { color: var(--q-for); }
+.bd-col[data-k="s"] .sg { color: var(--q-ink-3); }
+.bd-col[data-k="a"] .sg { color: var(--q-ink); }
+.bd-pct { display: block; margin-top: 6px; font-size: var(--q-fs-pct); font-weight: 650; line-height: 1; letter-spacing: -0.05em; color: var(--q-ink); white-space: nowrap; }
+.bd-pct small { font-size: 0.4em; font-weight: 500; letter-spacing: 0; color: var(--q-ink-3); vertical-align: 0.95em; margin-left: 0.1em; }
+.bd-sub { display: block; margin-top: 8px; font-size: var(--q-fs-small); color: var(--q-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bd-track { display: none; }
+.bd-mid { position: absolute; left: 50%; top: -24px; height: 31px; border-left: 1px solid var(--q-ink-2); pointer-events: none; }
+.bd-mid span { position: absolute; left: 7px; top: -3px; font-size: var(--q-fs-micro); color: var(--q-ink-2); white-space: nowrap; letter-spacing: 0.04em; }
+
+.gloss { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-top: 40px; align-items: end; }
+.gloss-text { grid-column: 1 / 8; margin: 0; font-size: var(--q-fs-lead); line-height: 1.6; color: var(--q-ink-2); max-width: 60ch; }
+.gloss-text b { color: var(--q-ink); font-weight: 600; }
+.dist { grid-column: 9 / 13; display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--q-rule-2); padding-top: 12px; }
+.dist-v { font-size: var(--q-fs-figure); font-weight: 650; letter-spacing: -0.04em; }
+.dist-l { font-size: var(--q-fs-small); color: var(--q-ink-3); line-height: 1.4; }
+
+/* ---------------------------------------------------------- stats ledger */
+.ledger { border-top: 1px solid var(--q-rule-2); border-bottom: 1px solid var(--q-rule); }
+.ledger dl { margin: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.ledger .cell { padding: 16px 18px 18px; border-left: 1px solid var(--q-rule); min-width: 0; }
+.ledger .cell:first-child { border-left: 0; padding-left: 0; }
+.ledger dt { font-size: var(--q-fs-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--q-ink-3); white-space: nowrap; }
+.ledger dd { margin: 6px 0 0; }
+.ledger .v { display: block; font-size: 26px; font-weight: 650; letter-spacing: -0.04em; line-height: 1.1; }
+.ledger .n { display: block; margin-top: 4px; font-size: var(--q-fs-small); color: var(--q-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ------------------------------------------------------------- sections */
+.sec { padding: 104px 0 0; }
+.sec-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; padding-bottom: 14px; border-bottom: 1px solid var(--q-rule-2); position: relative; }
+.sec-head h2 { grid-column: 1 / 5; margin: 0; font-size: var(--q-fs-h2); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+.sec-head p { grid-column: 5 / 13; margin: 0; font-size: var(--q-fs-small); color: var(--q-ink-3); text-align: right; }
+.sec-head .draw { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--q-ink-2); }
+
+/* ----------------------------------------------------------- scrollback */
+.sb { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-top: 28px; }
+.readout { grid-column: 1 / 5; display: flex; flex-direction: column; min-width: 0; }
+.ro-date { font-size: var(--q-fs-small); color: var(--q-ink-2); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.ro-date .pin { color: var(--q-ink-3); }
+.ro-word { margin: 6px 0 22px -0.04em; font-size: var(--q-fs-readout); font-weight: 800; letter-spacing: -0.06em; line-height: 0.95; white-space: nowrap; }
+.ro-word.is-yes { color: var(--q-for); }
+.ro-rows { margin: 0; display: grid; grid-template-columns: 2ch auto 1fr auto; gap: 7px 12px; align-items: baseline; font-size: var(--q-fs-small); border-top: 1px solid var(--q-rule); padding-top: 12px; }
+.ro-rows dt { display: contents; }
+.ro-rows .lbl { color: var(--q-ink-2); }
+.ro-rows dd { margin: 0; text-align: right; font-weight: 600; font-size: 15px; }
+.ro-rows .strip { overflow: hidden; }
+.ro-delta { margin-top: 14px; font-size: var(--q-fs-small); color: var(--q-ink-3); }
+.ro-delta b { color: var(--q-ink-2); font-weight: 500; }
+.ro-note { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--q-rule); font-size: var(--q-fs-small); line-height: 1.6; color: var(--q-ink-2); min-height: 7.4em; }
+.ro-keys { margin-top: auto; padding-top: 16px; font-size: var(--q-fs-micro); color: var(--q-ink-3); letter-spacing: 0.04em; }
+.ro-keys kbd { font: inherit; color: var(--q-ink-2); border: 1px solid var(--q-rule-2); padding: 0 4px; }
+.ro-today { color: var(--q-ink); font-size: var(--q-fs-small); }
+.ro-today[disabled] { color: var(--q-ink-3); cursor: default; }
+
+.chart-wrap { grid-column: 5 / 13; min-width: 0; }
+.chart-legend { display: flex; gap: 22px; justify-content: flex-end; font-size: var(--q-fs-micro); color: var(--q-ink-3); letter-spacing: 0.06em; margin-bottom: 6px; }
+.chart-legend i { display: inline-block; width: 18px; height: 0; border-top: 2px solid; vertical-align: middle; margin-right: 6px; }
+.chart { position: relative; cursor: crosshair; touch-action: pan-y; }
+.chart:focus-visible { outline-offset: 6px; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart text { font-family: var(--q-font); font-size: 10.5px; fill: var(--q-ink-3); }
+.chart .grid { stroke: var(--q-rule); stroke-width: 1; }
+.chart .line50 { stroke: var(--q-ink-2); stroke-width: 1; stroke-dasharray: 3 4; }
+.chart .lbl50 { fill: var(--q-ink-2); }
+.chart .ln { fill: none; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.chart .ln-f { stroke: var(--q-for); stroke-width: 1.75; }
+.chart .ln-a { stroke: var(--q-against); stroke-width: 1.25; }
+.js.fx-on .chart-wrap:not(.in) .ln { stroke-dashoffset: 1; }
+.js.fx-on .chart-wrap.in .ln { transition: stroke-dashoffset 1100ms var(--ease-swift) 120ms; }
+.js.fx-on .chart-wrap.in .ln-a { transition-delay: 220ms; }
+.chart .vol { fill: var(--q-ink-3); opacity: 0.45; }
+.chart .vol.sel { fill: var(--q-ink); opacity: 1; }
+.chart .ev line { stroke: var(--q-ink-3); stroke-width: 1; stroke-dasharray: 1 3; }
+.chart .ev text { fill: var(--q-ink-2); }
+.chart .cur line { stroke: var(--q-ink); stroke-width: 1; }
+.chart .cur .dot-f { fill: var(--q-for); }
+.chart .cur .dot-a { fill: var(--q-ink); }
+.chart .cur text { fill: var(--q-ink); }
+.chart .cur { transition: opacity var(--q-dur-1) linear; }
+.chart .hit { fill: transparent; }
+
+/* -------------------------------------------------------------- entries */
+.toolbar { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin: 22px 0 10px; font-size: var(--q-fs-small); }
+.seg { display: flex; gap: 2px; }
+.seg button { padding: 5px 10px; color: var(--q-ink-2); border: 1px solid transparent; transition: color var(--q-dur-1) var(--ease-swift), border-color var(--q-dur-1) var(--ease-swift); }
+.seg button:hover { color: var(--q-ink); border-color: var(--q-rule-2); }
+.seg button[aria-pressed="true"] { color: var(--q-ink); border-color: var(--q-ink-2); }
+.seg .ct { color: var(--q-ink-3); margin-left: 6px; }
+.grep { display: flex; align-items: baseline; gap: 8px; margin-left: auto; color: var(--q-ink-3); border-bottom: 1px solid var(--q-rule-2); transition: border-color var(--q-dur-1) var(--ease-swift); }
+.grep:focus-within { border-color: var(--q-ink); }
+.grep input { font: inherit; color: var(--q-ink); background: transparent; border: 0; outline: 0; width: 22ch; padding: 4px 0; }
+.grep input::placeholder { color: var(--q-ink-3); }
+.sort-m { display: none; }
+.count { font-size: var(--q-fs-small); color: var(--q-ink-3); margin: 0 0 8px; }
+
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-size: var(--q-fs-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--q-ink-3); font-weight: 500; text-align: left; padding: 0 12px 10px; border-bottom: 1px solid var(--q-rule-2); white-space: nowrap; }
+.tbl th.num, .tbl td.num { text-align: right; }
+.tbl th:first-child, .tbl td:first-child { padding-left: 0; }
+.tbl th:last-child, .tbl td:last-child { padding-right: 0; text-align: right; }
+.th-btn { text-transform: inherit; letter-spacing: inherit; color: inherit; position: relative; }
+.th-btn:hover { color: var(--q-ink); }
+.th-btn .dir { display: inline-block; width: 1ch; color: var(--q-ink); }
+th[aria-sort="ascending"] .th-btn, th[aria-sort="descending"] .th-btn { color: var(--q-ink); }
+.tbl td { padding: 15px 12px 14px; border-bottom: 1px solid var(--q-rule); vertical-align: top; }
+.row { cursor: pointer; transition: background-color var(--q-dur-1) var(--ease-swift); }
+.row:hover, .row:focus-within { background: var(--q-panel); }
+.js.fx-on .tbl-wrap:not(.in) .row { opacity: 0; transform: translateY(1px); }
+.js.fx-on .tbl-wrap.in .row { transition: opacity var(--q-dur-2) var(--ease-swift) calc(var(--r) * 60ms), transform var(--q-dur-2) var(--ease-swift) calc(var(--r) * 60ms), background-color var(--q-dur-1) var(--ease-swift); }
+.c-rank { width: 4ch; color: var(--q-ink-3); font-size: var(--q-fs-small); padding-top: 17px !important; }
+.c-entry { min-width: 0; }
+.entry { text-align: left; font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; color: var(--q-ink); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 4px; text-decoration-thickness: 1px; transition: text-decoration-color var(--q-dur-1) var(--ease-swift); }
+.row:hover .entry, .entry:focus-visible { text-decoration-color: var(--q-ink-2); }
+.entry .go { display: inline-block; margin-left: 8px; color: var(--q-ink-2); opacity: 0; transform: translateX(-1px); transition: opacity var(--q-dur-1) var(--ease-swift), transform var(--q-dur-1) var(--ease-swift); }
+.row:hover .go, .entry:focus-visible .go { opacity: 1; transform: none; }
+.meta { display: block; margin-top: 3px; font-size: var(--q-fs-small); color: var(--q-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 64ch; }
+.meta .dom { color: var(--q-ink-2); }
+.num { font-size: var(--q-fs-body); white-space: nowrap; padding-top: 16px !important; }
+.c-strip { white-space: nowrap; padding-top: 16px !important; }
+.strip { font-size: 13px; letter-spacing: 0; white-space: nowrap; }
+.strip .sf { color: var(--q-for); }
+.strip .ss { color: var(--q-shrug); }
+.strip .sa { color: var(--q-against); }
+.c-net { font-weight: 600; }
+.c-date { color: var(--q-ink-2); }
+.net-pos { color: var(--q-for); }
+.net-zero { color: var(--q-ink-2); }
+.empty td { padding: 48px 0; text-align: left; color: var(--q-ink-2); font-size: var(--q-fs-lead); cursor: default; }
+.empty button { color: var(--q-ink); }
+
+/* -------------------------------------------------------- details sheet */
+.scrim { position: fixed; inset: 0; z-index: 70; background: var(--q-scrim); opacity: 0; visibility: hidden; transition: opacity var(--q-dur-2) var(--ease-swift), visibility 0s linear var(--q-dur-2); }
+.scrim.open { opacity: 1; visibility: visible; transition: opacity var(--q-dur-2) var(--ease-swift); }
+.sheet {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 75; width: min(620px, 100vw);
+  background: var(--q-panel); border-left: 1px solid var(--q-rule-2); overflow-y: auto; overscroll-behavior: contain;
+  transform: translateX(100%); visibility: hidden;
+  transition: transform var(--q-dur-2) var(--ease-swift), visibility 0s linear var(--q-dur-2);
+}
+.sheet.open { transform: none; visibility: visible; transition: transform var(--q-dur-2) var(--ease-swift); }
+.sh-in { padding: 22px 36px 48px; }
+.sh-bar { display: flex; align-items: center; gap: 18px; font-size: var(--q-fs-small); color: var(--q-ink-3); padding-bottom: 14px; border-bottom: 1px solid var(--q-rule); }
+.sh-bar .sp { margin-right: auto; letter-spacing: 0.12em; text-transform: uppercase; font-size: var(--q-fs-micro); }
+.sh-bar button { color: var(--q-ink-2); }
+.sh-bar button:hover { color: var(--q-ink); }
+.sh-bar button[disabled] { color: var(--q-ink-3); opacity: 0.5; cursor: default; }
+.sh-title { margin: 26px 0 10px; font-size: 20px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sh-meta { font-size: var(--q-fs-small); color: var(--q-ink-3); }
+.sh-meta b { color: var(--q-ink-2); font-weight: 500; }
+.sh-sec { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--q-rule); }
+.sh-sec > .micro { display: block; margin-bottom: 10px; }
+.sh-thesis { margin: 0; font-size: 15px; line-height: 1.6; color: var(--q-ink); }
+.sh-strip { font-size: 15px; display: block; margin-bottom: 10px; white-space: nowrap; overflow: hidden; }
+.mini { display: grid; }
+.mini .bd-col { padding-right: 10px; }
+.mini .bd-pct { font-size: 30px; }
+.mini .bd-head { margin-top: 8px; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); margin: 18px 0 0; border-top: 1px solid var(--q-rule); }
+.metrics div { padding: 10px 12px 0 0; }
+.metrics div + div { padding-left: 14px; border-left: 1px solid var(--q-rule); }
+.metrics dt { font-size: var(--q-fs-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--q-ink-3); }
+.metrics dd { margin: 4px 0 0; font-size: 20px; font-weight: 650; letter-spacing: -0.03em; }
+.quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.quotes li { padding-left: 16px; border-left: 2px solid var(--q-shrug); }
+.quotes li[data-k="f"] { border-left-color: var(--q-for); }
+.quotes li[data-k="a"] { border-left-color: var(--q-against); }
+.quotes blockquote { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--q-ink); }
+.quotes .cite { display: block; margin-top: 4px; font-size: var(--q-fs-small); color: var(--q-ink-3); }
+.sh-links { display: flex; gap: 24px; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--q-rule); font-size: var(--q-fs-small); }
+.js.fx-on .sheet .stg { opacity: 0; transform: translateY(1px); }
+.js.fx-on .sheet.ready .stg { opacity: 1; transform: none; transition: opacity var(--q-dur-2) var(--ease-swift) calc(var(--i) * 70ms), transform var(--q-dur-2) var(--ease-swift) calc(var(--i) * 70ms); }
+.skel { display: none; padding-top: 26px; }
+.sheet.loading .skel { display: block; }
+.sheet.loading .sh-body { display: none; }
+.skel span { display: block; height: 12px; background: var(--q-raised); margin-bottom: 12px; }
+.skel p { font-size: var(--q-fs-small); color: var(--q-ink-3); margin: 18px 0 0; }
+
+/* ---------------------------------------------------------------- footer */
+.foot { margin-top: 120px; padding-bottom: 80px; }
+.foot-rule { position: relative; height: 1px; background: var(--q-rule); }
+.foot-rule .draw { height: 1px; background: var(--q-ink-2); }
+.foot-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 26px; }
+.foot-dl { grid-column: 1 / 9; margin: 0; display: grid; grid-template-columns: 13ch 1fr; gap: 9px 18px; font-size: var(--q-fs-small); }
+.foot-dl dt { font-size: var(--q-fs-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--q-ink-3); padding-top: 1px; }
+.foot-dl dd { margin: 0; color: var(--q-ink-2); }
+.foot-dl kbd { font: inherit; color: var(--q-ink); }
+.foot-sum { grid-column: 9 / 13; text-align: right; }
+.foot-sum .micro { display: block; }
+.foot-sum .big { display: block; font-size: 56px; font-weight: 750; letter-spacing: -0.06em; line-height: 1; margin-top: 8px; }
+.foot-sum .eq { display: block; margin-top: 8px; font-size: var(--q-fs-small); color: var(--q-ink-3); white-space: nowrap; }
+
+/* -------------------------------------------------------------- controls */
+.controls {
+  position: fixed; left: 16px; bottom: 16px; z-index: 95; display: flex; align-items: center; gap: 0;
+  background: var(--q-raised); border: 1px solid var(--q-rule-2); font-size: var(--q-fs-micro); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.ctl { position: relative; padding: 8px 12px; color: var(--q-ink-2); transition: color var(--q-dur-1) var(--ease-swift); white-space: nowrap; }
+.ctl + .ctl { border-left: 1px solid var(--q-rule-2); }
+.ctl::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--q-dur-2) var(--ease-swift); }
+.ctl:hover, .ctl:focus-visible { color: var(--q-ink); }
+.ctl:hover::after, .ctl:focus-visible::after { transform: scaleX(1); }
+.ctl b { font-weight: 700; color: var(--q-ink); }
+.ctl[aria-pressed="true"] b { color: var(--q-for); }
+.ctl[disabled] { color: var(--q-ink-3); cursor: not-allowed; }
+.ctl[disabled] b { color: var(--q-ink-3); }
+.ctl .k { border: 1px solid var(--q-rule-2); padding: 0 4px; margin-right: 6px; }
+.ctl-flash { animation: ctl-flash 360ms var(--ease-swift); }
+@keyframes ctl-flash { from { opacity: 0.35; } to { opacity: 1; } }
+.status { position: fixed; left: 16px; bottom: 54px; z-index: 95; font-size: var(--q-fs-small); color: var(--q-ink-2); opacity: 0; transform: translateY(1px); transition: opacity var(--q-dur-2) var(--ease-swift), transform var(--q-dur-2) var(--ease-swift); pointer-events: none; }
+.status.on { opacity: 1; transform: none; }
+
+/* ------------------------------------------------------------ 768 band */
+@media (max-width: 1024px) {
+  :root { --q-gutter: 32px; }
+  .nav { display: none; }
+  .hero-q { grid-column: 1 / 13; }
+  .rule-defs { grid-column: 1 / 13; margin-top: 16px; grid-template-columns: repeat(3, auto 1fr); }
+  .hero-top { align-items: start; }
+  .gloss-text { grid-column: 1 / 13; }
+  .dist { grid-column: 1 / 13; margin-top: 22px; }
+  .ledger dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ledger .cell:nth-child(4) { border-left: 0; padding-left: 0; }
+  .ledger .cell:nth-child(n+4) { border-top: 1px solid var(--q-rule); }
+  .sb { grid-template-columns: 1fr; }
+  .readout, .chart-wrap { grid-column: 1 / -1; }
+  .readout { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; margin-bottom: 26px; }
+  .ro-date, .ro-word { grid-column: 1; }
+  .ro-rows { grid-column: 2; grid-row: 1 / 3; align-self: end; }
+  .ro-delta, .ro-note, .ro-keys { grid-column: 1 / -1; }
+  .ro-note { min-height: 0; }
+  .c-rank, .tbl th:first-child { display: none; }
+  .tbl th:nth-child(2), .tbl td:nth-child(2) { padding-left: 0; }
+  .c-date, .th-date { display: none; }
+  .tbl th.th-net, .tbl td.c-net { padding-right: 0; text-align: right; }
+  .meta { max-width: 44ch; }
+  .sec { padding-top: 88px; }
+  .sec-head h2 { grid-column: 1 / 13; }
+  .sec-head p { grid-column: 1 / 13; text-align: left; margin-top: 6px; }
+}
+
+/* ------------------------------------------------------- 390 composition */
+@media (max-width: 640px) {
+  :root { --q-gutter: 18px; --q-header-h: 44px; }
+  .run .long { display: none; }
+  .hero { padding: 36px 0 32px; }
+  .hero-q { font-size: 17px; }
+  .rule-defs { grid-template-columns: auto 1fr; }
+  .verdict { font-size: 27.5vw; flex-direction: column; line-height: 0.86; margin-bottom: 40px; }
+  .breakdown { grid-template-columns: 1fr !important; row-gap: 18px; }
+  .breakdown > .bd-mid { display: none; }
+  .bd-col { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding-right: 0; }
+  .bd-col .bd-rule { display: none; }
+  .bd-head { grid-column: 1; grid-row: 1; margin-top: 0; }
+  .bd-pct { grid-column: 2; grid-row: 1 / 3; font-size: 44px; margin-top: 0; text-align: right; }
+  .bd-sub { grid-column: 1; grid-row: 2; margin-top: 2px; }
+  .bd-track { display: block; grid-column: 1 / -1; position: relative; height: 3px; margin-top: 10px; background: var(--q-rule); }
+  .bd-track .fill { position: absolute; inset: 0; background: currentColor; transform-origin: left; transform: scaleX(var(--s, 0)); }
+  .bd-track::after { content: ""; position: absolute; left: 50%; top: -4px; height: 11px; border-left: 1px solid var(--q-ink-2); }
+  .mini .bd-pct { font-size: 28px; }
+  .gloss { margin-top: 30px; }
+  .ledger dl { grid-template-columns: 1fr 1fr; }
+  .ledger .cell { padding: 14px 0 14px 14px; }
+  .ledger .cell:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .ledger .cell:nth-child(4) { border-left: 1px solid var(--q-rule); padding-left: 14px; }
+  .ledger .cell:nth-child(n+3) { border-top: 1px solid var(--q-rule); }
+  .ledger .v { font-size: 22px; }
+  .sec { padding-top: 72px; }
+  .readout { display: flex; }
+  .ro-word { font-size: 52px; }
+  .chart-legend { justify-content: flex-start; flex-wrap: wrap; gap: 6px 16px; }
+  .toolbar { gap: 12px; }
+  .seg { width: 100%; overflow-x: auto; }
+  .grep { margin-left: 0; flex: 1; }
+  .grep input { width: 100%; }
+  .sort-m { display: flex; align-items: baseline; gap: 6px; color: var(--q-ink-3); }
+  .sort-m select { font: inherit; color: var(--q-ink); background: var(--q-ground); border: 0; border-bottom: 1px solid var(--q-rule-2); padding: 4px 0; }
+  .tbl thead { display: none; }
+  .tbl, .tbl tbody { display: block; }
+  .tbl tr.row { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--q-rule); }
+  .tbl tr.row td { display: block; border: 0; padding: 0 !important; text-align: left; }
+  .tbl td.c-entry { grid-column: 1 / -1; }
+  .meta { max-width: 100%; }
+  .tbl td.c-strip { grid-column: 1; margin-top: 10px; }
+  .tbl td.c-net { grid-column: 2; margin-top: 10px; text-align: right; }
+  .tbl td.c-pts { grid-column: 1; margin-top: 4px; font-size: var(--q-fs-small); color: var(--q-ink-3); }
+  .tbl td.c-pts::after { content: " pts"; }
+  .tbl td.c-cmt { grid-column: 2; margin-top: 4px; font-size: var(--q-fs-small); color: var(--q-ink-3); text-align: right; }
+  .tbl td.c-cmt::after { content: " comments"; }
+  .tbl tr.empty { display: block; }
+  .tbl tr.empty td { display: block; }
+  .sh-in { padding: 16px 18px 72px; }
+  .metrics dd { font-size: 17px; }
+  .foot-dl { grid-column: 1 / -1; grid-template-columns: 1fr; gap: 2px; }
+  .foot-dl dd { margin-bottom: 10px; }
+  .foot-sum { grid-column: 1 / -1; text-align: left; margin-top: 18px; }
+  .foot { padding-bottom: 96px; }
+  .controls { left: 0; right: 0; bottom: 0; border-left: 0; border-right: 0; border-bottom: 0; justify-content: space-between; }
+  .ctl { flex: 1; text-align: center; padding: 12px 6px; }
+  .status { left: 18px; bottom: 50px; }
+}
+
+/* ---------------------------------------------------- reduced motion:
+   content stays, travel drops. Fades remain (opacity only). */
+@media (prefers-reduced-motion: reduce) {
+  .fx-on { scroll-behavior: auto; }
+  .js.fx-on [data-enter], .js.fx-on .verdict:not(.in) .ch, .js.fx-on .tbl-wrap:not(.in) .row, .js.fx-on .sheet .stg { transform: none !important; }
+  .js.fx-on [data-enter] .draw { transform: none; }
+  .js.fx-on .chart-wrap:not(.in) .ln { stroke-dashoffset: 0; }
+  .veil.is-on .veil-rule .draw { transform: scaleX(1); transition: none; }
+  .veil.is-lift { transform: none; opacity: 0; transition: opacity 200ms linear; }
+  .sheet { transform: none; opacity: 0; transition: opacity var(--q-dur-1) linear, visibility 0s linear var(--q-dur-1); }
+  .sheet.open { opacity: 1; transition: opacity var(--q-dur-1) linear; }
+  .entry .go, .status, .nav a::after, .ul::after, .ctl::after { transform: none; }
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add("js", "fx-on");</script>
+<a class="skip" href="#entries">Skip to the articles</a>
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- verdict-veil.svelte + comprehensive-loader.svelte, fused: one overlay, the loader is its progress rule -->
+<div class="veil" id="veil" role="status" aria-label="Loading the verdict" hidden>
+  <div class="wrap veil-inner">
+    <p class="veil-q">Is AI &ldquo;good&rdquo; yet?</p>
+    <div class="veil-rule"><span class="draw"></span></div>
+    <ol class="veil-log" aria-hidden="true">
+      <li style="--i:0"><span>GET</span><span>verdict.json</span><span class="ok">200</span><span>4 ms</span></li>
+      <li style="--i:1"><span>GET</span><span>articles.json</span><span class="ok">200</span><span>11 ms</span></li>
+      <li style="--i:2"><span>GET</span><span>history.json</span><span class="ok">200</span><span>9 ms</span></li>
+    </ol>
+    <div class="veil-foot"><span class="veil-ready">ready.</span><span class="veil-skip">esc or click to skip</span></div>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="#verdict">is-ai-good-yet <span>/ v1.2</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#verdict">verdict</a>
+      <a href="#scrollback">scrollback</a>
+      <a href="#entries">entries</a>
+      <a href="#method">method</a>
+    </nav>
+    <p class="run"><span class="long">run <b>#1,094</b> &middot; </span>updated <b><time datetime="2026-11-20T04:00Z">2026-11-20 04:00 UTC</time></b></p>
+  </div>
+</header>
+
+<main>
+  <!-- verdict-display.svelte -->
+  <section class="hero" id="verdict" aria-labelledby="q">
+    <div class="wrap">
+      <div class="hero-top">
+        <h1 class="hero-q" id="q" data-enter style="--d:0ms">Is AI <span class="quote">&ldquo;good&rdquo;</span> yet? Hacker News, asked daily.</h1>
+        <dl class="rule-defs" data-enter style="--d:120ms" aria-label="How the verdict is decided">
+          <dt>yes</dt><dd>when <span class="t-for">for</span> &ge; 50.0% of weighted sentiment</dd>
+          <dt>no</dt><dd>when against &ge; 50.0%</dd>
+          <dt>not yet</dt><dd>everything else, so far</dd>
+        </dl>
+      </div>
+      <p class="flag" id="flag" aria-live="polite"><span id="flag-text"></span> <button type="button" class="ul" id="flag-today">return to today</button></p>
+      <p class="verdict" id="verdict-word" data-enter style="--d:60ms" aria-label="Answer: not yet"></p>
+
+      <div class="breakdown" id="breakdown" role="list" aria-label="Points-weighted sentiment, trailing 7 days"></div>
+
+      <div class="gloss">
+        <p class="gloss-text" id="gloss" data-enter style="--d:560ms"></p>
+        <div class="dist" data-enter style="--d:640ms">
+          <span class="dist-v" id="dist-v"></span>
+          <span class="dist-l" id="dist-l"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- stats-bar.svelte -->
+  <section class="wrap" aria-label="Corpus">
+    <div class="ledger"><dl id="ledger"></dl></div>
+  </section>
+
+  <!-- history-chart.svelte (promoted: V1 nests it inside verdict-display; here it is the second screen) -->
+  <section class="sec" id="scrollback" aria-labelledby="sb-h">
+    <div class="wrap">
+      <div class="sec-head" data-enter>
+        <h2 id="sb-h">Scrollback</h2>
+        <p>90 days &middot; each day is a trailing 7-day, points-weighted share &middot; drag or use arrow keys</p>
+        <span class="draw" aria-hidden="true"></span>
+      </div>
+      <div class="sb">
+        <div class="readout" data-enter style="--d:80ms">
+          <div class="ro-date"><span id="ro-date"></span><span class="pin" id="ro-pin"></span></div>
+          <p class="ro-word" id="ro-word"></p>
+          <dl class="ro-rows" id="ro-rows"></dl>
+          <p class="ro-delta" id="ro-delta"></p>
+          <p class="ro-note" id="ro-note"></p>
+          <p class="ro-keys"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> day &middot; <kbd>shift</kbd> week &middot; <kbd>home</kbd> <kbd>end</kbd> &middot; <button type="button" class="ro-today ul" id="ro-today" disabled>back to today</button></p>
+        </div>
+        <div class="chart-wrap" id="chart-wrap" data-enter style="--d:160ms">
+          <div class="chart-legend" aria-hidden="true">
+            <span><i style="color:var(--q-for)"></i>for</span>
+            <span><i style="color:var(--q-ink)"></i>against</span>
+            <span><i style="color:var(--q-ink-2);border-top-style:dashed;border-top-width:1px"></i>50.0, the line</span>
+            <span><i style="color:var(--q-ink-3);border-top-width:4px;width:6px"></i>articles/day</span>
+          </div>
+          <div class="chart" id="chart" role="slider" tabindex="0" aria-label="Scrub 90 days of sentiment history" aria-valuemin="0" aria-valuemax="89" aria-valuenow="89"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- articles-table.svelte -->
+  <section class="sec" id="entries" aria-labelledby="en-h">
+    <div class="wrap">
+      <div class="sec-head" data-enter>
+        <h2 id="en-h">Entries</h2>
+        <p>The articles behind the number, last four weeks &middot; open one for the evidence</p>
+        <span class="draw" aria-hidden="true"></span>
+      </div>
+      <div class="toolbar" data-enter style="--d:80ms">
+        <div class="seg" id="seg" role="group" aria-label="Filter by what HN said"></div>
+        <label class="sort-m">sort <select id="sort-m" aria-label="Sort entries">
+          <option value="points">points</option><option value="comments">comments</option><option value="net">net</option><option value="date">date</option>
+        </select></label>
+        <label class="grep"><span aria-hidden="true">grep</span><input id="grep" type="search" placeholder="titles, domains" aria-label="Filter titles and domains" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="tbl-wrap" id="tbl-wrap" data-enter style="--d:0ms">
+        <table class="tbl">
+          <caption class="sr">Recent Hacker News articles about AI with comment sentiment</caption>
+          <thead><tr>
+            <th scope="col">#</th>
+            <th scope="col">entry</th>
+            <th scope="col" class="num" data-sort="points"><button type="button" class="th-btn">pts <span class="dir"></span></button></th>
+            <th scope="col" class="num" data-sort="comments"><button type="button" class="th-btn">cmts <span class="dir"></span></button></th>
+            <th scope="col">hn says <span class="t-for">+</span> <span class="t-shrug">&middot;</span> &minus;</th>
+            <th scope="col" class="num th-net" data-sort="net"><button type="button" class="th-btn">net <span class="dir"></span></button></th>
+            <th scope="col" class="th-date" data-sort="date"><button type="button" class="th-btn">date <span class="dir"></span></button></th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- minimal-footer.svelte: the ledger's closing line -->
+<footer class="wrap foot" id="method">
+  <div class="foot-rule" data-enter><span class="draw"></span></div>
+  <div class="foot-grid">
+    <dl class="foot-dl" data-enter style="--d:80ms">
+      <dt>checksum</dt><dd id="foot-check"></dd>
+      <dt>method</dt><dd>Comment sentiment from a ranked-tree sample of each thread, weighted by HN points, trailing 7 days. Methodology v1.2.</dd>
+      <dt>source</dt><dd>Hacker News front page and /best, AI-related stories only. Nothing here is a survey; it is what people said out loud.</dd>
+      <dt>next run</dt><dd>2026-11-21 04:00 UTC. We ask again tomorrow, and the day after.</dd>
+      <dt>keys</dt><dd><kbd>r</kbd> replay intro &middot; <kbd>esc</kbd> skip / close &middot; <kbd>j</kbd> <kbd>k</kbd> move &middot; <kbd>enter</kbd> open &middot; <kbd>[</kbd> <kbd>]</kbd> prev / next entry</dd>
+      <dt>fine print</dt><dd>Not affiliated with Y Combinator, or with optimism. Every number on this prototype is mock data.</dd>
+    </dl>
+    <div class="foot-sum" data-enter style="--d:160ms">
+      <span class="micro">balance carried forward</span>
+      <span class="big" id="foot-big">100.0</span>
+      <span class="eq" id="foot-eq"></span>
+    </div>
+  </div>
+</footer>
+
+<!-- article-details-sheet.svelte -->
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" aria-hidden="true">
+  <div class="sh-in">
+    <div class="sh-bar">
+      <span class="sp" id="sh-pos"></span>
+      <button type="button" id="sh-prev" aria-label="Previous entry">[ prev</button>
+      <button type="button" id="sh-next" aria-label="Next entry">next ]</button>
+      <button type="button" id="sh-close" aria-label="Close details">close esc</button>
+    </div>
+    <div class="skel" aria-hidden="true"><span style="width:82%"></span><span style="width:64%"></span><span style="width:91%"></span><span style="width:48%"></span><p id="skel-text">reading comments&hellip;</p></div>
+    <div class="sh-body">
+      <h2 class="sh-title stg" style="--i:0" id="sh-title"></h2>
+      <p class="sh-meta stg" style="--i:1" id="sh-meta"></p>
+      <div class="sh-sec stg" style="--i:2"><span class="micro">the article says</span><p class="sh-thesis" id="sh-thesis"></p></div>
+      <div class="sh-sec stg" style="--i:3"><span class="micro">hacker news says</span>
+        <span class="sh-strip strip" id="sh-strip" aria-hidden="true"></span>
+        <div class="mini" id="sh-mini" role="list"></div>
+        <dl class="metrics" id="sh-metrics"></dl>
+      </div>
+      <div class="sh-sec stg" style="--i:4"><span class="micro" id="sh-ev-h">evidence</span><ul class="quotes" id="sh-quotes"></ul></div>
+      <div class="sh-links stg" style="--i:5"><a class="ul" href="#" data-mock="hn">open thread on hn (mock)</a><a class="ul" href="#" data-mock="src">read the article (mock)</a></div>
+    </div>
+  </div>
+</aside>
+
+<div class="controls" role="group" aria-label="Display controls">
+  <button type="button" class="ctl" id="btn-replay" aria-keyshortcuts="r" aria-label="Replay intro"><span class="k" aria-hidden="true">r</span>replay</button>
+  <button type="button" class="ctl" id="btn-sound" aria-pressed="false">sound: <b>off</b></button>
+  <button type="button" class="ctl" id="btn-fx" aria-pressed="true">fx: <b>on</b></button>
+</div>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+
+<script>
+(function () {
+  "use strict";
+  var doc = document, root = doc.documentElement;
+  function $(s, c) { return (c || doc).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); }
+  var store = {
+    get: function (k) { try { return window.localStorage ? window.localStorage.getItem(k) : null; } catch (e) { return null; } },
+    set: function (k, v) { try { if (window.localStorage) window.localStorage.setItem(k, v); } catch (e) {} }
+  };
+  var mq = null;
+  try { mq = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null; } catch (e) { mq = null; }
+  function reduced() { return !!(mq && mq.matches); }
+
+  /* =====================================================================
+     MOCK DATA — invented for this prototype. Nothing here is scraped.
+     Shapes mirror the V1 exports (verdict score parts, topArticles,
+     weekly snapshots) closely enough to port.
+     ===================================================================== */
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var rnd = mulberry32(1094);
+  var DAYS = 90, DAY = 86400000, END = Date.UTC(2026, 10, 19);
+  var MON = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  var WD = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  function iso(ts) { var d = new Date(ts); return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function g(t, c, s) { return Math.exp(-((t - c) * (t - c)) / (2 * s * s)); }
+
+  var EVENTS = [
+    { i: 31, short: "yes, briefly", note: "A new model shipped on a Tuesday. For crossed 50% for the first time in the window. It held for two days, which is a record." },
+    { i: 61, short: "the postmortem", note: "An on-call runbook postmortem reached 1,488 points. Against crossed 50% and the page said NO for the first time this quarter." },
+    { i: 75, short: "the invoice", note: "Someone posted the bill for their AI coding pilot. Shrug fell, against rose. Nobody was surprised, which is also data." }
+  ];
+
+  var HIST = [];
+  (function buildHistory() {
+    for (var t = 0; t < DAYS; t++) {
+      var ts = END - (DAYS - 1 - t) * DAY;
+      var f = 0.272 + 0.034 * (t / 89) + 0.012 * Math.sin(t / 6.5) + (rnd() - 0.5) * 0.022 + 0.2 * g(t, 31, 1.3) - 0.06 * g(t, 61, 2.2);
+      var a = 0.488 - 0.028 * (t / 89) + 0.012 * Math.cos(t / 7.3) + (rnd() - 0.5) * 0.022 - 0.16 * g(t, 31, 1.3) + 0.085 * g(t, 61, 1.6) + 0.035 * g(t, 75, 1.8);
+      if (!(t === 31 || t === 32)) f = Math.min(f, 0.489);
+      if (!(t >= 60 && t <= 63)) a = Math.min(a, 0.493);
+      var wd = new Date(ts).getUTCDay();
+      var count = Math.max(4, Math.round(9 + rnd() * 10 + 5 * g(t, 61, 3) + 3 * g(t, 31, 2) - ((wd === 0 || wd === 6) ? 4 : 0)));
+      var pts = Math.round(count * (190 + rnd() * 130));
+      var cm = Math.round(count * (27 + rnd() * 9));
+      HIST.push({ ts: ts, f: f, a: a, count: count, pts: pts, cm: cm });
+    }
+    // Hand-set the moments the story hangs on.
+    HIST[31].f = 0.503; HIST[31].a = 0.284;
+    HIST[32].f = 0.501; HIST[32].a = 0.297;
+    HIST[61].a = Math.max(HIST[61].a, 0.538); HIST[62].a = Math.max(HIST[62].a, 0.517);
+    HIST[89].f = 0.312; HIST[89].a = 0.464;
+    HIST.forEach(function (d) { d.s = 1 - d.f - d.a; });
+  })();
+  var TODAY = DAYS - 1;
+
+  /* article sentiment splits are % of sampled comments: f(or) / s(hrug) / a(gainst) */
+  var ARTICLES = [
+    { id: 1, title: "Show HN: I let an agent refactor our monorepo for 72 hours", dom: "github.com/kestrel-labs", pts: 1204, cm: 688, date: "2026-11-18", f: 28, s: 19, a: 53, util: 0.58, traj: "worse",
+      thesis: "An autonomous agent produced 1,900 passing commits and one architecture nobody on the team can explain.",
+      q: [["a", "The diff is green. The diff is also 41,000 lines. Those are two different facts.", 412], ["s", "The boring parts, renames and import cleanup, were flawless. It's the 'while I was here' commits that scare me.", 233], ["a", "We ran the same experiment. Day one felt like magic, day three felt like code review as a punishment.", 198]] },
+    { id: 2, title: "The bill for our AI coding pilot came in", dom: "lowtide.blog", pts: 842, cm: 511, date: "2026-11-05", f: 14, s: 24, a: 62, util: 0.41, traj: "worse",
+      thesis: "A 40-seat pilot cost more than the contractor it replaced, mostly in tokens spent re-reading the same files.",
+      q: [["a", "Productivity went up 12% and the invoice went up 300%. Someone in finance is about to discover ratios.", 377], ["s", "This is a context-window problem dressed up as a pricing problem.", 164], ["a", "We cancelled after the agent spent $900 in a weekend summarizing its own logs.", 151]] },
+    { id: 3, title: "Ask HN: Has AI made you a faster engineer or just a busier one?", dom: "news.ycombinator.com", pts: 653, cm: 1032, date: "2026-11-14", f: 31, s: 38, a: 31, util: 0.5, traj: "flat",
+      thesis: "Open question thread. The top answers split on whether throughput gains survive review and maintenance.",
+      q: [["s", "Faster at starting things. The finishing rate is unchanged, so now I have more unfinished things.", 520], ["f", "Busier, but the busy work is more interesting. I'll take it.", 207], ["a", "I measure it in meetings about the code, and those doubled.", 188]] },
+    { id: 4, title: "A frontier model now passes 71% of SWE-bench Verified; we checked the other 29%", dom: "evals.fieldnotes.dev", pts: 977, cm: 402, date: "2026-11-12", f: 38, s: 27, a: 35, util: 0.71, traj: "better",
+      thesis: "Failures cluster in tasks that need repo-wide context; the passing 71% skew toward single-file fixes.",
+      q: [["f", "Best kind of benchmark post: the interesting part is the failures.", 301], ["a", "71% on a curated set is not 71% on my codebase, which was curated by no one.", 289], ["f", "The trend is the story. Two years ago this number was a rounding error.", 176]] },
+    { id: 5, title: "We replaced our on-call runbooks with an LLM. Here is the postmortem", dom: "ops.ferrous.dev", pts: 1488, cm: 873, date: "2026-10-22", f: 11, s: 21, a: 68, util: 0.33, traj: "worse",
+      thesis: "The model followed a stale runbook, confidently, for 47 minutes. The actual fix was one config flag.",
+      q: [["a", "It did exactly what the runbook said. That is the postmortem.", 640], ["a", "Confidence without a rollback plan is just a faster outage.", 311], ["s", "To be fair, a sleepy human would have read the same stale runbook. Slower, though.", 205]] },
+    { id: 6, title: "Autocomplete was the killer app all along", dom: "quietcode.substack.com", pts: 412, cm: 233, date: "2026-11-10", f: 57, s: 24, a: 19, util: 0.77, traj: "better",
+      thesis: "Small, low-latency completions deliver most of the value with none of the agent theatrics.",
+      q: [["f", "Tab-complete a line, keep my brain. That is the whole product for me.", 244], ["f", "Agents are the demo. Autocomplete is the habit.", 190], ["s", "Give it two years and autocomplete will also want a monthly seat.", 97]] },
+    { id: 7, title: "Why I stopped reviewing AI-generated pull requests line by line", dom: "tidepool.dev", pts: 389, cm: 301, date: "2026-11-07", f: 44, s: 22, a: 34, util: 0.64, traj: "flat",
+      thesis: "Reviewing behaviour through tests and property checks catches more than reading generated diffs.",
+      q: [["s", "This is 'write good tests', which was also the advice in 2009.", 211], ["f", "Moving review up a level is the right instinct. Diffs were never the unit of trust.", 168], ["a", "Until the model also writes the tests. See the other thread.", 149]] },
+    { id: 8, title: "Junior developers are learning differently, not less", dom: "mentor.notes.page", pts: 534, cm: 388, date: "2026-11-04", f: 51, s: 26, a: 23, util: 0.6, traj: "better",
+      thesis: "Interviews with 30 juniors suggest debugging skill lags while code-reading improves.",
+      q: [["f", "My juniors read more code than I did at their age. They just didn't write it.", 260], ["a", "Learning to debug is learning to be wrong slowly. The tools skip that part.", 241], ["f", "Every generation was told it was learning less. We were told that about Stack Overflow.", 199]] },
+    { id: 9, title: "Ask HN: What's the most expensive bug an AI wrote for you?", dom: "news.ycombinator.com", pts: 1120, cm: 1406, date: "2026-10-31", f: 17, s: 19, a: 64, util: 0.38, traj: "worse",
+      thesis: "Incident stories. The top replies involve silent data corruption rather than crashes.",
+      q: [["a", "It swapped two arguments of the same type. Tests passed. Invoices did not.", 702], ["s", "Mine was a timezone bug, so honestly, a human tradition.", 455], ["a", "A migration dropped a column it called 'unused'. It was used. By billing.", 433]] },
+    { id: 10, title: "Local models are finally good enough for code search", dom: "grep.rocks", pts: 701, cm: 344, date: "2026-10-28", f: 62, s: 21, a: 17, util: 0.81, traj: "better",
+      thesis: "A 14B local model on a laptop beats keyword search on internal repos, with no data leaving the machine.",
+      q: [["f", "Search is the use case where being slightly wrong is fine. Generation isn't.", 318], ["f", "No API key, nothing leaves the laptop. This is the version I can get past legal.", 287], ["s", "Good enough for search, yes. Still not for writing the code it finds.", 140]] },
+    { id: 11, title: "The 10x engineer is now three agents and a nervous intern", dom: "lowtide.blog", pts: 288, cm: 176, date: "2026-10-24", f: 26, s: 41, a: 33, util: 0.29, traj: "flat",
+      thesis: "Satire, mostly. Argues that coordination cost grows faster than agent count.",
+      q: [["s", "Funny because the intern is the only one who knows where prod is.", 156], ["a", "It's satire until your org chart has a column for agent seats.", 121], ["s", "The nervous intern is me. I am the nervous intern.", 118]] },
+    { id: 12, title: "Tell HN: The model wrote the tests too", dom: "news.ycombinator.com", pts: 615, cm: 497, date: "2026-11-19", f: 22, s: 30, a: 48, util: 0.44, traj: "worse",
+      thesis: "Generated code and generated tests agreed with each other and disagreed with the spec.",
+      q: [["a", "Two models agreeing is not verification. It's a quorum of one.", 389], ["s", "Mutation testing catches this. Nobody runs mutation testing.", 214], ["a", "At least the tests and the bug are consistent.", 177]] }
+  ];
+  ARTICLES.forEach(function (x) {
+    x.net = (x.f - x.a) / 100;
+    x.k = (x.f >= x.s && x.f >= x.a) ? "f" : (x.a >= x.s ? "a" : "s");
+    x.sampled = Math.min(120, x.cm);
+  });
+
+  /* ---------------------------------------------------------- helpers */
+  function fmt(n) { try { return n.toLocaleString("en-US"); } catch (e) { return String(n); } }
+  function signed(n, d) { var v = Math.abs(n).toFixed(d); return (n > 0.00001 ? "+" : n < -0.00001 ? "\u2212" : "\u00b1") + v; }
+  function wordOf(f, a) { return f >= 0.5 ? "YES" : a >= 0.5 ? "NO" : "NOT YET"; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; }); }
+  // largest-remainder rounding to tenths so displayed shares always sum to exactly 100.0
+  function tenths(f, s, a) {
+    var raw = [f * 1000, s * 1000, a * 1000], fl = raw.map(Math.floor), rem = 1000 - fl[0] - fl[1] - fl[2];
+    var order = [0, 1, 2].sort(function (i, j) { return (raw[j] - fl[j]) - (raw[i] - fl[i]); });
+    for (var k = 0; k < rem; k++) fl[order[k % 3]]++;
+    return fl.map(function (v) { return v / 10; });
+  }
+  function strip(f, s, a, n) {
+    var t = tenths(f / 100, s / 100, a / 100), w = [t[0] * n / 100, t[1] * n / 100, t[2] * n / 100], c = w.map(Math.floor);
+    var rem = n - c[0] - c[1] - c[2], order = [0, 1, 2].sort(function (i, j) { return (w[j] - c[j]) - (w[i] - c[i]); });
+    for (var k = 0; k < rem; k++) c[order[k]]++;
+    return "<span class=\"sf\">" + rep("+", c[0]) + "</span><span class=\"ss\">" + rep("\u00b7", c[1]) + "</span><span class=\"sa\">" + rep("\u2212", c[2]) + "</span>";
+  }
+  function rep(ch, n) { var o = ""; for (var i = 0; i < n; i++) o += ch; return o; }
+  function trailing(i, key) { var s = 0; for (var k = Math.max(0, i - 6); k <= i; k++) s += HIST[k][key]; return s; }
+  function dayLabel(i) { var d = new Date(HIST[i].ts); return WD[d.getUTCDay()] + " " + iso(HIST[i].ts); }
+  function shortDate(isoStr) { var p = isoStr.split("-"); return MON[+p[1] - 1] + " " + p[2]; }
+
+  /* ---------------------------------------------------------- state */
+  var state = { fx: store.get("v12q-fx") !== "off", sound: false, idx: TODAY, pinned: false, word: "", filter: "all", query: "", sort: "points", dir: -1, sheet: -1, view: [] };
+
+  /* ============================================================ SOUND
+     Two cues. That is the whole sound design. WebAudio synthesis only;
+     the AudioContext is created lazily inside a user gesture. */
+  var actx = null;
+  function audio() {
+    if (!state.sound || !state.fx) return null;
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { actx = new AC(); } catch (e) { return null; }
+    }
+    if (actx.state === "suspended" && actx.resume) { try { actx.resume().catch(function () {}); } catch (e) {} }
+    return actx;
+  }
+  // CUE 1 — tick: loader done (and confirmation when sound is switched on)
+  function cueTick() {
+    var c = audio(); if (!c) return;
+    try {
+      var t = c.currentTime + 0.005, o = c.createOscillator(), gn = c.createGain();
+      o.type = "triangle";
+      o.frequency.setValueAtTime(1760, t);
+      o.frequency.exponentialRampToValueAtTime(1320, t + 0.03);
+      gn.gain.setValueAtTime(0.0001, t);
+      gn.gain.exponentialRampToValueAtTime(0.035, t + 0.002);
+      gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+      o.connect(gn); gn.connect(c.destination);
+      o.start(t); o.stop(t + 0.06);
+    } catch (e) {}
+  }
+  // CUE 2 — stinger: veil lift. A falling minor third (G4 -> E4) for NOT YET / NO, rising for YES.
+  function cueStinger(word) {
+    var c = audio(); if (!c) return;
+    try {
+      var t = c.currentTime + 0.01, lp = c.createBiquadFilter(), notes = word === "YES" ? [329.63, 392] : [392, 329.63];
+      lp.type = "lowpass"; lp.frequency.setValueAtTime(1800, t); lp.Q.value = 0.5; lp.connect(c.destination);
+      notes.forEach(function (hz, n) {
+        var st = t + n * 0.14, o = c.createOscillator(), gn = c.createGain(), dur = n ? 0.6 : 0.22;
+        o.type = "sine"; o.frequency.setValueAtTime(hz, st);
+        gn.gain.setValueAtTime(0.0001, st);
+        gn.gain.exponentialRampToValueAtTime(0.05, st + 0.01);
+        gn.gain.exponentialRampToValueAtTime(0.0001, st + dur);
+        o.connect(gn); gn.connect(lp); o.start(st); o.stop(st + dur + 0.02);
+      });
+    } catch (e) {}
+  }
+
+  /* ============================================================ HERO */
+  var elWord = $("#verdict-word"), elBd = $("#breakdown");
+  var KEYS = [["f", "+", "for"], ["s", "\u00b1", "shrug"], ["a", "\u2212", "against"]];
+  function buildBreakdown() {
+    var h = "";
+    KEYS.forEach(function (k, n) {
+      h += "<div class=\"bd-col\" role=\"listitem\" data-k=\"" + k[0] + "\" data-enter style=\"--d:" + (300 + n * 80) + "ms;--dd:0ms\">" +
+        "<span class=\"bd-rule draw\" aria-hidden=\"true\"></span>" +
+        "<span class=\"bd-head\"><span class=\"sg\" aria-hidden=\"true\">" + k[1] + "</span>" + k[2] + "</span>" +
+        "<span class=\"bd-pct\"><span class=\"v\"></span><small>%</small></span>" +
+        "<span class=\"bd-sub\"></span>" +
+        "<span class=\"bd-track\" aria-hidden=\"true\"><span class=\"fill\"></span></span></div>";
+    });
+    h += "<div class=\"bd-mid\" aria-hidden=\"true\" data-enter style=\"--d:520ms\"><span>50.0 &middot; the line</span></div>";
+    elBd.innerHTML = h;
+  }
+  function setWord(word, animate) {
+    if (word === state.word && !animate) return;
+    state.word = word;
+    var parts = word.split(" "), i = 0, h = "";
+    parts.forEach(function (w, n) {
+      h += "<span class=\"w\" aria-hidden=\"true\">";
+      var txt = w + (n === parts.length - 1 ? "." : "");
+      for (var c = 0; c < txt.length; c++) h += "<span class=\"ch\" style=\"--i:" + (i++) + "\">" + esc(txt[c]) + "</span>";
+      h += "</span>";
+    });
+    elWord.innerHTML = h;
+    elWord.setAttribute("aria-label", "Answer: " + word.toLowerCase());
+    elWord.classList.toggle("is-yes", word === "YES");
+    if (animate && state.fx && elWord.classList.contains("in")) {
+      elWord.style.setProperty("--d", "0ms");
+      elWord.classList.remove("in"); void elWord.offsetWidth; elWord.classList.add("in");
+    }
+  }
+  function renderHero(i, animateWord) {
+    var d = HIST[i], t = tenths(d.f, d.s, d.a), word = wordOf(d.f, d.a);
+    setWord(word, !!animateWord && word !== state.word);
+    elBd.style.gridTemplateColumns = t[0] + "fr " + t[1] + "fr " + t[2] + "fr";
+    var pts = trailing(i, "pts"), cms = trailing(i, "cm");
+    $$(".bd-col", elBd).forEach(function (col, n) {
+      var share = [d.f, d.s, d.a][n];
+      $(".v", col).textContent = t[n].toFixed(1);
+      $(".bd-sub", col).textContent = fmt(Math.round(pts * share)) + " pts \u00b7 " + fmt(Math.round(cms * share)) + " comments";
+      $(".fill", col).style.setProperty("--s", (t[n] / 100).toFixed(3));
+      col.setAttribute("aria-label", KEYS[n][2] + " " + t[n].toFixed(1) + " percent");
+    });
+    var gl = $("#gloss"), dv = $("#dist-v"), dl = $("#dist-l"), gap = (t[2] - t[0]).toFixed(1);
+    if (word === "YES") {
+      gl.innerHTML = "For crossed the line: <b>" + t[0].toFixed(1) + "%</b> of points-weighted sentiment, against " + t[2].toFixed(1) + "%. Enjoy it. In 90 days this has happened on " + yesDays + " days.";
+      dv.textContent = "+" + (t[0] - 50).toFixed(1); dl.innerHTML = "points of share<br>over the line";
+      dv.className = "dist-v t-for";
+    } else if (word === "NO") {
+      gl.innerHTML = "Against crossed 50%. That is not &ldquo;not yet&rdquo;; that is <b>no</b>. Weighted by " + fmt(pts) + " points across " + fmt(trailing(i, "count")) + " articles.";
+      dv.textContent = "+" + (t[2] - 50).toFixed(1); dl.innerHTML = "points of share<br>into no";
+      dv.className = "dist-v";
+    } else {
+      gl.innerHTML = "Hacker News remains unconvinced. Against leads for by <b>" + gap + " points</b> across " + fmt(trailing(i, "count")) + " articles and " + fmt(pts) + " points of discussion, trailing seven days. The shruggers are not helping.";
+      dv.textContent = (50 - t[0]).toFixed(1); dl.innerHTML = "points of share<br>until this says yes";
+      dv.className = "dist-v";
+    }
+    var flag = $("#flag");
+    flag.classList.toggle("on", i !== TODAY);
+    $("#flag-text").textContent = i !== TODAY ? "Showing scrollback: " + iso(d.ts) + "." : "";
+  }
+
+  /* ============================================================ LEDGER */
+  var yesDays = 0, noDays = 0, flips = 0;
+  (function () {
+    var prev = null;
+    HIST.forEach(function (d) { var w = wordOf(d.f, d.a); if (w === "YES") yesDays++; if (w === "NO") noDays++; if (prev && w !== prev) flips++; prev = w; });
+  })();
+  function renderLedger() {
+    var sum = function (k) { return HIST.reduce(function (s, d) { return s + d[k]; }, 0); };
+    var cells = [
+      ["articles read", fmt(sum("count")), "90-day window, AI-related only"],
+      ["comments sampled", fmt(sum("cm")), "ranked-tree, up to 120 a thread"],
+      ["points weighed", fmt(sum("pts")), "the unit of the verdict"],
+      ["sources", "312", "domains; github.com leads, again"],
+      ["verdict changes", String(flips), "in 90 days, all of them brief"],
+      ["days at yes", yesDays + " of 90", "we checked twice"]
+    ];
+    $("#ledger").innerHTML = cells.map(function (c, n) {
+      return "<div class=\"cell\" data-enter style=\"--d:" + (n * 70) + "ms\"><dt>" + c[0] + "</dt><dd><span class=\"v\">" + c[1] + "</span><span class=\"n\">" + c[2] + "</span></dd></div>";
+    }).join("");
+  }
+
+  /* ============================================================ SCROLLBACK */
+  var chart = $("#chart"), geo = null;
+  function renderReadout(i) {
+    var d = HIST[i], t = tenths(d.f, d.s, d.a), word = wordOf(d.f, d.a), td = tenths(HIST[TODAY].f, HIST[TODAY].s, HIST[TODAY].a);
+    $("#ro-date").textContent = dayLabel(i) + (i === TODAY ? " (today)" : "");
+    $("#ro-pin").textContent = state.pinned && i !== TODAY ? "pinned \u00b7 esc returns" : "";
+    var w = $("#ro-word"); w.textContent = word + "."; w.classList.toggle("is-yes", word === "YES");
+    $("#ro-rows").innerHTML = KEYS.map(function (k, n) {
+      var cls = n === 0 ? "t-for" : n === 1 ? "t-shrug" : "t-against";
+      var stripHtml = "<span class=\"strip\"><span class=\"" + (n === 0 ? "sf" : n === 1 ? "ss" : "sa") + "\">" + rep(n === 0 ? "+" : n === 1 ? "\u00b7" : "\u2212", Math.round(t[n] / 4)) + "</span></span>";
+      return "<dt><span class=\"" + cls + "\" aria-hidden=\"true\">" + k[1] + "</span><span class=\"lbl\">" + k[2] + "</span>" + stripHtml.replace("<span class=\"strip\">", "<span class=\"strip\" aria-hidden=\"true\">") + "</dt><dd>" + t[n].toFixed(1) + "</dd>";
+    }).join("");
+    $("#ro-delta").innerHTML = i === TODAY ? "Today. <b>" + (50 - t[0]).toFixed(1) + "</b> points of share from yes." :
+      "vs today: for <b>" + signed(t[0] - td[0], 1) + "</b> \u00b7 against <b>" + signed(t[2] - td[2], 1) + "</b> \u00b7 " + (TODAY - i) + " days back";
+    var ev = null;
+    EVENTS.forEach(function (e) { if (Math.abs(e.i - i) <= 2) ev = e; });
+    $("#ro-note").textContent = ev ? iso(HIST[ev.i].ts) + ": " + ev.note : (word === "NOT YET" ? "Nothing notable. Hacker News is just like this. " + fmt(d.count) + " articles that day, " + fmt(d.pts) + " points." : "");
+    $("#ro-today").disabled = i === TODAY;
+    chart.setAttribute("aria-valuenow", String(i));
+    chart.setAttribute("aria-valuetext", iso(d.ts) + ": " + word.toLowerCase() + ", for " + t[0].toFixed(1) + " percent, against " + t[2].toFixed(1) + " percent");
+  }
+  function renderChart() {
+    var W = Math.max(260, Math.round(chart.getBoundingClientRect().width || 800));
+    var narrow = W < 560, H = narrow ? 280 : 372;
+    var m = { l: 30, r: 6, t: narrow ? 16 : 36, b: 70 };
+    var pw = W - m.l - m.r, ph = H - m.t - m.b, y0 = 0.15, y1 = 0.65;
+    function x(i) { return m.l + i * (pw / (DAYS - 1)); }
+    function y(v) { return m.t + (1 - (v - y0) / (y1 - y0)) * ph; }
+    var h = "<svg width=\"" + W + "\" height=\"" + H + "\" viewBox=\"0 0 " + W + " " + H + "\" aria-hidden=\"true\" focusable=\"false\">";
+    [0.2, 0.3, 0.4, 0.6].forEach(function (v) {
+      h += "<line class=\"grid\" x1=\"" + m.l + "\" x2=\"" + (W - m.r) + "\" y1=\"" + y(v).toFixed(1) + "\" y2=\"" + y(v).toFixed(1) + "\"/>";
+      h += "<text x=\"0\" y=\"" + (y(v) + 3.5).toFixed(1) + "\">" + Math.round(v * 100) + "</text>";
+    });
+    h += "<line class=\"line50\" x1=\"" + m.l + "\" x2=\"" + (W - m.r) + "\" y1=\"" + y(0.5).toFixed(1) + "\" y2=\"" + y(0.5).toFixed(1) + "\"/>";
+    h += "<text class=\"lbl50\" x=\"0\" y=\"" + (y(0.5) + 3.5).toFixed(1) + "\">50</text>";
+    // volume band
+    var vb = H - m.b + 18, vh = 28, maxC = 0;
+    HIST.forEach(function (d) { maxC = Math.max(maxC, d.count); });
+    HIST.forEach(function (d, i) {
+      var bh = Math.max(1, d.count / maxC * vh);
+      h += "<rect class=\"vol\" data-i=\"" + i + "\" x=\"" + (x(i) - 1).toFixed(1) + "\" y=\"" + (vb + vh - bh).toFixed(1) + "\" width=\"2\" height=\"" + bh.toFixed(1) + "\"/>";
+    });
+    // x labels: month starts
+    HIST.forEach(function (d, i) {
+      var dt = new Date(d.ts);
+      if (i === 0 || dt.getUTCDate() === 1) h += "<text x=\"" + x(i).toFixed(1) + "\" y=\"" + (H - 4) + "\">" + MON[dt.getUTCMonth()] + " " + pad(dt.getUTCDate()) + "</text>";
+    });
+    // events
+    if (!narrow) EVENTS.forEach(function (e) {
+      var ex = x(e.i), ey = Math.min(y(HIST[e.i].f), y(HIST[e.i].a));
+      h += "<g class=\"ev\"><line x1=\"" + ex.toFixed(1) + "\" x2=\"" + ex.toFixed(1) + "\" y1=\"" + (m.t - 12) + "\" y2=\"" + (ey - 6).toFixed(1) + "\"/><text x=\"" + (ex + 5).toFixed(1) + "\" y=\"" + (m.t - 16) + "\">" + shortDate(iso(HIST[e.i].ts)) + " " + e.short + "</text></g>";
+    });
+    function path(key) { return HIST.map(function (d, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(d[key]).toFixed(1); }).join(""); }
+    h += "<path class=\"ln ln-a\" pathLength=\"1\" d=\"" + path("a") + "\"/>";
+    h += "<path class=\"ln ln-f\" pathLength=\"1\" d=\"" + path("f") + "\"/>";
+    h += "<g class=\"cur\" id=\"cur\"><line y1=\"" + (m.t - 4) + "\" y2=\"" + (vb + vh + 4) + "\" x1=\"0\" x2=\"0\"/><circle class=\"dot-a\" r=\"3\" cx=\"0\" cy=\"0\"/><circle class=\"dot-f\" r=\"3.5\" cx=\"0\" cy=\"0\"/></g>";
+    h += "<rect class=\"hit\" x=\"" + m.l + "\" y=\"0\" width=\"" + pw + "\" height=\"" + H + "\"/></svg>";
+    chart.innerHTML = h;
+    geo = { m: m, pw: pw, x: x, y: y };
+    placeCursor(state.idx);
+  }
+  function placeCursor(i) {
+    if (!geo) return;
+    var cur = $("#cur", chart); if (!cur) return;
+    var cx = geo.x(i);
+    cur.setAttribute("transform", "translate(" + cx.toFixed(1) + " 0)");
+    var dots = cur.querySelectorAll("circle");
+    dots[0].setAttribute("cy", geo.y(HIST[i].a).toFixed(1));
+    dots[1].setAttribute("cy", geo.y(HIST[i].f).toFixed(1));
+    $$(".vol.sel", chart).forEach(function (r) { r.classList.remove("sel"); });
+    var v = chart.querySelector(".vol[data-i=\"" + i + "\"]"); if (v) v.classList.add("sel");
+  }
+  function setIdx(i, opts) {
+    i = Math.max(0, Math.min(TODAY, i));
+    var changed = i !== state.idx;
+    state.idx = i;
+    if (opts && typeof opts.pin === "boolean") state.pinned = opts.pin;
+    placeCursor(i); renderReadout(i); renderHero(i, changed); renderFooter(i);
+  }
+  function idxFromEvent(ev) {
+    if (!geo) return state.idx;
+    var r = chart.getBoundingClientRect();
+    return Math.round((ev.clientX - r.left - geo.m.l) / (geo.pw / (DAYS - 1)));
+  }
+  chart.addEventListener("pointermove", function (ev) { if (!state.pinned || ev.buttons) setIdx(idxFromEvent(ev), ev.buttons ? { pin: true } : null); });
+  chart.addEventListener("pointerdown", function (ev) {
+    var i = idxFromEvent(ev);
+    setIdx(i, { pin: !(state.pinned && i === state.idx) || i !== state.idx });
+  });
+  chart.addEventListener("pointerleave", function () { if (!state.pinned) setIdx(TODAY); });
+  chart.addEventListener("keydown", function (ev) {
+    var step = ev.shiftKey ? 7 : 1, k = ev.key, n = null;
+    if (k === "ArrowLeft" || k === "ArrowDown") n = state.idx - step;
+    else if (k === "ArrowRight" || k === "ArrowUp") n = state.idx + step;
+    else if (k === "Home") n = 0;
+    else if (k === "End") n = TODAY;
+    else if (k === "PageUp") n = state.idx - 30;
+    else if (k === "PageDown") n = state.idx + 30;
+    if (n === null) return;
+    ev.preventDefault();
+    setIdx(n, { pin: Math.max(0, Math.min(TODAY, n)) !== TODAY });
+  });
+  function backToToday() { setIdx(TODAY, { pin: false }); }
+  $("#ro-today").addEventListener("click", backToToday);
+  $("#flag-today").addEventListener("click", backToToday);
+
+  /* ============================================================ FOOTER */
+  function renderFooter(i) {
+    var d = HIST[i], t = tenths(d.f, d.s, d.a);
+    $("#foot-check").innerHTML = "<span class=\"t-for\">+ " + t[0].toFixed(1) + "</span> &nbsp;\u00b1 " + t[1].toFixed(1) + " &nbsp;\u2212 " + t[2].toFixed(1) + " &nbsp;= " + (t[0] + t[1] + t[2]).toFixed(1) + (i === TODAY ? "" : " &nbsp;(scrollback " + iso(d.ts) + ")");
+    $("#foot-eq").textContent = "for + shrug + against, " + (i === TODAY ? "today" : iso(d.ts)) + ". Still not yes.".replace("Still not yes.", wordOf(d.f, d.a) === "YES" ? "Briefly yes." : "Still not yes.");
+  }
+
+  /* ============================================================ ENTRIES */
+  var tbody = $("#tbody");
+  function buildSeg() {
+    var c = { all: ARTICLES.length, f: 0, s: 0, a: 0 };
+    ARTICLES.forEach(function (x) { c[x.k]++; });
+    var items = [["all", "all"], ["f", "for"], ["s", "shrug"], ["a", "against"]];
+    $("#seg").innerHTML = items.map(function (it) {
+      return "<button type=\"button\" data-f=\"" + it[0] + "\" aria-pressed=\"" + (state.filter === it[0]) + "\">" + it[1] + "<span class=\"ct\">" + c[it[0]] + "</span></button>";
+    }).join("");
+  }
+  function computeView() {
+    var q = state.query.trim().toLowerCase();
+    var v = ARTICLES.filter(function (x) {
+      if (state.filter !== "all" && x.k !== state.filter) return false;
+      if (q && (x.title + " " + x.dom).toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+    var key = { points: "pts", comments: "cm", net: "net", date: "date" }[state.sort];
+    v.sort(function (p, r) { var A = p[key], B = r[key]; return (A < B ? -1 : A > B ? 1 : 0) * state.dir; });
+    state.view = v;
+    return v;
+  }
+  function renderTable() {
+    var v = computeView(), q = state.query.trim();
+    $$("th[data-sort]").forEach(function (th) {
+      var on = th.getAttribute("data-sort") === state.sort;
+      if (on) th.setAttribute("aria-sort", state.dir < 0 ? "descending" : "ascending"); else th.removeAttribute("aria-sort");
+      $(".dir", th).textContent = on ? (state.dir < 0 ? "\u2193" : "\u2191") : "";
+    });
+    $("#sort-m").value = state.sort;
+    $("#count").textContent = v.length === ARTICLES.length ? "12 entries, sorted by " + state.sort + "." : v.length + " of " + ARTICLES.length + " entries.";
+    if (!v.length) {
+      tbody.innerHTML = "<tr class=\"empty\"><td colspan=\"7\">0 entries match " + (q ? "&ldquo;" + esc(q) + "&rdquo;" : "this filter") + ". Hacker News has moved on. <button type=\"button\" class=\"ul\" id=\"clear\">clear filters</button></td></tr>";
+      return;
+    }
+    tbody.innerHTML = v.map(function (x, n) {
+      var netCls = x.net > 0.1 ? "net-pos" : Math.abs(x.net) <= 0.1 ? "net-zero" : "";
+      return "<tr class=\"row\" data-id=\"" + x.id + "\" style=\"--r:" + n + "\">" +
+        "<td class=\"c-rank\">" + pad(n + 1) + "</td>" +
+        "<td class=\"c-entry\"><button type=\"button\" class=\"entry\" data-id=\"" + x.id + "\" aria-haspopup=\"dialog\">" + esc(x.title) + "<span class=\"go\" aria-hidden=\"true\">&rarr;</span></button>" +
+        "<span class=\"meta\"><span class=\"dom\">" + esc(x.dom) + "</span> &middot; " + esc(x.thesis) + "</span></td>" +
+        "<td class=\"num c-pts\">" + fmt(x.pts) + "</td><td class=\"num c-cmt\">" + fmt(x.cm) + "</td>" +
+        "<td class=\"c-strip\"><span class=\"strip\" aria-hidden=\"true\">" + strip(x.f, x.s, x.a, 20) + "</span><span class=\"sr\">for " + x.f + ", shrug " + x.s + ", against " + x.a + " percent</span></td>" +
+        "<td class=\"num c-net " + netCls + "\">" + signed(x.net, 2) + "</td>" +
+        "<td class=\"c-date\"><time datetime=\"" + x.date + "\">" + shortDate(x.date) + "</time></td></tr>";
+    }).join("");
+  }
+  $("#seg").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button[data-f]") : null; if (!b) return;
+    state.filter = b.getAttribute("data-f");
+    $$("#seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    renderTable();
+  });
+  $("#grep").addEventListener("input", function (ev) { state.query = ev.target.value; renderTable(); });
+  $("#sort-m").addEventListener("change", function (ev) { state.sort = ev.target.value; state.dir = state.sort === "date" ? -1 : -1; renderTable(); });
+  $$("th[data-sort] .th-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var k = b.parentNode.getAttribute("data-sort");
+      if (state.sort === k) state.dir = -state.dir; else { state.sort = k; state.dir = -1; }
+      renderTable();
+    });
+  });
+  tbody.addEventListener("click", function (ev) {
+    if (ev.target.id === "clear") {
+      state.filter = "all"; state.query = ""; $("#grep").value = "";
+      buildSeg(); renderTable(); $("#grep").focus(); return;
+    }
+    var row = ev.target.closest ? ev.target.closest("tr.row") : null; if (!row) return;
+    openSheet(+row.getAttribute("data-id"), $(".entry", row));
+  });
+
+  /* ============================================================ SHEET */
+  var sheet = $("#sheet"), scrim = $("#scrim"), opener = null, loadTimer = 0;
+  function byId(id) { for (var i = 0; i < ARTICLES.length; i++) if (ARTICLES[i].id === id) return ARTICLES[i]; return null; }
+  function fillSheet(x) {
+    var pos = state.view.indexOf(x);
+    $("#sh-pos").textContent = "entry " + pad(pos + 1) + " / " + pad(state.view.length);
+    $("#sh-prev").disabled = pos <= 0;
+    $("#sh-next").disabled = pos >= state.view.length - 1;
+    $("#sh-title").textContent = x.title;
+    $("#sh-meta").innerHTML = "<b>" + esc(x.dom) + "</b> &middot; " + fmt(x.pts) + " pts &middot; " + fmt(x.cm) + " comments &middot; " + x.date + " &middot; " + x.sampled + " sampled";
+    $("#sh-thesis").textContent = x.thesis;
+    $("#sh-strip").innerHTML = strip(x.f, x.s, x.a, 40);
+    $("#sh-mini").style.gridTemplateColumns = x.f + "fr " + x.s + "fr " + x.a + "fr";
+    $("#sh-mini").innerHTML = KEYS.map(function (k, n) {
+      var v = [x.f, x.s, x.a][n];
+      return "<div class=\"bd-col\" role=\"listitem\" data-k=\"" + k[0] + "\" aria-label=\"" + k[2] + " " + v + " percent\"><span class=\"bd-rule draw\" style=\"background:currentColor\" aria-hidden=\"true\"></span><span class=\"bd-head\"><span class=\"sg\" aria-hidden=\"true\">" + k[1] + "</span>" + k[2] + "</span><span class=\"bd-pct\">" + v + "<small>%</small></span><span class=\"bd-track\" aria-hidden=\"true\"><span class=\"fill\" style=\"--s:" + (v / 100) + "\"></span></span></div>";
+    }).join("");
+    $("#sh-metrics").innerHTML = "<div><dt>net</dt><dd class=\"" + (x.net > 0.1 ? "t-for" : "") + "\">" + signed(x.net, 2) + "</dd></div><div><dt>utility</dt><dd>" + x.util.toFixed(2) + "</dd></div><div><dt>trajectory</dt><dd>" + x.traj + "</dd></div>";
+    $("#sh-ev-h").textContent = "evidence \u00b7 " + x.q.length + " quotes, ranked by subtree points";
+    $("#sh-quotes").innerHTML = x.q.map(function (q, n) {
+      var lab = { f: "for", s: "shrug", a: "against" }[q[0]];
+      return "<li data-k=\"" + q[0] + "\"><blockquote>&ldquo;" + esc(q[1]) + "&rdquo;</blockquote><span class=\"cite\">" + lab + " &middot; subtree +" + q[2] + " &middot; sample rank " + (n + 1) + "</span></li>";
+    }).join("");
+    $("#skel-text").textContent = "reading " + x.sampled + " comments\u2026";
+  }
+  function openSheet(id, from) {
+    var x = byId(id); if (!x) return;
+    if (from) opener = from;
+    state.sheet = id;
+    fillSheet(x);
+    sheet.classList.remove("ready"); sheet.classList.add("loading");
+    sheet.setAttribute("aria-hidden", "false");
+    sheet.classList.add("open"); scrim.classList.add("open");
+    sheet.scrollTop = 0;
+    clearTimeout(loadTimer);
+    // real loading state: production fetches /details/[id]; prototype fakes 200ms
+    loadTimer = setTimeout(function () { sheet.classList.remove("loading"); void sheet.offsetWidth; sheet.classList.add("ready"); }, 200);
+    setTimeout(function () { try { $("#sh-close").focus({ preventScroll: true }); } catch (e) { $("#sh-close").focus(); } }, 30);
+  }
+  function closeSheet() {
+    if (state.sheet < 0) return;
+    state.sheet = -1; clearTimeout(loadTimer);
+    sheet.classList.remove("open", "ready", "loading"); scrim.classList.remove("open");
+    sheet.setAttribute("aria-hidden", "true");
+    if (opener && doc.body.contains(opener)) { try { opener.focus({ preventScroll: true }); } catch (e) { opener.focus(); } }
+  }
+  function stepSheet(dir) {
+    var x = byId(state.sheet); if (!x) return;
+    var pos = state.view.indexOf(x), nx = state.view[pos + dir]; if (!nx) return;
+    var btn = tbody.querySelector(".entry[data-id=\"" + nx.id + "\"]");
+    openSheet(nx.id, btn);
+  }
+  $("#sh-close").addEventListener("click", closeSheet);
+  scrim.addEventListener("click", closeSheet);
+  $("#sh-prev").addEventListener("click", function () { stepSheet(-1); });
+  $("#sh-next").addEventListener("click", function () { stepSheet(1); });
+  $$("[data-mock]").forEach(function (a) { a.addEventListener("click", function (ev) { ev.preventDefault(); say("Mock link. Production opens the real thread / source."); }); });
+  sheet.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Tab") return;
+    var f = $$("button:not([disabled]), a[href]", sheet).filter(function (el) { return el.offsetParent !== null; });
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (ev.shiftKey && doc.activeElement === first) { ev.preventDefault(); last.focus(); }
+    else if (!ev.shiftKey && doc.activeElement === last) { ev.preventDefault(); first.focus(); }
+  });
+
+  /* ============================================================ STATUS + CONTROLS */
+  var statusTimer = 0;
+  function say(msg) {
+    var s = $("#status"); s.textContent = msg; s.classList.add("on");
+    clearTimeout(statusTimer); statusTimer = setTimeout(function () { s.classList.remove("on"); }, 2200);
+  }
+  function flash(b) { b.classList.remove("ctl-flash"); void b.offsetWidth; b.classList.add("ctl-flash"); }
+  var btnFx = $("#btn-fx"), btnSound = $("#btn-sound"), btnReplay = $("#btn-replay");
+  function syncControls() {
+    btnFx.setAttribute("aria-pressed", String(state.fx));
+    $("b", btnFx).textContent = state.fx ? "on" : "off";
+    btnSound.setAttribute("aria-pressed", String(state.sound));
+    $("b", btnSound).textContent = state.sound ? "on" : "off";
+    btnSound.disabled = !state.fx;
+    btnSound.title = state.fx ? "" : "Sound is part of FX";
+  }
+  btnSound.addEventListener("click", function () {
+    if (!state.fx) return;
+    state.sound = !state.sound;
+    syncControls(); flash(btnSound);
+    if (state.sound) { cueTick(); say("Sound on. Two cues: a tick, and the veil lift. That is all of them."); }
+    else { say("Sound off."); }
+  });
+  btnFx.addEventListener("click", function () { setFx(!state.fx); flash(btnFx); });
+  btnReplay.addEventListener("click", function () { flash(btnReplay); replay(); });
+
+  function setFx(on) {
+    state.fx = on;
+    store.set("v12q-fx", on ? "on" : "off");
+    root.classList.toggle("fx-on", on);
+    root.classList.toggle("fx-off", !on);
+    if (!on) {
+      state.sound = false;
+      if (actx && actx.suspend) { try { actx.suspend().catch(function () {}); } catch (e) {} }
+      killIntro();
+      revealAll();
+      say("FX off: intro, ambient effects, motion and sound are gone. Everything still works.");
+    } else {
+      say("FX on. Press R to watch the intro.");
+    }
+    syncControls();
+  }
+
+  /* ============================================================ ENTRANCES */
+  var io = null;
+  function revealAll() { $$("[data-enter]").forEach(function (el) { el.classList.add("in"); }); }
+  function resetEntrances() {
+    if (io) { io.disconnect(); io = null; }
+    $$("[data-enter]").forEach(function (el) { el.classList.remove("in"); });
+    elWord.style.setProperty("--d", "60ms");
+  }
+  function revealHero() { $$(".hero [data-enter]").forEach(function (el) { el.classList.add("in"); }); }
+  function startObserver() {
+    var rest = $$("[data-enter]:not(.in)");
+    if (!("IntersectionObserver" in window)) { rest.forEach(function (el) { el.classList.add("in"); }); return; }
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    rest.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ============================================================ INTRO
+     Fast curtain: question + load log + progress rule, lift. 1.1s total. */
+  var veil = $("#veil"), timers = [], introOn = false;
+  function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+  function killIntro() {
+    timers.forEach(clearTimeout); timers = [];
+    introOn = false; veil.hidden = true; veil.className = "veil";
+  }
+  function playIntro() {
+    killIntro(); resetEntrances();
+    if (!state.fx) { revealAll(); return; }
+    introOn = true;
+    var r = reduced(), lift = r ? 420 : 640, gone = r ? 220 : 470;
+    veil.hidden = false; void veil.offsetWidth;
+    veil.classList.add("is-on");
+    at(lift - 40, function () { veil.classList.add("is-ready"); cueTick(); });
+    at(lift, function () { veil.classList.add("is-lift"); cueStinger(wordOf(HIST[state.idx].f, HIST[state.idx].a)); revealHero(); });
+    at(lift + gone, function () { killIntro(); startObserver(); });
+  }
+  function skipIntro() {
+    if (!introOn) return;
+    killIntro(); revealHero(); startObserver();
+  }
+  function replay() {
+    if (!state.fx) { say("FX is off, so there is no intro to replay."); return; }
+    closeSheet();
+    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch (e) { window.scrollTo(0, 0); }
+    playIntro();
+  }
+  veil.addEventListener("click", skipIntro);
+
+  /* ============================================================ KEYS */
+  doc.addEventListener("keydown", function (ev) {
+    var tg = ev.target, typing = tg && (tg.tagName === "INPUT" || tg.tagName === "TEXTAREA" || tg.tagName === "SELECT" || tg.isContentEditable);
+    if (ev.key === "Escape") {
+      if (introOn) { skipIntro(); return; }
+      if (state.sheet >= 0) { closeSheet(); return; }
+      if (typing && tg.id === "grep" && tg.value) return;
+      if (state.pinned || state.idx !== TODAY) { backToToday(); return; }
+      return;
+    }
+    if (typing || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    if (ev.key === "r" || ev.key === "R") { ev.preventDefault(); flash(btnReplay); replay(); return; }
+    if (state.sheet >= 0) {
+      if (ev.key === "[") stepSheet(-1);
+      else if (ev.key === "]") stepSheet(1);
+      return;
+    }
+    if (ev.key === "j" || ev.key === "k") {
+      var list = $$(".entry", tbody); if (!list.length) return;
+      var cur = list.indexOf(doc.activeElement), nx = ev.key === "j" ? cur + 1 : cur - 1;
+      if (cur === -1) nx = ev.key === "j" ? 0 : list.length - 1;
+      nx = Math.max(0, Math.min(list.length - 1, nx));
+      ev.preventDefault(); list[nx].focus();
+    }
+  });
+
+  /* ============================================================ BOOT */
+  var resizeT = 0;
+  window.addEventListener("resize", function () { clearTimeout(resizeT); resizeT = setTimeout(renderChart, 120); });
+  if (mq && mq.addEventListener) { try { mq.addEventListener("change", function () { /* CSS handles it; JS timings read reduced() per run */ }); } catch (e) {} }
+
+  buildBreakdown();
+  renderLedger();
+  buildSeg();
+  renderTable();
+  setWord(wordOf(HIST[TODAY].f, HIST[TODAY].a), false);
+  renderChart();
+  setIdx(TODAY, { pin: false });
+  root.classList.toggle("fx-on", state.fx);
+  root.classList.toggle("fx-off", !state.fx);
+  syncControls();
+  playIntro();
+})();
+</script>
+</body>
+</html>

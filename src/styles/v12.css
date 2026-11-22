@@ -1,0 +1,76 @@
+/* v1.2 Phosphor Scope — document-level layer.
+   Component-scoped styles live in their .svelte files; this file holds the
+   ambient CRT layer (body.v12) and pre-paint intro guard. */
+
+@layer components {
+  body.v12 {
+    background: var(--phosphor-screen);
+    color: var(--phosphor-text);
+  }
+
+  body.v12 :is(#home, #weekly, #articles-table, #ph-method) {
+    scroll-margin-top: 4.5rem;
+  }
+
+  html.v12-veil-pending body {
+    background: var(--phosphor-screen);
+  }
+
+  html.v12-veil-pending .ph-page {
+    visibility: hidden;
+  }
+
+  /* Vignette: inset box-shadow, deliberately not a gradient. */
+  body.v12::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: inset 0 0 18vmax var(--phosphor-vignette);
+    opacity: 0.35;
+  }
+
+  /* Phosphor flicker: an 8s steps() blip at ~1.8% tint. */
+  body.v12::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background: var(--phosphor-flicker);
+    animation: v12-flicker 8s steps(1) infinite;
+  }
+
+  @keyframes v12-flicker {
+    0%,
+    92% {
+      opacity: 0;
+    }
+    93% {
+      opacity: 1;
+    }
+    94% {
+      opacity: 0;
+    }
+    96% {
+      opacity: 1;
+    }
+    97%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  html.fx-off body.v12::before,
+  html.fx-off body.v12::after {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.v12::before,
+    body.v12::after {
+      display: none;
+    }
+  }
+}

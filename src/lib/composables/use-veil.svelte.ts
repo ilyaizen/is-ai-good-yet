@@ -1,103 +1,62 @@
-import { onMount, getContext } from "svelte"
+import { onMount } from "svelte"
+import { v12Effects } from "$lib/state/v12-effects.svelte"
 
 const STORAGE_KEY = "isAiGoodYetRevealed"
-const LOADER_FADE_DELAY_MS = 100
 
-type VeilControl = {
-  setVeilState: (params: {
-    visible: boolean
-    onReveal: () => void
-    articleCount: number
-    lastUpdateTimestamp: number | null
-    resetTrigger: number
-  }) => void
+export interface VeilController {
+  readonly isLoading: boolean
+  readonly revealed: boolean
+  readonly showIntro: boolean
+  readonly replayKey: number
+  handleReveal: () => void
+  handleComplete: () => void
+  handleReplay: () => void
 }
 
-type LayoutScrollState = {
-  scroll: number
-  setScrolledPastVerdict: (value: boolean) => void
-}
-
-/**
- * Shared veil state machine for landing pages.
- * Manages the reveal/replay lifecycle, localStorage persistence,
- * and sync with the layout-level veil control + scroll-driven header visibility.
- */
-export function useVeil(params: { articleCount: number; lastUpdateTimestamp: number | null }) {
-  const layoutScrollState = getContext<LayoutScrollState>("layoutScrollState")
-  const veilControl = getContext<VeilControl>("veilControl")
-
+export function useVeil(): VeilController {
   let isLoading = $state(true)
   let revealed = $state(false)
-  let contentVisible = $state(false)
-  let veilResetTrigger = $state(0)
+  let showIntro = $state(false)
+  let replayKey = $state(0)
 
-  function resetToVeil() {
-    revealed = false
-    contentVisible = false
-  }
-
-  function handleReveal() {
+  function handleReveal(): void {
     revealed = true
-    if (typeof localStorage !== "undefined") {
+    document.documentElement.classList.remove("v12-veil-pending")
+    try {
       localStorage.setItem(STORAGE_KEY, "true")
+    } catch {
+      // Storage can be blocked; keep the reveal for this mount.
     }
-    setTimeout(() => {
-      contentVisible = true
-    }, 300)
   }
 
-  function handleReplay() {
+  function handleComplete(): void {
+    showIntro = false
+    requestAnimationFrame(() => {
+      document.getElementById("home")?.focus({ preventScroll: true })
+    })
+  }
+
+  function handleReplay(): void {
+    if (!v12Effects.fx || showIntro) return
     revealed = false
-    contentVisible = false
-    if (typeof localStorage !== "undefined") {
-      localStorage.removeItem(STORAGE_KEY)
-    }
-    veilResetTrigger++
+    replayKey += 1
+    showIntro = true
+    window.scrollTo({ top: 0, behavior: "instant" })
   }
-
-  function handleReplayScrollToTop() {
-    handleReplay()
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0 })
-    }
-  }
-
-  // Scroll-driven header visibility
-  $effect(() => {
-    if (!revealed) {
-      layoutScrollState.setScrolledPastVerdict(false)
-      return
-    }
-    const scrolledPast = layoutScrollState.scroll > window.innerHeight * 0.5
-    layoutScrollState.setScrolledPastVerdict(scrolledPast)
-  })
-
-  // Sync veil visibility state with layout
-  $effect(() => {
-    if (!isLoading) {
-      veilControl.setVeilState({
-        visible: !revealed,
-        onReveal: handleReveal,
-        articleCount: params.articleCount,
-        lastUpdateTimestamp: params.lastUpdateTimestamp,
-        resetTrigger: veilResetTrigger,
-      })
-    }
-  })
 
   onMount(() => {
-    if (typeof localStorage !== "undefined") {
-      const hasRevealed = localStorage.getItem(STORAGE_KEY)
-      if (hasRevealed === "true") {
-        revealed = true
-        contentVisible = true
-      }
+    let returning = false
+    try {
+      v12Effects.init()
+      returning = localStorage.getItem(STORAGE_KEY) === "true"
+    } catch {
+      // Usable with session-only state when storage is restricted.
     }
-
-    setTimeout(() => {
-      isLoading = false
-    }, LOADER_FADE_DELAY_MS)
+    showIntro = v12Effects.fx && !returning
+    if (!showIntro) {
+      handleReveal()
+    }
+    isLoading = false
   })
 
   return {
@@ -107,12 +66,14 @@ export function useVeil(params: { articleCount: number; lastUpdateTimestamp: num
     get revealed() {
       return revealed
     },
-    get contentVisible() {
-      return contentVisible
+    get showIntro() {
+      return showIntro
+    },
+    get replayKey() {
+      return replayKey
     },
     handleReveal,
+    handleComplete,
     handleReplay,
-    handleReplayScrollToTop,
-    resetToVeil,
   }
 }

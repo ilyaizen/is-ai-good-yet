@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Is AI &ldquo;Good&rdquo; Yet? &mdash; v1.2 prototype &middot; Phosphor Boot</title>
+<script>
+  /* Runs before first paint so the boot veil never flashes the page underneath. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add("js");
+    var fx = "on";
+    try { fx = window.localStorage.getItem("v12.fx") || "on"; } catch (e) { /* storage blocked: default on */ }
+    if (fx === "off") d.classList.add("fx-off");
+    else d.classList.add("boot-pending");
+  })();
+</script>
+<style>
+/* =====================================================================
+   TOKENS — maps 1:1 to src/styles/tokens.css
+   Values copied from the repo (.dark theme + palette). Same names, same
+   values, so the port is a find-and-keep, not a re-theme.
+   ===================================================================== */
+:root {
+  /* tokens.css :root — palette */
+  --palette-lime-dark: oklch(0.68 0.18 140.85);
+  --palette-warning-dark: oklch(0.8 0.14 105);          /* kept for mapping; unused (monochrome) */
+  --palette-destructive-dark: oklch(0.63 0.23 20.65);   /* kept for mapping; unused (monochrome) */
+  --palette-gray-300: oklch(0.7 0.01 250);
+  --palette-gray-500: oklch(0.5 0.01 250);
+  --palette-gray-800: oklch(0.15 0.008 250);
+  --palette-gray-900: oklch(0.13 0.008 250);
+  --palette-gray-950: oklch(0.09 0.005 250);
+
+  /* tokens.css .dark — terminal tokens */
+  --terminal-bg: var(--palette-gray-900);
+  --terminal-bg-subtle: var(--palette-gray-950);
+  --terminal-bg-header: var(--palette-gray-800);
+  --terminal-bg-footer: oklch(0.12 0.008 250);
+  --terminal-border: oklch(0.68 0.18 130.85 / 0.4);
+  --terminal-border-strong: var(--palette-lime-dark);
+  --terminal-border-subtle: oklch(0.68 0.18 130.85 / 0.2);
+  --terminal-text: oklch(0.95 0.005 250);
+  --terminal-text-muted: var(--palette-gray-300);
+  --terminal-text-faint: var(--palette-gray-500);
+  --terminal-accent: var(--palette-lime-dark);
+  --terminal-accent-glow: oklch(0.68 0.18 130.85 / 0.3);
+  --terminal-accent-hover: oklch(0.68 0.18 130.85 / 0.15);
+  --terminal-cursor: var(--palette-lime-dark);
+
+  /* tokens.css — layout */
+  --container-width: 80rem;
+  --radius: 0.4rem;
+  --spacing: 0.25rem;
+
+  /* app.css */
+  --ease-swift: cubic-bezier(0, 0.7, 0.1, 1);
+
+  /* crt-effect.css */
+  --crt-scanline-opacity: 0.04;
+  --crt-vignette-opacity: 0.08;
+  --crt-flicker-speed: 8s;
+
+  /* ---------------- NEW (v1.2 Phosphor Boot) ---------------- */
+  /* NEW: zero-request mono stack replaces the "IBM Plex Mono" webfont in --font-mono */
+  --font-mono-v12: ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  /* NEW: phosphor ramp — every value shares --palette-lime-dark's hue (140.85), only L/C move.
+     Text is tinted phosphor rather than blue-gray: one monochrome tube, one hue. */
+  --phosphor: oklch(0.86 0.19 140.85);          /* beam / peak (#85ef73) 14.3:1 on ground */
+  --phosphor-text: oklch(0.9 0.045 140.85);     /* body copy (#cee6ca) 15.6:1 */
+  --phosphor-muted: oklch(0.72 0.06 140.85);    /* secondary (#91ae8b) 8.5:1 */
+  --phosphor-faint: oklch(0.6 0.05 140.85);     /* labels (#70886c) 5.3:1 */
+  --phosphor-rule: oklch(0.68 0.18 140.85 / 0.22);
+  --phosphor-wash: oklch(0.68 0.18 140.85 / 0.07);
+  /* NEW: semantic aliases over existing tokens */
+  --ground: var(--terminal-bg-subtle);          /* gray-950 */
+  --surface: var(--terminal-bg-header);         /* gray-800: panels, sheet */
+  /* NEW: motion */
+  --stagger: 70ms;
+  --dur-enter: 420ms;
+  --dur-sheet: 360ms;
+  --dur-lift: 460ms;
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--ground); color-scheme: dark; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--phosphor-text);
+  font-family: var(--font-mono-v12);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+html.veil-open body { overflow: hidden; }
+a { color: var(--phosphor); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.wrap { width: 100%; max-width: var(--container-width); margin: 0 auto; padding: 0 2.5rem; }
+kbd { font: inherit; font-size: 0.75em; color: var(--phosphor-faint); border: 1px solid var(--phosphor-rule); border-radius: 3px; padding: 0 0.3em; margin-left: 0.4em; }
+.hl { color: var(--phosphor); }
+.skip { position: absolute; left: 1rem; top: -3rem; z-index: 100; background: var(--phosphor); color: var(--ground); padding: 0.4rem 0.8rem; }
+.skip:focus { top: 1rem; }
+
+/* ---------- one control geometry for the whole page ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  height: 2rem; padding: 0 0.75rem;
+  font-size: 0.8125rem; letter-spacing: 0.02em;
+  background: transparent; color: var(--phosphor-text);
+  border: 1px solid var(--terminal-border); border-radius: 3px;
+  cursor: pointer; white-space: nowrap;
+  transition: background-color 120ms var(--ease-swift), border-color 120ms var(--ease-swift), transform 90ms var(--ease-swift);
+}
+.btn:hover { background: var(--terminal-accent-hover); border-color: var(--terminal-border-strong); }
+.btn:active { transform: translateY(1px); }
+.btn[aria-pressed="true"] { background: var(--phosphor); color: var(--ground); border-color: var(--phosphor); }
+.btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+.btn--primary { border-color: var(--phosphor); color: var(--phosphor); }
+
+/* ---------- caret ---------- */
+.caret { display: inline-block; width: 0.6em; height: 1.05em; margin-left: 0.08em; background: var(--terminal-cursor); vertical-align: -0.15em; animation: blink 1.06s steps(1) infinite; }
+.caret--big { width: 0.5em; height: 0.82em; vertical-align: -0.04em; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- entrance primitive (transform/opacity only) ---------- */
+.js .rv { opacity: 0; transform: translateY(8px); transition: opacity var(--dur-enter) var(--ease-swift), transform var(--dur-enter) var(--ease-swift); transition-delay: calc(var(--i, 0) * var(--stagger)); }
+.js .is-in .rv, .js .rv.is-in { opacity: 1; transform: none; }
+
+/* ---------- header ---------- */
+.hdr { border-bottom: 1px solid var(--phosphor-rule); }
+.hdr__in { display: flex; align-items: center; gap: 1.5rem; height: 3.25rem; }
+.brand { color: var(--phosphor-text); text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
+.brand__ver { color: var(--phosphor-faint); font-weight: 400; margin-left: 0.6em; font-size: 0.8125rem; }
+.hdr__status { flex: 1; margin: 0; font-size: 0.8125rem; color: var(--phosphor-faint); display: flex; gap: 0.6em; flex-wrap: wrap; }
+.hdr__status b { color: var(--phosphor-text); font-weight: 400; }
+.fail { background: var(--phosphor); color: var(--ground); padding: 0 0.3em; }
+
+/* ---------- hero ---------- */
+.hero { min-height: calc(100vh - 3.25rem - 6.5rem); min-height: calc(100dvh - 3.25rem - 6.5rem); display: flex; align-items: center; padding: 3.5rem 0 2.5rem; }
+.hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) 22rem; gap: 4rem; align-items: end; }
+.prompt { margin: 0 0 0.75rem; font-size: 1.125rem; color: var(--phosphor-muted); min-height: 1.6em; }
+.prompt__sigil { color: var(--phosphor); margin-right: 0.5em; }
+.verdict {
+  margin: 0; font-weight: 700; color: var(--phosphor);
+  font-size: clamp(3.6rem, 11.5vw, 10rem); line-height: 0.95;
+  letter-spacing: -0.03em; word-spacing: -0.28em;
+  min-height: 0.95em; white-space: nowrap;
+  text-shadow: 0 0 0.35em oklch(0.68 0.18 140.85 / 0.18);
+}
+.bd { margin-top: 2.25rem; }
+.bd__bar { font-size: 1.25rem; line-height: 1; white-space: nowrap; overflow: hidden; height: 1.25rem; letter-spacing: 0; }
+.bd__pos { color: var(--phosphor); }
+.bd__neu { color: var(--phosphor-muted); }
+.bd__neg { color: var(--phosphor-faint); }
+.bd__legend { display: flex; gap: 2.5rem; margin: 0.9rem 0 0; flex-wrap: wrap; }
+.bd__legend div { display: flex; gap: 0.6em; align-items: baseline; }
+.bd__legend dt { color: var(--phosphor-faint); font-size: 0.8125rem; }
+.bd__legend dd { margin: 0; font-size: 1.125rem; color: var(--phosphor-text); }
+.hero__lede { margin: 1.75rem 0 0.35rem; font-size: 1.125rem; max-width: 46ch; color: var(--phosphor-text); }
+.hero__fine { margin: 0; font-size: 0.8125rem; color: var(--phosphor-faint); max-width: 60ch; }
+
+.register { border-left: 1px solid var(--phosphor-rule); padding-left: 1.75rem; font-size: 0.875rem; }
+.register h2 { margin: 0 0 0.9rem; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--phosphor-faint); }
+.reg { margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 1rem; row-gap: 0.35rem; }
+.reg dt { color: var(--phosphor-faint); }
+.reg dd { margin: 0; text-align: right; color: var(--phosphor-text); }
+.reg dd.hl { color: var(--phosphor); }
+.voices { margin: 1.4rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.9rem; }
+.voices li { border-left: 2px solid var(--phosphor-rule); padding-left: 0.8rem; color: var(--phosphor-muted); font-size: 0.8125rem; }
+.voices q { display: block; color: var(--phosphor-text); quotes: none; margin-bottom: 0.2rem; }
+.voices .who { color: var(--phosphor-faint); }
+
+/* ---------- POST summary (stats bar) ---------- */
+.post { border-top: 1px solid var(--phosphor-rule); border-bottom: 1px solid var(--phosphor-rule); background: var(--terminal-bg); }
+.post__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; }
+.post__cell { padding: 1.1rem 1.25rem; border-left: 1px solid var(--phosphor-rule); min-width: 0; }
+.post__cell:first-child { border-left: 0; padding-left: 0; }
+.post__cell dt { font-size: 0.75rem; color: var(--phosphor-faint); letter-spacing: 0.06em; text-transform: uppercase; display: flex; gap: 0.5em; }
+.post__cell dt .ok { margin-left: auto; color: var(--phosphor); letter-spacing: 0.04em; }
+.post__cell dd { margin: 0.3rem 0 0; font-size: 1.25rem; color: var(--phosphor-text); }
+.post__cell dd small { font-size: 0.75rem; color: var(--phosphor-faint); margin-left: 0.35em; }
+
+/* ---------- device sections ---------- */
+.dev { padding: 4.5rem 0 1rem; }
+.devh { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; }
+.devh h2 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--phosphor-text); white-space: nowrap; }
+.devh__path { color: var(--phosphor); font-weight: 400; margin-right: 0.6em; }
+.devh__rule { flex: 1; border-top: 1px solid var(--phosphor-rule); transform: translateY(-0.3em); transform-origin: left; }
+.js .devh__rule { transform: translateY(-0.3em) scaleX(0); transition: transform 700ms var(--ease-swift) 120ms; }
+.js .is-in .devh__rule { transform: translateY(-0.3em) scaleX(1); }
+.devh__meta { color: var(--phosphor-faint); font-size: 0.8125rem; white-space: nowrap; }
+
+/* ---------- articles table ---------- */
+.tools { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.tools__chips { display: flex; gap: 0.5rem; }
+.grep { margin-left: auto; display: flex; align-items: center; gap: 0.5rem; height: 2rem; border: 1px solid var(--terminal-border); border-radius: 3px; padding: 0 0.6rem; }
+.grep:focus-within { border-color: var(--phosphor); }
+.grep label { color: var(--phosphor-faint); font-size: 0.8125rem; }
+.grep input { background: transparent; border: 0; outline: 0; width: 15rem; font-size: 0.8125rem; color: var(--phosphor-text); caret-color: var(--phosphor); }
+.grep input::placeholder { color: var(--phosphor-faint); opacity: 0.7; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.tbl th { text-align: left; font-weight: 400; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--phosphor-faint); padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--phosphor-rule); }
+.tbl td { padding: 0.7rem 0.75rem; border-bottom: 1px solid oklch(0.68 0.18 140.85 / 0.09); vertical-align: baseline; }
+.tbl .num { text-align: right; white-space: nowrap; }
+.tbl tbody tr { cursor: pointer; transition: background-color 90ms var(--ease-swift); }
+.tbl tbody tr:hover, .tbl tbody tr:focus-within { background: var(--phosphor-wash); }
+.tbl tbody tr.is-active { background: var(--terminal-accent-hover); }
+.c-s { width: 6.5rem; }
+.c-t { width: auto; }
+.rowbtn { all: unset; cursor: pointer; display: inline; color: var(--phosphor-text); }
+.rowbtn:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 3px; }
+.rowbtn__title { position: relative; }
+.tbl tbody tr:hover .rowbtn__title::before, .tbl tbody tr:focus-within .rowbtn__title::before { content: "\25B8"; position: absolute; left: -1.05em; color: var(--phosphor); }
+.rowbtn__dom { color: var(--phosphor-faint); margin-left: 0.7em; font-size: 0.8125rem; }
+.sent { display: inline-block; min-width: 5.25rem; padding: 0 0.35em; font-size: 0.8125rem; border: 1px solid transparent; white-space: nowrap; }
+.sent--pos { color: var(--phosphor); }
+.sent--neu { color: var(--phosphor-muted); }
+.sent--neg { color: var(--phosphor-text); border-color: var(--phosphor-faint); }
+.dim { color: var(--phosphor-faint); }
+.empty td { cursor: default; padding: 2rem 0.75rem; color: var(--phosphor-muted); }
+.tbl tbody tr.empty:hover { background: transparent; }
+.tblstat { margin: 0.6rem 0 0; font-size: 0.8125rem; color: var(--phosphor-faint); min-height: 1.55em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tblstat b { color: var(--phosphor); font-weight: 400; }
+
+/* ---------- scope (history) ---------- */
+.scope { display: grid; grid-template-columns: 21rem minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.readout__cmd { margin: 0; color: var(--phosphor-muted); font-size: 0.875rem; }
+.readout__cmd b { color: var(--phosphor-text); font-weight: 400; }
+.readout__v { margin: 0.4rem 0 0.9rem; font-size: 2.75rem; line-height: 1; font-weight: 700; color: var(--phosphor); letter-spacing: -0.02em; word-spacing: -0.28em; min-height: 1em; white-space: nowrap; }
+.readout dl { margin: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 1rem; row-gap: 0.3rem; font-size: 0.875rem; }
+.readout dt { color: var(--phosphor-faint); }
+.readout dd { margin: 0; text-align: right; }
+.readout__note { margin: 1rem 0; font-size: 0.8125rem; color: var(--phosphor-muted); min-height: 3.1em; }
+.screen { position: relative; border: 1px solid var(--phosphor-rule); background: var(--terminal-bg); border-radius: 2px; touch-action: pan-y; cursor: ew-resize; }
+.screen:focus-visible { outline-offset: 3px; }
+.screen canvas { display: block; width: 100%; height: 19rem; }
+.screen__hint { display: flex; justify-content: space-between; gap: 1rem; margin: 0.6rem 0 0; font-size: 0.75rem; color: var(--phosphor-faint); }
+.events { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* ---------- footer ---------- */
+.foot { margin-top: 5rem; border-top: 1px solid var(--phosphor-rule); background: var(--terminal-bg-footer); padding: 2.5rem 0 5rem; font-size: 0.8125rem; color: var(--phosphor-muted); }
+.foot__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 3rem; }
+.foot__halt { margin: 0 0 0.5rem; color: var(--phosphor-text); font-size: 0.9375rem; }
+.foot p { margin: 0 0 0.5rem; max-width: 60ch; }
+.foot h2 { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--phosphor-faint); margin: 0 0 0.6rem; }
+.foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
+.foot .count { color: var(--phosphor); }
+
+/* ---------- details sheet ---------- */
+.scrim { position: fixed; inset: 0; z-index: 40; background: oklch(0.05 0.005 250 / 0.72); opacity: 0; pointer-events: none; transition: opacity 260ms var(--ease-swift); }
+.scrim.is-open { opacity: 1; pointer-events: auto; }
+.sheet {
+  position: fixed; z-index: 41; top: 0; right: 0; bottom: 0; width: min(36rem, 100vw);
+  background: var(--surface); border-left: 1px solid var(--terminal-border);
+  transform: translateX(100%); visibility: hidden;
+  transition: transform var(--dur-sheet) var(--ease-swift), visibility 0s linear var(--dur-sheet);
+  display: flex; flex-direction: column;
+}
+.sheet.is-open { transform: none; visibility: visible; transition: transform var(--dur-sheet) var(--ease-swift), visibility 0s; }
+.sheet__bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--phosphor-rule); font-size: 0.8125rem; color: var(--phosphor-faint); }
+.sheet__bar span { margin-right: auto; }
+.sheet__body { padding: 1.5rem 1.5rem 2.5rem; overflow-y: auto; flex: 1; }
+.sheet__title { margin: 0 0 0.8rem; font-size: 1.375rem; line-height: 1.3; color: var(--phosphor-text); }
+.meta { margin: 0 0 1.4rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem 1rem; font-size: 0.8125rem; }
+.meta dt { color: var(--phosphor-faint); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.meta dd { margin: 0.1rem 0 0; color: var(--phosphor-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gauge { margin: 0 0 1.5rem; }
+.gauge__lab { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--phosphor-faint); margin-bottom: 0.35rem; }
+.gauge__lab b { color: var(--phosphor); font-weight: 400; font-size: 0.875rem; }
+.gauge__track { position: relative; height: 0.9rem; border: 1px solid var(--phosphor-rule); }
+.gauge__track::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; border-left: 1px dashed var(--phosphor-faint); }
+.gauge__fill { position: absolute; top: 2px; bottom: 2px; left: 50%; width: 50%; background: var(--phosphor); transform-origin: left center; transition: transform 520ms var(--ease-swift); }
+.gauge__fill.is-neg { left: 0; transform-origin: right center; background: var(--phosphor-muted); }
+.sheet h3 { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--phosphor-faint); margin: 1.5rem 0 0.6rem; }
+.sheet__sum { margin: 0; color: var(--phosphor-text); }
+.quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.quotes li { border-left: 2px solid var(--phosphor); padding: 0.1rem 0 0.1rem 0.9rem; }
+.quotes q { display: block; quotes: none; color: var(--phosphor-text); min-height: 1.55em; }
+.quotes .src { display: block; font-size: 0.75rem; color: var(--phosphor-faint); margin-top: 0.25rem; }
+.sheet__links { margin-top: 1.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* ---------- boot veil (intro + loader) ---------- */
+.veil { position: fixed; inset: 0; z-index: 60; background: var(--ground); display: none; overflow: auto; transform-origin: 50% 50%; }
+.boot-pending .veil, .veil.is-open { display: block; }
+.veil:focus { outline: none; }
+.veil__in { max-width: 62rem; padding: 2.75rem 2.5rem 6rem; font-size: 0.9375rem; line-height: 1.6; }
+.veil__top { display: flex; justify-content: space-between; gap: 1rem; color: var(--phosphor-text); margin-bottom: 0.2rem; }
+.veil__hint { color: var(--phosphor-faint); font-size: 0.8125rem; }
+.vl { margin: 0; white-space: pre-wrap; min-height: 1.6em; color: var(--phosphor-muted); }
+.vl--hi { color: var(--phosphor-text); }
+.vl--gap { min-height: 0.8em; }
+.vrow { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 4.25rem minmax(0, 15rem); column-gap: 0.75rem; color: var(--phosphor-muted); }
+.vrow__lead { display: flex; min-width: 0; }
+.vrow__lead span:first-child { white-space: nowrap; }
+.lead { flex: 1; overflow: hidden; white-space: nowrap; color: var(--phosphor-faint); opacity: 0.6; padding-left: 0.4em; }
+.lead::after { content: " . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ."; }
+.vrow__st { color: var(--phosphor-faint); }
+.vrow__st.is-ok { color: var(--phosphor); }
+.vrow__st.is-fail .fail { display: inline-block; }
+.vrow__note { color: var(--phosphor-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vbig { margin: 0.3rem 0 0; font-size: clamp(2rem, 6vw, 3.75rem); font-weight: 700; color: var(--phosphor); line-height: 1.05; word-spacing: -0.28em; min-height: 1.05em; }
+.veil__end { margin-top: 1.75rem; }
+.veil__end p { margin: 0 0 1rem; color: var(--phosphor-text); }
+.veil__actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.veil.is-lifting { animation: crt-off var(--dur-lift) var(--ease-swift) forwards; pointer-events: none; }
+@keyframes crt-off {
+  0% { transform: scale(1, 1); opacity: 1; }
+  55% { transform: scale(1, 0.004); opacity: 1; }
+  100% { transform: scale(0, 0.004); opacity: 0; }
+}
+
+/* ---------- CRT ambient layer ---------- */
+.crt { position: fixed; inset: 0; z-index: 70; pointer-events: none; }
+.crt__scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 2px, oklch(0 0 0 / calc(var(--crt-scanline-opacity) * 6)) 2px 3px); }
+.crt__flicker { position: absolute; inset: 0; background: oklch(0.68 0.18 140.85 / 0.018); opacity: 0; animation: flicker var(--crt-flicker-speed) steps(1) infinite; }
+.crt__vig { position: absolute; inset: 0; box-shadow: inset 0 0 14vmax oklch(0 0 0 / calc(var(--crt-vignette-opacity) * 5)); }
+@keyframes flicker { 0%, 100% { opacity: 0; } 11% { opacity: 1; } 12% { opacity: 0; } 47% { opacity: 0.6; } 48% { opacity: 0; } 83% { opacity: 1; } 84.5% { opacity: 0; } }
+
+/* ---------- fixed controls ---------- */
+.dock { position: fixed; z-index: 80; right: 1rem; bottom: 1rem; display: flex; gap: 0.5rem; background: var(--ground); padding: 0.35rem; border: 1px solid var(--phosphor-rule); border-radius: 4px; }
+.dock .btn b { font-weight: 700; }
+.toast { position: fixed; z-index: 80; right: 1rem; bottom: 4.1rem; max-width: 26rem; margin: 0; padding: 0.55rem 0.8rem; background: var(--surface); border: 1px solid var(--terminal-border); font-size: 0.8125rem; color: var(--phosphor-text); opacity: 0; transform: translateY(6px); transition: opacity 200ms var(--ease-swift), transform 200ms var(--ease-swift); pointer-events: none; }
+.toast.is-on { opacity: 1; transform: none; }
+
+/* =====================================================================
+   FX OFF — the production toggle proof. Intro, ambient, motion die.
+   ===================================================================== */
+.fx-off .crt { display: none; }
+.fx-off .veil { display: none !important; }
+.fx-off .caret { animation: none; }
+.fx-off .rv, .fx-off .devh__rule { opacity: 1 !important; transform: none !important; transition: none !important; }
+.fx-off .devh__rule { transform: translateY(-0.3em) !important; }
+.fx-off .sheet, .fx-off .scrim, .fx-off .gauge__fill, .fx-off .toast, .fx-off .btn, .fx-off .tbl tbody tr { transition: none !important; }
+.fx-off .verdict, .fx-off .readout__v { text-shadow: none; }
+
+/* ---------- reduced motion: content stays, travel drops, ambient dies ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .crt { display: none; }
+  .caret { animation: none; }
+  .js .rv { transform: none; transition: opacity 200ms linear; transition-delay: 0ms; }
+  .js .devh__rule { transform: translateY(-0.3em); transition: none; }
+  .sheet, .sheet.is-open { transition: visibility 0s; }
+  .veil.is-lifting { animation: veil-fade 200ms linear forwards; }
+  .btn:active { transform: none; }
+  .toast { transform: none; }
+}
+@keyframes veil-fade { to { opacity: 0; } }
+
+/* ---------- 768: tablet composition ---------- */
+@media (max-width: 1080px) {
+  .wrap { padding: 0 1.75rem; }
+  .hero__grid { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .register { border-left: 0; border-top: 1px solid var(--phosphor-rule); padding: 1.5rem 0 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 2.5rem; }
+  .register h2 { grid-column: 1 / -1; }
+  .voices { margin: 0; }
+  .post__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .post__cell:nth-child(4) { border-left: 0; padding-left: 0; }
+  .post__cell:nth-child(n+4) { border-top: 1px solid var(--phosphor-rule); }
+  .scope { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .readout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 2rem; align-items: start; }
+  .readout__head { grid-column: 1; }
+  .readout dl { grid-column: 2; grid-row: 1 / span 2; }
+  .readout__note { grid-column: 1; margin: 0; }
+  .readout .btn { grid-column: 1; justify-self: start; margin-top: 0.75rem; }
+  .rowbtn__dom { display: none; }
+  .foot__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .foot__grid > :first-child { grid-column: 1 / -1; }
+  .vrow { grid-template-columns: 8.5rem minmax(0, 1fr) 4.25rem; }
+  .vrow__note { grid-column: 2 / -1; padding-left: 0; }
+}
+
+/* ---------- 390: phone composition (a log, not a squeezed table) ---------- */
+@media (max-width: 640px) {
+  body { font-size: 0.875rem; padding-bottom: 3.5rem; }
+  .wrap { padding: 0 1.1rem; }
+  .hdr__in { height: 3rem; gap: 0.75rem; }
+  .hdr__status { display: none; }
+  .brand { margin-right: auto; }
+  .hero { min-height: auto; padding: 2.25rem 0 2rem; }
+  .prompt { font-size: 1rem; }
+  .verdict { font-size: clamp(3.4rem, 19vw, 5.5rem); }
+  .bd { margin-top: 1.5rem; }
+  .bd__bar { font-size: 1rem; height: 1rem; }
+  .bd__legend { display: grid; grid-template-columns: 1fr; gap: 0.25rem; }
+  .bd__legend div { justify-content: space-between; border-bottom: 1px dotted var(--phosphor-rule); padding: 0.2rem 0; }
+  .hero__lede { font-size: 1rem; }
+  .register { grid-template-columns: minmax(0, 1fr); }
+  .voices { margin-top: 1.25rem; }
+  .post__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .post__cell { padding: 0.85rem 0 0.85rem 0.9rem; border-top: 1px solid var(--phosphor-rule); }
+  .post__cell:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .post__cell:nth-child(4) { border-left: 1px solid var(--phosphor-rule); padding-left: 0.9rem; }
+  .post__cell:nth-child(-n+2) { border-top: 0; }
+  .post__cell:last-child { grid-column: 1 / -1; }
+  .post__cell dd { font-size: 1.0625rem; }
+  .dev { padding-top: 3rem; }
+  .devh__meta { display: none; }
+  .tools__chips { overflow-x: auto; max-width: 100%; }
+  .grep { margin-left: 0; width: 100%; }
+  .grep input { width: 100%; }
+  .tbl thead { display: none; }
+  .tbl, .tbl tbody { display: block; }
+  .tbl tbody tr { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "s t" "s m"; column-gap: 0.8rem; padding: 0.8rem 0; border-bottom: 1px solid oklch(0.68 0.18 140.85 / 0.12); }
+  .tbl td { border: 0; padding: 0; }
+  .tbl td.c-s { grid-area: s; width: auto; }
+  .tbl td.c-t { grid-area: t; }
+  .tbl td.c-p, .tbl td.c-c, .tbl td.c-d { display: none; }
+  .tbl td.c-m { display: block; grid-area: m; font-size: 0.75rem; color: var(--phosphor-faint); margin-top: 0.2rem; text-align: left; }
+  .sent { min-width: 3.4rem; }
+  .sent .lbl { display: none; }
+  .tbl tbody tr:hover .rowbtn__title::before, .tbl tbody tr:focus-within .rowbtn__title::before { content: none; }
+  .tblstat { display: none; }
+  .empty { display: block !important; }
+  .readout { display: block; }
+  .readout__v { font-size: 2.25rem; }
+  .screen canvas { height: 13rem; }
+  .screen__hint .k { display: none; }
+  .foot__grid { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .sheet { top: auto; left: 0; width: 100%; height: 88vh; height: 88dvh; border-left: 0; border-top: 1px solid var(--terminal-border); transform: translateY(100%); }
+  .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sheet__bar .k { display: none; }
+  .dock { left: 0; right: 0; bottom: 0; border-radius: 0; border-width: 1px 0 0; justify-content: flex-end; padding: 0.4rem 0.75rem; }
+  .toast { left: 0.75rem; right: 0.75rem; bottom: 3.4rem; max-width: none; }
+  .veil__in { padding: 1.5rem 1.1rem 5rem; font-size: 0.8125rem; }
+  .veil__hint { display: none; }
+  .vrow { grid-template-columns: 6.5rem minmax(0, 1fr) 3.5rem; column-gap: 0.5rem; }
+  .vrow__lead .lead { display: none; }
+  .vrow__note { grid-column: 1 / -1; padding-left: 1.5rem; }
+}
+.c-m { display: none; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hdr" id="top">
+  <div class="wrap hdr__in">
+    <a class="brand" href="#top">is-ai-good-yet<span class="brand__ver">v1.2</span></a>
+    <p class="hdr__status">
+      <span>boot <b>2026-11-20 04:00Z</b></span><span>&middot;</span>
+      <span><b>1,365</b> articles</span><span>&middot;</span>
+      <span>optimism cache <span class="fail">FAIL</span></span>
+    </p>
+    <button class="btn" id="rescanBtn" type="button" aria-keyshortcuts="R" aria-label="Re-scan: replay the boot sequence">re-scan<kbd>R</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO VERDICT  (repo: verdict-display.svelte) -->
+  <section class="hero" id="hero" aria-labelledby="heroTitle">
+    <div class="wrap hero__grid">
+      <div class="hero__main">
+        <p class="prompt" aria-hidden="true"><span class="prompt__sigil">&gt;</span><span id="heroQa">is ai &ldquo;</span><span id="heroQb" class="hl">good</span><span id="heroQc">&rdquo; yet?</span></p>
+        <h1 class="verdict" id="heroTitle"><span class="sr-only">Is AI good yet? Not yet.</span><span aria-hidden="true" id="heroVerdict">NOT YET.</span><span class="caret caret--big" aria-hidden="true"></span></h1>
+        <div class="bd">
+          <div class="bd__bar" id="bdBar" aria-hidden="true"></div>
+          <dl class="bd__legend" aria-label="Points-weighted breakdown">
+            <div class="rv" style="--i:0"><dt>+ positive</dt><dd id="bdPos">38.6%</dd></div>
+            <div class="rv" style="--i:1"><dt>~ neutral</dt><dd id="bdNeu">21.0%</dd></div>
+            <div class="rv" style="--i:2"><dt>&minus; negative</dt><dd id="bdNeg">40.4%</dd></div>
+          </dl>
+        </div>
+        <p class="hero__lede rv" style="--i:3">Hacker News is warming up. The skeptics still bring more points to the thread.</p>
+        <p class="hero__fine rv" style="--i:4">Points-weighted across 484 articles from the last 12 months. Neutral counts half. Yes needs 60.</p>
+      </div>
+      <aside class="register" aria-labelledby="regTitle">
+        <h2 id="regTitle" class="rv" style="--i:2">verdict register</h2>
+        <dl class="reg rv" style="--i:3">
+          <dt>score</dt><dd class="hl" id="regScore">49.1 / 100</dd>
+          <dt>yes at</dt><dd>&ge; 60.0</dd>
+          <dt>no below</dt><dd>&lt; 40.0</dd>
+          <dt>distance to yes</dt><dd id="regDist">&minus;10.9</dd>
+          <dt>7-day drift</dt><dd id="regDrift">+1.8</dd>
+          <dt>last flip</dt><dd>2026-10-29 &rarr; NO, 1 day</dd>
+        </dl>
+        <ul class="voices rv" style="--i:4" aria-label="Loudest voices">
+          <li><q>Tests were the judge. The model did not get to argue.</q><span class="who">loudest +</span> &middot; 509 pts</li>
+          <li><q>We did not replace an engineer. We hired a very fast one who bills by the word.</q><span class="who">loudest &minus;</span> &middot; 820 pts</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- POST SUMMARY  (repo: stats-bar.svelte) -->
+  <section class="post" aria-label="Corpus stats" data-reveal>
+    <div class="wrap">
+      <dl class="post__grid">
+        <div class="post__cell rv" style="--i:0"><dt>articles analyzed <span class="ok">ok</span></dt><dd>1,365<small>all-time</small></dd></div>
+        <div class="post__cell rv" style="--i:1"><dt>window <span class="ok">ok</span></dt><dd>12 mo<small>484 in window</small></dd></div>
+        <div class="post__cell rv" style="--i:2"><dt>sources <span class="ok">ok</span></dt><dd>3<small>hn &middot; algolia &middot; bodies</small></dd></div>
+        <div class="post__cell rv" style="--i:3"><dt>comments sampled <span class="ok">ok</span></dt><dd>48,210<small>ranked tree</small></dd></div>
+        <div class="post__cell rv" style="--i:4"><dt>next boot <span class="ok">cron</span></dt><dd><span id="postCountdown">--:--:--</span><small>04:00 utc</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- DEVICE TABLE  (repo: articles-table.svelte) -->
+  <section class="dev" id="articles" aria-labelledby="artTitle" data-reveal>
+    <div class="wrap">
+      <header class="devh">
+        <h2 id="artTitle"><span class="devh__path">/dev/hn0</span>recent articles</h2>
+        <span class="devh__rule" aria-hidden="true"></span>
+        <span class="devh__meta" id="artMeta">10 of 484 &middot; newest first</span>
+      </header>
+      <div class="tools rv" style="--i:0">
+        <div class="tools__chips" role="group" aria-label="Filter by sentiment">
+          <button class="btn chip" type="button" data-f="all" aria-pressed="true">all <span class="n"></span></button>
+          <button class="btn chip" type="button" data-f="pos" aria-pressed="false">+ pos <span class="n"></span></button>
+          <button class="btn chip" type="button" data-f="neu" aria-pressed="false">~ neu <span class="n"></span></button>
+          <button class="btn chip" type="button" data-f="neg" aria-pressed="false">&minus; neg <span class="n"></span></button>
+        </div>
+        <div class="grep">
+          <label for="grepIn">grep</label>
+          <input id="grepIn" type="search" placeholder="title, domain or author" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+      <table class="tbl">
+        <caption class="sr-only">Recent Hacker News articles with sentiment. Select a title to inspect evidence.</caption>
+        <thead><tr><th class="c-s" scope="col">sentiment</th><th class="c-t" scope="col">title</th><th class="num" scope="col">points</th><th class="num" scope="col">comments</th><th class="num" scope="col">posted</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="tblstat" id="tblStat" aria-hidden="true">hover a row to preview &middot; enter or click to inspect</p>
+    </div>
+  </section>
+
+  <!-- SCOPE  (repo: history-chart.svelte) — the live thing -->
+  <section class="dev" id="history" aria-labelledby="histTitle" data-reveal>
+    <div class="wrap">
+      <header class="devh">
+        <h2 id="histTitle"><span class="devh__path">/dev/scope</span>sentiment trace</h2>
+        <span class="devh__rule" aria-hidden="true"></span>
+        <span class="devh__meta">90 daily samples &middot; 2026-08-23 &rarr; today</span>
+      </header>
+      <div class="scope">
+        <div class="readout rv" style="--i:0">
+          <div class="readout__head">
+            <p class="readout__cmd">&gt; verdict --at <b id="roDate">2026-11-20</b></p>
+            <p class="readout__v" aria-hidden="true"><span id="roVerdict">NOT YET.</span></p>
+          </div>
+          <dl>
+            <dt>score</dt><dd id="roScore">49.1</dd>
+            <dt>+ positive</dt><dd id="roPos">38.6%</dd>
+            <dt>~ neutral</dt><dd id="roNeu">21.0%</dd>
+            <dt>&minus; negative</dt><dd id="roNeg">40.4%</dd>
+            <dt>sample</dt><dd id="roDay">90 / 90</dd>
+          </dl>
+          <p class="readout__note" id="roNote">Today. 10.9 points short of yes.</p>
+          <button class="btn" id="roNow" type="button">return to today<kbd>End</kbd></button>
+          <p class="sr-only" id="roLive" aria-live="polite"></p>
+        </div>
+        <div class="rv" style="--i:1">
+          <div class="screen" id="scopeScreen" tabindex="0" role="slider" aria-label="Scrub sentiment history by date" aria-valuemin="0" aria-valuemax="89" aria-valuenow="89" aria-valuetext="2026-11-20: NOT YET, score 49.1">
+            <canvas id="scopeCanvas" aria-hidden="true"></canvas>
+          </div>
+          <p class="screen__hint"><span>drag across the trace to re-run the verdict for any day</span><span class="k">&larr; &rarr; day &middot; PgUp PgDn week</span></p>
+          <ul class="events" aria-label="Notable days">
+            <li><button class="btn" type="button" data-day="31">2026-09-23 &middot; YES</button></li>
+            <li><button class="btn" type="button" data-day="67">2026-10-29 &middot; NO</button></li>
+            <li><button class="btn" type="button" data-day="0">first sample</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER  (repo: minimal-footer.svelte / app-footer.svelte) -->
+<footer class="foot" id="about" data-reveal>
+  <div class="wrap foot__grid">
+    <div class="rv" style="--i:0">
+      <p class="foot__halt">System halted. Next boot at 04:00 UTC &mdash; in <span class="count" id="footCountdown">--:--:--</span><span class="caret" aria-hidden="true"></span></p>
+      <p>Every night a pipeline reads Hacker News stories about AI and the visible comments under them, scores each article, and weights it by the attention it got. This page is that run, printed.</p>
+      <p class="dim">Prototype: every article, quote and number on this page is invented mock data.</p>
+    </div>
+    <div class="rv" style="--i:1">
+      <h2>how it decides</h2>
+      <ul>
+        <li>score = positive + &frac12; neutral (points-weighted)</li>
+        <li>&ge; 60 yes &middot; 40&ndash;60 not yet &middot; &lt; 40 no</li>
+        <li>one sample a day, 12-month window</li>
+      </ul>
+    </div>
+    <div class="rv" style="--i:2">
+      <h2>elsewhere</h2>
+      <ul>
+        <li><a href="#history">history trace</a></li>
+        <li><a href="https://github.com/ilyaizen/is-ai-good-yet">source on github</a></li>
+        <li><button class="btn" type="button" id="footReplay">replay boot<kbd>R</kbd></button></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- DETAILS SHEET  (repo: article-details-sheet.svelte) -->
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="sheet__bar">
+    <span id="shPath">inspect /dev/hn0/01</span>
+    <button class="btn" type="button" id="shPrev" aria-label="Previous article">prev<kbd class="k">K</kbd></button>
+    <button class="btn" type="button" id="shNext" aria-label="Next article">next<kbd class="k">J</kbd></button>
+    <button class="btn" type="button" id="shClose" aria-label="Close details">close<kbd class="k">Esc</kbd></button>
+  </div>
+  <div class="sheet__body">
+    <h2 class="sheet__title" id="shTitle"></h2>
+    <dl class="meta">
+      <div><dt>points</dt><dd id="shPts"></dd></div>
+      <div><dt>comments</dt><dd id="shCmts"></dd></div>
+      <div><dt>posted</dt><dd id="shDate"></dd></div>
+      <div><dt>author</dt><dd id="shAuthor"></dd></div>
+      <div><dt>source</dt><dd id="shDom"></dd></div>
+      <div><dt>weight</dt><dd id="shWeight"></dd></div>
+    </dl>
+    <div class="gauge">
+      <div class="gauge__lab"><span>&minus;100</span><b id="shSent"></b><span>+100</span></div>
+      <div class="gauge__track"><div class="gauge__fill" id="shFill"></div></div>
+    </div>
+    <h3>summary</h3>
+    <p class="sheet__sum" id="shSum"></p>
+    <h3>evidence</h3>
+    <ul class="quotes" id="shQuotes"></ul>
+    <div class="sheet__links">
+      <a class="btn" id="shHn" href="#">open thread on hn (mock)</a>
+    </div>
+  </div>
+</aside>
+
+<!-- BOOT VEIL  (repo: comprehensive-loader.svelte = fetch block, verdict-veil.svelte = POST + compile) -->
+<div class="veil" id="veil" role="dialog" aria-modal="true" aria-label="Boot sequence. Press Escape to skip." tabindex="-1">
+  <div class="veil__in">
+    <div class="veil__top"><span>PHOSPHOR BIOS 1.2.0 &middot; is-ai-good-yet.com</span><span class="veil__hint">click or Esc skips &middot; R replays</span></div>
+    <div id="veilLog"></div>
+    <div class="veil__end" id="veilEnd" hidden>
+      <p id="veilDone">Boot complete. Press Enter for the answer.<span class="caret" aria-hidden="true"></span></p>
+      <div class="veil__actions">
+        <button class="btn btn--primary" type="button" id="veilGo">show the answer<kbd>Enter</kbd></button>
+        <button class="btn" type="button" id="veilAbout">what is this?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="crt" aria-hidden="true"><div class="crt__scan"></div><div class="crt__flicker"></div><div class="crt__vig"></div></div>
+
+<div class="dock" role="group" aria-label="Display settings">
+  <button class="btn" type="button" id="fxBtn" aria-pressed="true" aria-label="Effects: on. Toggle intro, ambient effects, motion and sound.">FX: <b>ON</b></button>
+  <button class="btn" type="button" id="sndBtn" aria-pressed="false" aria-label="Sound: off">SOUND: <b>OFF</b></button>
+</div>
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===================================================================
+     MOCK DATA — invented for this prototype. Nothing here is scraped.
+     =================================================================== */
+  var DAY = 86400000;
+  var NOW = Date.UTC(2026, 10, 20, 4, 0, 12); // fixed "pipeline ran at" stamp, keeps mocks deterministic
+  var VERDICT = { score: 49.1, pos: 38.6, neu: 21.0, neg: 40.4, yesAt: 60, noBelow: 40 };
+
+  var ARTICLES = [
+    { id: 46211873, t: "The token bill came in", d: "buttondown.com", a: "mbrock", p: 820, c: 511, s: -58, ago: 1,
+      sum: "A 14-person startup itemizes one month of agent usage: $41k in tokens, two shipped features, one very long retro.",
+      q: [["We did not replace an engineer. We hired a very fast one who bills by the word.", "article"], ["Everyone in this thread is doing the math on their own team right now and not posting it.", "thread, ranked #1"]] },
+    { id: 46190457, t: "Postmortem: our agent force-pushed to main (politely)", d: "incidentlog.dev", a: "kmorrow", p: 641, c: 402, s: -71, ago: 3,
+      sum: "An autonomous refactor rewrote history on main. The commit message apologized in advance.",
+      q: [["The commit message said \u2018sorry for the noise\u2019. It was not noise. It was the repository.", "article"], ["Branch protection is a feature, not a suggestion. Oldest lesson, new author.", "thread, ranked #2"]] },
+    { id: 46177302, t: "Local models are good enough for refactoring now", d: "tinyhost.io", a: "sverre", p: 509, c: 260, s: 44, ago: 4,
+      sum: "A 30B local model runs rename, extract and inline refactors across six repos; 91% pass with the test suite as judge.",
+      q: [["Tests were the judge. The model did not get to argue.", "article"], ["The interesting part isn\u2019t quality, it\u2019s that it runs on the laptop I already own.", "thread, ranked #1"]] },
+    { id: 46158811, t: "I let an agent maintain my side project for 30 days", d: "jlee.blog", a: "jlee", p: 412, c: 287, s: 62, ago: 6,
+      sum: "Dependency bumps, issue triage and two features shipped unattended. The author mostly reviewed diffs over coffee.",
+      q: [["It closed 23 issues. I closed my laptop.", "article"], ["Side projects are the best case: no on-call, no compliance, one user who loves you.", "thread, ranked #3"]] },
+    { id: 46139260, t: "Formal verification is having a moment thanks to LLMs", d: "proofs.substack.com", a: "ndg", p: 377, c: 151, s: 55, ago: 8,
+      sum: "LLM-drafted Lean proofs for a parser library. The checker rejects 70%; the remaining 30% are real.",
+      q: [["The model proposes, the kernel disposes.", "article"], ["Finally a use where hallucination is cheap: the proof either checks or it doesn\u2019t.", "thread, ranked #1"]] },
+    { id: 46120034, t: "We measured AI code review across 40k pull requests", d: "eng.plinth.co", a: "awhite", p: 298, c: 166, s: 8, ago: 10,
+      sum: "Review bots caught 11% more bugs before merge and wrote three times more comments that nobody read.",
+      q: [["Bug catch rate went up. So did the number of comments resolved with \u2018ok\u2019.", "article"], ["Measure time-to-merge, not comment volume, or you\u2019re grading the bot on noise.", "thread, ranked #2"]] },
+    { id: 46097718, t: "The autocomplete is confident. The tests are not.", d: "quietbuild.dev", a: "rtk", p: 233, c: 198, s: -48, ago: 13,
+      sum: "A team tracks flaky tests after adopting inline completion: up 38% in a quarter, mostly in generated fixtures.",
+      q: [["Confidence is not a test oracle.", "article"], ["We banned generated fixtures and the flake rate went back to boring.", "thread, ranked #4"]] },
+    { id: 46071945, t: "Junior devs are learning faster. Or are they?", d: "teachyourself.cs", a: "pmora", p: 154, c: 233, s: -22, ago: 17,
+      sum: "Bootcamp cohort study: assisted students finish tasks twice as fast and explain them 40% worse.",
+      q: [["They can ship the feature. Ask them why it works and the room gets quiet.", "article"], ["Same was said about Stack Overflow. The difference is SO made you read.", "thread, ranked #1"]] },
+    { id: 46044120, t: "Show HN: A linter that flags code your AI wrote at 3am", d: "github.com/latelint", a: "hdz", p: 188, c: 74, s: 31, ago: 21,
+      sum: "Heuristics for generated-code smells: unused abstractions, apologetic comments, eight levels of nesting.",
+      q: [["Rule L014: comment begins with \u2018Certainly!\u2019.", "article"], ["Half of these rules would flag my own 3am code. Installing.", "thread, ranked #2"]] },
+    { id: 46010377, t: "Ask HN: Has AI coding actually reduced your on-call pages?", d: "news.ycombinator.com", a: "throwaway_oncall", p: 96, c: 312, s: -12, ago: 26,
+      sum: "312 comments, no consensus. The most common answer: fewer typos, same outages.",
+      q: [["Fewer typos, same outages.", "thread, ranked #1"], ["Pages went down 20% after we let it write runbooks. Turns out we never had runbooks.", "thread, ranked #3"]] }
+  ];
+
+  var EVENTS = {
+    31: "Frontier model launch. Yes for one day, then HN read the pricing page.",
+    67: "Major API outage plus a rate-limit change. No for one day."
+  };
+
+  function buildHistory() {
+    // seeded walk (mulberry32) so every load draws the same mock trace
+    var seed = 0x1d2c3b;
+    function rnd() { seed = (seed + 0x6d2b79f5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+    var out = [];
+    var start = NOW - 89 * DAY;
+    for (var i = 0; i < 90; i++) {
+      var s = 46.4 + i * 0.03 + 3.1 * Math.sin(i / 8.5) + (rnd() - 0.5) * 3.4;
+      s += 9 * Math.exp(-Math.pow(i - 31, 2) / 2.2) - 7.5 * Math.exp(-Math.pow(i - 67, 2) / 1.6);
+      s = Math.min(59.2, Math.max(40.6, s));
+      var neu = 18 + rnd() * 5;
+      out.push({ date: start + i * DAY, score: s, neu: neu });
+    }
+    out[31].score = 61.4; out[67].score = 38.2;
+    out[89].score = VERDICT.score; out[89].neu = VERDICT.neu;
+    out.forEach(function (d) {
+      d.score = Math.round(d.score * 10) / 10;
+      d.neu = Math.round(d.neu * 10) / 10;
+      d.pos = Math.round((d.score - d.neu / 2) * 10) / 10;
+      d.neg = Math.round((100 - d.pos - d.neu) * 10) / 10;
+    });
+    return out;
+  }
+  var HISTORY = buildHistory();
+
+  /* ===================================================================
+     helpers
+     =================================================================== */
+  var docEl = document.documentElement;
+  function $(s) { return document.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  function safeGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+  function safeSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+  function mq(q) { try { return window.matchMedia ? window.matchMedia(q) : null; } catch (e) { return null; } }
+  var prmQuery = mq("(prefers-reduced-motion: reduce)");
+  function reduced() { return !!(prmQuery && prmQuery.matches); }
+  var state = { fx: !docEl.classList.contains("fx-off"), sound: false };
+  function motionOK() { return state.fx && !reduced(); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function iso(ms) { var d = new Date(ms); return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()); }
+  function fmt1(n) { return (Math.round(n * 10) / 10).toFixed(1); }
+  function signed(n) { return (n > 0 ? "+" : n < 0 ? "\u2212" : "\u00b1") + Math.abs(n); }
+  function verdictOf(score) { return score >= VERDICT.yesAt ? "YES" : score >= VERDICT.noBelow ? "NOT YET" : "NO"; }
+  function labelOf(s) { return s >= 20 ? "pos" : s <= -20 ? "neg" : "neu"; }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+
+  var toastTimer = 0;
+  function toast(msg) {
+    var t = $("#toast"); t.textContent = msg; t.classList.add("is-on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("is-on"); }, 2600);
+  }
+
+  /* typewriter with per-element cancellation; completes instantly when motion is off */
+  var typers = typeof WeakMap === "function" ? new WeakMap() : null;
+  function typeText(node, text, ms, onChar) {
+    var prev = typers && typers.get(node); if (prev) prev.cancel = true;
+    var job = { cancel: false }; if (typers) typers.set(node, job);
+    if (!motionOK() || !ms) { node.textContent = text; return Promise.resolve(true); }
+    return new Promise(function (res) {
+      var i = 0; node.textContent = "";
+      (function step() {
+        if (job.cancel) { res(false); return; }
+        if (!motionOK()) { node.textContent = text; res(true); return; }
+        i++; node.textContent = text.slice(0, i);
+        if (onChar && text.charAt(i - 1) !== " ") onChar(i);
+        if (i >= text.length) { res(true); return; }
+        setTimeout(step, ms);
+      })();
+    });
+  }
+
+  /* ===================================================================
+     SOUND — WebAudio synthesis only. Context created lazily on a gesture.
+     =================================================================== */
+  var Sound = {
+    ctx: null, out: null, lastHover: 0, lastScrub: 0,
+    ensure: function () {
+      if (this.ctx) { if (this.ctx.state === "suspended" && this.ctx.resume) this.ctx.resume().catch(function () {}); return this.ctx; }
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+      try {
+        this.ctx = new AC();
+        this.out = this.ctx.createGain(); this.out.gain.value = 0.9;
+        var comp = this.ctx.createDynamicsCompressor(); comp.threshold.value = -18;
+        this.out.connect(comp); comp.connect(this.ctx.destination);
+      } catch (e) { this.ctx = null; }
+      return this.ctx;
+    },
+    ok: function () { return state.sound && state.fx && this.ctx && this.ctx.state !== "closed"; },
+    tone: function (o) {
+      var c = this.ctx, t0 = c.currentTime + (o.at || 0);
+      var osc = c.createOscillator(), g = c.createGain(), node = osc;
+      osc.type = o.type || "sine";
+      osc.frequency.setValueAtTime(o.f0, t0);
+      if (o.f1) osc.frequency.exponentialRampToValueAtTime(o.f1, t0 + o.dur);
+      if (o.lp) { var f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = o.lp; osc.connect(f); node = f; }
+      node.connect(g); g.connect(this.out);
+      var a = o.attack || 0.002, hold = o.hold || 0;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.linearRampToValueAtTime(o.gain, t0 + a);
+      if (hold) g.gain.setValueAtTime(o.gain, t0 + a + hold);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + o.dur);
+      osc.start(t0); osc.stop(t0 + o.dur + 0.02);
+    },
+    noise: function (o) {
+      var c = this.ctx, t0 = c.currentTime + (o.at || 0);
+      var len = Math.max(1, Math.floor(c.sampleRate * o.dur)), buf = c.createBuffer(1, len, c.sampleRate), ch = buf.getChannelData(0);
+      for (var i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+      var src = c.createBufferSource(); src.buffer = buf;
+      var f = c.createBiquadFilter(); f.type = o.hp ? "highpass" : "lowpass"; f.frequency.value = o.hp || o.lp || 1000;
+      var g = c.createGain();
+      g.gain.setValueAtTime(o.gain, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + o.dur);
+      src.connect(f); f.connect(g); g.connect(this.out); src.start(t0); src.stop(t0 + o.dur + 0.02);
+    },
+    cue: function (name, arg) {
+      if (!this.ok()) return;
+      try {
+        var now = performance.now();
+        switch (name) {
+          case "tick": // loader / boot line printed
+            this.tone({ type: "square", f0: 2100 + ((arg || 0) % 5) * 70, dur: 0.014, gain: 0.022, attack: 0.001 }); break;
+          case "probe": // device probe answered OK
+            this.tone({ type: "square", f0: 1320, dur: 0.04, gain: 0.018, lp: 3500 }); break;
+          case "fail": // device probe FAIL
+            this.tone({ type: "square", f0: 220, dur: 0.11, gain: 0.03, lp: 1200, hold: 0.05 }); break;
+          case "post": // single POST-pass beep
+            this.tone({ type: "square", f0: 1000, dur: 0.17, gain: 0.032, lp: 3000, attack: 0.004, hold: 0.12 }); break;
+          case "reveal": // veil lift gesture: degauss thump
+            this.tone({ type: "sine", f0: 140, f1: 42, dur: 0.38, gain: 0.09, attack: 0.005 });
+            this.noise({ dur: 0.22, gain: 0.035, lp: 900 }); break;
+          case "stinger": { // verdict printed; interval depends on the verdict
+            var v = (arg && arg.v) || "NOT YET", k = (arg && arg.gain) || 1;
+            var pair = v === "YES" ? [440, 659.25] : v === "NO" ? [329.63, 246.94] : [587.33, 440];
+            this.tone({ type: "square", f0: pair[0], dur: 0.14, gain: 0.045 * k, lp: 1800, hold: 0.06 });
+            this.tone({ type: "square", f0: pair[1], dur: 0.2, gain: 0.045 * k, lp: 1800, hold: 0.08, at: 0.18 }); break; }
+          case "hover": // row hover blip; pitch encodes the row's sentiment
+            if (now - this.lastHover < 45) return; this.lastHover = now;
+            this.tone({ type: "triangle", f0: 520 + (arg || 0) * 2.2, dur: 0.028, gain: 0.02 }); break;
+          case "scrub": // crossing a day on the scope
+            if (now - this.lastScrub < 32) return; this.lastScrub = now;
+            this.tone({ type: "sine", f0: 1600, dur: 0.009, gain: 0.014 }); break;
+          case "toggle": // relay click for any control
+            this.noise({ dur: 0.008, gain: 0.05, hp: 2000 }); break;
+          case "open": // sheet open: relay + low body
+            this.noise({ dur: 0.008, gain: 0.05, hp: 2000 });
+            this.tone({ type: "sine", f0: 220, f1: 330, dur: 0.07, gain: 0.03 }); break;
+          case "close":
+            this.tone({ type: "sine", f0: 330, f1: 196, dur: 0.07, gain: 0.025 }); break;
+        }
+      } catch (e) { /* audio is decorative; never break the page */ }
+    }
+  };
+
+  /* ===================================================================
+     FX + SOUND toggles
+     =================================================================== */
+  var fxBtn = $("#fxBtn"), sndBtn = $("#sndBtn");
+  function paintToggles() {
+    fxBtn.setAttribute("aria-pressed", String(state.fx));
+    fxBtn.querySelector("b").textContent = state.fx ? "ON" : "OFF";
+    fxBtn.setAttribute("aria-label", "Effects: " + (state.fx ? "on" : "off") + ". Toggle intro, ambient effects, motion and sound.");
+    var sOn = state.sound && state.fx;
+    sndBtn.setAttribute("aria-pressed", String(sOn));
+    sndBtn.querySelector("b").textContent = sOn ? "ON" : "OFF";
+    sndBtn.setAttribute("aria-disabled", String(!state.fx));
+    sndBtn.setAttribute("aria-label", state.fx ? "Sound: " + (sOn ? "on" : "off") : "Sound: muted while effects are off");
+  }
+  function setFx(on) {
+    Sound.cue("toggle");
+    state.fx = on;
+    docEl.classList.toggle("fx-off", !on);
+    docEl.classList.remove("boot-pending");
+    safeSet("v12.fx", on ? "on" : "off");
+    if (!on) {
+      if (veilOpen) liftVeil(false);
+      finishPage();
+      Scope.settle();
+      $$(".quotes q").forEach(function (q) { if (q.dataset.full) q.textContent = q.dataset.full; });
+    } else {
+      Scope.draw();
+    }
+    paintToggles();
+    Sound.cue("toggle");
+    toast(on ? "FX on. Press R to replay the boot." : "FX off. Intro, ambient effects, motion and sound are disabled.");
+  }
+  fxBtn.addEventListener("click", function () { setFx(!state.fx); });
+  sndBtn.addEventListener("click", function () {
+    if (!state.fx) { toast("Sound is muted while FX is off."); return; }
+    state.sound = !state.sound;
+    if (state.sound) {
+      if (!Sound.ensure()) { state.sound = false; toast("This browser has no Web Audio. Sound stays off."); paintToggles(); return; }
+      Sound.cue("toggle"); Sound.cue("probe");
+      toast("Sound on. Press R to hear the boot.");
+    } else { toast("Sound off."); }
+    paintToggles();
+  });
+
+  /* ===================================================================
+     BOOT VEIL — loader (fetch block) + POST + verdict compile
+     =================================================================== */
+  var veil = $("#veil"), vlog = $("#veilLog"), vend = $("#veilEnd");
+  var veilOpen = false, bootGen = 0, bootStart = 0;
+
+  function vline(text, cls) { var p = el("p", "vl" + (cls ? " " + cls : ""), text); vlog.appendChild(p); return p; }
+  function vprobe(dev, desc) {
+    var r = el("div", "vrow");
+    var d = el("span", "", dev);
+    var lead = el("span", "vrow__lead"); lead.appendChild(el("span", "", desc)); lead.appendChild(el("span", "lead"));
+    var st = el("span", "vrow__st", "..");
+    var note = el("span", "vrow__note", "");
+    r.appendChild(d); r.appendChild(lead); r.appendChild(st); r.appendChild(note);
+    vlog.appendChild(r);
+    return { st: st, note: note };
+  }
+  function bar(n, w) { var f = Math.round(n * w); return "[" + new Array(f + 1).join("#") + new Array(w - f + 1).join("-") + "]"; }
+
+  function runBoot(mode) {
+    if (!state.fx) return;
+    var gen = ++bootGen;
+    var alive = function () { return gen === bootGen; };
+    var sp = mode === "warm" ? 0.35 : 1;
+    var instant = reduced();
+    var lineN = 0;
+    function wait(ms) { return new Promise(function (r) { setTimeout(function () { r(alive()); }, instant ? Math.min(ms, 40) : ms * sp); }); }
+    function say(text, cls) { var p = vline(text, cls); Sound.cue("tick", lineN++); return p; }
+    function count(node, to, suffix, ms) {
+      return new Promise(function (res) {
+        if (instant || !window.requestAnimationFrame) { node.textContent = to.toLocaleString("en-US") + suffix; res(alive()); return; }
+        var t0 = performance.now();
+        (function f(t) {
+          if (!alive()) { res(false); return; }
+          var k = Math.min(1, (t - t0) / (ms * sp));
+          node.textContent = Math.round(to * k).toLocaleString("en-US") + suffix;
+          if (k < 1) requestAnimationFrame(f); else res(true);
+        })(t0);
+      });
+    }
+    function progress(node, label, ms, spin) {
+      return new Promise(function (res) {
+        var W = window.innerWidth < 640 ? 12 : 24, frames = "|/-\\", t0 = performance.now();
+        if (instant) { node.textContent = label + bar(1, W) + "  100%"; res(alive()); return; }
+        (function f() {
+          if (!alive()) { res(false); return; }
+          var k = Math.min(1, (performance.now() - t0) / (ms * sp));
+          var sk = Math.floor((performance.now() - t0) / 70) % 4;
+          node.textContent = label + bar(k, W) + "  " + pad(Math.round(k * 100)) + "%" + (spin && k < 1 ? "  " + frames.charAt(sk) : "");
+          if (k < 1) setTimeout(f, 40); else res(true);
+        })();
+      });
+    }
+
+    openVeil();
+    bootStart = performance.now();
+    var lastSeen = safeGet("v12.veilSeen");
+
+    var seq = (async function () {
+      if (mode === "warm") {
+        say("WARM BOOT \u00b7 last cold boot " + (lastSeen || "earlier") + " \u00b7 memory test skipped", "vl--hi");
+        var lw = say("");
+        if (!(await progress(lw, "read 3 files 25.7 kB  ", 500))) return;
+        if (!(await wait(120))) return;
+        say("devices 6/6 probed \u00b7 1 FAIL (optimism cache, cleared)");
+        if (!(await wait(160))) return;
+      } else {
+        say("2026-11-20 04:00:12Z \u00b7 build 1.2.0 \u00b7 (c) the comment section, all opinions reserved");
+        say("", "vl--gap");
+        // --- loader block (comprehensive-loader.svelte) ---
+        var files = [["verdict.json", "1.2 kB"], ["articles.json", "18.4 kB"], ["historical.json", "6.1 kB"]];
+        for (var i = 0; i < files.length; i++) {
+          if (!(await wait(110))) return;
+          var pr = vprobe("fetch", files[i][0]);
+          if (!(await wait(140 + i * 60))) return;
+          pr.st.textContent = "ok"; pr.st.classList.add("is-ok"); pr.note.textContent = files[i][1]; Sound.cue("tick", i);
+        }
+        var lp = say("", "vl--hi");
+        if (!(await progress(lp, "read  ", 520))) return;
+        lp.textContent += "  3/3 files";
+        say("", "vl--gap");
+        // --- POST ---
+        var mem = say("", "vl--hi");
+        mem.textContent = "memory test  ";
+        var mc = el("span", "", "0"); mem.appendChild(mc);
+        if (!(await count(mc, 1365, " articles", 650))) return;
+        mem.appendChild(document.createTextNode("   ok"));
+        var mem2 = say(""); mem2.textContent = "             ";
+        var mc2 = el("span", "", "0"); mem2.appendChild(mc2);
+        if (!(await count(mc2, 48210, " comments", 520))) return;
+        mem2.appendChild(document.createTextNode("   ok"));
+        say("", "vl--gap");
+        say("probing devices", "vl--hi");
+        var devs = [
+          ["/dev/hn0", "hacker news front page", "ok", ""],
+          ["/dev/algolia", "story + comment index", "ok", ""],
+          ["/dev/fetch", "article bodies", "ok", "13,832 cached"],
+          ["/dev/llm0", "SENTIMENT COPROCESSOR", "ok", "3 temperature settings"],
+          ["/dev/hype", "optimism cache", "FAIL", "cleared, continuing"],
+          ["/dev/scope", "90-day history", "ok", "90 samples"]
+        ];
+        for (var j = 0; j < devs.length; j++) {
+          if (!(await wait(90))) return;
+          var pv = vprobe(devs[j][0], devs[j][1]); Sound.cue("tick", j);
+          if (!(await wait(devs[j][2] === "FAIL" ? 420 : 150 + (j % 3) * 70))) return;
+          if (devs[j][2] === "FAIL") { pv.st.textContent = ""; pv.st.appendChild(el("span", "fail", "FAIL")); Sound.cue("fail"); }
+          else { pv.st.textContent = "ok"; pv.st.classList.add("is-ok"); Sound.cue("probe"); }
+          pv.note.textContent = devs[j][3];
+        }
+        if (!(await wait(160))) return;
+        Sound.cue("post");
+        say("", "vl--gap");
+        var cp = say("", "vl--hi");
+        if (!(await progress(cp, "compiling verdict  ", 900, true))) return;
+        say("weighting 484 articles by points .......... ok");
+        say("+ 38.6%   ~ 21.0%   \u2212 40.4%   score 49.1 / 100   yes needs 60.0");
+        if (!(await wait(240))) return;
+      }
+      var vb = el("p", "vbig", ""); vlog.appendChild(vb);
+      await typeText(vb, "VERDICT: NOT YET.", mode === "warm" ? 20 : 55, function (n) { Sound.cue("tick", n); });
+      if (!alive()) return;
+      Sound.cue("stinger", { v: "NOT YET" });
+      if (mode === "warm") { if (await wait(700 / sp)) liftVeil(false); return; }
+      if (!(await wait(300))) return;
+      $("#veilDone").firstChild.textContent = "Boot complete in " + ((performance.now() - bootStart) / 1000).toFixed(1) + " s. Press Enter for the answer.";
+      vend.hidden = false;
+      try { $("#veilGo").focus({ preventScroll: true }); } catch (e) { $("#veilGo").focus(); }
+    })();
+    seq.catch(function () { liftVeil(false); });
+  }
+
+  function openVeil() {
+    vlog.textContent = "";
+    vend.hidden = true;
+    veil.classList.remove("is-lifting");
+    veil.classList.add("is-open");
+    docEl.classList.remove("boot-pending");
+    docEl.classList.add("veil-open");
+    veilOpen = true;
+    veil.scrollTop = 0;
+    try { veil.focus({ preventScroll: true }); } catch (e) { veil.focus(); }
+  }
+
+  function liftVeil(gesture, then) {
+    if (!veilOpen && !docEl.classList.contains("boot-pending")) return;
+    bootGen++;
+    veilOpen = false;
+    safeSet("v12.veilSeen", iso(Date.now()));
+    if (gesture) Sound.cue("reveal");
+    function done() {
+      veil.classList.remove("is-open", "is-lifting");
+      docEl.classList.remove("veil-open", "boot-pending");
+    }
+    if (motionOK()) {
+      veil.classList.add("is-lifting");
+      setTimeout(function () { startPage(); if (then) then(); }, 200);
+      setTimeout(done, reduced() ? 220 : 470);
+    } else { done(); startPage(); if (then) then(); }
+  }
+
+  veil.addEventListener("click", function () { liftVeil(true); });
+  $("#veilAbout").addEventListener("click", function (e) {
+    e.stopPropagation();
+    liftVeil(true, function () { var a = $("#about"); if (a) a.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto" }); });
+  });
+
+  function replay() {
+    if (!state.fx) { toast("FX is off, so the boot sequence is disabled. Turn FX on to replay."); return; }
+    closeSheet(true);
+    try { window.scrollTo(0, 0); } catch (e) { /* ignore */ }
+    runBoot("cold");
+  }
+  $("#rescanBtn").addEventListener("click", replay);
+  $("#footReplay").addEventListener("click", replay);
+
+  /* ===================================================================
+     HERO entrance (re-runs after every veil lift)
+     =================================================================== */
+  var hero = $("#hero"), heroV = $("#heroVerdict"), bdBar = $("#bdBar");
+  var qa = $("#heroQa"), qb = $("#heroQb"), qc = $("#heroQc");
+  var Q = ["is ai \u201c", "good", "\u201d yet?"];
+  var pageGen = 0, barCells = 0;
+
+  function cellsFor() {
+    var probe = el("span", "", "\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588");
+    probe.style.visibility = "hidden"; probe.style.position = "absolute";
+    bdBar.appendChild(probe);
+    var cw = probe.getBoundingClientRect().width / 10;
+    probe.remove();
+    var w = bdBar.clientWidth;
+    return cw > 0 && w > 0 ? Math.max(10, Math.min(72, Math.floor(w / cw))) : 40;
+  }
+  function renderBar(fill) {
+    var n = barCells || 40;
+    var p = Math.round(n * VERDICT.pos / 100), u = Math.round(n * VERDICT.neu / 100), g = n - p - u;
+    var shown = Math.round(n * fill);
+    bdBar.textContent = "";
+    var segs = [["bd__pos", "\u2588", p], ["bd__neu", "\u2592", u], ["bd__neg", "\u2591", g]];
+    var left = shown;
+    segs.forEach(function (s) { var k = Math.max(0, Math.min(s[2], left)); left -= k; bdBar.appendChild(el("span", s[0], new Array(k + 1).join(s[1]))); });
+  }
+  function fillBar(gen) {
+    barCells = cellsFor();
+    if (!motionOK()) { renderBar(1); return; }
+    var t0 = performance.now(), dur = 640;
+    (function f() {
+      if (gen !== pageGen) return;
+      var k = Math.min(1, (performance.now() - t0) / dur);
+      renderBar(1 - Math.pow(1 - k, 3));
+      if (k < 1) setTimeout(f, 24);
+    })();
+  }
+  function finishPage() {
+    pageGen++;
+    qa.textContent = Q[0]; qb.textContent = Q[1]; qc.textContent = Q[2];
+    heroV.textContent = "NOT YET.";
+    barCells = cellsFor(); renderBar(1);
+    hero.classList.add("is-in");
+    $$("[data-reveal]").forEach(function (s) { s.classList.add("is-in"); });
+    Scope.start();
+  }
+  async function startPage() {
+    var gen = ++pageGen;
+    if (!motionOK()) { finishPage(); return; }
+    hero.classList.remove("is-in");
+    qa.textContent = ""; qb.textContent = ""; qc.textContent = ""; heroV.textContent = ""; bdBar.textContent = "";
+    void hero.offsetWidth;
+    if (!(await typeText(qa, Q[0], 26)) || gen !== pageGen) return;
+    if (!(await typeText(qb, Q[1], 110)) || gen !== pageGen) return;
+    if (!(await typeText(qc, Q[2], 26)) || gen !== pageGen) return;
+    await new Promise(function (r) { setTimeout(r, 160); });
+    if (gen !== pageGen) return;
+    if (!(await typeText(heroV, "NOT YET.", 80, function (n) { Sound.cue("tick", n); })) || gen !== pageGen) return;
+    Sound.cue("stinger", { v: "NOT YET" });
+    hero.classList.add("is-in");
+    fillBar(gen);
+  }
+
+  /* ===================================================================
+     ARTICLES table + filter + grep
+     =================================================================== */
+  var rowsEl = $("#rows"), tblStat = $("#tblStat");
+  var filter = "all", grep = "", visible = [];
+  function rowFor(a, i) {
+    var tr = el("tr", "rv"); tr.style.setProperty("--i", String(i)); tr.dataset.idx = String(ARTICLES.indexOf(a));
+    var lab = labelOf(a.s);
+    var tdS = el("td", "c-s"), b = el("span", "sent sent--" + lab);
+    b.appendChild(el("span", "lbl", lab + " ")); b.appendChild(document.createTextNode(signed(a.s)));
+    tdS.appendChild(b);
+    var tdT = el("td", "c-t"), btn = el("button", "rowbtn"); btn.type = "button";
+    btn.appendChild(el("span", "rowbtn__title", a.t)); btn.appendChild(el("span", "rowbtn__dom", a.d));
+    btn.setAttribute("aria-label", a.t + ". Sentiment " + signed(a.s) + ". Open details.");
+    tdT.appendChild(btn);
+    tr.appendChild(tdS); tr.appendChild(tdT);
+    tr.appendChild(el("td", "num c-p", a.p.toLocaleString("en-US")));
+    tr.appendChild(el("td", "num c-c", a.c.toLocaleString("en-US")));
+    tr.appendChild(el("td", "num c-d dim", iso(NOW - a.ago * DAY).slice(5)));
+    tr.appendChild(el("td", "c-m", a.p + " pts \u00b7 " + a.c + " comments \u00b7 " + a.ago + "d ago \u00b7 " + a.d));
+    tr.addEventListener("click", function () { openSheet(ARTICLES.indexOf(a)); });
+    function preview() {
+      Sound.cue("hover", a.s);
+      tblStat.textContent = "";
+      tblStat.appendChild(el("b", "", "\u25b8 " + signed(a.s) + " "));
+      tblStat.appendChild(document.createTextNode(a.p + " pts \u00b7 " + a.c + " comments \u00b7 by " + a.a + " \u00b7 " + a.sum));
+    }
+    tr.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") preview(); });
+    btn.addEventListener("focus", preview);
+    return tr;
+  }
+  function renderRows() {
+    var g = grep.trim().toLowerCase();
+    visible = ARTICLES.filter(function (a) {
+      if (filter !== "all" && labelOf(a.s) !== filter) return false;
+      if (g && (a.t + " " + a.d + " " + a.a).toLowerCase().indexOf(g) < 0) return false;
+      return true;
+    });
+    rowsEl.textContent = "";
+    if (!visible.length) {
+      var tr = el("tr", "empty"), td = el("td");
+      td.colSpan = 5;
+      td.appendChild(document.createTextNode("grep: 0 matches" + (g ? " for \u201c" + grep.trim() + "\u201d" : "") + ". HN has not had an opinion on this yet. Give it a day. "));
+      var clr = el("button", "btn", "clear filters"); clr.type = "button";
+      clr.addEventListener("click", function (e) { e.stopPropagation(); grep = ""; $("#grepIn").value = ""; setFilter("all"); $("#grepIn").focus(); });
+      td.appendChild(clr); tr.appendChild(td); rowsEl.appendChild(tr);
+    } else {
+      visible.forEach(function (a, i) { rowsEl.appendChild(rowFor(a, i)); });
+    }
+    $("#artMeta").textContent = visible.length + " of 484 \u00b7 newest first";
+  }
+  function setFilter(f) {
+    filter = f;
+    $$(".chip").forEach(function (c) { c.setAttribute("aria-pressed", String(c.dataset.f === f)); });
+    renderRows();
+  }
+  $$(".chip").forEach(function (c) {
+    var n = c.dataset.f === "all" ? ARTICLES.length : ARTICLES.filter(function (a) { return labelOf(a.s) === c.dataset.f; }).length;
+    c.querySelector(".n").textContent = String(n);
+    c.addEventListener("click", function () { Sound.cue("toggle"); setFilter(c.dataset.f); });
+  });
+  $("#grepIn").addEventListener("input", function (e) { grep = e.target.value; renderRows(); });
+
+  /* ===================================================================
+     DETAILS SHEET
+     =================================================================== */
+  var sheet = $("#sheet"), scrim = $("#scrim"), sheetIdx = -1, lastFocus = null, sheetGen = 0;
+  function fillSheet(i) {
+    var a = ARTICLES[i], gen = ++sheetGen;
+    sheetIdx = i;
+    $("#shPath").textContent = "inspect /dev/hn0/" + pad(i + 1) + " of " + ARTICLES.length;
+    $("#shTitle").textContent = a.t;
+    $("#shPts").textContent = a.p.toLocaleString("en-US");
+    $("#shCmts").textContent = a.c.toLocaleString("en-US");
+    $("#shDate").textContent = iso(NOW - a.ago * DAY);
+    $("#shAuthor").textContent = a.a;
+    $("#shDom").textContent = a.d;
+    $("#shWeight").textContent = fmt1(a.p * Math.log10(a.c + 10) / 30);
+    $("#shSent").textContent = labelOf(a.s) + " " + signed(a.s);
+    var fill = $("#shFill");
+    fill.classList.toggle("is-neg", a.s < 0);
+    fill.style.transform = "scaleX(" + (Math.abs(a.s) / 100) + ")";
+    $("#shSum").textContent = a.sum;
+    $("#shHn").setAttribute("aria-label", "Open thread on Hacker News (mock link, item " + a.id + ")");
+    var ul = $("#shQuotes"); ul.textContent = "";
+    var qs = a.q.map(function (q) {
+      var li = el("li"), qq = el("q"); qq.dataset.full = q[0];
+      qq.setAttribute("aria-label", q[0]);
+      li.appendChild(qq); li.appendChild(el("span", "src", "\u2014 " + q[1])); ul.appendChild(li);
+      return qq;
+    });
+    (async function () {
+      for (var k = 0; k < qs.length; k++) {
+        if (motionOK()) { qs[k].textContent = ""; await new Promise(function (r) { setTimeout(r, 90); }); }
+        if (gen !== sheetGen) return;
+        await typeText(qs[k], qs[k].dataset.full, 9);
+        if (gen !== sheetGen) return;
+      }
+    })();
+    $$("#rows tr").forEach(function (tr) { tr.classList.toggle("is-active", tr.dataset.idx === String(i)); });
+  }
+  function openSheet(i) {
+    if (sheetIdx < 0) lastFocus = document.activeElement;
+    fillSheet(i);
+    sheet.classList.add("is-open"); scrim.classList.add("is-open");
+    Sound.cue("open");
+    setTimeout(function () { try { $("#shClose").focus({ preventScroll: true }); } catch (e) { $("#shClose").focus(); } }, 30);
+  }
+  function closeSheet(silent) {
+    if (sheetIdx < 0) return;
+    sheetGen++;
+    sheet.classList.remove("is-open"); scrim.classList.remove("is-open");
+    sheetIdx = -1;
+    $$("#rows tr").forEach(function (tr) { tr.classList.remove("is-active"); });
+    if (!silent) Sound.cue("close");
+    if (lastFocus && lastFocus.focus && document.contains(lastFocus)) { try { lastFocus.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
+  }
+  function stepSheet(d) {
+    var list = visible.length ? visible : ARTICLES;
+    var pos = list.indexOf(ARTICLES[sheetIdx]);
+    var next = list[(pos + d + list.length) % list.length];
+    if (pos < 0) next = list[0];
+    Sound.cue("hover", next.s);
+    fillSheet(ARTICLES.indexOf(next));
+  }
+  $("#shClose").addEventListener("click", function () { closeSheet(); });
+  $("#shPrev").addEventListener("click", function () { stepSheet(-1); });
+  $("#shNext").addEventListener("click", function () { stepSheet(1); });
+  $("#shHn").addEventListener("click", function (e) { e.preventDefault(); toast("Mock data: there is no real thread behind this link."); });
+  scrim.addEventListener("click", function () { closeSheet(); });
+
+  /* ===================================================================
+     SCOPE — phosphor trace with afterglow (the live thing)
+     =================================================================== */
+  var Scope = (function () {
+    var screen = $("#scopeScreen"), cv = $("#scopeCanvas");
+    var ctx = null;
+    try { ctx = cv.getContext ? cv.getContext("2d") : null; } catch (e) { ctx = null; }
+    // canvas gets sRGB equivalents of the OKLCH tokens (computed offline) — canvas oklch support is uneven
+    var C = {
+      beam: "133,239,115",   // --phosphor
+      lime: "79,178,62",     // --palette-lime-dark
+      text: "206,230,202",   // --phosphor-text
+      faint: "112,136,108",  // --phosphor-faint
+      ground: "5,8,10"       // --terminal-bg
+    };
+    var N = HISTORY.length, BASE = 0.5, GLOW_MS = 650, SWEEP_MS = 1500;
+    var W = 0, H = 0, dpr = 1, idx = N - 1, energy = new Float32Array(N), beam = -1, t0 = 0, raf = 0, last = 0, started = false;
+    var padL = 40, padR = 14, padT = 22, padB = 26, lo = 30, hi = 70;
+    var lastV = "NOT YET", settleT = 0, liveT = 0, dragging = false;
+
+    function rgba(c, a) { return "rgba(" + c + "," + Math.max(0, Math.min(1, a)).toFixed(3) + ")"; }
+    function x(i) { return padL + (W - padL - padR) * (i / (N - 1)); }
+    function y(v) { return padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo)); }
+    function size() {
+      if (!ctx) return;
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      var r = cv.getBoundingClientRect();
+      W = Math.max(200, Math.round(r.width)); H = Math.max(120, Math.round(r.height));
+      cv.width = W * dpr; cv.height = H * dpr;
+      padL = W < 480 ? 30 : 40;
+    }
+    function draw() {
+      if (!ctx || !W) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.font = "11px ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace";
+      ctx.textBaseline = "middle";
+      // graticule: real scale, labelled
+      ctx.lineWidth = 1;
+      [30, 40, 50, 60, 70].forEach(function (v) {
+        var yy = Math.round(y(v)) + 0.5;
+        var thr = v === 60 || v === 40;
+        ctx.strokeStyle = rgba(C.lime, thr ? 0.32 : 0.09);
+        ctx.setLineDash(thr ? [3, 4] : []);
+        ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+        ctx.fillStyle = rgba(C.faint, 1); ctx.textAlign = "right";
+        ctx.fillText(String(v), padL - 8, yy);
+      });
+      ctx.setLineDash([]);
+      ctx.textAlign = "left"; ctx.fillStyle = rgba(C.faint, 1);
+      if (W > 420) {
+        ctx.fillText("yes \u2265 60", padL + 6, y(60) - 8);
+        ctx.fillText("no < 40", padL + 6, y(40) + 9);
+      }
+      // month ticks
+      ctx.textBaseline = "alphabetic";
+      HISTORY.forEach(function (d, i) {
+        var dt = new Date(d.date);
+        if (dt.getUTCDate() === 1) {
+          var xx = Math.round(x(i)) + 0.5;
+          ctx.strokeStyle = rgba(C.lime, 0.09); ctx.beginPath(); ctx.moveTo(xx, padT); ctx.lineTo(xx, H - padB); ctx.stroke();
+          ctx.fillStyle = rgba(C.faint, 1); ctx.textAlign = "left";
+          ctx.fillText(["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getUTCMonth()], xx + 4, H - 8);
+        }
+      });
+      ctx.textAlign = "right"; ctx.fillText("today", W - padR, H - 8);
+      // event ticks
+      Object.keys(EVENTS).forEach(function (k) {
+        var i = +k, xx = Math.round(x(i)) + 0.5;
+        ctx.strokeStyle = rgba(C.faint, 0.8); ctx.beginPath(); ctx.moveTo(xx, padT - 12); ctx.lineTo(xx, padT - 4); ctx.stroke();
+        ctx.fillStyle = rgba(C.faint, 1); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (W > 420) ctx.fillText(verdictOf(HISTORY[i].score), xx, padT - 16 < 6 ? 6 : padT - 16);
+      });
+      // trace
+      var reach = beam < 0 ? -1 : Math.min(N - 1, Math.floor(beam));
+      var fx = state.fx && !reduced();
+      for (var pass = 0; pass < (fx ? 2 : 1); pass++) {
+        var glow = fx && pass === 0;
+        ctx.lineWidth = glow ? 5 : 1.6; ctx.lineCap = "round"; ctx.lineJoin = "round";
+        for (var i = 0; i < reach; i++) {
+          var e = (energy[i] + energy[i + 1]) / 2;
+          ctx.strokeStyle = glow ? rgba(C.beam, e * 0.13) : rgba(C.beam, fx ? 0.35 + 0.65 * e : 0.95);
+          ctx.beginPath(); ctx.moveTo(x(i), y(HISTORY[i].score)); ctx.lineTo(x(i + 1), y(HISTORY[i + 1].score)); ctx.stroke();
+        }
+        if (beam >= 0 && beam < N - 1 && reach >= 0) {
+          var f = beam - reach, x0 = x(reach), y0 = y(HISTORY[reach].score);
+          var x1 = x0 + (x(reach + 1) - x0) * f, y1 = y0 + (y(HISTORY[reach + 1].score) - y0) * f;
+          ctx.strokeStyle = glow ? rgba(C.beam, 0.13) : rgba(C.beam, 1);
+          ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+          if (!glow) { ctx.fillStyle = rgba(C.beam, 1); ctx.beginPath(); ctx.arc(x1, y1, 2.4, 0, Math.PI * 2); ctx.fill(); }
+        }
+      }
+      // scrub cursor
+      if (reach >= idx || beam >= N - 1) {
+        var cx = Math.round(x(idx)) + 0.5, cy = y(HISTORY[idx].score);
+        ctx.strokeStyle = rgba(C.text, 0.28); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(cx, padT); ctx.lineTo(cx, H - padB); ctx.stroke();
+        ctx.fillStyle = rgba(C.ground, 1); ctx.strokeStyle = rgba(C.beam, 1); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(cx, cy, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
+    }
+    function frame(t) {
+      var dt = Math.min(64, t - last); last = t;
+      var active = false;
+      if (beam >= 0 && beam < N - 1) {
+        var prev = Math.floor(beam);
+        beam = Math.min(N - 1, ((t - t0) / SWEEP_MS) * (N - 1));
+        for (var i = prev + 1; i <= Math.floor(beam); i++) energy[i] = 1;
+        active = true;
+      }
+      var k = Math.exp(-dt / GLOW_MS);
+      for (var j = 0; j <= Math.min(N - 1, Math.floor(beam)); j++) {
+        energy[j] = BASE + (energy[j] - BASE) * k;
+        if (energy[j] - BASE > 0.01) active = true;
+      }
+      draw();
+      raf = active && motionOK() ? requestAnimationFrame(frame) : 0;
+      if (!raf) settle();
+    }
+    function kick() {
+      if (!ctx) return;
+      if (!motionOK() || !window.requestAnimationFrame) { settle(); return; }
+      if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
+    }
+    function settle() {
+      if (raf && window.cancelAnimationFrame) cancelAnimationFrame(raf);
+      raf = 0;
+      if (started || !motionOK()) { beam = N - 1; for (var i = 0; i < N; i++) energy[i] = motionOK() ? Math.max(BASE, Math.min(energy[i], 1)) : 1; }
+      draw();
+    }
+    function start() {
+      if (started) { draw(); return; }
+      started = true;
+      if (!motionOK()) { settle(); return; }
+      energy.fill(0); beam = 0; t0 = performance.now(); energy[0] = 1;
+      kick();
+    }
+    function setIdx(i, user) {
+      i = Math.max(0, Math.min(N - 1, i));
+      if (i === idx && user !== "force") return;
+      idx = i;
+      if (user) Sound.cue("scrub");
+      var d = HISTORY[i], v = verdictOf(d.score);
+      $("#roDate").textContent = iso(d.date);
+      $("#roScore").textContent = fmt1(d.score);
+      $("#roPos").textContent = fmt1(d.pos) + "%";
+      $("#roNeu").textContent = fmt1(d.neu) + "%";
+      $("#roNeg").textContent = fmt1(d.neg) + "%";
+      $("#roDay").textContent = (i + 1) + " / " + N;
+      var ago = N - 1 - i;
+      var gap = VERDICT.yesAt - d.score;
+      $("#roNote").textContent = EVENTS[i] || (ago === 0 ? "Today. " + fmt1(gap) + " points short of yes." :
+        ago + " days ago. " + (gap > 0 ? fmt1(gap) + " points short of yes." : "Above the yes line."));
+      screen.setAttribute("aria-valuenow", String(i));
+      screen.setAttribute("aria-valuetext", iso(d.date) + ": " + v + ", score " + fmt1(d.score));
+      // the verdict line re-types once the scrub settles; the stinger fires only when the answer changes
+      clearTimeout(settleT);
+      settleT = setTimeout(function () {
+        typeText($("#roVerdict"), v + ".", 38);
+        if (v !== lastV) { lastV = v; if (user) Sound.cue("stinger", { v: v, gain: 0.7 }); }
+      }, user ? 110 : 0);
+      clearTimeout(liveT);
+      liveT = setTimeout(function () { $("#roLive").textContent = iso(d.date) + ": " + v + ". Score " + fmt1(d.score) + "."; }, 450);
+      // re-excite the phosphor around the cursor, like the beam passing again
+      if (started && motionOK()) {
+        for (var k = i - 2; k <= i + 2; k++) if (k >= 0 && k < N && k <= beam) energy[k] = Math.max(energy[k], k === i ? 1 : 0.8);
+        kick();
+      } else draw();
+    }
+    function idxFromEvent(e) {
+      var r = cv.getBoundingClientRect();
+      var px = e.clientX - r.left;
+      return Math.round(((px - padL) / Math.max(1, r.width - padL - padR)) * (N - 1));
+    }
+    screen.addEventListener("pointerdown", function (e) {
+      dragging = true;
+      try { screen.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      setIdx(idxFromEvent(e), true);
+    });
+    screen.addEventListener("pointermove", function (e) {
+      if (dragging || e.pointerType === "mouse") setIdx(idxFromEvent(e), true);
+    });
+    function endDrag() { dragging = false; }
+    screen.addEventListener("pointerup", endDrag);
+    screen.addEventListener("pointercancel", endDrag);
+    screen.addEventListener("keydown", function (e) {
+      var m = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageUp: 7, PageDown: -7 };
+      if (e.key in m) { e.preventDefault(); setIdx(idx + m[e.key], true); }
+      else if (e.key === "Home") { e.preventDefault(); setIdx(0, true); }
+      else if (e.key === "End") { e.preventDefault(); setIdx(N - 1, true); }
+    });
+    $("#roNow").addEventListener("click", function () { Sound.cue("toggle"); setIdx(N - 1, true); });
+    $$(".events .btn").forEach(function (b) {
+      b.addEventListener("click", function () { Sound.cue("toggle"); setIdx(+b.dataset.day, true); });
+    });
+
+    var rT = 0;
+    function onResize() { clearTimeout(rT); rT = setTimeout(function () { size(); draw(); }, 80); }
+    if (typeof ResizeObserver === "function") { try { new ResizeObserver(onResize).observe(cv); } catch (e) { window.addEventListener("resize", onResize); } }
+    else window.addEventListener("resize", onResize);
+    size(); draw();
+
+    return { start: start, draw: draw, settle: function () { settle(); }, setIdx: setIdx, get idx() { return idx; } };
+  })();
+
+  /* ===================================================================
+     scroll reveals
+     =================================================================== */
+  function revealSection(s) {
+    s.classList.add("is-in");
+    if (s.id === "history") Scope.start();
+  }
+  if (typeof IntersectionObserver === "function") {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { revealSection(en.target); io.unobserve(en.target); } });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
+    $$("[data-reveal]").forEach(function (s) { io.observe(s); });
+  } else {
+    $$("[data-reveal]").forEach(revealSection);
+  }
+
+  /* ===================================================================
+     countdown to the next daily boot (real clock; the ritual)
+     =================================================================== */
+  function tickCountdown() {
+    var now = Date.now(), d = new Date(now);
+    var next = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 4, 0, 0);
+    if (next <= now) next += DAY;
+    var s = Math.floor((next - now) / 1000);
+    var txt = pad(Math.floor(s / 3600)) + ":" + pad(Math.floor((s % 3600) / 60)) + ":" + pad(s % 60);
+    $("#postCountdown").textContent = txt; $("#footCountdown").textContent = txt;
+  }
+  tickCountdown(); setInterval(tickCountdown, 1000);
+
+  /* ===================================================================
+     keyboard
+     =================================================================== */
+  function typingTarget(t) { return t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable); }
+  document.addEventListener("keydown", function (e) {
+    var mod = e.ctrlKey || e.metaKey || e.altKey;
+    var inDock = e.target && e.target.closest && e.target.closest(".dock");
+    if (veilOpen) {
+      if (inDock && (e.key === "Enter" || e.key === " ")) return;
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") { e.preventDefault(); liftVeil(true); return; }
+      if ((e.key === "r" || e.key === "R") && !mod) { e.preventDefault(); replay(); }
+      return;
+    }
+    if (sheetIdx >= 0) {
+      if (e.key === "Escape") { e.preventDefault(); closeSheet(); return; }
+      if (!mod && (e.key === "j" || e.key === "J" || e.key === "ArrowDown")) { e.preventDefault(); stepSheet(1); return; }
+      if (!mod && (e.key === "k" || e.key === "K" || e.key === "ArrowUp")) { e.preventDefault(); stepSheet(-1); return; }
+      if (e.key === "Tab") {
+        var f = $$("#sheet button, #sheet a[href]");
+        if (!f.length) return;
+        var first = f[0], lastEl = f[f.length - 1];
+        if (!sheet.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); }
+        else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
+      }
+      return;
+    }
+    if (typingTarget(e.target) || mod) return;
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); replay(); }
+  });
+
+  /* generic hover blip for controls */
+  $$(".btn").forEach(function (b) { b.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") Sound.cue("hover", 40); }); });
+
+  if (prmQuery && prmQuery.addEventListener) prmQuery.addEventListener("change", function () { Scope.settle(); });
+
+  /* ===================================================================
+     init
+     =================================================================== */
+  renderRows();
+  paintToggles();
+  Scope.setIdx(HISTORY.length - 1, "force");
+  var regDrift = HISTORY[89].score - HISTORY[82].score;
+  $("#regDrift").textContent = (regDrift >= 0 ? "+" : "\u2212") + fmt1(Math.abs(regDrift));
+  $("#regDist").textContent = "\u2212" + fmt1(VERDICT.yesAt - VERDICT.score);
+
+  if (state.fx) {
+    // cold boot on first visit, warm boot after (persisted, like useVeil); R always replays cold
+    runBoot(safeGet("v12.veilSeen") ? "warm" : "cold");
+  } else {
+    finishPage();
+  }
+})();
+</script>
+</body>
+</html>

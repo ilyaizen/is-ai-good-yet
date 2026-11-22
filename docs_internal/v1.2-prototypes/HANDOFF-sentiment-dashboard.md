@@ -1,0 +1,24 @@
+# Handoff: V1.2 sentiment dashboard — next design iteration
+
+Repo: `D:\Projects\is-ai-good-yet` · branch `feature/v1.2-phosphor-boot` · HEAD `1cf3f5b` (unpushed baseline). Windows Git Bash, Vite+/pnpm, SvelteKit 2 + Svelte 5 runes. English only; no delegation. Read `AGENTS.md` and load `is-ai-good-yet-frontend` before coding.
+
+## Design decision
+
+**Telemetry Deck is rejected as the design direction. Remove `CH-00` and `LINK NOMINAL` entirely from the next V1 design. Do not relabel them or replace them with other simulated instrument status.** The target is a professional, futuristic **sentiment analysis dashboard**, not a machine console. Think precise typography, restrained surfaces, and color that explains the data. No channel-number branding, nominal lights, gauges as decoration, fake uptime, or countdowns. Preserve the old prototype files as references, not requirements.
+
+Use the chart-first experiment as a scaffold, not an approved design. It improved the order but still feels like a large landing headline followed by a chart. Recommended next composition: a compact **AI coding sentiment** overview with Hacker News as the scope; a single current verdict and score; one dominant, explorable weekly history chart with an explicitly labeled threshold band; evidence visible immediately below. Keep the chart focal, use readable axis labels across the time span, and put the selected week's date/score by the plot. Never replace the current verdict when the user inspects history. One accent for the data, not the chrome. No grid of KPI tiles. If sentiment mix earns space, present it once and label it as article counts, not what determines the weighted score. Put supporting numbers and scoring method in details. Intro is a separate decision: no selected intro; do not invest in ARM or pick C on the user's behalf.
+
+## State to preserve
+
+Rechecked branch/HEAD and dirty tree. Baseline `1cf3f5b` holds persisted pre-paint `v12.fx`, session-only sound off by default, live reduced-motion handling, and boot infrastructure. The worktree contains the uncommitted B port (tracked changes in landing, layout, server, styles, audio and veil; untracked `deck-*` and A/B/C mock-data prototype HTML/memos). **Do not reset, clean, stash, commit, or push this WIP.**
+
+The first iteration added only `src/lib/components/landing/history-preview.svelte` and additive wiring in `src/routes/+page.svelte`. It is dev-only and shows at `/?variant=history`; `/` remains the comparison deck and both currently share its ARM intro. The sketch uses the existing V1 loader, 1-year/90-day weekly history, a week selector, three real high-influence threads, and methodology. Dev preview rendered both bodies; changing the range and selecting a week left the current 67.5 score unchanged. `CH-00` is in `src/lib/components/landing/verdict-display.svelte`; `LINK NOMINAL` and its lamp are in `src/routes/+page.svelte`. The labels have not been removed from the preserved comparison deck during this handoff. The new design must omit them. Once the design is chosen, remove obsolete runtime markup and wires rather than just hiding them with CSS.
+
+## First action in the new session
+
+Open [chart-first](http://127.0.0.1:5174/?variant=history) and [current deck](http://127.0.0.1:5174/) in Desktop Preview. Port 5174 was serving `v12.fx` at handoff; session `proc_d4a7a90f8e06`. If down, start `pnpm run dev --host 127.0.0.1 --port 5174`, read the actual port, and verify `v12.fx`. Cold start can exceed two minutes. Leave **5173 (CopySpeech)** alone. Produce one dev-only design iteration, ideally as a separate variant so the old comparison remains intact. Open it in Desktop Preview and show desktop and phone visuals; stop for design approval before a full port.
+
+## Data and release gates
+
+- V1 exports weekly and monthly snapshots, no daily series. Plot recorded points only; line segments are visual guides, not readings. Do not mix the current export into the weekly series. YES ≥55; NO <45; otherwise NOT YET. Any change markers describe measured changes, not causes. Evidence quotes have no per-quote sentiment or attribution; the 04:18 UTC countdown is not a schedule. Keep V1/V2 contracts separate, plus `isAiGoodYetRevealed`, the effects store, token-only colors, and `--ease-swift` where used.
+- No lint, typecheck, analytics test, production smoke, changelog update, commit, push, or merge has run for this iteration. After approval and implementation, ask before scoped `vp check`, `pnpm exec svelte-check --tsconfig ./tsconfig.json --output machine` (target 0/0), `pnpm run test:analytics-script`, and a production-mode interaction smoke. Then update `[Unreleased]`. Ask separately before commit or push; show the PR URL, wait for explicit ✅ before merge, then run `./scripts/monitor-deploy.sh`.

@@ -4,6 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Is AI “Good” Yet?</title>
+    <script>
+      // v1.2 FX pre-paint bootstrap: apply the persisted effects-off state
+      // before first paint and guard unrevealed first-visit landing paints
+      // until the Phosphor intro veil mounts.
+      try {
+        if (localStorage.getItem("v12.fx") === "off") {
+          document.documentElement.classList.add("fx-off")
+        } else if (location.pathname === "/" && localStorage.getItem("isAiGoodYetRevealed") !== "true") {
+          document.documentElement.classList.add("v12-veil-pending")
+        }
+      } catch (e) {}
+    </script>
     <script src="https://analytics.is-ai-good-yet.com/api/script.js?siteId=903a72fbf2be" defer></script>
     %sveltekit.head%
   </head>

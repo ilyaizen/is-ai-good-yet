@@ -9,6 +9,18 @@ import {
   getStaticExportTimestamp,
 } from "$lib/static-data"
 import type { PageServerLoad } from "./$types"
+import articles from "$lib/data/articles.json"
+
+const detailQuotes = (["positive", "neutral", "negative"] as const).flatMap((sentiment) => {
+  for (const article of articles) {
+    if (article.sentiment_label !== sentiment) continue
+    const text = article.quotes
+      ?.map((quote) => quote.replace(/^["“]|["”]$/g, "").trim())
+      .find((quote) => quote.length > 20 && quote.length < 150)
+    if (text) return [{ text, hnId: article.hn_id, sentiment }]
+  }
+  return []
+})
 
 export const load: PageServerLoad = async () => {
   try {
@@ -27,6 +39,7 @@ export const load: PageServerLoad = async () => {
       weeklySnapshots,
       permanentRecord,
       topArticles,
+      detailQuotes,
       pipelineStats,
       lastCatchUpTimeAgo,
       lastCatchUpTimestamp,
@@ -73,6 +86,7 @@ export const load: PageServerLoad = async () => {
         negativeCount: 0,
       },
       topArticles: [],
+      detailQuotes: [],
       pipelineStats: {
         totalUrls: null,
         resolved: 0,

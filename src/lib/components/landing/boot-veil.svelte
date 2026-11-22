@@ -6,6 +6,11 @@
   const QUESTION = "is ai \u201cgood\u201d yet?"
   const GOOD_START = 6
   const GOOD_END = 11
+  const DESCRIPTION = [
+    "This site tracks developer sentiment toward AI coding tools.",
+    "It reads Hacker News submissions to see whether enthusiasm or skepticism carries more weight."
+  ]
+  const TOKENS = DESCRIPTION.map((line) => line.match(/\S+\s*/g) ?? [])
 
   let {
     onReveal,
@@ -17,6 +22,13 @@
 
   let phase = $state<"typing" | "ready" | "lifting" | "done">("typing")
   let typed = $state("")
+  let streamed = $state(["", ""])
+
+  function finishTyping() {
+    typed = QUESTION
+    streamed = [...DESCRIPTION]
+    phase = "ready"
+  }
   let skipButton = $state<HTMLButtonElement>()
   let revealButton = $state<HTMLButtonElement>()
   let replayButton = $state<HTMLButtonElement>()
@@ -38,6 +50,7 @@
     const run = ++runId
     phase = "typing"
     typed = ""
+    streamed = DESCRIPTION.map(() => "")
 
     if (!v12Effects.fx) {
       reveal()
@@ -45,8 +58,7 @@
     }
 
     if (!v12Effects.motionOK) {
-      typed = QUESTION
-      phase = "ready"
+      finishTyping()
       return
     }
 
@@ -55,8 +67,7 @@
 
     for (let i = 0; i < QUESTION.length; i += 1) {
       if (!v12Effects.motionOK) {
-        typed = QUESTION
-        phase = "ready"
+        finishTyping()
         return
       }
       const ch = QUESTION[i]
@@ -68,11 +79,20 @@
 
     await sleep(160)
     if (run !== runId) return
-    cueKeystroke("enter")
+    if (v12Effects.motionOK) cueKeystroke("enter")
 
-    await sleep(140)
-    if (run !== runId) return
-    phase = "ready"
+    for (const [index, tokens] of TOKENS.entries()) {
+      for (const token of tokens) {
+        if (!v12Effects.motionOK) {
+          finishTyping()
+          return
+        }
+        streamed[index] += token
+        await sleep(42)
+        if (run !== runId) return
+      }
+    }
+    finishTyping()
   }
 
   function replayWithSound(): void {
@@ -109,7 +129,7 @@
       reveal()
       return
     }
-    if (event.key === "Enter" && !(event.target instanceof HTMLButtonElement)) {
+    if (phase === "ready" && event.key === "Enter" && !(event.target instanceof HTMLButtonElement)) {
       event.preventDefault()
       reveal()
       return
@@ -176,9 +196,9 @@
       <h1 id="veil-heading" class="sr-only">Is AI &ldquo;Good&rdquo; Yet?</h1>
       <p class="sr-only" aria-live="polite">
         {#if phase === "typing"}
-          Typing question: Is AI good yet? Press Escape to skip.
+          Intro playing. Press Escape to skip.
         {:else if phase === "ready"}
-          Ready. Choose show the answer or replay with typing sound.
+          {DESCRIPTION.join(" ")} Choose Answer or Replay. Replay enables typing sounds.
         {/if}
       </p>
 
@@ -192,6 +212,12 @@
         <span class="veil-caret"></span>
       </p>
 
+      <div class="veil-description" aria-hidden="true">
+        {#each DESCRIPTION as line, index (line)}
+          <p><span>{line}</span><span>{streamed[index]}</span></p>
+        {/each}
+      </div>
+
       <div class="veil-actions">
         {#if phase === "typing"}
           <button
@@ -200,7 +226,7 @@
             class="veil-btn veil-btn-quiet"
             onclick={reveal}
           >
-            skip &middot; esc
+            skip
           </button>
         {:else}
           <button
@@ -209,7 +235,7 @@
             class="veil-btn veil-btn-primary"
             onclick={reveal}
           >
-            show the answer
+            answer
           </button>
           <button
             bind:this={replayButton}
@@ -217,12 +243,14 @@
             class="veil-btn"
             onclick={replayWithSound}
           >
-            {v12Effects.sound ? "replay" : "replay with sound"}
+            replay
           </button>
         {/if}
       </div>
 
-      <p class="veil-hint" aria-hidden="true">enter reveal &middot; esc skip &middot; r replay</p>
+      <p class="veil-hint" aria-hidden="true">
+        {#if phase === "ready"}enter answer &middot; {/if}esc skip &middot; r replay
+      </p>
     </div>
   </div>
 {/if}
@@ -235,6 +263,7 @@
     display: grid;
     place-items: center;
     padding: clamp(1rem, 4vw, 2.5rem);
+    overflow-y: auto;
     background: var(--td-ground);
     color: var(--td-ink);
     font-family: var(--font-mono);
@@ -305,6 +334,28 @@
     height: 1.05em;
     background: var(--td-accent);
     animation: veil-blink 1s steps(1) infinite;
+  }
+
+  .veil-description {
+    display: grid;
+    gap: 0.45rem;
+    max-width: 64ch;
+    color: var(--td-muted);
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  .veil-description p {
+    display: grid;
+    margin: 0;
+  }
+
+  .veil-description span {
+    grid-area: 1 / 1;
+  }
+
+  .veil-description span:first-child {
+    visibility: hidden;
   }
 
   .veil-actions {

@@ -23,6 +23,9 @@
   import PhosphorFxBar from "./phosphor-fx-bar.svelte"
   import PhosphorStoryDialog from "./phosphor-story-dialog.svelte"
   import PhFlowNumber from "./ph-flow-number.svelte"
+  import PhosphorMoreInfo from "./phosphor-more-info.svelte"
+  import VisitorCounter from "$lib/components/visitor-counter.svelte"
+  import { v12Effects } from "$lib/state/v12-effects.svelte"
 
   let {
     data,
@@ -204,6 +207,7 @@
         <span class="ph-scope">// hacker news &middot; ai coding</span>
       </a>
       <div class="ph-header-right">
+        <a class="ph-link" href="#details">more info</a>
         <a
           class="ph-link"
           href="#ph-method"
@@ -557,6 +561,8 @@
       {/if}
     </section>
 
+    <PhosphorMoreInfo quotes={data.detailQuotes} />
+
     <!-- METHODOLOGY (sample size, rolling window, and weighting live exclusively here) -->
     <details id="ph-method" class="ph-method" bind:open={methodOpen}>
       <summary>&gt; cat methodology.txt</summary>
@@ -583,7 +589,10 @@
     </details>
 
     <footer class="ph-footer">
-      <span>Hacker News sentiment on AI-assisted coding.</span>
+      <div>
+        <div>Hacker News sentiment on AI-assisted coding.</div>
+        <div>Unique visitors: <strong><VisitorCounter animated={v12Effects.motionOK} /></strong></div>
+      </div>
       <nav aria-label="Source links">
         <a href="https://github.com/ilyaizen/is-ai-good-yet" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://hcker.news/" target="_blank" rel="noreferrer">Hcker.news</a>
@@ -1266,6 +1275,10 @@
     gap: 0.5rem 1.25rem;
     font-size: 0.76rem;
     color: var(--td-faint);
+  }
+
+  .ph-footer strong {
+    color: var(--td-accent);
   }
 
   .ph-footer nav {

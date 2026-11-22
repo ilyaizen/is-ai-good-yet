@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Restore the Convex unique visitor count in the Phosphor footer and the landing page’s More Info section with a summary, source quotes, and expandable sentiment themes, separate from Methodology.
 - Promote **Phosphor Scope** (`phosphor-scope.svelte`, `phosphor-data.ts`, `phosphor-fx-bar.svelte`, `phosphor-story-dialog.svelte`) to the production `/` landing page using real V1 static exports (`verdict.json`, `weekly.json`, `articles.json`), dominant weekly rolling history with visible `45`/`55` thresholds, `NOT YET` band, a continuous trace joining adjacent recorded snapshots (no visual gaps over missing weeks), and week inspection directly on the chart (pointer scrub plus a keyboard-accessible ARIA slider), newest-first Hacker News evidence stream with `YYYY-MM-DD` dates and band-consistent sentiment scores (`+1.5` / `±0.2` / `−1.5`), story inspect dialog (`/api/article-details/:id`), and collapsed Methodology details.
 - Odometer digit roll (`ph-flow-number.svelte`) on the current verdict score and the weekly readout — masked 0-9 columns with stepped right-to-left stagger, falling back to plain text under FX off / reduced motion.
 - Semantic sentiment color coding across Phosphor Scope, token-defined only (`src/styles/tokens.css`): positive stays phosphor green, medium/neutral (`NOT YET`, `~ neu`, `45–55` band) moves to an amber cast of the warning palette, and negative (`NO`, `− neg`, `<45`) to a chroma-trimmed destructive red — applied to the current verdict accent/glow, weekly readout, chart threshold dashes + zone tags + `NOT YET` band, story sentiment badges, and inspect-dialog sentiment, in both dark and light themes.
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Stream the intro’s explanation before enabling the answer, and shorten the veil controls to `answer`, `replay`, and `skip`.
 - Tighten V1.2 phosphor tokens (`src/styles/tokens.css`, `src/styles/v12.css`) and layout integration (`src/routes/+layout.svelte`, `src/lib/state/v12-effects.svelte.ts`) so `FX:ON/OFF`, live `prefers-reduced-motion`, and session-only `SOUND:ON/OFF` govern the entire `/` experience cleanly.
 - Update `tests/test-analytics-script.ts` to match the canonical Rybbit `script.js?siteId=903a72fbf2be` URL introduced in `#40`.
 

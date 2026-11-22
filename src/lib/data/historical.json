@@ -325,14 +325,14 @@
   },
   {
     "month": "2026-10",
-    "score": 60.77,
+    "score": 60.79,
     "verdict": "YES",
-    "articleCount": 1333
+    "articleCount": 1334
   },
   {
     "month": "2026-11",
-    "score": 61.32,
+    "score": 61.08,
     "verdict": "YES",
-    "articleCount": 1365
+    "articleCount": 1374
   }
 ]

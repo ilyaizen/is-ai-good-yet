@@ -57884,6 +57884,49 @@
       }
     }
   },
+  "50139998": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person narrative describing a developer’s personal framework for using AI."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1637,
+        "output_tokens": 170,
+        "total_tokens": 1807,
+        "inference_time_ms": 446.2,
+        "tokens_per_second": 381.0,
+        "prompt_chars": 2564,
+        "timestamp": "2026-11-22T16:22:50.446269+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "The Brain Sandwich encourages mindful AI use, keeping developers in control while benefiting from AI assistance.",
+        "quotes": [
+          "\"Whenever you work on something, you should use: Your brain, and then AI, and then Your brain.\"",
+          "\"Before you tell the agent to start building anything, you go there and read and understand it first.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:43.402721+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1471,
+        "output_tokens": 154,
+        "total_tokens": 1625,
+        "inference_time_ms": 362.4,
+        "tokens_per_second": 424.9,
+        "prompt_chars": 2564,
+        "timestamp": "2026-11-22T16:23:43.402721+00:00"
+      }
+    }
+  },
   "50289162": {
     "prefilter": {
       "response": {
@@ -58875,6 +58918,49 @@
       }
     }
   },
+  "50359839": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and opinion on AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1864,
+        "output_tokens": 145,
+        "total_tokens": 2009,
+        "inference_time_ms": 494.7,
+        "tokens_per_second": 293.1,
+        "prompt_chars": 3978,
+        "timestamp": "2026-11-16T02:18:01.532074+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "mixed",
+        "trajectory": "pessimistic",
+        "topic": "productivity",
+        "summary": "AI coding tools boost engineer productivity but fall flat for non‑programmers, revealing a programmer‑bias in prompt design.",
+        "quotes": [
+          "“Prompting an AI well is programming.”",
+          "“It mostly lets people who already think like programmers do it faster, in English.”"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:24:58.271531+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2083,
+        "output_tokens": 204,
+        "total_tokens": 2287,
+        "inference_time_ms": 836.6,
+        "tokens_per_second": 243.8,
+        "prompt_chars": 5840,
+        "timestamp": "2026-11-22T16:24:58.275490+00:00"
+      }
+    }
+  },
   "50454395": {
     "prefilter": {
       "response": {
@@ -59344,6 +59430,306 @@
         "tokens_per_second": 483.7,
         "prompt_chars": 3032,
         "timestamp": "2026-11-16T02:18:18.660621+00:00"
+      }
+    }
+  },
+  "50573681": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person developer experience and opinions about AI coding tools."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1921,
+        "output_tokens": 170,
+        "total_tokens": 2091,
+        "inference_time_ms": 516.3,
+        "tokens_per_second": 329.3,
+        "prompt_chars": 3983,
+        "timestamp": "2026-11-22T16:23:03.206144+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI tools boost speed but require careful oversight, especially in game engine workflows.",
+        "quotes": [
+          "'Claude added support for peer-to-peer play... after four hours of mostly hands‑off work'",
+          "'AI made transitioning from using Unreal into Godot trivial'"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:44.968323+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2462,
+        "output_tokens": 153,
+        "total_tokens": 2615,
+        "inference_time_ms": 497.7,
+        "tokens_per_second": 307.4,
+        "prompt_chars": 7433,
+        "timestamp": "2026-11-22T16:23:44.968323+00:00"
+      }
+    }
+  },
+  "50529612": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "Contains empirical findings and team experience on AI coding verification."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1905,
+        "output_tokens": 157,
+        "total_tokens": 2062,
+        "inference_time_ms": 518.2,
+        "tokens_per_second": 303.0,
+        "prompt_chars": 3991,
+        "timestamp": "2026-11-22T16:22:24.853186+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "quality",
+        "summary": "Claude’s verification loops boost quality and throughput, making AI coding practical and reliable.",
+        "quotes": [
+          "\"Verification loops are the building block that lets you delegate more work to Claude.\"",
+          "\"Having a separate grader check Claude’s work against a rubric improved task success by up to 10 points.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:38.811317+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2561,
+        "output_tokens": 173,
+        "total_tokens": 2734,
+        "inference_time_ms": 466.2,
+        "tokens_per_second": 371.1,
+        "prompt_chars": 7971,
+        "timestamp": "2026-11-22T16:23:38.811317+00:00"
+      }
+    }
+  },
+  "50526152": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person developer experience with AI agents and tool usage."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1966,
+        "output_tokens": 174,
+        "total_tokens": 2140,
+        "inference_time_ms": 434.3,
+        "tokens_per_second": 400.7,
+        "prompt_chars": 3979,
+        "timestamp": "2026-11-22T16:22:41.910070+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "Lend is a pragmatic, secure workflow enhancer that keeps credentials local while letting agents run remotely.",
+        "quotes": [
+          "I built a tool to let remote agents use tools on my laptop with my approval.",
+          "This works great until an agent needs something on my laptop.",
+          "lend reads the token from 1Password, runs gh with GH_TOKEN set, and sends back the output. The token stays on the laptop."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:41.845399+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2760,
+        "output_tokens": 126,
+        "total_tokens": 2886,
+        "inference_time_ms": 462.8,
+        "tokens_per_second": 272.3,
+        "prompt_chars": 7974,
+        "timestamp": "2026-11-22T16:23:41.845399+00:00"
+      }
+    }
+  },
+  "50581110": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and opinion about AI coding tools are present."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1958,
+        "output_tokens": 285,
+        "total_tokens": 2243,
+        "inference_time_ms": 537.5,
+        "tokens_per_second": 530.2,
+        "prompt_chars": 3977,
+        "timestamp": "2026-11-22T16:22:27.994422+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "tool",
+        "trajectory": "optimistic",
+        "topic": "workflow",
+        "summary": "DreamCoder offers a powerful, flexible harness that boosts speed with AI, but still needs human guidance—overall a useful, forward‑thinking workflow tool.",
+        "quotes": [
+          "\"The speed advantage was undeniable,\" \"It will do more than just display a chat window for coding agent work.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:40.231828+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2697,
+        "output_tokens": 169,
+        "total_tokens": 2866,
+        "inference_time_ms": 479.1,
+        "tokens_per_second": 352.7,
+        "prompt_chars": 7976,
+        "timestamp": "2026-11-22T16:23:40.231828+00:00"
+      }
+    }
+  },
+  "50562262": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person developer experience and opinion on AI safeguards."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1667,
+        "output_tokens": 174,
+        "total_tokens": 1841,
+        "inference_time_ms": 428.0,
+        "tokens_per_second": 406.5,
+        "prompt_chars": 2815,
+        "timestamp": "2026-11-22T16:22:10.053231+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI safeguards block essential security fixes, creating real risk and frustration.",
+        "quotes": [
+          "\"It got stopped because of bullshit “AI safeguards\"",
+          "\"Claude will tell you to fuck off and use an older model that still will try to stop you from applying adequate protection."
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:36.589404+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1501,
+        "output_tokens": 179,
+        "total_tokens": 1680,
+        "inference_time_ms": 443.2,
+        "tokens_per_second": 403.9,
+        "prompt_chars": 2815,
+        "timestamp": "2026-11-22T16:23:36.589404+00:00"
+      }
+    }
+  },
+  "50579331": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First‑person narrative with personal experience, critique, and opinion on AI coding."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1887,
+        "output_tokens": 139,
+        "total_tokens": 2026,
+        "inference_time_ms": 479.9,
+        "tokens_per_second": 289.7,
+        "prompt_chars": 3965,
+        "timestamp": "2026-11-22T16:22:11.487614+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "hazard",
+        "trajectory": "pessimistic",
+        "topic": "quality",
+        "summary": "AI coding tools produce insecure, slow architecture, harming app quality.",
+        "quotes": [
+          "\"AI will never push back on requirements\", \"It will trade off performance for security and slow down the app.\", \"If you are a developer, the coding job is going away.\n"
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:37.208773+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2145,
+        "output_tokens": 204,
+        "total_tokens": 2349,
+        "inference_time_ms": 516.5,
+        "tokens_per_second": 395.0,
+        "prompt_chars": 6112,
+        "timestamp": "2026-11-22T16:23:37.208773+00:00"
+      }
+    }
+  },
+  "50574772": {
+    "prefilter": {
+      "response": {
+        "category": "AI_DISCOURSE",
+        "confidence": 0.95,
+        "reasoning": "First-person experience and productivity claims about AI agents in coding."
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 1952,
+        "output_tokens": 129,
+        "total_tokens": 2081,
+        "inference_time_ms": 372.6,
+        "tokens_per_second": 346.2,
+        "prompt_chars": 3980,
+        "timestamp": "2026-11-22T16:23:22.931004+00:00"
+      }
+    },
+    "sentiment": {
+      "response": {
+        "utility": "magic",
+        "trajectory": "optimistic",
+        "topic": "productivity",
+        "summary": "AI agents turned a multi‑day admin panel into a few hours, proving they’re a game‑changer for speed.",
+        "quotes": [
+          "\"A day of work fits in an hour.\"",
+          "\"A week‑long feature fits in a day.\""
+        ],
+        "model": "openai/gpt-oss-20b",
+        "analyzed_at": "2026-11-22T16:23:45.965658+00:00"
+      },
+      "metrics": {
+        "model": "openai/gpt-oss-20b",
+        "input_tokens": 2639,
+        "output_tokens": 167,
+        "total_tokens": 2806,
+        "inference_time_ms": 523.4,
+        "tokens_per_second": 319.1,
+        "prompt_chars": 7974,
+        "timestamp": "2026-11-22T16:23:45.965658+00:00"
       }
     }
   }

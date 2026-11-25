@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { PageData } from "./$types"
+  import { page } from "$app/state"
   import BootVeil from "$lib/components/landing/boot-veil.svelte"
+  import PhosphorCrt from "$lib/components/landing/phosphor-crt.svelte"
   import PhosphorScope from "$lib/components/landing/phosphor-scope.svelte"
   import { unlockSound } from "$lib/audio/v12-sound"
   import { useVeil } from "$lib/composables/use-veil.svelte"
@@ -15,7 +17,11 @@
   const veil = useVeil()
 
   function onWindowKeydown(event: KeyboardEvent): void {
+    if (event.isTrusted && !event.repeat && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      unlockSound()
+    }
     if (
+      page.url.searchParams.get("controls") !== "1" ||
       veil.showIntro ||
       !v12Effects.fx ||
       dialogOpen ||
@@ -32,11 +38,12 @@
       return
     }
     event.preventDefault()
-    if (v12Effects.sound) {
-      unlockSound(() => veil.handleReplay())
-      return
-    }
     veil.handleReplay()
+  }
+
+  function onPointerActivation(event: PointerEvent): void {
+    if (!event.isTrusted || !event.isPrimary || event.button !== 0) return
+    if ((event.pointerType === "mouse") === (event.type === "pointerdown")) unlockSound()
   }
 </script>
 
@@ -48,7 +55,7 @@
   />
 </svelte:head>
 
-<svelte:window onkeydown={onWindowKeydown} />
+<svelte:window onkeydown={onWindowKeydown} onpointerdown={onPointerActivation} onpointerup={onPointerActivation} />
 
 {#if !veil.isLoading && veil.showIntro}
   {#key veil.replayKey}
@@ -67,3 +74,5 @@
     }}
   />
 </div>
+
+<PhosphorCrt />

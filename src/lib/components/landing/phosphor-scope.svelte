@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/state"
   import type { PageData } from "../../../routes/$types"
   import type { InfluentialArticle } from "$lib/server/db"
   import { cueHover, cueScrub, cueToggle } from "$lib/audio/v12-sound"
@@ -42,23 +43,23 @@
   } = $props()
 
   const ranges: ReadonlyArray<{ days: number | null; label: string }> = [
-    { days: 90, label: "90D" },
-    { days: 365, label: "1Y" },
-    { days: null, label: "ALL" },
+    { days: 90, label: "90 days" },
+    { days: 365, label: "1 year" },
+    { days: null, label: "All time" },
   ]
 
   const bandFilters: ReadonlyArray<{ key: "all" | "pos" | "neu" | "neg"; label: string }> = [
-    { key: "all", label: "all" },
-    { key: "pos", label: "+ pos" },
-    { key: "neu", label: "± neu" },
-    { key: "neg", label: "− neg" },
+    { key: "all", label: "All" },
+    { key: "pos", label: "Positive" },
+    { key: "neu", label: "Neutral" },
+    { key: "neg", label: "Negative" },
   ]
 
   const sortOptions: ReadonlyArray<{ key: StorySortKey; label: string }> = [
-    { key: "hn_timestamp", label: "newest first" },
-    { key: "hn_score", label: "hn points" },
-    { key: "hn_comments", label: "comments" },
-    { key: "sentiment_score", label: "most positive" },
+    { key: "hn_timestamp", label: "Newest first" },
+    { key: "hn_score", label: "Most points" },
+    { key: "hn_comments", label: "Most comments" },
+    { key: "sentiment_score", label: "Most positive" },
   ]
 
   const PAGE_SIZE = 10
@@ -77,7 +78,10 @@
   let inspectedId = $state<number | null>(null)
 
   const current = $derived(data.verdictScore)
-  const currentAnswer = $derived(answerFor(current.finalScore))
+  function verdictLabel(score: number): string {
+    const answer = answerFor(score)
+    return answer.charAt(0) + answer.slice(1).toLowerCase()
+  }
   // Semantic tone (pos/neu/neg) driving the verdict accent, glow, and score color
   const verdictTone = $derived(current.totalAnalyzed ? verdictBandFor(current.finalScore) : null)
 
@@ -197,25 +201,25 @@
 </script>
 
 <div class="dir-phosphor ph-page">
-  <div class="ph-scan" aria-hidden="true"></div>
-
   <header class="ph-header">
     <div class="ph-wrap ph-header-row">
       <a class="ph-brand" href="#home">
         <span class="ph-sigil" aria-hidden="true">&gt;</span>
         <strong>is-ai-good-yet</strong>
-        <span class="ph-scope">// hacker news &middot; ai coding</span>
+        <span class="ph-scope">// Hacker News · AI coding tools</span>
       </a>
       <div class="ph-header-right">
-        <a class="ph-link" href="#details">more info</a>
+        <a class="ph-link" href="#details">Key themes</a>
         <a
           class="ph-link"
           href="#ph-method"
           onclick={() => {
             methodOpen = true
-          }}>methodology</a
+          }}>Methodology</a
         >
-        <PhosphorFxBar {onReplay} {replayDisabled} />
+        {#if page.url.searchParams.get("controls") === "1"}
+          <PhosphorFxBar {onReplay} {replayDisabled} />
+        {/if}
       </div>
     </div>
   </header>
@@ -229,24 +233,24 @@
       aria-labelledby="ph-verdict-heading"
     >
       <div class="ph-hero-left">
-        <p class="ph-prompt"><span class="ph-sigil" aria-hidden="true">&gt;</span> is ai &ldquo;good&rdquo; yet?</p>
+        <p class="ph-prompt"><span class="ph-sigil" aria-hidden="true">&gt;</span> Is AI &ldquo;good&rdquo; yet?</p>
         <h1 id="ph-verdict-heading" class="ph-verdict">
           {#if current.totalAnalyzed}
-            {currentAnswer}.
+            {verdictLabel(current.finalScore)}.
           {:else}
-            UNAVAILABLE.
+            Unavailable.
           {/if}
         </h1>
       </div>
 
       {#if current.totalAnalyzed}
         <div class="ph-hero-right" aria-label="Current verdict score">
-          <p class="ph-kicker">current verdict</p>
+          <p class="ph-kicker">Current verdict score</p>
           <p class="ph-score">
             <strong><PhFlowNumber value={current.finalScore.toFixed(1)} /></strong><span>/100</span>
           </p>
           <p class="ph-thresholds">
-            YES &ge;{YES_FLOOR} &middot; NO &lt;{NO_CEILING}{#if exportedAt} &middot; {exportedAt.slice(0, 10)}{/if}
+            Yes ≥ {YES_FLOOR} · No &lt; {NO_CEILING}{#if exportedAt} · Updated {exportedAt.slice(0, 10)}{/if}
           </p>
         </div>
       {/if}
@@ -256,9 +260,9 @@
     <section id="weekly" class="ph-panel" aria-labelledby="ph-scope-heading">
       <div class="ph-panel-head">
         <div>
-          <h2 id="ph-scope-heading"><span class="ph-path">/weekly</span> sentiment history</h2>
+          <h2 id="ph-scope-heading">Weekly sentiment</h2>
           <p class="ph-sub">
-            Recorded weekly rolling snapshots &middot; inspecting a week keeps the current verdict fixed
+            Select a point to see that week’s score. The verdict above stays fixed.
           </p>
         </div>
         <div class="ph-ranges" role="group" aria-label="Weekly history range">
@@ -368,16 +372,16 @@
 
               <div class="ph-zone-tags" aria-hidden="true">
                 <span class="ph-zone-tag ph-zone-yes" style:top={`${(100 * yAt(YES_FLOOR)) / plotHeight}%`}>
-                  YES &ge;{YES_FLOOR}
+                  Yes ≥ {YES_FLOOR}
                 </span>
                 <span
                   class="ph-zone-tag ph-zone-mid"
                   style:top={`${(50 * (yAt(YES_FLOOR) + yAt(NO_CEILING))) / plotHeight}%`}
                 >
-                  NOT YET
+                  Not yet
                 </span>
                 <span class="ph-zone-tag ph-zone-no" style:top={`${(100 * yAt(NO_CEILING)) / plotHeight}%`}>
-                  NO &lt;{NO_CEILING}
+                  No &lt; {NO_CEILING}
                 </span>
               </div>
 
@@ -391,7 +395,7 @@
                 aria-valuemax={Math.max(0, points.length - 1)}
                 aria-valuenow={selectedWeek ?? points.length - 1}
                 aria-valuetext={inspectedPoint
-                  ? `Week of ${formatMediumDate(inspectedPoint.sample.weekStart)}, score ${inspectedPoint.sample.verdictScore.toFixed(1)}, ${answerFor(inspectedPoint.sample.verdictScore)}`
+                  ? `Week of ${formatMediumDate(inspectedPoint.sample.weekStart)}, score ${inspectedPoint.sample.verdictScore.toFixed(1)}, ${verdictLabel(inspectedPoint.sample.verdictScore)}`
                   : `Latest recorded week ${formatMediumDate(points[points.length - 1].sample.weekStart)}, score ${points[points.length - 1].sample.verdictScore.toFixed(1)}`}
                 onpointerdown={onPointerDown}
                 onpointermove={onPointerMove}
@@ -411,9 +415,9 @@
           <figcaption class="ph-scrub-bar">
             <output class="ph-readout">
               {#if inspectedPoint}
-                <span>week {inspectedPoint.sample.weekStart}</span>
+                <span>Week of {inspectedPoint.sample.weekStart}</span>
                 <strong class={`ph-read-${verdictBandFor(inspectedPoint.sample.verdictScore)}`}>
-                  <PhFlowNumber value={inspectedPoint.sample.verdictScore.toFixed(1)} /> &middot; {answerFor(inspectedPoint.sample.verdictScore)}
+                  <PhFlowNumber value={inspectedPoint.sample.verdictScore.toFixed(1)} /> · {verdictLabel(inspectedPoint.sample.verdictScore)}
                 </strong>
                 <button
                   type="button"
@@ -421,7 +425,7 @@
                   onclick={() => {
                     cueToggle()
                     selectedWeek = null
-                  }}>clear</button
+                  }}>Clear selection</button
                 >
               {:else}
                 <span>
@@ -442,9 +446,9 @@
     <section id="articles-table" class="ph-evidence" aria-labelledby="ph-feed-heading">
       <div class="ph-panel-head">
         <div>
-          <h2 id="ph-feed-heading"><span class="ph-path">/hn/stories</span> hacker news evidence</h2>
+          <h2 id="ph-feed-heading">Hacker News stories</h2>
           <p class="ph-sub">
-            Sorted newest first by HN submission time &middot; {formatInt(filteredStories.length)} stories
+            {formatInt(filteredStories.length)} {filteredStories.length === 1 ? "story" : "stories"}. Select a headline to read the analysis.
           </p>
         </div>
       </div>
@@ -468,20 +472,20 @@
         </div>
 
         <label class="ph-grep">
-          <span>grep</span>
+          <span>Search</span>
           <input
             type="search"
             bind:value={query}
             oninput={() => {
               pageIndex = 0
             }}
-            placeholder="title, topic, domain"
+            placeholder="Title, topic or domain"
             autocomplete="off"
           />
         </label>
 
         <label class="ph-sort">
-          <span>order</span>
+          <span>Sort by</span>
           <select
             bind:value={sortKey}
             onchange={() => {
@@ -498,11 +502,11 @@
 
       {#if visibleStories.length}
         <div class="ph-cols" aria-hidden="true">
-          <span>posted</span>
-          <span>sentiment</span>
-          <span>story</span>
-          <span class="num">pts</span>
-          <span class="num">cmt</span>
+          <span>Posted</span>
+          <span>Sentiment</span>
+          <span>Story</span>
+          <span class="num">Points</span>
+          <span class="num">Comments</span>
         </div>
 
         <ul class="ph-list">
@@ -524,8 +528,8 @@
                   <strong>{story.hn_title}</strong>
                   {#if domain}<small>{domain}</small>{/if}
                 </span>
-                <span class="ph-num"><span class="ph-mob-k">pts </span>{formatInt(story.hn_score)}</span>
-                <span class="ph-num"><span class="ph-mob-k">cmt </span>{formatInt(story.hn_comments)}</span>
+                <span class="ph-num"><span class="ph-mob-k">Points: </span>{formatInt(story.hn_score)}</span>
+                <span class="ph-num"><span class="ph-mob-k">Comments: </span>{formatInt(story.hn_comments)}</span>
               </button>
             </li>
           {/each}
@@ -539,7 +543,7 @@
             onclick={() => {
               cueToggle()
               pageIndex -= 1
-            }}>prev</button
+            }}>Previous</button
           >
           <span>
             {pageIndex * PAGE_SIZE + 1}–{pageIndex * PAGE_SIZE + visibleStories.length} of {formatInt(
@@ -553,7 +557,7 @@
             onclick={() => {
               cueToggle()
               pageIndex += 1
-            }}>next</button
+            }}>Next</button
           >
         </nav>
       {:else}
@@ -565,25 +569,23 @@
 
     <!-- METHODOLOGY (sample size, rolling window, and weighting live exclusively here) -->
     <details id="ph-method" class="ph-method" bind:open={methodOpen}>
-      <summary>&gt; cat methodology.txt</summary>
+      <summary>Methodology <code aria-hidden="true">/methodology.txt</code></summary>
       <div class="ph-method-body">
         {#if current.totalAnalyzed}
           <p>
-            Current verdict sample: {formatInt(current.totalAnalyzed)} analyzed Hacker News articles in a rolling
-            {current.monthsAnalyzed}-month window ({formatInt(data.permanentRecord.totalArticles)} all-time analyzed).
-            {#if exportedAt} Exported {formatMediumDate(exportedAt)} (UTC).{/if}
+            The current verdict covers {formatInt(current.totalAnalyzed)} articles from a rolling
+            {current.monthsAnalyzed}-month window. The full record contains {formatInt(data.permanentRecord.totalArticles)} articles.
+            {#if exportedAt} Last updated {formatMediumDate(exportedAt)} (UTC).{/if}
           </p>
         {/if}
         <p>
-          Verdict weighting: each article’s sentiment is weighted by influence (Hacker News points and recency). The
-          0–100 score reflects the positive share of combined positive and negative contributions. YES is
-          &ge;{YES_FLOOR}; NO is &lt;{NO_CEILING}; scores between {NO_CEILING} and {YES_FLOOR} are NOT YET.
+          Recent articles and stories with more Hacker News points carry more weight. The score measures the positive share
+          of all positive and negative contributions on a scale of 0 to 100. A score of {YES_FLOOR} or higher means
+          “Yes.” Below {NO_CEILING} means “No.” The rest fall into “Not yet.”
         </p>
         <p>
-          History and feed rules: only dots on the weekly chart are recorded snapshots; connecting segments join
-          adjacent recorded weeks as visual guides, not daily readings. Hacker News stories above are ordered newest
-          first by actual HN submission time (<code>hn_timestamp</code>) for reading clarity; presentation order does
-          not alter verdict weighting.
+          Each dot marks a recorded week. The lines connect those readings; they don’t represent daily scores.
+          Stories appear newest first by submission date unless you choose another order. Sorting never changes the verdict.
         </p>
       </div>
     </details>
@@ -614,6 +616,8 @@
 
 <style>
   .ph-page {
+    --ph-caption: 0.8125rem;
+    --ph-section-heading: clamp(1.25rem, 2vw, 1.5rem);
     position: relative;
     min-height: 100vh;
     background: var(--td-ground);
@@ -624,18 +628,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .ph-scan {
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0 2px,
-      var(--td-scanline) 2px 3px
-    );
-    opacity: 0.28;
-  }
 
   .ph-wrap {
     width: min(100%, 72rem);
@@ -659,7 +651,7 @@
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
     padding-block: 0.4rem;
-    font-size: 0.78rem;
+    font-size: var(--ph-caption);
   }
 
   .ph-brand {
@@ -670,8 +662,7 @@
     text-decoration: none;
   }
 
-  .ph-sigil,
-  .ph-path {
+  .ph-sigil {
     color: var(--td-accent);
   }
 
@@ -747,6 +738,7 @@
     line-height: 0.94;
     font-weight: 700;
     letter-spacing: -0.04em;
+    word-spacing: -0.18em;
     color: var(--td-verdict, var(--td-ink-bright));
     text-shadow: 0 0 0.35em var(--td-verdict-glow, var(--td-glow));
   }
@@ -757,10 +749,8 @@
 
   .ph-kicker {
     margin: 0;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--td-faint);
+    font-size: var(--ph-caption);
+    color: var(--td-muted);
   }
 
   .ph-score {
@@ -806,15 +796,18 @@
 
   h2 {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: var(--ph-section-heading);
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+    font-weight: 600;
     color: var(--td-ink);
   }
 
   .ph-sub {
-    margin: 0.25rem 0 0;
-    font-size: 0.76rem;
-    color: var(--td-faint);
+    margin: 0.4rem 0 0;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    color: var(--td-muted);
   }
 
   .ph-ranges {
@@ -950,8 +943,7 @@
     position: absolute;
     inset: 0 0.55rem 0 auto;
     pointer-events: none;
-    font-size: 0.66rem;
-    letter-spacing: 0.06em;
+    font-size: 0.75rem;
   }
 
   .ph-zone-tag {
@@ -1011,7 +1003,7 @@
     margin-top: 0.85rem;
     padding-top: 0.75rem;
     border-top: 1px solid var(--td-rule-soft);
-    font-size: 0.78rem;
+    font-size: var(--ph-caption);
   }
 
   .ph-readout {
@@ -1044,7 +1036,7 @@
     color: var(--td-muted);
     padding: 0.15rem 0.5rem;
     font: inherit;
-    font-size: 0.72rem;
+    font-size: var(--ph-caption);
     cursor: pointer;
     transition:
       border-color 140ms var(--ease-swift),
@@ -1064,7 +1056,7 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.85rem;
-    font-size: 0.76rem;
+    font-size: var(--ph-caption);
   }
 
   .ph-chips {
@@ -1120,7 +1112,7 @@
   .ph-cols,
   .ph-row {
     display: grid;
-    grid-template-columns: 6.4rem 4.8rem minmax(0, 1fr) 4.2rem 4.2rem;
+    grid-template-columns: 6.4rem 4.8rem minmax(0, 1fr) 4rem 4.6rem;
     align-items: baseline;
     gap: 0.75rem;
   }
@@ -1129,10 +1121,8 @@
     padding: 0.45rem 0.6rem;
     border-top: 1px solid var(--td-rule);
     border-bottom: 1px solid var(--td-rule);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--td-faint);
+    font-size: var(--ph-caption);
+    color: var(--td-muted);
   }
 
   .ph-cols .num,
@@ -1167,7 +1157,7 @@
 
   .ph-date {
     color: var(--td-muted);
-    font-size: 0.78rem;
+    font-size: var(--ph-caption);
     white-space: nowrap;
   }
 
@@ -1175,7 +1165,7 @@
     display: inline-block;
     width: fit-content;
     padding: 0 0.35rem;
-    font-size: 0.76rem;
+    font-size: var(--ph-caption);
     white-space: nowrap;
     border: 1px solid transparent;
   }
@@ -1199,7 +1189,9 @@
   }
 
   .ph-title strong {
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 400;
     color: var(--td-ink);
   }
 
@@ -1211,7 +1203,7 @@
 
   .ph-num {
     color: var(--td-muted);
-    font-size: 0.8rem;
+    font-size: var(--ph-caption);
   }
 
   .ph-mob-k {
@@ -1224,7 +1216,7 @@
     justify-content: space-between;
     gap: 0.75rem;
     padding-top: 0.8rem;
-    font-size: 0.76rem;
+    font-size: var(--ph-caption);
     color: var(--td-faint);
   }
 
@@ -1236,6 +1228,7 @@
 
   /* Methodology */
   .ph-method {
+    scroll-margin-top: 6rem;
     border-top: 1px solid var(--td-rule);
     padding-top: 0.85rem;
   }
@@ -1243,7 +1236,8 @@
   .ph-method summary {
     cursor: pointer;
     color: var(--td-accent);
-    font-size: 0.84rem;
+    font-size: 1rem;
+    font-weight: 600;
     width: fit-content;
   }
 
@@ -1251,17 +1245,21 @@
     margin-top: 0.75rem;
     display: grid;
     gap: 0.55rem;
-    max-width: 74ch;
+    max-width: 66ch;
     color: var(--td-muted);
-    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
   .ph-method-body p {
     margin: 0;
   }
 
-  .ph-method-body code {
-    color: var(--td-ink);
+  .ph-method summary code {
+    margin-left: 0.5em;
+    font: 400 var(--ph-caption) var(--font-mono);
+    color: var(--td-muted);
   }
 
   /* Footer */
@@ -1273,7 +1271,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
-    font-size: 0.76rem;
+    font-size: var(--ph-caption);
     color: var(--td-faint);
   }
 
@@ -1304,7 +1302,6 @@
     outline-offset: 2px;
   }
 
-  :global(html.fx-off) .ph-scan,
   :global(html.fx-off) .ph-trace-glow {
     display: none;
   }
@@ -1324,7 +1321,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ph-scan,
     .ph-trace-glow {
       display: none;
     }
@@ -1376,13 +1372,14 @@
     }
 
     .ph-row {
-      grid-template-columns: auto auto auto 1fr;
+      display: flex;
+      flex-wrap: wrap;
       gap: 0.35rem 0.65rem;
       padding-inline: 0.25rem;
     }
 
     .ph-title {
-      grid-column: 1 / -1;
+      flex-basis: 100%;
       order: -1;
     }
 
@@ -1394,7 +1391,7 @@
 
     .ph-num {
       text-align: left;
-      font-size: 0.74rem;
+      font-size: var(--ph-caption);
     }
 
     .ph-mob-k {

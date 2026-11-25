@@ -2,9 +2,8 @@
  * v1.2 Phosphor Scope sound engine. Pure WebAudio synthesis — zero audio assets.
  *
  * Singleton. The AudioContext is created ONLY inside unlockSound(), which is
- * invoked from real user gestures (SOUND toggle, Replay with sound, or keyboard R
- * when sound is already armed). Every cue is a no-op unless sound is on AND FX
- * is on, and every cue is failure-isolated so audio can never break the page.
+ * invoked from real user gestures on the landing page. Cues stay silent until
+ * the browser permits playback; audio never gates a UI action.
  */
 import { v12Effects } from "$lib/state/v12-effects.svelte"
 
@@ -23,7 +22,7 @@ let lastHoverAt = 0
 let lastScrubAt = 0
 
 function audio(): { ctx: AudioContext; master: GainNode } | null {
-  if (!v12Effects.sound || !v12Effects.fx || !ctx || !master || ctx.state !== "running" || document.hidden) {
+  if (!v12Effects.sound || !ctx || !master || ctx.state !== "running" || document.hidden) {
     return null
   }
   return { ctx, master }
@@ -35,14 +34,11 @@ function jitter(base: number, spread: number): number {
 
 /** Create or resume the AudioContext from a user gesture. Safe to call repeatedly. */
 export function unlockSound(onReady?: () => void): void {
-  if (!v12Effects.fx) return
+  if (!v12Effects.sound) return
   try {
     if (!ctx) {
       const AudioCtor = window.AudioContext ?? window.webkitAudioContext
-      if (!AudioCtor) {
-        onReady?.()
-        return
-      }
+      if (!AudioCtor) return
       ctx = new AudioCtor()
       const compressor = ctx.createDynamicsCompressor()
       compressor.threshold.value = -18
@@ -62,20 +58,19 @@ export function unlockSound(onReady?: () => void): void {
       void ctx
         .resume()
         .then(() => onReady?.())
-        .catch(() => onReady?.())
+        .catch(() => {})
     } else {
       onReady?.()
     }
   } catch {
     ctx = null
     master = null
-    onReady?.()
   }
 }
 
 /** Suspend the engine when sound or FX is switched off. */
 export function silenceSound(): void {
-  if (ctx && ctx.state === "running") {
+  if (ctx && ctx.state !== "closed") {
     void ctx.suspend().catch(() => {})
   }
 }

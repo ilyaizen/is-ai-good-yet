@@ -88,11 +88,11 @@
   onkeydown={onKeydown}
 >
   <header class="dlg-head">
-    <span class="dlg-path">inspect // hn/{article?.hn_id ?? "—"}</span>
+    <span class="dlg-path">Story <code>hn/{article?.hn_id ?? "—"}</code></span>
     <div class="dlg-actions">
-      <button type="button" disabled={!hasPrevious} onclick={() => step(-1)} aria-label="Previous story (K)">prev K</button>
-      <button type="button" disabled={!hasNext} onclick={() => step(1)} aria-label="Next story (J)">next J</button>
-      <button type="button" onclick={close} aria-label="Close details">close Esc</button>
+      <button type="button" disabled={!hasPrevious} onclick={() => step(-1)} aria-label="Previous story (K)">Previous <kbd>K</kbd></button>
+      <button type="button" disabled={!hasNext} onclick={() => step(1)} aria-label="Next story (J)">Next <kbd>J</kbd></button>
+      <button type="button" onclick={close} aria-label="Close details (Escape)">Close <kbd>Esc</kbd></button>
     </div>
   </header>
 
@@ -107,7 +107,7 @@
           <dt>Sentiment</dt>
           <dd class={`band-${band}`}>{bandScore(article.sentiment_score)} ({article.sentiment_label})</dd>
         </div>
-        <div><dt>HN Points</dt><dd>{formatInt(article.hn_score)}</dd></div>
+        <div><dt>HN points</dt><dd>{formatInt(article.hn_score)}</dd></div>
         <div><dt>Comments</dt><dd>{formatInt(article.hn_comments)}</dd></div>
         <div><dt>Source</dt><dd>{domain || "news.ycombinator.com"}</dd></div>
         <div><dt>Topic</dt><dd>{article.topic || "—"}</dd></div>
@@ -118,11 +118,11 @@
         <p class="dlg-summary">{article.summary}</p>
       {/if}
 
-      <h3>Exported quotes</h3>
+      <h3>Article excerpts</h3>
       {#if failed}
-        <p class="dlg-note" role="status">Details are unavailable for this story.</p>
+        <p class="dlg-note" role="status">Excerpts are unavailable. You can still open the HN thread below.</p>
       {:else if !details}
-        <p class="dlg-note" role="status">Loading story details…</p>
+        <p class="dlg-note" role="status">Loading excerpts…</p>
       {:else if details.analysis?.quotes?.length}
         <ul class="dlg-quotes">
           {#each details.analysis.quotes as quote, index (index)}
@@ -130,7 +130,7 @@
           {/each}
         </ul>
       {:else}
-        <p class="dlg-note">No quotes were exported for this story.</p>
+        <p class="dlg-note">No excerpts were saved for this story.</p>
       {/if}
 
       <div class="dlg-links">
@@ -189,6 +189,11 @@
     gap: 0.35rem;
   }
 
+  .dlg-actions kbd {
+    font: inherit;
+    color: var(--td-muted);
+  }
+
   .dlg-actions button {
     min-height: 2rem;
     padding: 0 0.55rem;
@@ -228,10 +233,12 @@
 
   h2 {
     margin: 0 0 1rem;
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-size: clamp(1.25rem, 2.5vw, 1.625rem);
     line-height: 1.3;
     font-weight: 700;
-    color: var(--td-ink-bright);
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+    color: var(--td-ink);
   }
 
   .dlg-meta {
@@ -250,15 +257,13 @@
   }
 
   .dlg-meta dt {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--td-faint);
+    font-size: var(--ph-caption);
+    color: var(--td-muted);
   }
 
   .dlg-meta dd {
     margin: 0.2rem 0 0;
-    font-size: 0.82rem;
+    font-size: 0.875rem;
     color: var(--td-ink);
     overflow-wrap: anywhere;
   }
@@ -275,17 +280,17 @@
 
   h3 {
     margin: 1.3rem 0 0.5rem;
-    font-size: 0.72rem;
+    font-size: 1.0625rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--td-faint);
+    color: var(--td-ink);
   }
 
-  .dlg-summary {
+  .dlg-summary,
+  .dlg-quotes p {
     margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.55;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
     color: var(--td-ink);
   }
 
@@ -309,12 +314,6 @@
     background: var(--td-ground);
   }
 
-  .dlg-quotes p {
-    margin: 0;
-    font-size: 0.84rem;
-    line-height: 1.55;
-    color: var(--td-ink);
-  }
 
   .dlg-links {
     display: flex;

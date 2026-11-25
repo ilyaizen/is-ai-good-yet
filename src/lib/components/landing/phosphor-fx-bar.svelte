@@ -16,6 +16,7 @@
       silenceSound()
     } else {
       v12Effects.setFx(true)
+      unlockSound(cueToggle)
     }
   }
 
@@ -32,13 +33,7 @@
 
   function triggerReplay(): void {
     if (!v12Effects.fx || replayDisabled) return
-    if (v12Effects.sound) {
-      unlockSound(() => {
-        cueToggle()
-        onReplay()
-      })
-      return
-    }
+    unlockSound(cueToggle)
     onReplay()
   }
 </script>
@@ -49,9 +44,18 @@
     class="fx-btn"
     aria-pressed={v12Effects.fx}
     onclick={toggleFx}
-    title="Toggle scanlines, glow, and motion (persisted in v12.fx)"
+    title="Toggle visual effects and interaction sounds"
   >
-    FX:<b>{v12Effects.fx ? "ON" : "OFF"}</b>
+    Effects <b aria-hidden="true">{v12Effects.fx ? "On" : "Off"}</b>
+  </button>
+  <button
+    type="button"
+    class="fx-btn"
+    aria-pressed={v12Effects.crt}
+    disabled={!v12Effects.fx}
+    onclick={() => v12Effects.setCrt(!v12Effects.crt)}
+  >
+    CRT <b aria-hidden="true">{v12Effects.crt ? "On" : "Off"}</b>
   </button>
   <button
     type="button"
@@ -61,7 +65,7 @@
     onclick={toggleSound}
     title={v12Effects.fx ? "Toggle synthesized interaction audio (session only)" : "Enable FX first to use sound"}
   >
-    SOUND:<b>{v12Effects.sound ? "ON" : "OFF"}</b>
+    Sound <b aria-hidden="true">{v12Effects.sound ? "On" : "Off"}</b>
   </button>
   <button
     type="button"
@@ -70,7 +74,7 @@
     onclick={triggerReplay}
     title={v12Effects.fx ? "Replay intro prompt (R)" : "Enable FX first to replay intro"}
   >
-    REPLAY
+    Replay intro
   </button>
 </div>
 

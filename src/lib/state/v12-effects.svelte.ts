@@ -1,11 +1,11 @@
 /**
- * v1.2 effects toggle: master FX switch + session sound switch.
+ * V1 landing effects: master FX switch, plus CRT and sound preferences.
  *
  * - `fx` persists in localStorage ("v12.fx") and is applied pre-paint by the
  *   inline bootstrap in app.html (adds `fx-off` to <html> before first paint),
  *   so a returning effects-off visitor never sees the intro, flicker, or glow.
- * - `sound` is deliberately session-only: OFF on every load (autoplay policy),
- *   and the AudioContext is only creatable from a real user gesture.
+ * - CRT and sound preferences start enabled each session. Audio still needs
+ *   a user gesture before the browser will play it.
  * - `prefers-reduced-motion` is tracked live and always respected, independent
  *   of the FX switch.
  */
@@ -15,7 +15,8 @@ const FX_KEY = "v12.fx"
 
 class V12Effects {
   fx = $state(true)
-  sound = $state(false)
+  private soundEnabled = $state(true)
+  private crtEnabled = $state(true)
   reducedMotion = $state(false)
   private initialized = false
 
@@ -24,9 +25,12 @@ class V12Effects {
     return this.fx && !this.reducedMotion
   }
 
-  /** Scanlines, flicker, vignette, caret blink, verdict glow. */
-  get ambientOK(): boolean {
-    return this.fx && !this.reducedMotion
+  get sound(): boolean {
+    return this.fx && this.soundEnabled
+  }
+
+  get crt(): boolean {
+    return this.fx && this.crtEnabled
   }
 
   init(): void {
@@ -53,16 +57,17 @@ class V12Effects {
       // Private mode: fall back to session-only state.
     }
     this.applyDocumentClass()
-    if (!on) {
-      this.sound = false
-      if (browser) {
-        document.documentElement.classList.remove("v12-veil-pending")
-      }
+    if (!on && browser) {
+      document.documentElement.classList.remove("v12-veil-pending")
     }
   }
 
   setSound(on: boolean): void {
-    this.sound = on && this.fx
+    this.soundEnabled = on
+  }
+
+  setCrt(on: boolean): void {
+    this.crtEnabled = on
   }
 
   private applyDocumentClass(): void {

@@ -1,14 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { cueKeystroke, cueReveal, unlockSound } from "$lib/audio/v12-sound"
+  import { page } from "$app/state"
+  import { cueKeystroke, cueReveal } from "$lib/audio/v12-sound"
   import { v12Effects } from "$lib/state/v12-effects.svelte"
 
-  const QUESTION = "is ai \u201cgood\u201d yet?"
+  const QUESTION = "Is AI \u201cgood\u201d yet?"
   const GOOD_START = 6
   const GOOD_END = 11
   const DESCRIPTION = [
-    "This site tracks developer sentiment toward AI coding tools.",
-    "It reads Hacker News submissions to see whether enthusiasm or skepticism carries more weight."
+    "What do developers make of AI coding tools?",
+    "The verdict weighs optimism against skepticism in articles shared on Hacker News."
   ]
   const TOKENS = DESCRIPTION.map((line) => line.match(/\S+\s*/g) ?? [])
 
@@ -32,6 +33,7 @@
   let skipButton = $state<HTMLButtonElement>()
   let revealButton = $state<HTMLButtonElement>()
   let replayButton = $state<HTMLButtonElement>()
+  const showControls = $derived(page.url.searchParams.get("controls") === "1")
 
   let runId = 0
   let liftTimer: ReturnType<typeof setTimeout> | undefined
@@ -95,12 +97,9 @@
     finishTyping()
   }
 
-  function replayWithSound(): void {
-    if (phase === "lifting" || phase === "done" || !v12Effects.fx) return
-    v12Effects.setSound(true)
-    unlockSound(() => {
-      void typeQuestion()
-    })
+  function replay(): void {
+    if (!showControls || phase === "lifting" || phase === "done" || !v12Effects.fx) return
+    void typeQuestion()
   }
 
   function reveal(): void {
@@ -134,23 +133,17 @@
       reveal()
       return
     }
-    if (event.key.toLowerCase() === "r" && !event.repeat) {
+    if (showControls && event.key.toLowerCase() === "r" && !event.repeat) {
       event.preventDefault()
-      if (v12Effects.sound) {
-        unlockSound(() => {
-          void typeQuestion()
-        })
-      } else {
-        void typeQuestion()
-      }
+      replay()
       return
     }
     if (event.key === "Tab") {
       event.preventDefault()
       if (phase === "typing") {
         skipButton?.focus()
-      } else if (document.activeElement === revealButton) {
-        replayButton?.focus()
+      } else if (replayButton && document.activeElement === revealButton) {
+        replayButton.focus()
       } else {
         revealButton?.focus()
       }
@@ -190,26 +183,21 @@
     aria-modal="true"
     aria-labelledby="veil-heading"
   >
-    <div class="veil-scan" aria-hidden="true"></div>
-
     <div class="veil-stage" inert={phase === "lifting" || undefined}>
-      <h1 id="veil-heading" class="sr-only">Is AI &ldquo;Good&rdquo; Yet?</h1>
+      <h1 id="veil-heading" class="sr-only">Is AI &ldquo;good&rdquo; yet?</h1>
       <p class="sr-only" aria-live="polite">
         {#if phase === "typing"}
           Intro playing. Press Escape to skip.
         {:else if phase === "ready"}
-          {DESCRIPTION.join(" ")} Choose Answer or Replay. Replay enables typing sounds.
+          {DESCRIPTION.join(" ")} Select Answer to see the verdict.{#if showControls} Select Replay to restart the intro.{/if}
         {/if}
       </p>
 
-      <p class="veil-kicker">is-ai-good-yet <span>// hacker news &middot; ai coding</span></p>
+      <p class="veil-kicker">is-ai-good-yet <span>// Hacker News · AI coding tools</span></p>
 
       <p class="veil-prompt" aria-hidden="true">
         <span class="veil-sigil">&gt;</span>
-        <span class="veil-text">{typed.slice(0, GOOD_START)}</span>
-        <span class="veil-text veil-good">{typed.slice(GOOD_START, GOOD_END + 1)}</span>
-        <span class="veil-text">{typed.slice(GOOD_END + 1)}</span>
-        <span class="veil-caret"></span>
+        <span>{typed.slice(0, GOOD_START)}<span class="veil-good">{typed.slice(GOOD_START, GOOD_END + 1)}</span>{typed.slice(GOOD_END + 1)}<span class="veil-caret"></span></span>
       </p>
 
       <div class="veil-description" aria-hidden="true">
@@ -226,7 +214,7 @@
             class="veil-btn veil-btn-quiet"
             onclick={reveal}
           >
-            skip
+            Skip
           </button>
         {:else}
           <button
@@ -235,21 +223,16 @@
             class="veil-btn veil-btn-primary"
             onclick={reveal}
           >
-            answer
+            Answer
           </button>
-          <button
-            bind:this={replayButton}
-            type="button"
-            class="veil-btn"
-            onclick={replayWithSound}
-          >
-            replay
-          </button>
+          {#if showControls}
+            <button bind:this={replayButton} type="button" class="veil-btn" onclick={replay}>Replay</button>
+          {/if}
         {/if}
       </div>
 
       <p class="veil-hint" aria-hidden="true">
-        {#if phase === "ready"}enter answer &middot; {/if}esc skip &middot; r replay
+        {#if phase === "ready"}Enter to answer · {/if}Esc to skip{#if showControls} · R to replay{/if}
       </p>
     </div>
   </div>
@@ -275,18 +258,6 @@
     animation: veil-crt-off 420ms var(--ease-swift) forwards;
   }
 
-  .veil-scan {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0 2px,
-      var(--td-scanline) 2px 3px
-    );
-    opacity: 0.28;
-  }
-
   .veil-stage {
     position: relative;
     z-index: 1;
@@ -310,16 +281,17 @@
 
   .veil-prompt {
     margin: 0;
-    min-height: 2.6em;
+    min-height: 1.2em;
     font-size: clamp(1.35rem, 4.6vw, 2.5rem);
     line-height: 1.2;
     font-weight: 700;
     letter-spacing: -0.025em;
+    word-spacing: -0.14em;
     color: var(--terminal-text);
     text-shadow: 0 0 0.35em var(--td-glow);
   }
 
-  .veil-text.veil-good {
+  .veil-good {
     color: var(--td-accent);
     text-shadow: 0 0 0.35em var(--td-glow);
   }
@@ -339,10 +311,11 @@
   .veil-description {
     display: grid;
     gap: 0.45rem;
-    max-width: 64ch;
+    max-width: 58ch;
     color: var(--td-muted);
-    font-size: 0.85rem;
-    line-height: 1.55;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .veil-description p {
@@ -455,10 +428,6 @@
     .veil.lifting {
       animation-name: veil-fade;
       animation-duration: 180ms;
-    }
-
-    .veil-scan {
-      display: none;
     }
 
     .veil-prompt {

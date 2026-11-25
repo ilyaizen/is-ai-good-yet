@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Refine the landing page’s terminal typography and copy, replace its CRT treatment, and enable gesture-activated sound by default. Open `/?controls=1` to show the effects, CRT, sound, and intro replay controls.
 - Stream the intro’s explanation before enabling the answer, and shorten the veil controls to `answer`, `replay`, and `skip`.
 - Tighten V1.2 phosphor tokens (`src/styles/tokens.css`, `src/styles/v12.css`) and layout integration (`src/routes/+layout.svelte`, `src/lib/state/v12-effects.svelte.ts`) so `FX:ON/OFF`, live `prefers-reduced-motion`, and session-only `SOUND:ON/OFF` govern the entire `/` experience cleanly.
 - Update `tests/test-analytics-script.ts` to match the canonical Rybbit `script.js?siteId=903a72fbf2be` URL introduced in `#40`.

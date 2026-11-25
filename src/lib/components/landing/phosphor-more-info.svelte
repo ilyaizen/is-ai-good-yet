@@ -12,11 +12,10 @@
 </script>
 
 <section id="details" class="ph-details" aria-labelledby="ph-details-heading">
-  <h2 id="ph-details-heading"><span>/details</span> more info</h2>
+  <h2 id="ph-details-heading">Key themes</h2>
   <p class="summary">
-    Developers report that AI coding tools help small teams ship faster. They also describe heavy review overhead,
-    reliability problems, concerns about losing skills, and uncertain long-term costs. The themes below summarize
-    those arguments, not a consensus among all developers.
+    Some developers say AI helps small teams ship faster. Others point to time spent reviewing code, unreliable results,
+    lost skills and uncertain costs. These are recurring arguments, not a poll of all developers.
   </p>
 
   <div class="themes">
@@ -27,7 +26,7 @@
         {#if quote}
           <blockquote>
             <p><q>{quote.text}</q></p>
-            <a href={`https://news.ycombinator.com/item?id=${quote.hnId}`}>HN discussion</a>
+            <a href={`https://news.ycombinator.com/item?id=${quote.hnId}`}>Read the HN discussion</a>
           </blockquote>
         {/if}
         <ul>
@@ -54,18 +53,25 @@
 
   h2 {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  h2 span {
-    color: var(--td-accent);
+    font-size: var(--ph-section-heading);
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    color: var(--td-ink);
   }
 
   .summary {
-    max-width: 74ch;
+    max-width: 66ch;
     margin: 0.5rem 0 1.25rem;
     color: var(--td-muted);
+  }
+
+  .summary,
+  blockquote p,
+  details p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
   .themes {
@@ -87,7 +93,8 @@
   h3 {
     margin: 0 0 0.65rem;
     color: var(--theme-tone);
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 1.0625rem;
   }
 
   blockquote {
@@ -99,7 +106,7 @@
 
   a {
     color: var(--td-ink);
-    font-size: 0.78rem;
+    font-size: var(--ph-caption);
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
